@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vdb R Function Reference</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/pygment.css" rel="stylesheet">
+    
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 900px;
+      }
+      .container-narrow > hr {
+        margin: 15px 0 20px 0;
+      }
+      
+      #next {
+         font-size: 14px;
+      }
+
+      #previous {
+         font-size: 14px;
+      }
+
+      .myHeader {
+         font-family: 'Chivo', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 400;
+         letter-spacing: -1px;
+         font-size: 28px;
+         line-height: 40px;
+         color: #d14;
+         text-shadow: 8px 2px 6 rgba(55, 55, 55, 0.5);
+      }
+
+/*      #main-content {
+         margin-top: -15px;
+      }
+*/
+    </style>
+        <style type="text/css">
+       pre .operator,
+       pre .paren { color: #555555 }
+
+       pre .literal {
+         color: rgb(88, 72, 246); font-weight: bold;
+       }
+/*       pre .literal { color: #006699; font-weight: bold } */
+
+       pre .number { color: #FF6600 }
+/*       pre .comment { color: #0099FF; font-style: italic }*/
+       pre .comment { color: #999; font-style: italic }
+       pre .keyword { color: #006699; font-weight: bold }
+
+       pre .identifier {
+         color: rgb(0, 0, 0);
+       }
+
+       pre .string { color: #CC3300 }
+    </style>
+
+    <!-- R syntax highlighter -->
+    <script type="text/javascript">
+    var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+    hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- MathJax scripts -->
+    <script type="text/javascript" src="js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({    
+      extensions: ["tex2jax.js"],    
+      "HTML-CSS": { scale: 100}    
+    });    
+    </script>
+    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+                                   <!-- <link rel="shortcut icon" href="ico/favicon.png"> -->
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="index.html">Docs</a></li>
+          <li class=""><a href="functionref.html">Function Ref</a></li>
+          <li><a href="https://www.github.com/hafen/vdb">Github</a></li>
+        </ul>
+        <p class="myHeader">vdb: Visualization Databases</p>
+      </div>
+
+      <hr>
+
+<div class="container-fluid">
+   <div class="row-fluid">
+   
+   <div class="span3 well">
+   <ul class = "nav nav-list" id="toc">
+   <li class='nav-header'>Intro</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#background'>Background</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#initial-setup'>Initial Setup</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#splitting-data'>Splitting Data</a>
+      </li>
+
+
+<li class='nav-header'>Creating Displays</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#a-bare-bones-display'>A Bare Bones Display</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#the-prepanel-function'>The Prepanel Function</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#determining-axis-limits'>Determining Axis Limits</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#cognostics'>Cognostics</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#putting-it-all-together'>Putting it All Together</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#another-display'>Another Display</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#single-panel-displays'>Single-Panel Displays</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#splod'>"splod"</a>
+      </li>
+
+
+<li class='nav-header'>Viewing Displays</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#shiny-viewer'>Shiny Viewer</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#client-side-viewer'>Client-Side Viewer</a>
+      </li>
+
+
+<li class='nav-header'>RHIPE</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#vdb-with-rhipe'>vdb with RHIPE</a>
+      </li>
+
+
+<li class='nav-header'>Notes on Storage</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#storage-types'>Storage Types</a>
+      </li>
+
+
+<li class='nav-header'>Lab Notebooks</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#creating-a-notebook'>Creating a Notebook</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#syncing-files-with-the-web'>Syncing Files With the Web</a>
+      </li>
+
+   </ul>
+   </div>
+
+<div class="span9 tab-content" id="main-content">
+
+<div class='tab-pane active' id='background'>
+<h3>Background</h3>
+
+<p>This document provides examples of creating and viewing visualization databases (VDBs) using the <code>vdb</code> package.  Visualization databases provide a way to visualize large, complex data in great detail from within the R statistical programming environment.  It operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  This is a research effort that is evolving, and this document communicates the current state.</p>
+
+<p>In short, a visualization database is a collection of displays, each of which visualizes some aspect of the data being analyzed.  A display consists of one or more panels, where a panel is a plot method applied to each subset of the data.  This package provides mechanisms which, after using the <a href="http://github.com/hafen/datadr">datadr</a> package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways.  This package also provides some mechanisms for maintaining a &quot;lab notebook&quot; with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display.</p>
+
+<!-- More on philosophy, background, divide and recombine, etc. -->
+
+<h4>Reference</h4>
+
+<p>Related projects:</p>
+
+<ul>
+<li><a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a>: the engine that makes VDBs work with large, complex data</li>
+<li><a href="http://github.com/hafen/datadr">datadr</a>: division methods</li>
+</ul>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://datadr.org">datadr.org</a></li>
+<li><a href="http://onlinelibrary.wiley.com/doi/10.1002/sta4.7/full">Large complex data: divide and recombine (D&amp;R) with RHIPE. <em>Stat</em>, 1(1), 53-67</a></li>
+<li><a href="http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf">Visualization Databases for the Analysis of Large Complex Datasets</a></li>
+</ul>
+
+</div>
+
+
+<div class='tab-pane' id='initial-setup'>
+<h3>Initial Setup</h3>
+
+<p>VDBs have a project-oriented nature.  It is expected that you will usually create a new VDB for a new project.  Within a project, there may be many analysis threads, and VDB allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify.</p>
+
+<pre><code class="r">library(datadr)
+library(vdb)
+
+# initialize a vdb (do this once per project)
+vdbDir &lt;- &quot;/tmp/vdbtest&quot;
+</code></pre>
+
+<p>Now, we need to initialize some files in this directory.  This again is a once-per-project task.</p>
+
+<pre><code class="r"># move files into place
+vdbInit(vdbDir, autoYes=TRUE)
+# don&#39;t specify autoYes generally
+</code></pre>
+
+<pre><code>Moving viewer files over
+Moving notebook files over
+</code></pre>
+
+<p>To see what happened:</p>
+
+<pre><code class="r">list.files(vdbDir)
+</code></pre>
+
+<pre><code>[1] &quot;notebook&quot;  &quot;viewer_cs&quot;
+</code></pre>
+
+<p>Two new directories exist in our VDB base directory.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  Your VDB directory will get populated with more files we we proceed.</p>
+
+<p>Now, we can set a list of options for all <code>vdb</code>-related work done in this R session, under the option name <code>vdbConn</code>.</p>
+
+<pre><code class="r"># set vdbConn option (do this once per session)
+options(vdbConn = list(
+   vdbName        = &quot;vdbTest&quot;, 
+   vdbPrefix      = vdbDir,
+   defaultStorage = &quot;local&quot;
+))
+</code></pre>
+
+<p>These options tell VDB functions that the current VDB is &quot;vdbTest&quot; and its files are located in &quot;vdbDir&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
+
+<p>The reason for setting a <code>vdbConn</code> list of options is that these options are fairly routinely required for functions in the <code>vdb</code> package and do not change over the course of an R session and are quite tedious to have to specify every time.</p>
+
+<p>We are now ready to start creating some displays, once we get data in a suitable format.</p>
+
+</div>
+
+
+<div class='tab-pane' id='splitting-data'>
+<h3>Splitting Data</h3>
+
+<p>I have included a test dataset in this package called <code>elnino</code>.  It consists of a time series of several variables measured by several buoys located across the Pacific ocean.</p>
+
+<!-- 
+data(elnino)
+data(elninoMap)
+xtick <- seq(-50, 100, by=10)
+ytick <- seq(-30, 30, by=10)
+xyplot(lat ~ lon, groups=buoy, data=elnino,
+   panel=function(x, y, ...) {
+      panel.fill("gray")
+      panel.abline(v=xtick, col="lightgray")
+      panel.abline(h=ytick, col="lightgray")
+      panel.superpose(x, y, ...)
+      panel.lines(elninoMap$x, elninoMap$y, col="white")      
+   },
+   panel.groups=function(x, y, ...) {
+      xmean <- mean(x, na.rm=TRUE)
+      ymean <- mean(y, na.rm=TRUE)
+      panel.points(xmean, ymean, cex=1.1)
+   },
+   ylim=c(-25, 25),
+   xlim=c(-60, 110),
+   pch=".",
+   scales=list(x=list(at=xtick), y=list(at=ytick)),
+   aspect="iso",
+   xlab="Longitude", ylab="Latitude"
+)
+-->
+
+<p>This map is the average location of each buoy.</p>
+
+<p><center>
+   <img src="figs/1plot.png" width="650px">
+</center></p>
+
+<p>Time series of several measurements are available at each location:</p>
+
+<pre><code class="r">data(elnino)
+head(elnino)
+</code></pre>
+
+<pre><code>       buoy       date   lat   lon zonWinds merWinds humidity airTemp ssTemp
+1 buoyid_27 1980-03-07 -0.02 70.54     -6.8      0.7       NA   26.14  26.24
+2 buoyid_27 1980-03-08 -0.02 70.54     -4.9      1.1       NA   25.66  25.97
+3 buoyid_27 1980-03-09 -0.02 70.54     -4.5      2.2       NA   25.69  25.28
+4 buoyid_27 1980-03-10 -0.02 70.54     -3.8      1.9       NA   25.57  24.31
+5 buoyid_27 1980-03-11 -0.02 70.54     -4.2      1.5       NA   25.30  23.19
+6 buoyid_27 1980-03-12 -0.02 70.54     -4.4      0.3       NA   24.72  23.64
+</code></pre>
+
+<p>We see that a buoy ID, date, geolocation, and several weather-related variables are given.  The buoys for the most part stay within the vicinity of a fixed location, but some drift quite a bit.  The buoy categorization was determined by binning the geolocations, and some categorizations are suspect, as we will see.</p>
+
+<p>An important aspect of plotting with <code>vdb</code> is the notion of working with data that has been divided into subsets.  This can be done in many ways, and we use the <a href="http://github.com/hafen/datadr">datadr</a> package to do so.  The <code>datadr</code> package has facilities for dividing both in-memory data.frames and very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> data objects.  For illustrative purposes, and for easy entry, we stick to the in-memory <code>elnino</code> data for this document, but do keep in mind that this all works for (and is primarily intended for) large data as well.</p>
+
+<p>There are many ways we might want to split the data, depending on the purpose of our analysis.  Suppose we are interested in viewing the time series of <code>elnino</code> data by buoy.</p>
+
+<pre><code class="r">buoySplit &lt;- divide(elnino, by=&quot;buoy&quot;)
+</code></pre>
+
+<p>The <code>divide</code> function takes a data.frame as an argument and splits it by the unique levels one or more conditioning variable.  The result is a list of class &quot;localDiv&quot;:</p>
+
+<pre><code class="r">buoySplit
+</code></pre>
+
+<pre><code>An object of class localDiv with the following attributes: 
+
+&#39;localDiv&#39; attr : value
+--------------------------------------------------------------------------------
+* vars          : buoy(cha), date(Dat), lat(num), lon(num), zonWinds(num), merWinds(num), humidity(num), airTemp(num), ssTemp(num)
+* totSize       : 13.04 MB
+* ndiv          : 67
+* trans         : identity transformation (original data is a data.frame)
+* nrow          : 178080
+* splitRowDistn : use dat$splitRowDistn to get distribution
+
+First-order division:
+  Type: Conditioning variable division
+    Conditioning variables: buoy
+</code></pre>
+
+<p>There are 67 subsets, one for each buoy.  We can see what the data structure looks like:</p>
+
+<pre><code class="r">str(buoySplit[[1]])
+# or
+str(divExample(buoySplit))
+</code></pre>
+
+<pre><code>&#39;data.frame&#39;:   2090 obs. of  9 variables:
+ $ buoy    : chr  &quot;buoyid_01&quot; &quot;buoyid_01&quot; &quot;buoyid_01&quot; &quot;buoyid_01&quot; ...
+ $ date    : Date, format: &quot;1992-09-22&quot; &quot;1992-09-23&quot; ...
+ $ lat     : num  -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.99 ...
+ $ lon     : num  55 55 55 55 55 ...
+ $ zonWinds: num  -4.6 -4.5 -5.4 -4.8 -5.9 -7 -6.6 -6.6 -7.6 -6.6 ...
+ $ merWinds: num  -0.2 -2.1 -1.3 -0.6 -0.3 -0.6 0.1 1.8 0.2 -0.4 ...
+ $ humidity: num  NA NA NA NA NA NA NA NA NA NA ...
+ $ airTemp : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ ssTemp  : num  NA 26.4 26.4 26.3 26.3 ...
+</code></pre>
+
+<p>The convenience function <code>divExample</code> grabs the first subset.  This is a useful function as it operates on RHIPE split data as well and is useful for testing plotting functions.  Notice that <code>buoySplit</code> is simply a list of subset data.frames.</p>
+
+<p>Now we are ready to make some plots.</p>
+
+</div>
+
+
+<div class='tab-pane' id='a-bare-bones-display'>
+<h3>A Bare Bones Display</h3>
+
+<p>To quickly get our feet wet with creating a display, we start with a minimal example.  Creating a plot first requires the specification of what you would like to be plotted.  You create a plot function that of what you would like to visualize for each subset.  The function takes one argument, which you can think of as any one subset of your data.  Some things to know about the plot function:</p>
+
+<ul>
+<li>The plot function is applied to each subset of your split data object</li>
+<li>The plot function takes one input, which is one of these subsets</li>
+<li>The plot function returns something that can be printed to a graphics device</li>
+<li>Those familiar with lattice can think of the plot function as the lattice panel function and the data argument as the lattice packet being plotted (except that you conveniently get the whole data structure instead of just <code>x</code> and <code>y</code>)</li>
+<li>As long as the plotting method you use can produce graphics in a graphics device, you can use it: base R graphics, lattice, or ggplot2 are all available </li>
+<li>However, using something like lattice or ggplot2 adds benefit because these create objects which can be inspected to pull out axis limits, etc. (see our discussion of prepanel functions later on)</li>
+<li>If you use something that doesn&#39;t create an object (like base R graphics), you need to wrap the list of plot commands in an expression as the return value.</li>
+</ul>
+
+<p>Suppose we want to do a simple time series plot that highlights points where there are duplicated values for a single date.  With lattice, we can do this with the following:</p>
+
+<pre><code class="r"># start with something simple...
+airDatePlotFn &lt;- function(dat) {
+   xyplot(airTemp ~ date, 
+      groups=duplicated(date) | duplicated(date, fromLast=TRUE), 
+      data=dat
+   )
+}
+</code></pre>
+
+<p>As mentioned, the argument <code>dat</code> (you can call it whatever you like) will have the data structure of any single split of your data.  Simply, we are plotting <code>airTemp</code> vs. <code>date</code>, and these variables reside in the data.frame of the current split being plotted, <code>dat</code>.</p>
+
+<p>When developing the plot function, it can be useful to build it up based on an example subset:</p>
+
+<pre><code class="r">dat &lt;- divExample(buoySplit)
+</code></pre>
+
+<p>The <code>groups=</code> line in the plot function basically creates a boolean that is <code>TRUE</code> if any of the time points have more than one value, which will be plotted with a different color.</p>
+
+<p>To test out this function on a subset:</p>
+
+<p><center>
+   <img src="figs/2plot1.png" width="500px">
+</center></p>
+
+<pre><code class="r">airDatePlotFn(divExample(buoySplit))
+</code></pre>
+
+<p>Now, let&#39;s create a display in our visualization database based on this plot function:</p>
+
+<pre><code class="r">vdbPlot(
+   name    = &quot;airTemp_vs_date_plain&quot;,
+   group   = &quot;buoy&quot;,
+   data    = buoySplit,
+   plotFn  = airDatePlotFn
+)
+</code></pre>
+
+<pre><code>Validating &#39;plotFn&#39;...
+Validating plot dimensions...
+Precomputed limits not supplied.  Computing axis limits...
+... skipping this step since both are axes are free ...
+Generating plots...
+-- Plotting panel 67 of 67 
+Updating displayList...
+Updating displayList...
+Writing panel keys...
+Writing cognostics...
+Plotting thumbnail...
+</code></pre>
+
+<p>This example shows the minimum number of parameters that must be specified to create a display: we must specify a <code>name</code> and <code>group</code> for the display, the split <code>data</code> it will be based on, and the plot function, <code>plotFn</code>.  Note that this will work just the same with RHIPE split data.</p>
+
+<p>The name and group collectively uniquely define a display and determine where the display is stored.  The group parameter helps keep track of displays by group, as an analysis may have many different threads.  We chose &quot;buoy&quot; as the group, as this display is related to an analysis of the data split by buoys.  By default, <code>group=&quot;common&quot;</code> (so it really doesn&#39;t need to be specified either if you are happy with that).</p>
+
+<p>The default behavior for how plots are stored when the input is a local dataset is to store a .png file for each subset on disk.  I am experimenting with many storage formats (including applying the plot function on-the-fly in the viewer), which is discussed later.</p>
+
+<p>Let&#39;s see how this effected our <code>vdb</code> directory:</p>
+
+<pre><code class="r">list.files(vdbDir)
+</code></pre>
+
+<pre><code>[1] &quot;displays&quot;  &quot;notebook&quot;  &quot;viewer_cs&quot;
+</code></pre>
+
+<p>Note that we have a new directory &quot;displays&quot;.  This is where all our displays are stored (of course!).  Let&#39;s see what is in there:</p>
+
+<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;_displayList.json&quot;  &quot;_displayList.Rdata&quot; &quot;buoy&quot;
+</code></pre>
+
+<p>The first two files beginning with <code>_displayList</code> are R and json versions of a master display list with different metadata about each display.  The third directory, &quot;buoy&quot; corresponds to the group that our newly created display belongs to, &quot;buoy&quot;.  Any display in the group &quot;buoy&quot; will be put here.</p>
+
+<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;, &quot;buoy&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;airTemp_vs_date_plain&quot;
+</code></pre>
+
+<p>We see our display, <code>airTemp_vs_date_plain</code> in here.  Let&#39;s see what is in there:</p>
+
+<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;, &quot;buoy&quot;, &quot;airTemp_vs_date_plain&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;cog.Rdata&quot;       &quot;json&quot;            &quot;object.Rdata&quot;    &quot;panelKeys.Rdata&quot;
+[5] &quot;png&quot;             &quot;thumb.png&quot;
+</code></pre>
+
+<p>We see several files, most of which do not need to concern the user.  However, the <code>png</code> directory is where the actual plots are stored.  The png files are named according to their split key.  It is good to know these are here if you want to pull one out at random.  However, in general, you want to get at the actual panels of the display through the viewer.</p>
+
+<p>To use the viewer, just type any of the following:</p>
+
+<pre><code class="r">view()
+view(group=&quot;buoy&quot;, name=&quot;airTemp_vs_date_plain&quot;)
+view(name=&quot;airTemp_vs_date_plain&quot;)
+</code></pre>
+
+<p>This will bring up the web-based viewer of your display.  If you do plain <code>view()</code>, you will get a list of displays to choose from (at this point, just one).  The other two lines take you directly to the display we just created.  Notice that the last one works, even though I said that a display is uniquely identified by the group and name combination.  Usually, name is unique too and if that is the case, group is inferred.</p>
+
+<p>Note that the aspect ratio is not ideal for this plot.  We&#39;ll show how to change this in the next example.</p>
+
+<p>We&#39;ll also talk more about how to use the viewer later.</p>
+
+<p>Now, let&#39;s do something that shows all of the other functionality of <code>vdbPlot</code>, including prepanel functions, cognostics, etc.</p>
+
+</div>
+
+
+<div class='tab-pane' id='the-prepanel-function'>
+<h3>The Prepanel Function</h3>
+
+<p>Usually prior to plotting you want to determine axis limits for each panel.  This is important because when viewing many small multiples, axis limits play a major role in making meaningful comparisons between panels.  Also, if a handful of panels have large outlying values, you might want to trim these so that you can view the bulk of the data in the panel at better resolution.  </p>
+
+<p>Note that if you want to skip this extra step of code, you can specify <code>lims</code> in <code>vdbPlot</code> (or explicitly in your panel function), which will automatically perform the axis limit computations prior to creating the display (as we did in our previous example).</p>
+
+<p>The <code>vdbPrepanel</code> function is the first step in determining axis limits.  For those familiar with aspect ratio banking, it also has preliminary support for calculating aspect ratios through banking.</p>
+
+<p>The main parameter to know about in the <code>vdbPrepanel</code> function is <code>preFn</code>, which is a function that takes a subset of your split data as an input (like <code>plotFn</code> in <code>vdbplot</code>) and returns a list including the elements <code>xlim</code> and <code>ylim</code> (each a vector of the min and max x and y ranges of the data subset), and optionally <code>dx</code> and <code>dy</code>, vectors used to determine the aspect ration when banking on 45 degrees.</p>
+
+<p>If you are familiar with prepanel functions in the lattice package, you will see the similarity.  A prepanel function might sometimes be somewhat unrelated to what is actually plotted, but usually axis limits depend exactly on what is being plotted.  In this case, if your <code>plotFn</code> is a trellis object, you can simply specify your <code>plotFn</code> as <code>preFn</code>, for convenience.  The <code>vdbPrepanel</code> function will simply apply the plot and grab the axis limits from the object created (I suppose I could add this functionality for ggplot2 as well).  Note that in this case, however, you cannot specify <code>dx</code> and <code>dy</code>.</p>
+
+</div>
+
+
+<div class='tab-pane' id='determining-axis-limits'>
+<h3>Determining Axis Limits</h3>
+
+<p>We can now determine our axis limits based on the results from <code>vdbPrepanel</code>.  The output from <code>vdbPrepanel</code> is object of class &quot;vdbPre&quot; which has a plot method that can help in the decision of how to specify limits.  Before we look at this plot, let&#39;s talk about the possible choices of limit specification (those familiar with lattice will know what these are):</p>
+
+<ul>
+<li><strong>&quot;same&quot;</strong>: the same limits are used for all the panels</li>
+<li><strong>&quot;free&quot;</strong>: the limits for each panel are determined by just the points in that panel</li>
+<li><strong>&quot;sliced&quot;</strong>:  the length (max - min) of the scales are constrained to remain the same across panels</li>
+</ul>
+
+<p>Determining suitable axis limits is dependent on what is being visualized, but typically &quot;same&quot; or &quot;sliced&quot; are good choices as they enable panel-to-panel comparisons, which is where much of the power of this type of visualization lies.  You might choose &quot;sliced&quot; if you are interested in relative behaviors in terms of scale, or &quot;same&quot; if you are interested in relative behaviors both in terms of location and scale.</p>
+
+<p>To view a plot of the panel axis limits to help in this determination:</p>
+
+<pre><code class="r">airDatePre &lt;- vdbPrepanel(buoySplit, airDatePlotFn)
+plot(airDatePre)
+</code></pre>
+
+<p><center>
+   <img src="figs/2plot2.png" width="650px">
+</center></p>
+
+<p>This plot orders the axis limits for both the x and y axes for both &quot;same&quot; and &quot;sliced&quot; (with sliced ranges centered around zero).  This can help us to see if we will be squeezing the data for a lot of panels when using &quot;same&quot;, and also helps identify outliers.  In each of the panels of this plot, you can think of the range of the &quot;Panel Limits&quot; axis as the range that will ultimately be chosen for each panel for the given axis and limit method.</p>
+
+<p>For this plot, it appears that slicing the axis limits does not buy us much resolution, and we know that for the time variable axis (x), we would like the limits to always be the same.  Thus, we choose &quot;same&quot; for both axes.</p>
+
+<p>To set our choice, we do the following:</p>
+
+<pre><code class="r">buoyLims &lt;- vdbSetLims(airDatePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
+</code></pre>
+
+<p>The <code>vdbPlot</code> function can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
+
+</div>
+
+
+<div class='tab-pane' id='cognostics'>
+<h3>Cognostics</h3>
+
+<p>Much of the power of the viewer for multi-panel displays (particularly when they number in the thousands or higher) lies in the ability to specify metrics that provide interesting information about each panel, with which you can filter and sort your collection of panels to look for those which are interesting.  John Tukey called such metrics &quot;cognostics&quot;.</p>
+
+<p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>vdbPlot</code>.  </p>
+
+<p>Note: Currently, the assumption is that the number of panels will always be a number small enough that all the cognostic information can reside in an R session (probably in the low millions).  If there are more, then sampling mechanisms will have to be added to allow for sampling.</p>
+
+<p>For our buoy data, there are several congnostics we might be interested in.  Typically the most meaningful cognostics are arrived upon iteratively.  Here, we specify the mean latitude and longitude, the drift (range) of the latitude and longitude, the range of temperature and date variables, the number of observtions, the number of missing values, and an estimate of the variability of the data around a fitted loess line of temperature vs. time.</p>
+
+<pre><code class="r">airDateCogFn &lt;- function(dat) {
+   data.frame(
+      meanLat = cogMean(dat$lat),
+      meanLon = cogMean(dat$lon),
+      latDrift = cogRange(dat$lat),
+      lonDrift = cogRange(dat$lon),
+      tempRng = cogRange(dat$airTemp),
+      dateRng = cogRange(as.numeric(dat$date)),
+      nObs = nrow(dat),
+      nNA = length(which(is.na(dat$airTemp))),
+      locVar = cogLoessRMSE(as.numeric(dat$date), dat$airTemp, degree=2, span=0.1)
+   )
+}
+</code></pre>
+
+<p>Notice the functions <code>cogMean</code>, <code>cogRange</code>, and <code>cogLoessRMSE</code>.  These are special cognostic functions (and there will be more) to simplify the process of specifying common cognostics.  The difference between <code>cogRange</code> and <code>range</code> and others is that there is removal of NAs and extra checking for errors (when all are NA) so that cognostic calculation is robust to errors.</p>
+
+<p>Let&#39;s test it on a subset:</p>
+
+<pre><code class="r">airDateCogFn(buoySplit[[1]])
+</code></pre>
+
+<pre><code>    meanLat  meanLon latDrift lonDrift tempRng dateRng nObs nNA    locVar
+1 -7.976856 54.99609     1.01     0.78    4.92    2099 2090 470 0.2390464
+</code></pre>
+
+<p>The final thing to specify that makes cognostics more meaningful in the viewer is to give the variables descriptions:</p>
+
+<pre><code class="r">airDateCogDesc &lt;- c(
+   &quot;Mean latitude&quot;,
+   &quot;Mean longitude&quot;,
+   &quot;Range of latitude drift of the buoy over time&quot;,
+   &quot;Range of longitude drift of the buoy over time&quot;,
+   &quot;Temperature range&quot;,
+   &quot;Date range (days)&quot;,
+   &quot;Number of observations&quot;,
+   &quot;Number of missing observations&quot;,
+   &quot;Variability of temperature around a time-local mean&quot;
+)
+</code></pre>
+
+<p>We will see how all of these components are used in the next section.</p>
+
+<!-- ### Input Variables ### -->
+
+</div>
+
+
+<div class='tab-pane' id='putting-it-all-together'>
+<h3>Putting it All Together</h3>
+
+<p>This may seem like a lot of work for one display over the bare bones example we looked at.  We have done prepanel computation, set axis limits, and specified a cognostics function with cognostic variable descriptions.  This really isn&#39;t very much work for the benefit we receive from what we are able to do with the display after it&#39;s created.  So let&#39;s create it:</p>
+
+<pre><code class="r">vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;airTemp_vs_date&quot;,
+   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
+   data    = buoySplit,
+   plotFn  = airDatePlotFn, 
+   plotDim = list(height=350, width=800),
+   lims    = buoyLims, 
+   cogFn   = airDateCogFn, 
+   cogDesc = airDateCogDesc
+)
+</code></pre>
+
+<pre><code>Validating &#39;plotFn&#39;...
+Validating plot dimensions...
+Testing cognostics function on a subset ... ok
+Generating plots...
+-- Plotting panel 67 of 67 
+Computing cognostics...
+Updating displayList...
+Updating displayList...
+Writing panel keys...
+Writing cognostics...
+Plotting thumbnail...
+</code></pre>
+
+<p>Note that in addition to everything else we have done to prepare for the display, we also specify the dimensions of each panel (in pixels) - (perhaps I should change parameters to <code>panelFn</code> and <code>panelDim</code>).  Currently, this is how aspect ratios of the bounding boxes are specified.  There is functionality for you to specify an aspect ratio and either a height or a width, where the bounding box with which the panel aspect ratio is computed is based on the data, not the entire plot (including axis labels, etc.), but it isn&#39;t quite working.  You can specify aspect ratios in your lattice plots, but it is then difficult to get the panel dimensions correct such that there is not a lot of white space wasted for each panel (remember, we want to tile many of these across one screen so we don&#39;t want to waste white space).  On a related note, for lattice plots, see <code>?noMargins</code>.</p>
+
+<p>Now, you can view the display:</p>
+
+<pre><code class="r">view()
+# or
+view(name=&quot;airTemp_vs_date&quot;)
+</code></pre>
+
+<p>We will put off details of the viewer again, although feel free to play around with it.</p>
+
+</div>
+
+
+<div class='tab-pane' id='another-display'>
+<h3>Another Display</h3>
+
+<p>Now that we went through a detailed description of how to create a display, let&#39;s get a little more practice and create another display.  It might be interesting to make a plot for each buoy of how it has moved over time, with the same color indication of whether one date has more than observation.  Since every buoy is at a different latitude and longitude, we already know that we want the x and y axes to be sliced so we will skip the prepanel steps.</p>
+
+<pre><code class="r">buoyMovePlotFn &lt;- function(dat) {
+   xyplot(lat ~ lon, groups=duplicated(date) | duplicated(date, fromLast=TRUE), data=dat)
+}
+
+vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;lat_vs_lon&quot;,
+   data    = buoySplit,
+   plotFn  = buoyMovePlotFn,
+   lims    = list(x=&quot;sliced&quot;, y=&quot;sliced&quot;)
+)
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='single-panel-displays'>
+<h3>Single-Panel Displays</h3>
+
+<p>For displays with many panels, it is worth the small amount of extra effort we went through in the previous section to get a nice, viewable display.  However, we are not always doing detailed visualization that requires such displays.  Suppose we have some simple plots we want to add to our VDB.  This can be done by creating a plot object (or expression for base R graphics) and passing it to <code>vdbPlot</code> as the <code>data</code> argument.</p>
+
+<p>For example, suppose that we want to investigate the dependence of the variance of air temperature on the mean for each buoy.  Below is an example of how to create a <code>plotFn</code> for this using the three possible approaches: (1) any base R plot command wrapped in an expression, (2) lattice, (3) ggplot.</p>
+
+<pre><code class="r">means &lt;- sapply(buoySplit, function(x) 
+   median(x$airTemp, na.rm=TRUE))
+vars &lt;- sapply(buoySplit, function(x) 
+   mad(x$airTemp, na.rm=TRUE))
+
+p &lt;- expression(plot(means, vars))  # base R
+p &lt;- xyplot(vars ~ means, aspect=1) # lattice
+p &lt;- qplot(means, vars, aspect=1)   # ggplot2
+p
+</code></pre>
+
+<p><center>
+   <img src="figs/2plot3.png" width="550px">
+</center></p>
+
+<p>Now to add it to the VDB:</p>
+
+<pre><code class="r">vdbPlot(
+   group=&quot;buoy&quot;,
+   name=&quot;tempVars_vs_tempMeans&quot;,
+   desc=&quot;Average variance of temperature at each buoy vs. average mean&quot;,
+   data=p
+)
+</code></pre>
+
+<pre><code>Validating plot dimensions...
+Generating plots...
+-- Plotting trellis / ggplot / base R plot object.
+Updating displayList...
+Updating displayList...
+Writing panel keys...
+Writing cognostics...
+Plotting thumbnail...
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='splod'>
+<h3>&quot;splod&quot;</h3>
+
+<p>Scatterplot matrices become increasingly infeasible as the number of variables grows beyond \(\approx\)10.  Using <code>vdb</code>, we can create &quot;scatterplot displays&quot;, where for \(p\) variables we create a panel for each of the \(\tbinom{p}{2}\) pairwise combinations.  We can leverage research on &quot;scagnostics&quot; (scatterplot diagnostics, or cognostics for scatterplots) <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=leland%20wilkinson%20scagnostics&amp;source=web&amp;cd=1&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.62.6148%26rep%3Drep1%26type%3Dpdf&amp;ei=6spVUcCQDYWl4AOJ_oHoDw&amp;usg=AFQjCNH0rmXCgq5vR-mEkuYz8AC476e6Bw&amp;sig2=VipicfJ0CN0AOJ4pt_yuXg&amp;bvm=bv.44442042,d.dmg&amp;cad=rja">reference</a>, which includes the R package <a href="http://cran.r-project.org/web/packages/scagnostics/">scagnostics</a> to identify interesting relationships.  I have created a convenience function for doing this, <code>splod()</code> (<strong>s</strong>catter<strong>plo</strong>t <strong>d</strong>isplay -- <em>when you have so many variables that <code>splom</code> is going to make your computer <code>splod</code></em>).  This function takes a data.frame and creates a subset for the data for each pairwise combination of variables.  The plot function is a simple scatterplot, and the cognostics function is a collection of scagnostics.</p>
+
+<p>To illustrate this, we will shift to a dataset in a completely different domain, baseball.  In real life there would probably not be a project that included both elnino data and baseball data, but we&#39;ll put this new plot into our existing project.</p>
+
+<pre><code class="r">data(batting)
+str(batting)
+</code></pre>
+
+<p>There are 24 variables.  The first 5 variables are descriptive and we do not want to include them in our scatterplot display.</p>
+
+<p>Creating a scatterplot display is as simple as</p>
+
+<pre><code class="r">vdbSplod(
+   batting, 
+   id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;)
+)
+</code></pre>
+
+<p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;localDiv&quot; object and passes them to <code>vdbPlot</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to vdbPlot such as a custom cognostics function.</p>
+
+<p>If you want to do something to the data prior to passing it to vdbSplod, you can do the above in two steps:</p>
+
+<pre><code class="r">batSplodDat &lt;- makeSplodData(batting, id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;))
+
+vdbSplod(batSplodDat)
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='shiny-viewer'>
+<h3>Shiny Viewer</h3>
+
+<p>The VDB viewer we have encountered throughout this document is a server-side web viewer that uses <a href="http://www.rstudio.com/shiny/">Shiny</a>.  This viewer basically provides a live R session running behind the web viewer, facilitating all of the interaction.  </p>
+
+<p>This viewer is very much a work in progress.  There are many possible features.  Focus is given first to functionality - I will work to optimize things (such as indexing the cognostics data.frame for faster sorting / filtering) once things settle.</p>
+
+<p>Below I describe some of the components of the viewer.</p>
+
+<h4>Panel View</h4>
+
+<p>This is the main component of the viewer.  Once you have selected a display to view, the panel view tiles the panels of the chosen display and allows you to page through them.  Left and right keys or the buttons on the header bar page through panels.  The text box at the top of the window specifies (approximately) how many panels to tile across the screen (exact number is based on the aspect ratio of the panels).</p>
+
+<h4>&quot;View&quot; Modal</h4>
+
+<p>Click the &quot;view&quot; button.  You can specify which cognostics to display below each panel.  The second tab, &quot;plotFn&quot; will let you change the plot function applied to each subset (this only works when <code>storage</code> is &quot;localData&quot;<code>or</code>&quot;rhipeData&quot;`.</p>
+
+<h4>&quot;Cognostics&quot; Modal</h4>
+
+<p>Here, you can sort and filter the panels based on their cognostics.  Click the histograms to get an interactive histogram with which you can specify a range.  On the multivariate selection row, click and drag table cells to specify all variables you want to do multivariate filtering on.  If you choose 2 variables, you are given an interactive scatterplot on which you can select ranges to filter on.  If you select more than 2 variables, you get a bivariate view of a projection pursuit to filter on (actual filtering in this case doesn&#39;t work right now).  I need to give some more thought to making this interface optimal.  The load, save, reset filter settings don&#39;t work right now.  When you leave this modal, you go back to panel view with the panels arranged according to what you did in the cognostics panel.</p>
+
+<h4>Changing the Display</h4>
+
+<p>This is available as first menu item in the display button dropdown.  It simply brings up a modal that lets you select a different display to view.</p>
+
+<h4>Adding a Related Display</h4>
+
+<p>Displays with the same set of keys can have their panels displayed together.  (When a display is created, a hash is made of the sorted unique panel keys.  If two displays have the same hash, it means that they have the exact same collection of panel keys).</p>
+
+<p>As an example, change the display to &quot;airTemp_vs_date&quot;.  Then select &quot;Add Related&quot; from the &quot;Display&quot; button dropdown and select &quot;lat_vs_lon&quot;.  Now you can view the movement of the buoy in association with the time series plots, and filter these to explore whether the lat/lon binning looks valid.</p>
+
+<h4>Keyboard Shortcuts</h4>
+
+<p>There are some keyboard shortcuts for convenience:</p>
+
+<ul>
+<li><strong>&quot;c&quot;</strong>: open cognostics modal</li>
+<li><strong>&quot;v&quot;</strong>: open view modal</li>
+<li><strong>&quot;d&quot;</strong>: open display modal</li>
+<li><strong>&quot;r&quot;</strong>: open related displays modal</li>
+<li><strong>esc</strong>: leave a modal and return to panel view</li>
+</ul>
+
+<h4>To Come</h4>
+
+<ul>
+<li>A dropdown for each column (variable) in the cognostics table with options to:
+
+<ul>
+<li>apply a transformation to the variable</li>
+<li>randomly sample displays to view across the distribution of this variable</li>
+<li>if a continuous variable, discretize into bins</li>
+</ul></li>
+<li>A collapsible sidebar in the panel view that allows you to see where specified cognostics for the panels currently being viewed lie with respect those cognostics of all panels - either in a univariate or bivariate view</li>
+<li>Ability to specify panel-to-panel relationships within and between displays through cognostics, specified with something like <code>&quot;group1/name1/key1;group2/name2/key2&quot;</code></li>
+<li>Add an interactive network graph using d3 for panel-to-panel relationships, used to select panels of interest</li>
+<li>Multi-user per-panel input / user &quot;authentication&quot;</li>
+<li>...</li>
+</ul>
+
+</div>
+
+
+<div class='tab-pane' id='client-side-viewer'>
+<h3>Client-Side Viewer</h3>
+
+<p>There is a client-side viewer that is convenient because it does not require a web server, but is not nearly as flexible because it requires collections of plot files as the storage mechanism.  This viewer can be invoked by calling <code>view(type=&quot;cs&quot;)</code>.</p>
+
+</div>
+
+
+<div class='tab-pane' id='vdb-with-rhipe'>
+<h3>vdb with RHIPE</h3>
+
+<p>The true inspiration for the <code>vdb</code> package was the need to deal with very large datasets.  So far we have looked at in-memory datasets because it helps introduce the different concepts of the package without requiring the user to have a Hadoop cluster at their fingertips.  Here we look at the buoy data in RHIPE.</p>
+
+<p>To start, we need to put the data into RHIPE and have it represented as a RHIPE data object.  This uses the <code>datadr</code> package, which is discussed in great detail <a href="http://hafen.github.com/datadr/">here</a>.  </p>
+
+<p>RHIPE data is stored as key/value pairs, where each pair is a subset of the data split up in some way.  The first step to getting the buoy data into a RHIPE data format on HDFS is to use the <code>rhwrite()</code> function:</p>
+
+<pre><code class="r">library(Rhipe)
+rhinit()
+
+hdfs.setwd(&quot;/tmp&quot;)
+
+# write buoySplit data to disk
+rhwrite(elnino, file = &quot;elnino&quot;, chunk = 10000, style = &quot;new&quot;)
+</code></pre>
+
+<p>Here we set the HDFS working directory to <code>/tmp</code> and write the data.frame into chunks of 10000 rows each.</p>
+
+<p>We can see what this data looks like on HDFS:</p>
+
+<pre><code class="r">rhls(&quot;elnino&quot;)
+</code></pre>
+
+<pre><code>  permission   owner      group     size          modtime                 file
+1 drwxr-xr-x hafe647 supergroup        0 2013-03-27 01:22 /tmp/elnino/_rh_meta
+2 -rw-r--r-- hafe647 supergroup 14221646 2013-03-27 01:22   /tmp/elnino/part_1
+</code></pre>
+
+<p>The <code>part_1</code> file holds the data, and the <code>_rh_meta</code> directory is a place for metadata to reside.  Typically large files will be stored across many <code>part_</code> files which are distributed across a multi-node Hadoop cluster, but in this case, the data is very small and we wrote it all to one file.</p>
+
+<p>We can represent this in R as a <strong>&quot;rhDF&quot;</strong> (RHIPE data.frame) object using the following:</p>
+
+<pre><code class="r">library(datadr)
+rhElnino &lt;- rhDF(&quot;elnino&quot;)
+rhElnino
+</code></pre>
+
+<pre><code>An object of class rhDF, rhData with the following attributes: 
+
+&#39;rhData&#39; attr    : value
+----------------------------------------------------------------------------
+* hasKeys        : [empty] call updateAttributes(dat) to get this value
+* loc            : /tmp/elnino
+* type           : sequence
+* nfile          : 1
+* totSize        : 13.56 MB
+* ndiv           : [empty] call updateAttributes(dat) to get this value
+* splitSizeDistn : [empty] call updateAttributes(dat) to get this value
+* sourceData     : [empty] - no source job
+* sourceJobData  : [empty] - no source job
+* example        : use divExample(dat) or dat$example to get example subset(s)
+
+&#39;rhDF&#39; attr     : value
+--------------------------------------------------------------------------------
+* vars          : buoy(cha), date(Dat), lat(num), lon(num), zonWinds(num), merWinds(num), humidity(num), airTemp(num), ssTemp(num)
+* trans         : identity transformation (original data is a data.frame)
+* badSchema     : (not implemented)
+* nrow          : [empty] call updateAttributes(dat) to get this value
+* splitRowDistn : [empty] call updateAttributes(dat) to get this value
+* summary       : (not implemented)
+</code></pre>
+
+<p>See the <code>datadr</code> package docs for more details.  With the data represented in this way, we can now apply the buoy division we had done with the local data previously.</p>
+
+<pre><code class="r">byBuoy &lt;- divide(rhElnino, by=&quot;buoy&quot;, output=&quot;byBuoy&quot;)
+</code></pre>
+
+<p>The code looks the same as before with the addition of the <code>output</code> argument, which tells where the divided data should reside on HDFS.  Now this data representation, <code>byBuoy</code> behaves pretty much identically to how local data does, which we already know how to handle.</p>
+
+<p>Let&#39;s look at what one subset will look like to our plot function and cognostics function:</p>
+
+<pre><code class="r">str(divExample(byBuoy))
+</code></pre>
+
+<pre><code>&#39;data.frame&#39;:   2133 obs. of  9 variables:
+ $ buoy    : chr  &quot;buoyid_06&quot; &quot;buoyid_06&quot; &quot;buoyid_06&quot; &quot;buoyid_06&quot; ...
+ $ date    : Date, format: &quot;1992-08-21&quot; &quot;1992-08-22&quot; ...
+ $ lat     : num  -8.01 -8.01 -8.01 -8 -8 -8.01 -8 -8 -8.01 -8 ...
+ $ lon     : num  9.95 9.97 9.97 9.96 9.96 ...
+ $ zonWinds: num  -6.5 -6.9 -5.9 -6.8 -7.6 -7.6 -4.3 -3.3 -4.3 -3.5 ...
+ $ merWinds: num  -1.1 -1 -1.2 -0.2 2 -0.9 -2.9 -6.4 -3.1 1 ...
+ $ humidity: num  78.5 78.1 77 77.3 80.1 77.3 84.8 75.8 73.8 78.1 ...
+ $ airTemp : num  NA 29 28.9 28.9 28.9 ...
+ $ ssTemp  : num  NA 29.3 29.3 29.4 29.3 ...
+</code></pre>
+
+<p>Now you can test the plot and cognostics functions we defined previously:</p>
+
+<pre><code class="r">airDatePlotFn(divExample(byBuoy))
+airDateCogFn(divExample(byBuoy))
+</code></pre>
+
+<p>And now to plot:</p>
+
+<pre><code class="r">vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;airTemp_vs_date&quot;,
+   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
+   data    = byBuoy,
+   plotFn  = airDatePlotFn, 
+   plotDim = list(height=350, width=800)
+)
+</code></pre>
+
+<p>This looks just the same as before except that we are now operating on RHIPE data.  The default storage is &quot;hdfs&quot;, meaning the plots will be put on HDFS and read from the with the viewer.  </p>
+
+<h4>hdfsData</h4>
+
+<p>We can also create a display where the actual images are not generated, but instead the viewer grabs the associated data and renders the images on-the-fly.  An example of this:</p>
+
+<pre><code class="r">vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;airTemp_vs_date&quot;,
+   storage = &quot;hdfsData&quot;,
+   data    = byBuoy,
+   plotFn  = airDatePlotFn, 
+   plotDim = list(height=350, width=800)
+)
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='storage-types'>
+<h3>Storage Types</h3>
+
+<p>I&#39;ve been exploring several storage types for the panels of the displays.  Here is an enumeration with some details.  In general, the main consideration is whether you want to store the raster images on disk or view them on-the-fly.</p>
+
+<p><strong>In favor of storing raster images on disk</strong></p>
+
+<ul>
+<li>Paging through panels can be faster as we don&#39;t have to render them prior to displaying them</li>
+<li>Less work for the web server</li>
+</ul>
+
+<p><strong>In favor of generating images on-the-fly</strong></p>
+
+<ul>
+<li><code>vdbPlot()</code> is considerably faster - only need to compute cognostics and metadata about the display.  This is particularly true for very large datasets.</li>
+<li>If we are only ever going to view a small subset of possibly hundreds of thousands of panels, why render them all up-front instead of rendering the ones you currently want to look at?</li>
+<li>Image resolution: we do now know if the image will be viewed as a single large panel in the window, or tiled with tens or hundreds of panels in a single window.  When we render the image on-the-fly, we can render it at the resolution at which it will be viewed instead of having to store a raster image that has a resolution sufficient to be viewed at the largest scale.  A way around this would be to go away from .png to a vector format like .svg.  The only problem with that is that those files can get very large, and can be difficult to render consistently across all browsers.  In the future, this may all move toward d3...</li>
+</ul>
+
+<!-- Another option that might be explored is storing the data for the plots in a way that some .json representation of it can be sent to the browser and rendered very quickly using d3.js... -->
+
+<p>Here is a list of storage types:</p>
+
+<h4>local</h4>
+
+<p>This is what we&#39;ve been dealing with for the most part and is the default for an input of class &quot;localDiv&quot;.  A raster .png image for each panel is stored to local disk in the &quot;displays&quot; directory.</p>
+
+<h4>hdfs</h4>
+
+<p>This is the default when the input is of class <strong>&quot;rhDiv&quot;</strong>.  Base64 encoded raster .png images are stored in a mapfile on HDFS.</p>
+
+<h4>hbase</h4>
+
+<p><em>(Coming soon)</em>.  Base64 encoded raster .png images are stored in an HBASE table.</p>
+
+<h4>mongo</h4>
+
+<p>Base64 encoded raster .png images are stored in mongoDB (connection parameters specified in <code>vdbConn</code>).  This is very experimental and not recommended.</p>
+
+<h4>localData</h4>
+
+<p>The data object of class <strong>&quot;localDiv&quot;</strong> is stored in the vdb directory and the viewer reads the data directly from this object and applies <code>plotFn</code> on-the-fly.  This allows you to change the plot function on-the-fly as well.</p>
+
+<p>Here is an example:</p>
+
+<pre><code class="r">vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;airTemp_vs_date_ld&quot;,
+   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
+   storage = &quot;localData&quot;,
+   data    = buoySplit,
+   plotFn  = airDatePlotFn, 
+   plotDim = list(height=350, width=800),
+   lims    = buoyLims, 
+   cogFn   = airDateCogFn, 
+   cogDesc = airDateCogDesc
+)
+</code></pre>
+
+<p>Navigate to the &quot;View&quot; modal and click the &quot;plotFn&quot; tab.  Now try changing the text of the plot to this, for example, to add a loess smooth:</p>
+
+<pre><code class="r">airDatePlotFn &lt;- function(dat) {
+   xyplot(airTemp ~ date, 
+      groups=duplicated(date) | duplicated(date, fromLast=TRUE), 
+      panel=function(x, y, ...) {
+         panel.xyplot(x, y, ...)
+         panel.loess(x, y, degree=2, span=0.1, 
+            evaluation=300, col=&quot;black&quot;))
+      },
+      data=dat$data
+   )
+}
+</code></pre>
+
+<h4>hdfsData</h4>
+
+<p>This will allows the same thing to be done with <strong>&#39;rhDiv&#39;</strong> data as with <strong>&#39;localDiv&#39;</strong> - data is rapidly retrieved based on its key and plots are rendered on-the-fly.</p>
+
+<p>Of all of these storage options, the client side viewer can only deal with &quot;local&quot;.  All others require the Shiny viewer.</p>
+
+<h4>Enumeration of input/output options</h4>
+
+<p>As you have seen, I&#39;ve implemented support for a lot of input/output types.  Part of this is to be flexible.  Part is because I&#39;m trying to evaluate what is the best way to go.  The two input formats are objects of class <strong>&#39;localDiv&#39;</strong> and <strong>&#39;rhDiv&#39;</strong>.  The output (&quot;storage&quot;) formats for a given input format are:</p>
+
+<p><strong>Output possibilities for input type &#39;localDiv&#39;</strong>:</p>
+
+<ul>
+<li>local <em>(default)</em></li>
+<li>localData</li>
+<li>mongodb</li>
+</ul>
+
+<p><strong>Output possibilities for input type &#39;rhDiv&#39;</strong>:</p>
+
+<ul>
+<li>hdfs <em>(default)</em></li>
+<li>local (not a good idea unless you have a common file system mounted on all nodes - like LUSTRE)</li>
+<li>mongodb</li>
+<li>hdfsData</li>
+<li>hbase <em>(not implemented)</em></li>
+</ul>
+
+</div>
+
+
+<div class='tab-pane' id='creating-a-notebook'>
+<h3>Creating a Notebook</h3>
+
+<p>When collaborating with others or keeping track of your own research, it is not usually natural to have a bunch of displays lying around.  It is useful to organize them.  This package contains functions that help set up and maintain a web notebook that ties in to the vdb.</p>
+
+<p>Notebooks are static pages, but are dynamically created using the <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> packages.  I&#39;m not so concerned here about the &quot;reproducible research&quot; facets of knitr the package, but they make it easier to set the notebooks up and are available if you want to use them.  Mainly, the idea is that you can write a simple notebook using the simple <a href="http://daringfireball.net/projects/markdown/">markdown syntax</a> and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.</p>
+
+<p>To create a new page, you can do the following:</p>
+
+<pre><code class="r">newNotebook(
+   title=&quot;El Nino Buoy Data Exploratory Analysis&quot;, 
+   author=&quot;Bob&quot;
+)
+</code></pre>
+
+<p>There is also an argument, <code>name</code>, which determines the name of the <code>.Rmd</code> file generated.  The default is <code>&quot;index&quot;</code>, so that the new notebook page we set up has the name &quot;index.Rmd&quot; with the specified title and author.  If you recall from earlier, there is a <code>notebook</code> subdirectory in your VDB directory.  This is where the notebook files go.</p>
+
+<p>Let&#39;s look at the first few lines of the file we just created:</p>
+
+<pre><code class="r">vdbDir &lt;- getOption(&quot;vdbConn&quot;)$vdbPrefix
+list.files(file.path(vdbDir, &quot;notebook&quot;))
+cat(paste(readLines(file.path(vdbDir, &quot;notebook&quot;, &quot;index.Rmd&quot;))[1:10], collapse=&quot;\n&quot;))
+</code></pre>
+
+<pre><code>```{r, echo=FALSE}
+# do not remove this block - set parameters accordingly
+bsSetup(
+   pageTitle = &quot;El Nino Buoy Data Exploratory Analysis&quot;, 
+   title     = &quot;El Nino Buoy Data Exploratory Analysis&quot;,
+   author    = &quot;Bob&quot;,
+   toc       = &quot;TRUE&quot;,
+   css       = NULL
+)
+</code></pre>
+
+<p>We see that there is a knitr R code block that gets executed.  This sets up the skeleton of the page using a function <code>bsSetup()</code>.  You can change the options here - (see the function reference for more details).  This sets up a skeleton of a page with a header, optional sidebar with table of contents, etc.  Below this first code chunk in the .Rmd file is where you put your notebook text.  By default, the <code>newNotebook()</code> function creates some default content here that illustrates various aspects of markdown.</p>
+
+<p>Go ahead and open this file in your favorite editor and try pasting in the following lines:</p>
+
+<pre><code class="r"># A look at time series plots by buoy
+
+Some text...
+
+nbDisplay(&quot;tempVars_vs_tempMeans&quot;)
+
+Some text...
+
+nbDisplayList(c(&quot;airTemp_vs_date&quot;, &quot;airTemp_vs_date_ld&quot;))
+</code></pre>
+
+<p>The function <code>nbDisplay()</code> is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The <code>nbDisplayList()</code> function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links to viewing the display on in the viewer.  </p>
+
+<p>Now typeset it and view:</p>
+
+<pre><code class="r">typeset() # or typeset(name=&quot;index&quot;)
+viewNotebook() # or viewNotebook(name=&quot;index&quot;)
+</code></pre>
+
+<p>Note that &quot;index&quot; is the default page name but you can make pages with other names.</p>
+
+</div>
+
+
+<div class='tab-pane' id='syncing-files-with-the-web'>
+<h3>Syncing Files With the Web</h3>
+
+<p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  More on this to come...</p>
+
+</div>
+
+   
+   
+   <ul class="pager">
+      <li><a href="#" id="previous">&larr; Previous</a></li> 
+      <li><a href="#" id="next">Next &rarr;</a></li> 
+   </ul>
+</div>
+
+
+</div>
+</div>
+
+<hr>
+
+<div class="footer">
+   <p>&copy; Ryan Hafen, 2013</p>
+</div>
+</div> <!-- /container -->
+
+<script src="js/jquery.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="js/jquery.ba-hashchange.min.js"></script>
+<script>
+function manageNextPrev() {
+   $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);
+   $('a#previous').parent().toggleClass('disabled', $('#toc.nav li.active').prevAll('li:not(.nav-header)').size() == 0);
+}
+manageNextPrev();
+
+$('a#next').click(function(e) {
+   e.preventDefault();
+   location.href = $('#toc.nav li.active').nextAll('li:not(.nav-header)').first().find('a').attr('href');
+   manageNextPrev();
+});
+$('a#previous').click(function(e) {
+   e.preventDefault();
+   location.href = $('#toc.nav li.active').prevAll('li:not(.nav-header)').first().find('a').attr('href');
+   manageNextPrev();
+});
+
+$(window).hashchange(function() {
+  $('.tab-pane').hide();
+  var tab = location.hash || '#background';
+  $(tab + '.tab-pane').show();
+
+  $('#toc.nav li.active').removeClass('active');
+  $('#toc.nav li a[href="' + tab + '"]').parent().addClass('active');
+  manageNextPrev();
+});
+$(window).hashchange();
+</script>
+</body>
+</html>

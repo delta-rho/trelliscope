@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vdb R Function Reference</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/pygment.css" rel="stylesheet">
+    <link href='css/highlight.css' rel='stylesheet'>
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 900px;
+      }
+      .container-narrow > hr {
+        margin: 15px 0 20px 0;
+      }
+      
+      #next {
+         font-size: 14px;
+      }
+
+      #previous {
+         font-size: 14px;
+      }
+
+      .myHeader {
+         font-family: 'Chivo', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 400;
+         letter-spacing: -1px;
+         font-size: 28px;
+         line-height: 40px;
+         color: #d14;
+         text-shadow: 8px 2px 6 rgba(55, 55, 55, 0.5);
+      }
+
+/*      #main-content {
+         margin-top: -15px;
+      }
+*/
+    </style>
+    
+    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+                                   <!-- <link rel="shortcut icon" href="ico/favicon.png"> -->
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class=""><a href="index.html">Docs</a></li>
+          <li class="active"><a href="functionref.html">Function Ref</a></li>
+          <li><a href="https://www.github.com/hafen/vdb">Github</a></li>
+        </ul>
+        <p class="myHeader">vdb: R Function Reference</p>
+      </div>
+
+      <hr>
+
+<div class="container-fluid">
+   <div class="row-fluid">
+   
+   <div class="span3 well">
+   <ul class = "nav nav-list" id="toc">
+   <li class='nav-header'>Contents</li> <li class="active">
+   <a target="_self" class="nav-not-header" href="#packagemain">Package Info</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#bssetup">bsSetup</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#htaccessgen">htaccessGen</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#makeinputvars">makeInputVars</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#makesploddata">makeSplodData</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#nbdisplay">nbDisplay</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#nbdisplaylist">nbDisplayList</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#newnotebook">newNotebook</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#nomargins">noMargins</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#plotvdbpre">plot.vdbPre</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#splodcogfn">splodCogFn</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#splodplotfn">splodPlotFn</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#typeset">typeset</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbinit">vdbInit</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbplot">vdbPlot</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbprepanel">vdbPrepanel</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbsetlims">vdbSetLims</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbsplod">vdbSplod</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbupdateviewer">vdbUpdateViewer</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#view">view</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#viewnotebook">viewNotebook</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#websync">websync</a>
+</li>
+   </ul>
+   </div>
+
+<div class="span9 tab-content" id="main-content">
+
+<!-- packagemain -->   
+<div class="tab-pane active" id="packagemain">
+
+<h3>Visualization Databases</h3>
+
+<p><strong>Author:</strong> Ryan Hafen</p>
+<p><strong>Version:</strong> 0.2</p>
+<p><strong>Date:</strong> 2012-03-03</p>
+<p><strong>License:</strong> BSD</p>
+
+<h4>Description</h4>
+<p>Visualization databases (VDBs) provide a way to organize and
+handle large amounts of multi-page visualizations.  This package provides a
+mechanism for easily generating and organizing plots and provides a dynamic
+viewer for tiling displays across the screen and paging through them. There
+is also a mechanism to generate built-in or user-defined &quot;cognostic&quot;
+metrics for each page of a plot, and the viewer has the ability to sort or
+filter the pages based on these cognostics.  This is useful for large
+multi-page displays where it is not possible to view each page, allowing
+only pages with interesting features to be presented.  This package also
+provides a way to meaningfully organize and present these displays in a
+&quot;lab notebook&quot;.</p>
+
+<h4>Depends</h4>
+<p>
+R (&gt;= 2.15.0),
+datadr,
+lattice (&gt;= 0.19-26),
+ggplot2,
+base64enc,
+knitr,
+markdown,
+shiny (&gt;= 0.5.0),
+digest,
+codetools,
+hexbin,
+fastICA</p>
+
+<h4>Suggests</h4>
+<p>
+Rhipe,
+rmongodb,
+scagnostics,
+ggplot2</p>
+
+</div>
+<!-- bsSetup -->   
+<div class="tab-pane" id="bssetup">
+
+<h3>Set Up Web Notebook Using Bootstrap</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#bssetup'>bsSetup</a></span><span class="keyword">(</span><span class="argument">pageTitle</span> <span class="argument">=</span> <span class="string">"test"</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"test"</span><span class="keyword">,</span> <span class="argument">author</span> <span class="argument">=</span> <span class="string">"author name"</span><span class="keyword">,</span>
+  <span class="argument">toc</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">css</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>pageTitle</dt>
+  <dd>the text to display on the title bar of
+  the web browser</dd>
+  <dt>title</dt>
+  <dd>the text to display on the header of the web
+  page</dd>
+  <dt>author</dt>
+  <dd>author</dd>
+  <dt>toc</dt>
+  <dd>should a table-of-contents be included?</dd>
+  <dt>css</dt>
+  <dd>path to additional style sheets, if desired</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Set up a Twitter Boostrap template for a notebook to be
+  typeset with knitr.  This function should be called at
+  the beginning of a .Rmd file.  If you use
+  <code>vdbNotebook</code> to initialize a notebook .Rmd
+  file, this will already be there.</p>
+
+
+  <h4>References</h4>
+
+  <p>http://twitter.github.com/bootstrap/</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code>vdbNotebook</code>, <code><a href='#typeset'>typeset</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- htaccessGen -->   
+<div class="tab-pane" id="htaccessgen">
+
+<h3>Generate a .htaccess file</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#htaccessgen'>htaccessGen</a></span><span class="keyword">(</span><span class="argument">vdbPath</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbPath</span><span class="keyword">,</span> <span class="argument">users</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbUsers</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>path</dt>
+  <dd>The location on the local file system of the
+  current project's "web" directory or the parent folder of
+  the web directory.</dd>
+  <dt>users</dt>
+  <dd>A vector of users to which access should be
+  granted.</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Generate a .htaccess file that restricts html access to
+  specified PNL users.</p>
+
+
+  <h4>Details</h4>
+
+  <p>Uses Kerberos authentication based on the User ID, which
+  can be looked up at icam.pnl.gov</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#typeset'>typeset</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- makeInputVars -->   
+<div class="tab-pane" id="makeinputvars">
+
+<h3>Create Input Variables for a VDB Display</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#makeinputvars'>makeInputVars</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="symbol">type</span><span class="keyword">,</span> <span class="argument">dataType</span> <span class="argument">=</span> <span class="string">"character"</span><span class="keyword">,</span> <span class="argument">default</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">,</span>
+  <span class="argument">description</span> <span class="argument">=</span> <span class="string">"Input variable"</span><span class="keyword">,</span> <span class="argument">args</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>name</dt>
+  <dd>name of the input variable</dd>
+  <dt>type</dt>
+  <dd>variable type - must be "text", "textarea",
+  or "select" (dropdown) - (checkbox to come?)</dd>
+  <dt>dataType</dt>
+  <dd>the desired type of the data for this
+  variable - must be "character", or "numeric"</dd>
+  <dt>default</dt>
+  <dd>the default value for the variable to take
+  prior to user input</dd>
+  <dt>args</dt>
+  <dd>a character vector of dropdown values if
+  type="select"</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Create a 'inputVars' object which can be passed to the
+  'inputVars' argument of <code><a href='#vdbplot'>vdbPlot</a></code> to create
+  per-panel input variables in the VDB viewer.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbplot'>vdbPlot</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- makeSplodData -->   
+<div class="tab-pane" id="makesploddata">
+
+<h3>Create Data Plottable by vdbSplod</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#makesploddata'>makeSplodData</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">id.vars</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>data</dt>
+  <dd>a data.frame</dd>
+  <dt>id.vars</dt>
+  <dd>variables to ignore when computing all
+  pairs of variables</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>an object of class 'localDiv' and 'splodDat' that can be
+  passed to <code><a href='#vdbsplod'>vdbSplod</a></code></p>
+
+
+  <h4>Description</h4>
+
+  <p>Create pairwise scatterplot data plottable by vdbSplod</p>
+
+
+  <h4>References</h4>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbsplod'>vdbSplod</a></code>, <code>vdbCogFn</code>,
+  <code><a href='#splodplotfn'>splodPlotFn</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- nbDisplay -->   
+<div class="tab-pane" id="nbdisplay">
+
+<h3>Make Single Display in a Notebook</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#nbdisplay'>nbDisplay</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>name</dt>
+  <dd>a vector of display names to be in the list</dd>
+  <dt>group</dt>
+  <dd>(needs to be fixed...)</dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Make html code to show a large plot of a single display
+  in a web notebook.  To be used inside of a notebook .Rmd
+  file.  Meant for single-panel displays.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#typeset'>typeset</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- nbDisplayList -->   
+<div class="tab-pane" id="nbdisplaylist">
+
+<h3>Make a List of Displays in a Notebook</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#nbdisplaylist'>nbDisplayList</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>name</dt>
+  <dd>a vector of display names to be in the list</dd>
+  <dt>group</dt>
+  <dd>(needs to be fixed...)</dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Make html code to display a list of displays in a web
+  notebook.  To be used inside of a notebook .Rmd file.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#typeset'>typeset</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- newNotebook -->   
+<div class="tab-pane" id="newnotebook">
+
+<h3>Create a New Notebook File</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#newnotebook'>newNotebook</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">blank</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"My Test Page"</span><span class="keyword">,</span>
+  <span class="argument">pageTitle</span> <span class="argument">=</span> <span class="symbol">title</span><span class="keyword">,</span> <span class="argument">author</span> <span class="argument">=</span> <span class="string">"Author Name"</span><span class="keyword">,</span> <span class="argument">toc</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">css</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>name</dt>
+  <dd>name of the .Rmd file to be created</dd>
+  <dt>blank</dt>
+  <dd>do you just want a blank page, or do you
+  want a template with several markdown examples filled out
+  for reference?</dd>
+  <dt>pageTitle,</dt>
+  <dd>title, author, toc, css these are
+  parameters to be placed in the <code><a href='#bssetup'>bsSetup</a></code> call
+  at the top of the .Rmd file, and can be ignored if you
+  plan to change them later in the file itself</dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>creates a new .Rmd file that will go in the "notebook"
+  directory of the vdb directory</p>
+
+
+  <h4>Description</h4>
+
+  <p>Create a new notebook file skeleton.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#typeset'>typeset</a></code>, <code><a href='#viewnotebook'>viewNotebook</a></code>,
+  <code><a href='#bssetup'>bsSetup</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- noMargins -->   
+<div class="tab-pane" id="nomargins">
+
+<h3>Remove Margins from Trellis/Lattice Plot</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#nomargins'>noMargins</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">topkey</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">rightkey</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>...</dt>
+  <dd>a list of other parameters to be passed to
+  par.settings</dd>
+  <dt>topkey</dt>
+  <dd>should extra space be added for a top key?</dd>
+  <dt>rightkey</dt>
+  <dd>should extra space be added for a right
+  key?</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Removes whitespace surrounding a trellis plot.  Ideal for
+  <code><a href='#vdbplot'>vdbPlot</a></code> because when tiling multiple
+  panels, a lot of space is wasted with the margins.</p>
+
+
+
+<h4>Examples</h4>
+<pre class="examples"><div class='input'>## <strong>Not run</strong>: # xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),#    par.settings=noMargins()# )# # # with additional par.settings...# xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),#    par.settings=noMargins(#       list(plot.symbol=list(col="black"))#    )# )# ## <strong>End(Not run)</strong></div></pre>
+
+<h4>See also</h4>
+
+  <code><a href='http://www.inside-r.org/r-doc/lattice/xyplot'>xyplot</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- plot.vdbPre -->   
+<div class="tab-pane" id="plotvdbpre">
+
+<h3>Plot results form vdbPrepanel</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#plotvdbpre'>plot.vdbPre</a></span><span class="keyword">(</span><span class="symbol">lims</span><span class="keyword">,</span> <span class="argument">layout</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">2</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">as.table</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">strip</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">strip.left</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">between</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">y</span> <span class="argument">=</span> <span class="number">0.25</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">xlab</span> <span class="argument">=</span> <span class="string">"Rank"</span><span class="keyword">,</span>
+  <span class="argument">ylab</span> <span class="argument">=</span> <span class="string">"Panel Limits"</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>lims</dt>
+  <dd>object of class "vdbPre" created by
+  <code><a href='#vdbprepanel'>vdbPrepanel</a></code></dd>
+  <dt>layout,</dt>
+  <dd>as.table, strip, strip.left, between,
+  xlab, ylab, ... parameters for the lattice plot that
+  is output (these are defaults - can ignore unless you
+  want fine control)</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>object of class "trellis" (plotted by default)</p>
+
+
+  <h4>Description</h4>
+
+  <p>Plot results form vdbPrepanel</p>
+
+
+  <h4>Details</h4>
+
+  <p>This function plots the sorted axis ranges for the x and
+  y axis for the case of "same" (all axis limits share the
+  same range) and "sliced" (all axis limits share the) and
+  can be useful in helping determine how to ultimately set
+  the limits.</p>
+
+
+
+<h4>Examples</h4>
+<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# plot(irisPre)# ## <strong>End(Not run)</strong></div></pre>
+
+<h4>See also</h4>
+
+  <code><a href='#vdbprepanel'>vdbPrepanel</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- splodCogFn -->   
+<div class="tab-pane" id="splodcogfn">
+
+<h3>Default Cognostics Function for vdbSplod</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#splodcogfn'>splodCogFn</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>df</dt>
+  <dd>a subset of data created by
+  <code><a href='#makesploddata'>makeSplodData</a></code></dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>a data.frame of scagnostics for the given subset</p>
+
+
+  <h4>Description</h4>
+
+  <p>Default cognostics function for vdbSplod</p>
+
+
+  <h4>References</h4>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#splodplotfn'>splodPlotFn</a></code>, <code><a href='#vdbsplod'>vdbSplod</a></code>,
+  <code><a href='#makesploddata'>makeSplodData</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- splodPlotFn -->   
+<div class="tab-pane" id="splodplotfn">
+
+<h3>Default Plot Function for vdbSplod</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#splodplotfn'>splodPlotFn</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>df</dt>
+  <dd>a subset of data created by
+  <code><a href='#makesploddata'>makeSplodData</a></code></dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>a trellis plot object of a scatterplot for the given
+  subset</p>
+
+
+  <h4>Description</h4>
+
+  <p>Default plot function for vdbSplod</p>
+
+
+  <h4>References</h4>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#splodcogfn'>splodCogFn</a></code>, <code><a href='#vdbsplod'>vdbSplod</a></code>,
+  <code><a href='#makesploddata'>makeSplodData</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- typeset -->   
+<div class="tab-pane" id="typeset">
+
+<h3>Typeset a notebook (.Rmd) File</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#typeset'>typeset</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>file</dt>
+  <dd>file name (extension of .Rmd is not
+  required)</dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>output .html file goes in the "notebook" directory of the
+  vdb directory, to be viewed with
+  <code><a href='#viewnotebook'>viewNotebook</a></code></p>
+
+
+  <h4>Description</h4>
+
+  <p>Processes a .Rmd file created with
+  <code><a href='#newnotebook'>newNotebook</a></code>.  Basically a wrapper around
+  knitr that additionally takes care of several layout
+  issues to get a Bootstrap notebook web page.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#viewnotebook'>viewNotebook</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbInit -->   
+<div class="tab-pane" id="vdbinit">
+
+<h3>Set up a new VDB</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbinit'>vdbInit</a></span><span class="keyword">(</span><span class="argument">path</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">autoYes</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>path</dt>
+  <dd>The location on the local file system where
+  the directory for the vdb will be placed</dd>
+  <dt>autoYes</dt>
+  <dd>should questions to proceed with
+  operations be automarically answered with "yes"?</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Set up a new vdb directory</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbupdateviewer'>vdbUpdateViewer</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbPlot -->   
+<div class="tab-pane" id="vdbplot">
+
+<h3>Create a vdb Display</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbplot'>vdbPlot</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> <span class="string">"common"</span><span class="keyword">,</span> <span class="argument">desc</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">,</span> <span class="argument">plotDim</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">height</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">width</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">aspect</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">res</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">plotFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">lims</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"free"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"free"</span><span class="keyword">,</span> <span class="argument">preFn</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">cogFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">cogDesc</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">inputVars</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">storage</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">subDirSize</span> <span class="argument">=</span> <span class="number">1000</span><span class="keyword">,</span> <span class="argument">subDirN</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">parallel</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">rhFail</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">mapred</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">calledFromRhipe</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>dat</dt>
+  <dd>data of class "localDiv", "rhData", "trellis",
+  "ggplot", or "expression"</dd>
+  <dt>name</dt>
+  <dd>the name of the display (no spaces or special
+  characters)</dd>
+  <dt>group</dt>
+  <dd>the group the display belongs to (displays
+  are organized into groups).  Defaults to "common"</dd>
+  <dt>desc</dt>
+  <dd>a description of the display (used in the
+  viewer and in notebooks)</dd>
+  <dt>plotDim</dt>
+  <dd>a list defining aspects of the plot
+  dimension, including height, width, aspect, and res
+  (resolution of raster image).  defaults are 480 (px), 40,
+  "fill", and 150, respectively</dd>
+  <dt>plotFn</dt>
+  <dd>a function that produces a plot and takes
+  one argument, which will be the current split of the data
+  being passed to it.  Useful to test with
+  plotFn(divExample(dat)).  Must return either an object of
+  class "ggplot", "trellis", or "expression" (of base plot
+  commands)</dd>
+  <dt>lims</dt>
+  <dd>either an object of class "vdbLims" as
+  obtained from <code><a href='#vdbsetlims'>vdbSetLims</a></code> or a list with
+  elements x, y, and preFn, that specify how to apply
+  <code><a href='#vdbprepanel'>vdbPrepanel</a></code> and <code><a href='#vdbsetlims'>vdbSetLims</a></code></dd>
+  <dt>cogFn</dt>
+  <dd>a function that produces a single row of a
+  data frame where each column is a cognostic feature .
+  The function should takes one argument, which will be the
+  current split of the data being passed to it.  Useful to
+  test with cogFn(divExample(dat))</dd>
+  <dt>cogDesc</dt>
+  <dd>a vector of descriptions for the cognostic
+  variables specified by cogFn</dd>
+  <dt>inputVars</dt>
+  <dd>input variables that will allow user
+  input in the viewer, defined by <code>inputVars</code></dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+  <dt>storage</dt>
+  <dd>how to store the plots and metadata for
+  the display.  See details</dd>
+  <dt>subDirSize</dt>
+  <dd>the approximate number plots per
+  subdirectory.  Only used of <code>storage=="local"</code>.  If
+  number of plots is less, there will not be subdiretories.
+  If set to 0, there will not be subdirectories.</dd>
+  <dt>verbose</dt>
+  <dd>print status messages?</dd>
+  <dt>parallel</dt>
+  <dd>for storage="local" create plots in
+  parallel (currently not working)</dd>
+  <dt>mapred</dt>
+  <dd>parameters to be passed to the Rhipe
+  mapreduce job (see <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code>)</dd>
+  <dt>calledFromRhipe</dt>
+  <dd>don't mess with this</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Create a vdb display</p>
+
+
+  <h4>Details</h4>
+
+  <p>there are a lot of details... see the vignette:
+  <code>browseVignettes("vdb")</code></p>
+
+  <p>Many of the parameters are optional or have defaults.</p>
+
+  <p>Storage options for plots: <span class='describe'> local:plots
+  for each of the panels will be stored in the displays
+  directory of the vdb directory mongo:plots will
+  be stored in mongodb using the mongodb connection as
+  specified by "vdbConn" (see vignette) - this is very
+  experimental hdfs:plots will be stored in a
+  mapfile on HDFS - can only be done with data of class
+  "rhSplit" localData:instead of storing plots,
+  data, plotFn, etc. will be stored locally and plotFn will
+  be applied to the data on-the-fly in the viewer </span> There
+  are so many options because there are several tradeoffs,
+  described in the vignette.</p>
+
+
+
+<h4>Examples</h4>
+<pre class="examples"><div class='input'># see docs</div></pre>
+
+<h4>See also</h4>
+
+  <code><a href='#vdbprepanel'>vdbPrepanel</a></code>, <code><a href='#vdbsetlims'>vdbSetLims</a></code>,
+  <code>inputVars</code>, <code>divide</code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbPrepanel -->   
+<div class="tab-pane" id="vdbprepanel">
+
+<h3>Prepanel Function for vdb Plots</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbprepanel'>vdbPrepanel</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">preFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">mapred</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">calledFromRhipe</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>dat</dt>
+  <dd>an object of class "localDiv" or "rhData"</dd>
+  <dt>preFn</dt>
+  <dd>a prepanel function that returns a list
+  specifying <code>xlim</code> and <code>ylim</code> for determining
+  axis limits, and optionally <code>dx</code> and <code>dy</code> for
+  determining aspect ratio (used to define slopes of line
+  segments used for banking computations).  preFn can also
+  be a plotFn (see <code><a href='#vdbplot'>vdbPlot</a></code>) that returns
+  either an object of class "trellis" or "ggplot", since
+  xlim and ylim can be determined from these.</dd>
+  <dt>mapred</dt>
+  <dd>a list of parameters to be sent to
+  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> if dat is of class "rhData"</dd>
+  <dt>verbose</dt>
+  <dd>print status messages?</dd>
+  <dt>calledFromRhipe</dt>
+  <dd>ignore this parameter (don't use
+  it)</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>object of class "vdbPre".  This is a list of the x and y
+  axis ranges for each split, along with the aspect ratio
+  banking value if <code>dx</code> and <code>dy</code> are supplied in
+  <code>preFn</code>.  Can be used with <code><a href='#plotvdbpre'>plot.vdbPre</a></code>
+  and <code><a href='#vdbsetlims'>vdbSetLims</a></code>.</p>
+
+
+  <h4>Description</h4>
+
+  <p>Prepanel function for vdb plots</p>
+
+
+  <h4>Details</h4>
+
+  <p>Apply a prepanel function to objects of class "localDiv"
+  (obtained from splitDF()) or "rhData" to determine ranges
+  of x and y axis limits.  Useful in conjunction with
+  <code><a href='#vdbsetlims'>vdbSetLims</a></code>.</p>
+
+  <p>The plot method plots the sorted axis ranges for the x
+  and y axis for the case of "same" (all axis limits share
+  the same range) and "sliced" (all axis limits share the)
+  and can be useful in helping determine how to ultimately
+  set the limits.</p>
+
+  <p>You don not need to use <code>vdbPrepanel</code> to ultimately
+  create a <code><a href='#vdbplot'>vdbPlot</a></code>, but if you bypass, you
+  will either need to specify your own limits in your plot
+  command, or do nothing, in which case each individual
+  plot will have limits based on the data in the split
+  being plotted (the axes will be "free").</p>
+
+  <p>Axis limits are very important.  What makes viewing
+  groups of plots of subsets of data ("small multiples") so
+  powerful is being able to make meaningful visual
+  comparisons across plots.  This is much easier to do if
+  scales for each plot are commensurate.</p>
+
+  <p>This function is also useful for identifying subsets with
+  very large outlying values, and in conjunction with
+  <code><a href='#vdbsetlims'>vdbSetLims</a></code>, allows you to account for that
+  prior to the expensive process of creating all of the
+  plots.</p>
+
+  <p>In the future, there will be helper functions for special
+  types of plots, such as histograms, etc. to help the user
+  more easily provide the <code>xlim</code> and <code>ylim</code>
+  components of the prepanel function.</p>
+
+
+
+<h4>Examples</h4>
+<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# plot(irisPre)#' ## <strong>End(Not run)</strong></div></pre>
+
+<h4>See also</h4>
+
+  <code><a href='http://www.inside-r.org/r-doc/ggplot2/aes_position'>x</a></code> <code><a href='#plotvdbpre'>plot.vdbPre</a></code>,
+  <code><a href='#vdbsetlims'>vdbSetLims</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>,
+  <code>localDiv</code>, <code>rhData</code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbSetLims -->   
+<div class="tab-pane" id="vdbsetlims">
+
+<h3>Specify rules for x and y limits for a vdbPlot</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbsetlims'>vdbSetLims</a></span><span class="keyword">(</span><span class="symbol">lims</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="string">"same"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"same"</span><span class="keyword">,</span> <span class="argument">xQuant</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">yQuant</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span>
+  <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">xRangeQuant</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="argument">yRangeQuant</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="argument">prop</span> <span class="argument">=</span> <span class="number">0.07</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>lims</dt>
+  <dd>object of class "vdbPre"</dd>
+  <dt>x</dt>
+  <dd>x-axis limits rule (either "same", "sliced", or
+  "free" - see details)</dd>
+  <dt>y</dt>
+  <dd>y-axis limits rule (either "same", "sliced", or
+  "free" - see details)</dd>
+  <dt>xQuant</dt>
+  <dd>lower and upper quantiles at which to cut
+  off x-axis limits, in the case of outliers.  Used when
+  x="same".</dd>
+  <dt>yQuant</dt>
+  <dd>same as xQuant but for y-axis</dd>
+  <dt>xQuantRange</dt>
+  <dd>a single upper quantile at which to
+  cut off the x-axis range, used when x="sliced", used in
+  the case of a few splits having abnormally high range,
+  which are wished to be excluded</dd>
+  <dt>yQuantRange</dt>
+  <dd>same as xQuantRange but for y-axis</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>object of class "vdbLims", which can be used in a call to
+  <code><a href='#vdbplot'>vdbPlot</a></code></p>
+
+
+  <h4>Description</h4>
+
+  <p>Based on results from <code><a href='#vdbprepanel'>vdbPrepanel</a></code>, specify
+  rules that will determine x and y axis limits.</p>
+
+
+  <h4>Details</h4>
+
+  <p>This function reduces the list of axis limits computed
+  for each split of a data set to an overall axis limit
+  rule for the plot.</p>
+
+  <p>About "x" and "y" parameters: This is the same as in
+  lattice.  From lattice documentation: A character string
+  that determines how axis limits are calculated for each
+  panel. Possible values are "same" (default), "free" and
+  "sliced". For relation="same", the same limits, usually
+  large enough to encompass all the data, are used for all
+  the panels. For relation="free", limits for each panel is
+  determined by just the points in that panel. Behavior for
+  relation="sliced" is similar, except that the length (max
+  - min) of the scales are constrained to remain the same
+  across panels.</p>
+
+
+
+<h4>Examples</h4>
+<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# irisLims <- vdbSetLims(irisPre, x="same", y="sliced")# ## <strong>End(Not run)</strong></div></pre>
+
+<h4>See also</h4>
+
+  <code><a href='#vdbprepanel'>vdbPrepanel</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbSplod -->   
+<div class="tab-pane" id="vdbsplod">
+
+<h3>Create a Scatterplot Display</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbsplod'>vdbSplod</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">id.vars</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">name</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">desc</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">cogFn</span> <span class="argument">=</span> <span class="symbol">splodCogFn</span><span class="keyword">,</span>
+  <span class="argument">plotFn</span> <span class="argument">=</span> <span class="symbol">splodPlotFn</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>data</dt>
+  <dd>a data.frame or an object of class
+  "splodDat"</dd>
+  <dt>id.vars</dt>
+  <dd>variables to ignore when computing all
+  pairs of variables</dd>
+  <dt>name,</dt>
+  <dd>desc, cogFn, plotFn, verbose, ...
+  parameters passed to <code><a href='#vdbplot'>vdbPlot</a></code></dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>an object of class 'localDiv' that can be passed to
+  <code><a href='#vdbsplod'>vdbSplod</a></code></p>
+
+
+  <h4>Description</h4>
+
+  <p>Create a scatterplot display (splod)</p>
+
+
+  <h4>References</h4>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbplot'>vdbPlot</a></code>, <code>makeSplodDat</code>,
+  <code>vdbCogFn</code>, <code><a href='#splodplotfn'>splodPlotFn</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbUpdateViewer -->   
+<div class="tab-pane" id="vdbupdateviewer">
+
+<h3>Update Project VDB Client Side Viewer Files</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbupdateviewer'>vdbUpdateViewer</a></span><span class="keyword">(</span><span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Useful to do after a new update of the <code>vdb</code> package
+  has been installed.  Moves the viewer files from the
+  package to the project directory.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbinit'>vdbInit</a></code>, <code>vdbUpdateOptions</code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- view -->   
+<div class="tab-pane" id="view">
+
+<h3>Run Server-Side Viewer</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#view'>view</a></span><span class="keyword">(</span><span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">type</span> <span class="argument">=</span> <span class="string">"ss"</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">name</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">port</span> <span class="argument">=</span> <span class="number">8100L</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+  <dt>type</dt>
+  <dd>there are two viewers - the server-side "ss"
+  and client-side "cs"</dd>
+  <dt>group,</dt>
+  <dd>name optional parameters to load the viewer
+  with a pre-specified display</dd>
+  <dt>port</dt>
+  <dd>if type="ss", what port to use for the
+  viewer</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Run server-side viewer on local machine</p>
+
+
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- viewNotebook -->   
+<div class="tab-pane" id="viewnotebook">
+
+<h3>View a Notebook File</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#viewnotebook'>viewNotebook</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>name</dt>
+  <dd>name of the notebook file (.html extension
+  not required)</dd>
+  <dt>conn</dt>
+  <dd>vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h4>Description</h4>
+
+  <p>Use <code><a href='http://www.inside-r.org/r-doc/utils/browseURL'>browseURL</a></code> to open a notebook .html file
+  that is in the "notebook" directory of the vdb directory
+  and that has typically been created with
+  <code><a href='#newnotebook'>newNotebook</a></code> and typeset with
+  <code><a href='#typeset'>typeset</a></code>.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#newnotebook'>newNotebook</a></code>, <code><a href='#typeset'>typeset</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- websync -->   
+<div class="tab-pane" id="websync">
+
+<h3>Sync vdb and notebook Files to a Web Server</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#websync'>websync</a></span><span class="keyword">(</span><span class="argument">vdbName</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbName</span><span class="keyword">,</span> <span class="argument">vdbPrefix</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbPrefix</span><span class="keyword">,</span>
+  <span class="argument">vdbWebSyncMethod</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebSyncMethod</span><span class="keyword">,</span>
+  <span class="argument">vdbWebServer</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebServer</span><span class="keyword">,</span> <span class="argument">rsync</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">vdbUsers</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebServer</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>vdbName</dt>
+  <dd>The name of the notebook.</dd>
+  <dt>vdbPrefix</dt>
+  <dd>The location on the local file system of
+  the current vdb project</dd>
+  <dt>vdbWebSyncMethod</dt>
+  <dd>Either "rsync" or "share".  This
+  specifies whether you want to transfer files to the web
+  server using rsync or using a shared drive.  Use "share"
+  if on Windows.  If using "rsync", make sure vdbPrefix
+  points to the web directory root on the remote machine.
+  If using "share", make sure vdbPrefix contains the full
+  path of the shared drive up to the web directory root.</dd>
+  <dt>vdbWebServer</dt>
+  <dd>The location of the web server.  If
+  it is mounted as a shared drive, this should be the path
+  to your web root directory (this is currently not an
+  option).  If syncing via ssh, this should contain
+  everything necessary to make a successful ssh connection,
+  such as "username@server:~/www"</dd>
+  <dt>rsync</dt>
+  <dd>Location of rsync binary.  Only important in
+  this function if dolocal=TRUE and
+  vdbWebSyncMethod="rsync".</dd>
+  <dt>vdbUsers</dt>
+  <dd>A vector of user names with which to
+  create a .htaccess file restricting access to these
+  users.</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Sync vdb and notebook files to a web server</p>
+
+
+  <h4>Details</h4>
+
+  <p>If you are syncing via ssh, this only works if public key
+  authentication is enabled between your local machine and
+  the remote server.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#typeset'>typeset</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+   
+   
+   <ul class="pager">
+      <li><a href="#" id="previous">&larr; Previous</a></li> 
+      <li><a href="#" id="next">Next &rarr;</a></li> 
+   </ul>
+</div>
+
+
+</div>
+</div>
+
+<hr>
+
+<div class="footer">
+   <p>&copy; Ryan Hafen, 2013</p>
+</div>
+</div> <!-- /container -->
+
+<script src="js/jquery.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="js/jquery.ba-hashchange.min.js"></script>
+<script>
+function manageNextPrev() {
+   $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);
+   $('a#previous').parent().toggleClass('disabled', $('#toc.nav li.active').prevAll('li:not(.nav-header)').size() == 0);
+}
+manageNextPrev();
+
+$('a#next').click(function(e) {
+   e.preventDefault();
+   location.href = $('#toc.nav li.active').nextAll('li:not(.nav-header)').first().find('a').attr('href');
+   manageNextPrev();
+});
+$('a#previous').click(function(e) {
+   e.preventDefault();
+   location.href = $('#toc.nav li.active').prevAll('li:not(.nav-header)').first().find('a').attr('href');
+   manageNextPrev();
+});
+
+$(window).hashchange(function() {
+  $('.tab-pane').hide();
+  var tab = location.hash || '#packagemain';
+  $(tab + '.tab-pane').show();
+
+  $('#toc.nav li.active').removeClass('active');
+  $('#toc.nav li a[href="' + tab + '"]').parent().addClass('active');
+  manageNextPrev();
+});
+$(window).hashchange();
+</script>
+</body>
+</html>
