@@ -1,0 +1,558 @@
+{"nodes": [
+{
+   "id":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Sponsorship":"State",
+   "Paid.Staff":10,
+   "Volunteer.Staff":50,
+   "Location":"L",
+   "Formalization":2,
+   "Decision.Rank.Score":20,
+   "Command.Rank.Score":0
+},
+{
+   "id":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Sponsorship":"State",
+   "Paid.Staff":400,
+   "Volunteer.Staff":2000,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":7,
+   "Command.Rank.Score":10
+},
+{
+   "id":"Wyoming.State.Highway.Patrol",
+   "Sponsorship":"State",
+   "Paid.Staff":200,
+   "Volunteer.Staff":0,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":0,
+   "Command.Rank.Score":3
+},
+{
+   "id":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Sponsorship":"Federal",
+   "Paid.Staff":60,
+   "Volunteer.Staff":0,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":5,
+   "Command.Rank.Score":5
+},
+{
+   "id":"Red.Cross",
+   "Sponsorship":"Private",
+   "Paid.Staff":1,
+   "Volunteer.Staff":20,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":0,
+   "Command.Rank.Score":0
+},
+{
+   "id":"Salvation.Army",
+   "Sponsorship":"Private",
+   "Paid.Staff":7,
+   "Volunteer.Staff":80,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":0,
+   "Command.Rank.Score":0
+},
+{
+   "id":"Laramie.County.Sheriff.s.Office",
+   "Sponsorship":"County",
+   "Paid.Staff":60,
+   "Volunteer.Staff":20,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":20,
+   "Command.Rank.Score":20
+},
+{
+   "id":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Sponsorship":"County/City",
+   "Paid.Staff":7,
+   "Volunteer.Staff":100,
+   "Location":"L",
+   "Formalization":2,
+   "Decision.Rank.Score":50,
+   "Command.Rank.Score":40
+},
+{
+   "id":"Cheyenne.Fire.Department",
+   "Sponsorship":"City",
+   "Paid.Staff":70,
+   "Volunteer.Staff":0,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":10,
+   "Command.Rank.Score":10
+},
+{
+   "id":"Cheyenne.Police.Department",
+   "Sponsorship":"City",
+   "Paid.Staff":100,
+   "Volunteer.Staff":0,
+   "Location":"L",
+   "Formalization":3,
+   "Decision.Rank.Score":20,
+   "Command.Rank.Score":30
+},
+{
+   "id":"Laramie.County.Fire.District..1..volunteer.",
+   "Sponsorship":"County",
+   "Paid.Staff":"NA",
+   "Volunteer.Staff":"NA",
+   "Location":"L",
+   "Formalization":"NA",
+   "Decision.Rank.Score":3,
+   "Command.Rank.Score":2
+},
+{
+   "id":"Laramie.County.Fire.District..2..volunteer.",
+   "Sponsorship":"County",
+   "Paid.Staff":1,
+   "Volunteer.Staff":20,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":3,
+   "Command.Rank.Score":2
+},
+{
+   "id":"A.1.Ambulance.Service",
+   "Sponsorship":"Private",
+   "Paid.Staff":10,
+   "Volunteer.Staff":6,
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":2,
+   "Command.Rank.Score":2
+},
+{
+   "id":"Shy.Wy.HAM.Radio.Club",
+   "Sponsorship":"Private",
+   "Paid.Staff":0,
+   "Volunteer.Staff":"NA",
+   "Location":"L",
+   "Formalization":1,
+   "Decision.Rank.Score":0,
+   "Command.Rank.Score":0
+}
+],"links": [
+{
+   "source":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":1
+},
+{
+   "source":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":1
+},
+{
+   "source":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":1
+},
+{
+   "source":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":1
+},
+{
+   "source":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "target":"Shy.Wy.HAM.Radio.Club",
+   "Frequency":1
+},
+{
+   "source":"Wyoming.State.National.Guard..Army.and.Air.",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":2
+},
+{
+   "source":"Wyoming.State.National.Guard..Army.and.Air.",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":2
+},
+{
+   "source":"Wyoming.State.National.Guard..Army.and.Air.",
+   "target":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Frequency":2
+},
+{
+   "source":"Wyoming.State.National.Guard..Army.and.Air.",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":2
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":3
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":3
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Frequency":3
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":3
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"Laramie.County.Fire.District..2..volunteer.",
+   "Frequency":3
+},
+{
+   "source":"Wyoming.State.Highway.Patrol",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":3
+},
+{
+   "source":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":4
+},
+{
+   "source":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":4
+},
+{
+   "source":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":4
+},
+{
+   "source":"Red.Cross",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":5
+},
+{
+   "source":"Red.Cross",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":5
+},
+{
+   "source":"Red.Cross",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":5
+},
+{
+   "source":"Red.Cross",
+   "target":"Shy.Wy.HAM.Radio.Club",
+   "Frequency":5
+},
+{
+   "source":"Salvation.Army",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":6
+},
+{
+   "source":"Salvation.Army",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":6
+},
+{
+   "source":"Salvation.Army",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":6
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Red.Cross",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Cheyenne.Police.Department",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Laramie.County.Fire.District..1..volunteer.",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"Laramie.County.Fire.District..2..volunteer.",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County.Sheriff.s.Office",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":7
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Red.Cross",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Laramie.County.Fire.District..2..volunteer.",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":8
+},
+{
+   "source":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "target":"Shy.Wy.HAM.Radio.Club",
+   "Frequency":8
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Cheyenne.Police.Department",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Laramie.County.Fire.District..1..volunteer.",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"Laramie.County.Fire.District..2..volunteer.",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Fire.Department",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":9
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Francis.E..Warren.Air.Force.Base..fire.unit.",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"Laramie.County.Fire.District..1..volunteer.",
+   "Frequency":10
+},
+{
+   "source":"Cheyenne.Police.Department",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":10
+},
+{
+   "source":"Laramie.County.Fire.District..1..volunteer.",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":11
+},
+{
+   "source":"Laramie.County.Fire.District..1..volunteer.",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":11
+},
+{
+   "source":"Laramie.County.Fire.District..1..volunteer.",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":11
+},
+{
+   "source":"Laramie.County.Fire.District..1..volunteer.",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":11
+},
+{
+   "source":"Laramie.County.Fire.District..1..volunteer.",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":11
+},
+{
+   "source":"Laramie.County.Fire.District..2..volunteer.",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":12
+},
+{
+   "source":"Laramie.County.Fire.District..2..volunteer.",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":12
+},
+{
+   "source":"Laramie.County.Fire.District..2..volunteer.",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":12
+},
+{
+   "source":"Laramie.County.Fire.District..2..volunteer.",
+   "target":"A.1.Ambulance.Service",
+   "Frequency":12
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Wyoming.State.Highway.Patrol",
+   "Frequency":13
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Red.Cross",
+   "Frequency":13
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Laramie.County.Sheriff.s.Office",
+   "Frequency":13
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":13
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":13
+},
+{
+   "source":"A.1.Ambulance.Service",
+   "target":"Laramie.County.Fire.District..1..volunteer.",
+   "Frequency":13
+},
+{
+   "source":"Shy.Wy.HAM.Radio.Club",
+   "target":"Wyoming.Disaster.and.Civil.Defense.Agnecy",
+   "Frequency":14
+},
+{
+   "source":"Shy.Wy.HAM.Radio.Club",
+   "target":"Wyoming.State.National.Guard..Army.and.Air.",
+   "Frequency":14
+},
+{
+   "source":"Shy.Wy.HAM.Radio.Club",
+   "target":"Laramie.County...Cheyenne.Civil.Defense.Agency",
+   "Frequency":14
+},
+{
+   "source":"Shy.Wy.HAM.Radio.Club",
+   "target":"Cheyenne.Fire.Department",
+   "Frequency":14
+},
+{
+   "source":"Shy.Wy.HAM.Radio.Club",
+   "target":"Laramie.County.Fire.District..1..volunteer.",
+   "Frequency":14
+}
+]}

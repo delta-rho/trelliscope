@@ -1,0 +1,29 @@
+\name{nbDisplay}
+\alias{nbDisplay}
+\title{Make Single Display in a Notebook}
+\usage{
+  nbDisplay(name, group = NULL,
+    conn = getOption("vdbConn"))
+}
+\arguments{
+  \item{name}{a vector of display names to be in the list}
+
+  \item{group}{(needs to be fixed...)}
+
+  \item{conn}{vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists}
+}
+\description{
+  Make html code to show a large plot of a single display
+  in a web notebook.  To be used inside of a notebook .Rmd
+  file.  Meant for single-panel displays.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{typeset}}, \code{\link{newNotebook}}
+}
+

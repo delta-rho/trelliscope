@@ -1,0 +1,62 @@
+Package: vdb
+Type: Package
+Title: Visualization Databases
+Version: 0.2
+Date: 2012-03-03
+Author: Ryan Hafen
+Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
+Description: Visualization databases (VDBs) provide a way to organize and
+    handle large amounts of multi-page visualizations.  This package provides a
+    mechanism for easily generating and organizing plots and provides a dynamic
+    viewer for tiling displays across the screen and paging through them. There
+    is also a mechanism to generate built-in or user-defined "cognostic"
+    metrics for each page of a plot, and the viewer has the ability to sort or
+    filter the pages based on these cognostics.  This is useful for large
+    multi-page displays where it is not possible to view each page, allowing
+    only pages with interesting features to be presented.  This package also
+    provides a way to meaningfully organize and present these displays in a
+    "lab notebook".
+License: BSD
+LazyLoad: yes
+LazyData: yes
+Depends:
+    R (>= 2.15.0),
+    datadr,
+    lattice (>= 0.19-26),
+    ggplot2,
+    base64enc,
+    knitr,
+    markdown,
+    shiny (>= 0.5.0),
+    digest,
+    codetools,
+    hexbin,
+    fastICA
+Suggests:
+    Rhipe,
+    rmongodb,
+    scagnostics,
+    ggplot2
+Collate:
+    'aspect.R'
+    'bsSetup.R'
+    'curLim.R'
+    'encodePlot.R'
+    'getMongoPlot.R'
+    'noMargins.R'
+    'progressbar.R'
+    'runViewer.R'
+    'typeset.R'
+    'vdbInit.R'
+    'vdbNotebook.R'
+    'vdbPlot.R'
+    'vdbPlotInternals.R'
+    'vdbPrepanel.R'
+    'vdbWriteCogJson.R'
+    'vdbUpdateInput.R'
+    'cognostics.R'
+    'htaccessGen.R'
+    'inputVars.R'
+    'vdbObject.R'
+    'vdbSplod.R'
+    'websync.R'

@@ -1,0 +1,37 @@
+\name{bsSetup}
+\alias{bsSetup}
+\title{Set Up Web Notebook Using Bootstrap}
+\usage{
+  bsSetup(pageTitle = "test", title = "test",
+    author = "author name", toc = TRUE, css = NULL)
+}
+\arguments{
+  \item{pageTitle}{the text to display on the title bar of
+  the web browser}
+
+  \item{title}{the text to display on the header of the web
+  page}
+
+  \item{author}{author}
+
+  \item{toc}{should a table-of-contents be included?}
+
+  \item{css}{path to additional style sheets, if desired}
+}
+\description{
+  Set up a Twitter Boostrap template for a notebook to be
+  typeset with knitr.  This function should be called at
+  the beginning of a .Rmd file.  If you use
+  \code{\link{vdbNotebook}} to initialize a notebook .Rmd
+  file, this will already be there.
+}
+\author{
+  Ryan Hafen
+}
+\references{
+  http://twitter.github.com/bootstrap/
+}
+\seealso{
+  \code{\link{vdbNotebook}}, \code{\link{typeset}}
+}
+

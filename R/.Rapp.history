@@ -1,0 +1,2 @@
+setwd("/Users/hafe647/Documents/Code/vdb/R")
+suppressMessages(library(data.table))

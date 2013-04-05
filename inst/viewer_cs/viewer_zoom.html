@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="viewerassets/css/bootstrap.css" rel="stylesheet">
+  </head>
+
+  <body style="margin:0px">
+
+
+      <table cellspacing="0" cellpadding="0" border="0" width="100%" height="100%" id="outer">
+          <tr>
+            <td id="plotArea" style="vertical-align: middle;"></td>
+            <td style="vertical-align: middle" style='margin-right:100px'>
+                <table id="cogTable" cellpadding="0" cellspacing="0" border="0" class="table table-condensed table-striped table-bordered">
+                </table>
+            </td>
+          </tr>
+      </table>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="viewerassets/js/jquery.js"></script>
+    <script src="viewerassets/js/swfobject.js"></script>
+
+    <script type="text/javascript">
+        // GLOBAL VARIABLES
+        var plotURL = "";
+        var plotType = "png";
+        var panelAspect;
+    </script>
+
+	<script type="text/javascript">
+	
+	$(document).ready(function() {
+	    
+	    // things need to wait for previous things to finish...
+	    $.ajaxSetup({ async: false });
+        
+		var panelAspect;
+		
+	    // get all parameters from the URL
+	    var urlParams = {};
+        (function () {
+            var e,
+                a = /\+/g,  // Regex for replacing addition symbol with a space
+                r = /([^&=]+)=?([^&]*)/g,
+                d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                q = window.location.search.substring(1);
+
+            while (e = r.exec(q))
+               urlParams[d(e[1])] = d(e[2]);
+        })();
+	    
+	    plotURL = urlParams['plotURL'];
+	    if(plotURL == null) {
+	        alert("Must specify URL of plot.");
+	        plotURL = "";
+	    }
+	    
+	    plotType = urlParams['plotType'];
+        if(plotType == null)
+            plotType = plotURL.substr(plotURL.lastIndexOf('.') + 1);
+
+    	var cog = urlParams['cog'];
+
+        // do necessary things with plot name
+        document.title = "Zoom view for \"" + plotURL + "\"";
+
+        function drawScreen() {
+            var ww = $(window).width();
+            var hh = $(window).height();
+            // alert(ww);
+
+            // hard code dimensions of plotArea
+            $("#plotArea").prop("width", ww * 2 / 3);
+            $("#plotArea").prop("height", hh);
+            
+            if(plotType == "png") {
+                $("#plotArea").html("<img src='" + plotURL + "' id='zoom' width='100%' height='auto'>");
+			    // panelAspect = $("#zoom").height() / $("#zoom").width();
+				// if($("#plotArea").height() > $("#zoom").height()) {
+				// 	$("#plotArea").prop("height", $("#zoom").height());					
+				// }
+            } else {
+                $("#plotArea").html("<div id=plotAreaSwf></div>");
+                swfobject.embedSWF(plotURL, "plotAreaSwf", "95%", "95%", "9");
+            }
+			
+    	    $("#cogTable").html(cog);
+        };
+        
+        drawScreen();
+
+        
+        $(window).resize(function() {
+            if(this.resizeTO) clearTimeout(this.resizeTO);
+            this.resizeTO = setTimeout(function() {
+                $(this).trigger('resizeEnd');
+            }, 250);
+        });
+
+        $(window).bind('resizeEnd', function() {
+            drawScreen();
+        });
+        
+    });
+	</script>
+
+    <!--
+    panelAspect = $("#zoom").height() / $("#zoom").width();
+ 
+    <script src="bootstrap/js/bootstrap-alert.js"></script>
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="bootstrap/js/bootstrap-tab.js"></script>
+    <script src="bootstrap/js/bootstrap-button.js"></script>
+    <script src="bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="bootstrap/js/bootstrap-typeahead.js"></script> 
+	 -->
+  </body>
+</html>

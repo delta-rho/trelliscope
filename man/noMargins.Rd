@@ -1,0 +1,41 @@
+\name{noMargins}
+\alias{noMargins}
+\title{Remove Margins from Trellis/Lattice Plot}
+\usage{
+  noMargins(..., topkey = FALSE, rightkey = FALSE)
+}
+\arguments{
+  \item{\ldots}{a list of other parameters to be passed to
+  par.settings}
+
+  \item{topkey}{should extra space be added for a top key?}
+
+  \item{rightkey}{should extra space be added for a right
+  key?}
+}
+\description{
+  Removes whitespace surrounding a trellis plot.  Ideal for
+  \code{\link{vdbPlot}} because when tiling multiple
+  panels, a lot of space is wasted with the margins.
+}
+\examples{
+\dontrun{
+xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
+   par.settings=noMargins()
+)
+
+# with additional par.settings...
+xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
+   par.settings=noMargins(
+      list(plot.symbol=list(col="black"))
+   )
+)
+}
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{xyplot}}, \code{\link{vdbPlot}}
+}
+

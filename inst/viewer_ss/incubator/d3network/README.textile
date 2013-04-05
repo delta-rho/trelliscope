@@ -1,0 +1,22 @@
+h1. Demo for How to build an Interactive Network Visualization
+
+h2. Running
+
+You can start up a local webserver by using python's simple server:
+
+<pre>
+python -m SimpleHTTTPServer
+</pre>
+
+or @thin@ in ruby
+
+<pre>
+thin start
+# might have to run 'bundle install' first
+</pre>
+
+Now go to "http://0.0.0.0:8000":http://0.0.0.0:8000/
+
+h2. Song Data
+
+Script to pull song data can be found in @tools/@ directory

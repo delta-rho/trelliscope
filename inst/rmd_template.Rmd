@@ -1,0 +1,98 @@
+
+
+# This is a header
+
+## This is a subheader
+
+Bold like **this**
+
+Italics like *this*
+
+Links like [this](http://www.google.com)
+
+Inline code like this `myVar=1`
+
+Unordered lists like this:
+
+- item 1
+- item 2
+- item 3
+
+Ordered lists like this:
+
+1. item 1
+2. item 2
+3. item 3
+
+Inline math like this \(x^2\)
+
+or like this $x^2$
+
+Block math like this:
+
+$$
+f(x) = \frac{1}{(\sigma\sqrt{2 \pi})} e^{-(\frac{(x - \mu)^2}{2 \sigma^2})}
+$$
+
+or like this:
+
+\[
+f(x) = \frac{1}{(\sigma\sqrt{2 \pi})} e^{-(\frac{(x - \mu)^2}{2 \sigma^2})}
+\]
+
+Inline R output like this: `r rnorm(1)`.
+
+Block R code like this:
+
+```{r}
+f <- function(n) rnorm(n)
+f(10)
+```
+
+Plots like this:
+
+```{r}
+plot(1:10)
+```
+
+Plain old html:
+<a href="http://google.com">google</a>
+
+Syntax-highlighted code blocks (many languages available) like this:
+
+<pre><code class="r">f <- function(x) {
+   cat("hi")
+   x <- c(1:10)
+   rnorm(n)
+}</code></pre>
+
+A list of plots from your vdb:
+
+```{r echo=FALSE, results="asis"}
+nbDisplayList(c("plot1", "plot2", "plot3"))
+```
+
+A single display from your vdb:
+
+```{r echo=FALSE, results="asis"}
+nbDisplayList("plot4")
+```
+
+More code for fun...
+
+A Cross Product Formula:
+
+\[
+  \mathbf{V}_1 \times \mathbf{V}_2 =
+   \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} & \mathbf{k} \\
+    \frac{\partial X}{\partial u} & \frac{\partial Y}{\partial u} & 0 \\
+    \frac{\partial X}{\partial v} & \frac{\partial Y}{\partial v} & 0 \\
+   \end{vmatrix}
+\]
+
+The probability of getting \(k\) heads when flipping \(n\) coins is:
+
+\[ P(E) = {n \choose k} p^k (1-p)^{ n-k} \]
+
+

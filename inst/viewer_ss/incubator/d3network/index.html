@@ -1,0 +1,89 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Song Networks: Interative Network Tutorial</title>
+  <meta name="description" content="Demo for How to Build an Interactive Network Visualization.">
+  <meta name="author" content="Jim Vallandingham">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS concatenated and minified via ant build script-->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- end CSS-->
+
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body>
+
+  <div id="container" class="container">
+    <header>
+    <h1>Similar Song Networks</h1>
+    <p>Songs similar to one another according to <a href="http://www.last.fm/api">last.fm</a> are linked together. Song nodes are sized based on playcounts, and colored by artist.</p>
+    </header>
+
+      <div id="file_selection" class="control">
+        <h3>Song</h3>
+        <select id="file_select">
+          <option value="call_me_al.json">You Can Call Me Al</option>
+          <option value="sledgehammer_2_rounds.json">Sledgehammer</option>
+          <option value="poker_face.json">Poker Face</option>
+          <option value="jolene.json">Jolene</option>
+          <option value="helplessness_blues.json">Helplessness Blues</option>
+          <option value="she_said.json">She Said She Said</option>
+          <option value="short_skirt.json">Short Skirt, Long Jacket</option>
+        </select>
+
+      </div>
+    <div id="controls">
+      <div id="layouts" class="control">
+        <h3>Layout</h3>
+        <a id="force" class="active">Force Directed</a>
+        <a id="radial">Artists</a>
+      </div>
+      <div id="filters" class="control">
+        <h3>Filter</h3>
+        <a id="all" class="active">All</a>
+        <a id="popular">Popular</a>
+        <a id="obscure">Obscure</a>
+      </div>
+      <div id="sorts" class="control">
+        <h3>Sort</h3>
+        <a id="songs" class="active">Songs</a>
+        <a id="links">Links</a>
+      </div>
+      <div id="search_section" class="control">
+        <form id="search_form" action=""  method="post">
+          <p class="search_title">Search <input type="text" class="text-input" id="search" value="" /></p>
+        </form>
+      </div>
+      <div id="main" role="main">
+           <div id="vis"></div>
+           <div id="info"></div>
+         </div>
+    <footer>
+    <p>Data from <a href="http://www.last.fm/api/show/track.getSimilar">last.fm</a>. Some songs include additional links for effect.<br/>Popular songs are defined as those with playcounts above the median for all songs in network.</p>
+
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+
+
+  <script defer src="js/plugins.js"></script>
+  <script src="js/script2.js"></script>
+  <script src="js/libs/d3.v2.js"></script>
+  <script src="js/Tooltip.js"></script>
+  
+</body>
+</html>

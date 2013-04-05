@@ -1,0 +1,28 @@
+\name{nbDisplayList}
+\alias{nbDisplayList}
+\title{Make a List of Displays in a Notebook}
+\usage{
+  nbDisplayList(name, group = NULL,
+    conn = getOption("vdbConn"))
+}
+\arguments{
+  \item{name}{a vector of display names to be in the list}
+
+  \item{group}{(needs to be fixed...)}
+
+  \item{conn}{vdb connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists}
+}
+\description{
+  Make html code to display a list of displays in a web
+  notebook.  To be used inside of a notebook .Rmd file.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{typeset}}, \code{\link{newNotebook}}
+}
+
