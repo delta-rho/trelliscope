@@ -1,7 +1,7 @@
 Package: vdb
 Type: Package
 Title: Visualization Databases
-Version: 0.2
+Version: 0.3
 Date: 2012-03-03
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
