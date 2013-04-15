@@ -110,7 +110,7 @@ vdbSplod <- function(
    id.vars=NULL,
    name=NULL,
    desc=NULL,
-   cogFn = splodCogFn,   
+   cogFn = splodCogFn,
    plotFn = splodPlotFn,
    verbose=TRUE,
    ...

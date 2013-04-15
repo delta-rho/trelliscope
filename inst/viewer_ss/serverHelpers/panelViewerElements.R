@@ -7,7 +7,7 @@ encodePNG <- function(plotLoc) {
    paste("data:image/png;base64,", b64, sep = "")   
 }
 
-getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix) {
+getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix, conn=NULL) {
    if(cdo$storage=="local") {
       hasSubDir <- cdo$subDirN > 0
       if(hasSubDir) {
@@ -22,8 +22,8 @@ getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix) {
       pngs <- unlist(cdo$mapfile[cogDF$panelKey])
    } else if(cdo$storage=="mongo") {
       mongoConn <- vdbMongoInit(conn)
-      mongoNS <- paste(conn$vdbName, cdo$name, sep=".")
-      pngs <- sapply(cogDF$panelKey, function(x) getMongoPlot(mongoConn, mongoNS, x))
+      mongoNS <- mongoCollName(conn$vdbName, cdo$group, cdo$name, "panel")
+      pngs <- sapply(as.character(cogDF$panelKey), function(x) getMongoPlot(mongoConn, mongoNS, x))
    } else if(cdo$storage=="localData") {
       tmpfile <- tempfile()
       # browser()
@@ -33,8 +33,7 @@ getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix) {
          vdb:::encodePNG(tmpfile)
       })
    } else if(cdo$storage=="hdfsData") {
-      dat <- hdfsData[cogDF$panelKey]
-
+      dat <- hdfsData[as.character(cogDF$panelKey)]
       tmpfile <- tempfile()
       pngs <- sapply(dat, function(x) {
          vdb:::vdbMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)

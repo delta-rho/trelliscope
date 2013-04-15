@@ -23,33 +23,28 @@ vdbFindGlobals <- function(f) {
 ## internal
 vdbValidateCogFn <- function(dat, cogFn, verbose=FALSE) {
    if(verbose)
-      message("Testing cognostics function on a subset ... ", appendLF=FALSE)
-   ex <- cogFn(divExample(dat))
-   if(!inherits(ex, "data.frame") || nrow(ex) > 1)
-      stop("'cogFn' must return a 1-row data.frame")
+      message("* Testing cognostics function on a subset ... ", appendLF=FALSE)
+   isCondDiv <- dat$divBy$type=="condDiv"
+
+   ex <- getCognosticsSub(divExample(dat), cogFn, isCondDiv, names(dat)[1])
+   if(!all(sapply(ex, function(x) inherits(x, "cog"))))
+      stop("Each cognostic must have class 'cog' - please make sure you are specifying: var=cog(...)")
+   
+   exdf <- cog2df(ex)
+   if(nrow(exdf) > 1)
+      stop("'cogFn' must return something that can be coerced into a 1-row data.frame")
    if(verbose)
       message("ok")
    ex
 }
 
 ## internal
-vdbValidateCogDesc <- function(cogEx, cogDesc) {
-   if(is.null(cogDesc)) {
-      cogDesc <- rep("", length(cogEx))
-   }
-   if(length(cogDesc) != length(cogEx))
-      stop("'cogDesc' vector must have same length as number of columns returned by 'cogFn'")
-   cogDesc
-}
-
-## internal
 vdbValidatePlotFn <- function(plotFn, dat, verbose=FALSE) {
    if(verbose)
-      message("Validating 'plotFn'...")
+      message("* Validating 'plotFn'...")
    
    plotFn(divExample(dat))
 }
-
 
 ## internal
 vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
@@ -62,7 +57,7 @@ vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
    aspect <- plotDim$aspect
    
    if(verbose)
-      message("Validating plot dimensions...")
+      message("* Validating plot dimensions...")
    
    limsUpdated <- FALSE
    # # TODO: this lattice stuff isn't working...
@@ -124,6 +119,16 @@ vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
    list(height=height, width=width, res=res, aspect=aspect)
 }
 
+vdbValidateCogStorage <- function(cogStorage, conn) {
+   if(is.null(cogStorage))
+      cogStorage <- "local"
+
+   if(!cogStorage %in% c("local", "mongo"))
+      stop("cogStorage must be 'local' or 'mongo'")
+
+   cogStorage
+}
+
 ## internal
 vdbValidateStorage <- function(storage, conn, datClass) {
    # if "storage" is not specified, use the conn default
@@ -138,12 +143,12 @@ vdbValidateStorage <- function(storage, conn, datClass) {
       storage <- "local"
    }
    if("rhData" %in% datClass && storage == "local") {
-      message("---WARNING: It is not advised to use storage='local' with input of type 'rhData'.  Unless you are using a local file system in place of HDFS on your hadoop cluster, this is not a good idea!---")
+      message("* ---WARNING: It is not advised to use storage='local' with input of type 'rhData'.  Unless you are using a local file system in place of HDFS on your hadoop cluster, this is not a good idea!---")
       # message("Changing storage to \"hdfs\" because this is the default option for dat of class \"rhData\"")
       # storage <- "hdfs"
    }
    if("rhData" %in% datClass && storage == "localData") {
-      message("Changing storage to \"hdfs\" because this is the default option for dat of class \"rhData\"")
+      message("* Changing storage to \"hdfs\" because this is the default option for dat of class \"rhData\"")
       storage <- "hdfs"
    }
    
@@ -154,27 +159,6 @@ vdbValidateStorage <- function(storage, conn, datClass) {
       stop(paste("storage=\"", storage, "\" is not recognized.  Must be either 'local', 'localData', 'hdfs', or 'mongo'.\n", sep=""))
       
    storage
-}
-
-## internal
-vdbMongoInit <- function(conn) {
-   if(any(is.na(c(
-      conn$mongoHost, conn$mongoName, conn$mongoUser, conn$mongoPass
-   ))))
-      stop("mongodb paramaters not set in conn")
-   
-   suppressMessages(require(caTools)) # for base64encode
-   # rmongodb uses Rprintf and suppressMessages doesn't work
-   tmpcapt <- suppressMessages(capture.output(require(rmongodb)))
-   # TODO: error handling, defaults, etc.
-   mongoConn <- mongo.create(
-      host = conn$mongoHost,
-      name = conn$mongoName,
-      username = conn$mongoUser,
-      password = conn$mongoPass,
-      db = conn$vdbName
-   )
-   mongoConn
 }
 
 # Check prefix and get directory ready
@@ -206,9 +190,9 @@ vdbValidatePrefix <- function(conn) {
 vdbValidateDisplayPrefix <- function(displayPrefix) {
    if(file.exists(displayPrefix)) {
       bakFile <- paste(displayPrefix, "_bak", sep="")
-      message(paste("Plot exists... backing up previous to", bakFile))
+      message(paste("* Plot exists... backing up previous to", bakFile))
       if(file.exists(bakFile)) {
-         message("Removing previous backup plot directory")
+         message("* Removing previous backup plot directory")
          unlink(bakFile, recursive=TRUE)
       }
       file.rename(displayPrefix, bakFile)
@@ -217,7 +201,7 @@ vdbValidateDisplayPrefix <- function(displayPrefix) {
 }
 
 ## internal
-vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, hdfsPrefix, width, height, aspect, updated=Sys.time(), keySig, dataSig=dataSig, subDirN) {
+vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, cogStorage, hdfsPrefix, width, height, aspect, updated=Sys.time(), keySig, dataSig=dataSig, subDirN) {
    # TODO: make this more robust (take list as parameter, etc.)
 
    if(is.null(hdfsPrefix))
@@ -225,7 +209,7 @@ vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, hdfsP
    
    displayListPath <- file.path(vdbPrefix, "displays", "_displayList.Rdata")
    
-   displayListNames <- c("uid", "Group", "Name", "Description", "Pages", "Storage Mode", "Storage Prefix", "Width (px)", "Height (px)", "Aspect Ratio", "Last Updated", "Key Signature", "Data Signature")
+   displayListNames <- c("uid", "Group", "Name", "Description", "Pages", "Storage Mode", "Cognostics Storage Mode", "Storage Prefix", "Width (px)", "Height (px)", "Aspect Ratio", "Last Updated", "Key Signature", "Data Signature")
    
    curPlot <- data.frame(
       uid=1,
@@ -234,6 +218,7 @@ vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, hdfsP
       desc=desc,
       n=n,
       storage=storage,
+      cogStorage=cogStorage,
       hdfs=hdfsPrefix,
       width=width,
       height=height,

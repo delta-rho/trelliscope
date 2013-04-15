@@ -13,6 +13,8 @@ verbose <- getOption("vdbLogViewer", default=FALSE)
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
 
 shinyServer(function(input, output) {
+
+   conn <- getOption("vdbConn")
    
    # NOTE: reactive objects starting with "cd" is shorthand for "current display", meaning that it corresponds with the display currently being viewed
    
@@ -60,12 +62,16 @@ shinyServer(function(input, output) {
       }
    })
    
+   cdCogDesc <- reactive({
+      cdDisplayObj()$cogDesc
+   })
+   
    ########################################################
    ### header stuff
    ########################################################
    
    nPages <- reactive({
-      ceiling(nrow(cdCogDF()) / (input$nRow * input$nCol))
+      ceiling(cogNrow(cdCogDF()) / (input$nRow * input$nCol))
    })
    
    output$nPages <- renderText({
@@ -89,29 +95,73 @@ shinyServer(function(input, output) {
       if(is.null(cdn)) {
          return(NULL)
       } else {
+         cdo <- cdDisplayObj()
          logMsg("Retrieving cognostics data for ", cdn[1], " / ", cdn[2], verbose=verbose)
-         load(file.path(vdbPrefix, "displays/", cdn[1], cdn[2], "cog.Rdata"))
+         if(cdo$cogStorage=="local") {
+            load(file.path(vdbPrefix, "displays/", cdn[1], cdn[2], "cog.Rdata"))
+         } else { # cognostics are in mongodb
+            mongoConn <- vdbMongoInit(conn)
+            NS <- mongoCollName(conn$vdbName, cdn[1], cdn[2], "cog")
+
+            ex <- mongoCog2DF(mongo.bson.to.list(mongo.find.one(mongoConn, NS))[-1])
+            ex <- data.frame(ex)
+            qry <- mongo.bson.empty()
+            srt <- mongo.bson.empty()
+            
+            nr <- mongo.count(mongoConn, NS, query=qry)
+            
+            cog <- list(
+               mongoConn=mongoConn,
+               NS=NS,
+               qry=qry,
+               srt=srt,
+               ncol=ncol(ex),
+               nrow=nr,
+               ex=ex
+            )
+            
+            class(cog) <- c("mongoCogConn", "list")
+         }
          return(cog)
       }
    })
    
    ### holds the cognostics data frame for the current display, sorted and filtered
    cdCogDF <- reactive({
-      cogDF <- cdCogObj()$cogDF
+      cogDF <- cdCogObj()
       if(!is.null(cogDF)) {
-         orderIndex <- cdCogIndex()
-         logMsg("Retrieving sorted and filtered cognostics data", verbose=verbose)
-         return(cogDF[orderIndex,,drop=FALSE])
+         if(inherits(cogDF, "mongoCogConn")) {
+            qryStr <- cdCogMongoQryStr()
+            
+            cogDF$qry <- qryStr$qry
+            cogDF$srt <- qryStr$srt
+            
+            nr <- mongo.count(cogDF$mongoConn, cogDF$NS, query=cogDF$qry)
+            cogDF$nr <- nr
+            
+            return(cogDF)
+         } else {
+            orderIndex <- cdCogIndex()
+            logMsg("Retrieving sorted and filtered cognostics data", verbose=verbose)
+            return(cogDF[orderIndex,,drop=FALSE])            
+         }
       } else {
          return(NULL)
       }
    })
    
+   cdCogLength <- reactive({
+      cogDF <- cdCogDF()
+      if(!is.null(cogDF)) {
+         cogNrow(cogDF)
+      }
+   })
+   
    ### index of filtered state of cognostics data frame for current display
    cdCogFilterIndex <- reactive({
-      cogDF <- cdCogObj()$cogDF
+      cogDF <- cdCogObj()
       if(!is.null(cogDF)) {
-         filterIndex <- seq_len(nrow(cogDF))
+         filterIndex <- seq_len(cogNrow(cogDF))
          # browser()
          # flt is a vector of 3-tuples - (filter type, filter column, filter value)
          # see getColumFilterInputs in table.js
@@ -130,14 +180,14 @@ shinyServer(function(input, output) {
             for(i in seq_along(flt)) {
                cur <- flt[[i]]
                if(cur[1] == "from") {
-                  newIndex <- which(cogDF[[as.integer(cur[2])]] >= as.numeric(cur[3]))               
+                  newIndex <- which(cogDF[[as.integer(cur[2])]] >= as.numeric(cur[3]))
                } else if(cur[1] == "to") {
                   newIndex <- which(cogDF[[as.integer(cur[2])]] <= as.numeric(cur[3]))
                } else if(cur[1] == "regex") {
                   # browser()
                   newIndex <- try(which(grepl(cur[3], cogDF[[as.integer(cur[2])]])))
                   if(inherits(newIndex, "try-error"))
-                     newIndex <- seq_len(nrow(cogDF))
+                     newIndex <- seq_len(cogNrow(cogDF))
                }
                filterIndex <- intersect(filterIndex, newIndex)
             }
@@ -146,9 +196,81 @@ shinyServer(function(input, output) {
       }
    })
    
+   cdCogMongoQryStr <- reactive({
+      cogDF <- cdCogObj()
+      if(!is.null(cogDF)) {
+         ex <- cogDF$ex
+         exNames <- names(ex)
+
+         # build ordering part of query
+         ordering <- input$cogColumnSortInput
+         srt <- mongo.bson.empty()
+         if(!is.null(ordering)) {
+            # need to know which columns are visible so we are sorting the right column
+            colIndex <- cogTableColVisibility()
+
+            ordIdx <- which(ordering != 0)
+            if(length(ordIdx) > 0) {
+               ordIdx <- ordIdx[order(ordering[ordIdx])]
+               srt <- list()
+               for(i in ordIdx) {
+                  srt[[exNames[colIndex[i]]]] <- as.integer(sign(ordering[i]))
+               }
+            }
+         }
+
+         # now build filtering part
+         qry <- mongo.bson.empty()
+
+         flt <- input$cogColumnFilterInput
+         if(!is.null(flt)) {
+            logMsg("Updating cognostic filter index", verbose=verbose)
+            n <- length(flt)
+            # get index for filters that are NULL
+            ind <- which(!sapply(flt[seq(3, n, by=3)], function(x) is.null(x) | x==""))
+            # remove those ones
+            if(length(ind) == 0) {
+               flt <- NULL
+            } else {
+               flt <- lapply(ind, function(x) flt[((x - 1)*3 + 1):(x*3)])
+            }
+
+            if(length(flt) > 0) {
+               qry <- list()
+
+               for(i in seq_along(flt)) {
+                  cur <- flt[[i]]
+                  curName <- exNames[as.integer(cur[2])]
+                  if(cur[1] == "from") {
+                     if(is.null(qry[[curName]])) {
+                        qry[[curName]] <- list("$gte"=as.numeric(cur[3]))
+                     } else {
+                        qry[[curName]][["$gte"]] <- as.numeric(cur[3])
+                     }
+                  } else if(cur[1] == "to") {
+                     if(is.null(qry[[curName]])) {
+                        qry[[curName]] <- list("$lte"=as.numeric(cur[3]))
+                     } else {
+                        qry[[curName]][["$lte"]] <- as.numeric(cur[3])
+                     }
+                  } else if(cur[1] == "regex") {
+                     qry[[exNames[as.integer(cur[2])]]] <-  list("$regex"=cur[3])
+                  }
+               }
+            }
+         }
+
+         # crs <- mongo.find(mongoConn, NS, query=qry) #, sort=srt)
+         # mongo.cursor.next(crs)
+         # mongo.cursor.value(crs)
+         list(srt=srt, qry=qry)
+      }
+
+   })
+   
    ### index of sorted and filtered state of cognostics data frame for current display
    cdCogIndex <- reactive({
-      cogDF <- cdCogObj()$cogDF
+      cogDF <- cdCogObj()
       if(!is.null(cogDF)) {
          # before ordering, perform any filters
          filterIndex <- cdCogFilterIndex()
@@ -157,8 +279,10 @@ shinyServer(function(input, output) {
          # cogDFOrd <- cogDFOrders()
          ordering <- input$cogColumnSortInput
          # this is a vector of -1 (desc), 0 (no sort), 1 (asc)
-         orderIndex <- seq_len(nrow(cogDF))
-         
+         orderIndex <- seq_len(cogNrow(cogDF))
+         # browser()
+         # need to know which columns are visible so we are sorting the right column
+         colIndex <- cogTableColVisibility()
          # get sort order and sort the table
          if(!is.null(ordering)) {
             if(any(ordering != 0)) {
@@ -166,7 +290,7 @@ shinyServer(function(input, output) {
                # TODO: use data.table here for faster sorting
                if(sum(abs(ordering)) == 1) {
                   ind <- which(abs(ordering) == 1)
-                  orderIndex <- order(cogDF[,ind,drop=FALSE], decreasing=ifelse(ordering[ind] < 0, TRUE, FALSE))
+                  orderIndex <- order(cogDF[,colIndex[ind],drop=FALSE], decreasing=ifelse(ordering[ind] < 0, TRUE, FALSE))
                   # if(ordering[ind] < 0) {
                   #    orderIndex <- rev(cogDFOrd[,ind])
                   # } else {
@@ -179,9 +303,9 @@ shinyServer(function(input, output) {
                   orderSign <- sign(ordering)[orderCols]
                   orderCols <- lapply(seq_along(orderCols), function(i) {
                      if(orderSign[i] < 0) {
-                        return(-xtfrm(cogDF[,orderCols[i], drop=FALSE]))
+                                                return(-xtfrm(cogDF[,colIndex[orderCols[i]], drop=FALSE]))
                      } else {
-                        return(cogDF[,orderCols[i], drop=FALSE])
+                        return(cogDF[,colIndex[orderCols[i]], drop=FALSE])
                      }
                   })
                   orderIndex <- do.call(order, orderCols)               
@@ -201,12 +325,14 @@ shinyServer(function(input, output) {
    cogTableCurrentData <- reactive({
       # cat("get current data\n")
       cogDF <- cdCogDF()
-      
-      colIndex <- cogTableColVisibility()
-      
+
       if(!is.null(cogDF)) {
          logMsg("Retrieving data to be shown in cognostics modal", verbose=verbose)
-         n <- nrow(cogDF)
+         
+         n <- cogNrow(cogDF)
+
+         colIndex <- cogTableColVisibility()
+         
          pageNum <- input$cogTablePagination
          pageLen <- as.integer(input$cogTablePageLength)
          if(n == 0) {
@@ -214,7 +340,7 @@ shinyServer(function(input, output) {
          } else {
             idx <- ((pageNum - 1)*pageLen + 1):min(pageNum*pageLen, n)         
          }
-         return(cogDF[idx, colIndex, drop=FALSE])
+         return(getCogData(cogDF, idx, colIndex))
       } else {
          return(NULL)
       }
@@ -223,14 +349,14 @@ shinyServer(function(input, output) {
    ### returns the columns that are to be displayed in the cognostics table
    cogTableColVisibility <- reactive({
       # basically get the column names
-      cogDF <- head(cdCogObj()$cogDF, 2)
+      cogDF <- cdCogObj()
       colIndex <- NULL
       if(!is.null(cogDF)) {
          colNames <- input$selectedCogTableVar
          if(colNames == "" || is.null(colNames)) {
-            colIndex <- seq_len(ncol(cogDF))
+            colIndex <- seq_len(cogNcol(cogDF))
          } else {
-            colIndex <- which(names(cogDF) %in% strsplit(colNames, ",")[[1]])
+            colIndex <- which(cogNames(cogDF) %in% strsplit(colNames, ",")[[1]])
          }
       }
       # browser()
@@ -239,11 +365,11 @@ shinyServer(function(input, output) {
    
    ### hidden field that I don't think is used...
    output$cogTableNrow <- reactive({
-      HTML(length(cdCogIndex()))
+      HTML(cdCogLength())
    })
    outputOptions(output, 'cogTableNrow', suspendWhenHidden=FALSE)
    
-   ### hidden field that I don't think is used...
+   ### hidden field
    output$cogTablePageLengthOut <- reactive({
       HTML(input$cogTablePageLength)
    })
@@ -251,8 +377,9 @@ shinyServer(function(input, output) {
    
    ### text indicating pagination info for cognostics modal table
    output$cogTablePaginateText <- renderText({
-      n <- length(cdCogIndex())
+      n <- cdCogLength()
       n2 <- as.integer(input$cogTablePageLength)
+
       HTML(
          input$cogTablePagination, 
          "of", ceiling(n / n2)
@@ -261,10 +388,10 @@ shinyServer(function(input, output) {
    
    output$cogTableHead <- reactive({
       # cat("table head")
-      cogDF <- head(cogTableCurrentData(), n = 1)
+      cogDF <- cogTableCurrentData()
       if(is.null(cogDF)) {
          return(NULL)
-      } else if(ncol(cogDF) > 0) {
+      } else if(cogNcol(cogDF) > 0) {
          cogTableHead(cogDF)
       }
    })
@@ -283,15 +410,15 @@ shinyServer(function(input, output) {
    output$cogTableFoot <- renderUI({
       # cat("table foot\n")
       colIndex <- cogTableColVisibility()
-      cogDF <- head(cdCogObj()$cogDF, 2)
-      
+      cogDF <- cdCogObj()
       if(is.null(cogDF)) {
          return(NULL)
-      } else if(ncol(cogDF) > 0) {
+      } else if(cogNcol(cogDF) > 0) {
+         cogDF <- getCogData(cogDF, 1, colIndex)
          HTML(paste(
-            cogTableFootFilter(cogDF[,colIndex,drop=FALSE]),
-            cogTableFootUnivar(cogDF[,colIndex,drop=FALSE]),
-            cogTableFootBivar(cogDF[,colIndex,drop=FALSE])
+            cogTableFootFilter(cogDF),
+            cogTableFootUnivar(cogDF),
+            cogTableFootBivar(cogDF)
          ))
       }
    })
@@ -299,7 +426,7 @@ shinyServer(function(input, output) {
    
    output$cogTableInfo <- renderText({
       # cat("table info\n")
-      n <- length(cdCogIndex())
+      n <- length(cdCogLength())
       pageNum <- input$cogTablePagination
       pageLen <- as.integer(input$cogTablePageLength)
       
@@ -321,15 +448,11 @@ shinyServer(function(input, output) {
    output$d3histData <- renderData({
       # these are marginal distributions - need whole cogDF
       colIndex <- cogTableColVisibility()
-      if(length(colIndex) > 1) {
-         cdfNames <- names(cdCogObj()$cogDF)
-         res <- lapply(colIndex, function(i) {
-            vals <- cdCogObj()$cogDF[,i]
-            if(inherits(vals, c("numeric", "integer"))) {
-               getD3HistData(vals, cdfNames[i])
-            } else {
-               ""
-            }
+      cogDF <- cdCogObj()
+      if(length(colIndex) > 1 && !is.null(cogDF)) {
+         cdfNames <- cogNames(cogDF)
+         res <- lapply(cdfNames, function(nm) {
+            getD3HistData(cogDF, nm)
          })
          names(res) <- as.character(colIndex)
          return(res)
@@ -347,7 +470,6 @@ shinyServer(function(input, output) {
       # cat(isLoaded, "\n")
       if(length(colIndex) > 1) {
          res <- lapply(colIndex, function(i) {
-            a <- cdCogObj()$cogDesc
             p <- xyplot(1:10 ~ 1:10)
             myRenderPlot({
                plot(p)
@@ -362,7 +484,10 @@ shinyServer(function(input, output) {
    output$d3bivarPlotDat <- renderText({
       curCols <- input$bivarColumns
       # cat(curCols)
-      cogDF <- cdCogObj()$cogDF[,cogTableColVisibility(), drop=FALSE]
+      cogDF <- cdCogObj()
+      
+      if(is.data.frame(cogDF))
+         cogDF <- cogDF[,cogTableColVisibility(), drop=FALSE]
       
       if(curCols != "") {
          curCols <- as.integer(strsplit(curCols, ",")[[1]])
@@ -412,7 +537,7 @@ shinyServer(function(input, output) {
    # this is for the plots to be displayed
    curPageCogDF <- reactive({
       cogDF <- cdCogDF()
-      n <- nrow(cogDF)
+      n <- cogNrow(cogDF)
       if(!is.null(cogDF)) {
          if(n==0) {
             idx <- integer(0)
@@ -422,7 +547,7 @@ shinyServer(function(input, output) {
             nc <- input$nCol
             idx <- ((cp - 1) * nr * nc + 1):min((cp * nr * nc), n)
          }
-         res <- cogDF[idx,, drop=FALSE]
+         res <- getCogData(cogDF, idx, seq_len(cogNcol(cogDF)))
          if(nrow(res) == 0) {
             return(NULL)
          } else {
@@ -439,12 +564,14 @@ shinyServer(function(input, output) {
          if(verbose)
             logMsg("Updating cog info in panel layout")
          relList <- getRelatedDisplays() # not used but need to react to it
+         
          totPanels <- input$nRow * input$nCol
          colNames <- input$selectedPlotVar
          idx <- which(names(cogDF) %in% strsplit(colNames, ",")[[1]])
-         res <- lapply(seq_len(nrow(cogDF)), function(i) {
+         res <- lapply(seq_len(cogNrow(cogDF)), function(i) {
             names <- paste("<strong>", names(cogDF)[idx], "</strong>", sep="")
-            vals <- cogDF[i,idx, drop=FALSE]
+
+            vals <- sapply(cogDF[i,idx, drop=FALSE], as.character)
             # browser()
             paste("<table class='table-condensed table-bordered table-striped' style='width:100%'><tbody>",
             paste("<tr><td>", apply(matrix(c(names, vals), ncol=2), 1, function(x) paste(x, collapse="</td><td>", sep="")), "</td></tr>", collapse="", sep=""),
@@ -474,7 +601,7 @@ shinyServer(function(input, output) {
             }
          }
          # a <- system.time({
-         res <- getPNGs(cogDF, cdo, localData, hdfsData, vdbPrefix)
+         res <- getPNGs(cogDF, cdo, localData, hdfsData, vdbPrefix, conn)
          # })
          # cat(a, "\n")
          if(length(res) < totPanels)
@@ -486,7 +613,7 @@ shinyServer(function(input, output) {
             # browser()
    
             res2 <- do.call(c, lapply(seq_along(relList), function(i) {
-               tmp <- getPNGs(cogDF, relList[[i]], NULL, NULL, vdbPrefix)
+               tmp <- getPNGs(cogDF, relList[[i]], NULL, NULL, vdbPrefix, conn)
                names(tmp) <- 
                if(length(tmp) < totPanels)
                   tmp <- c(tmp, rep("", totPanels - length(tmp)))
@@ -586,16 +713,16 @@ shinyServer(function(input, output) {
    outputOptions(output, 'panelAspect', suspendWhenHidden=FALSE)
       
    output$variableCogSelectInput <- renderUI({
-      vars <- names(cdCogObj()$cogDF)
-      desc <- cdCogObj()$cogDesc
-      
+      vars <- cogNames(cdCogObj())
+      desc <- cdCogDesc()
+
       makeVariableSelectTable(vars, desc, "Cog")
    })
    
    output$variablePlotSelectInput <- renderUI({
-      vars <- names(cdCogObj()$cogDF)
-      desc <- cdCogObj()$cogDesc
-      
+      vars <- cogNames(cdCogObj())
+      desc <- cdCogDesc()
+      # browser()
       makeVariableSelectTable(vars, desc, "Plot")
    })
    outputOptions(output, 'variablePlotSelectInput', suspendWhenHidden=FALSE)
@@ -610,10 +737,10 @@ shinyServer(function(input, output) {
    
    # precompute the orders?
    # cogDFOrders <- reactive({
-   #    cogDF <- cdCogObj()$cogDF
+   #    cogDF <- cdCogObj()
    #    apply(cogDF, 2, order)
    # })
-
+   
    # output$testOutput <- reactive({
    #    cdo <- cdDisplayObj()
    #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", input$nRow, "; nCol: ", input$nCol, "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))

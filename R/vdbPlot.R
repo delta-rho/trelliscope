@@ -16,10 +16,10 @@
 #' @param plotFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with plotFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)
 #' @param lims either an object of class "vdbLims" as obtained from \code{\link{vdbSetLims}} or a list with elements x, y, and preFn, that specify how to apply \code{\link{vdbPrepanel}} and \code{\link{vdbSetLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
-#' @param cogDesc a vector of descriptions for the cognostic variables specified by cogFn
 #' @param inputVars input variables that will allow user input in the viewer, defined by \code{\link{inputVars}}
 #' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param storage how to store the plots and metadata for the display.  See details
+#' @param cogStorage how to store the cognostics data.  Options are "local" for R data.frame, or "mongo" to store cognostics in mongodb
 #' @param subDirSize the approximate number plots per subdirectory.  Only used of \code{storage=="local"}.  If number of plots is less, there will not be subdiretories.  If set to 0, there will not be subdirectories.
 #' @param verbose print status messages?
 #' @param parallel for storage="local" create plots in parallel (currently not working)
@@ -36,6 +36,7 @@
 #'    \item{mongo:}{plots will be stored in mongodb using the mongodb connection as specified by "vdbConn" (see vignette) - this is very experimental}
 #'    \item{hdfs:}{plots will be stored in a mapfile on HDFS - can only be done with data of class "rhSplit"}
 #'    \item{localData:}{instead of storing plots, data, plotFn, etc. will be stored locally and plotFn will be applied to the data on-the-fly in the viewer}
+#'    \item{hdfsData:}{plotFn is applied on-the-fly to data retrieved from the original data on HDFS (must be a mapfile) - can only be done with data of class "rhDiv"}
 #' } 
 #' There are so many options because there are several tradeoffs, described in the vignette.
 #' 
@@ -56,10 +57,10 @@ vdbPlot <- function(
    plotFn = NULL, # function to be applied to each split,
    lims = list(x="free", y="free", preFn=NULL),
    cogFn = NULL,
-   cogDesc = NULL,
    inputVars = NULL, 
    conn = getOption("vdbConn"),
    storage = NULL,
+   cogStorage = NULL,
    subDirSize = 1000,
    subDirN = 0, # number of subdirectories - this overrides subDirSize
    verbose = TRUE,
@@ -89,11 +90,16 @@ vdbPlot <- function(
       plotDim <- vdbValidatePlotDim(plotDim, data, plotFn, verbose)
       storage <- vdbValidateStorage(storage, conn, class(data))
       inputVars <- vdbValidateInputs(inputVars)
+      cogStorage <- vdbValidateCogStorage(cogStorage, conn)
       
-      if(!is.null(cogFn)) {
-         cogEx <- vdbValidateCogFn(data, cogFn, verbose)
-         cogDesc <- vdbValidateCogDesc(cogEx, cogDesc)         
+      if(storage=="mongo" || cogStorage=="mongo") {
+         if(verbose)
+            message("* Clearing out old mongodb collections, if any")
+         mongoClear(conn, group, name)         
       }
+      
+      cogEx <- vdbValidateCogFn(data, cogFn, verbose)
+      
       vdbPrefix <- vdbValidatePrefix(conn)
       displayPrefix <- vdbGetDisplayPrefix(conn, group, name)   
       
@@ -106,7 +112,7 @@ vdbPlot <- function(
          hdfsPrefix <- conn$hdfsPrefix
          # TODO: make sure directory exists
          if(is.null(hdfsPrefix)) {
-            message("hdfsPrefix not specified... Using current hadoop working directory.")
+            message("* hdfsPrefix not specified... Using current hadoop working directory.")
             hdfsPrefix <- hdfs.getwd()
          }
       }
@@ -119,6 +125,9 @@ vdbPlot <- function(
       }
    }
    
+   if(storage=="mongo" || cogStorage=="mongo")
+      tmpcapt <- suppressMessages(capture.output(require(rmongodb)))
+   
    dataSig <- NA
    
    if(!isSinglePlot && !calledFromRhipe) {
@@ -126,7 +135,7 @@ vdbPlot <- function(
       # if not, we need to call vdbPrepanel on the data
       if(is.null(lims)) { # 
          if(verbose)
-            message("Limits not supplied.  Applying plotFn as is.")
+            message("* Limits not supplied.  Applying plotFn as is.")
          
          # lims <- list(x=list(type="free"), y=list(type="free"))
          # lims$preFnIsTrellis <- FALSE
@@ -137,7 +146,7 @@ vdbPlot <- function(
          yLimType <- lims$y$type
       } else {
          if(verbose)
-            message("Precomputed limits not supplied.  Computing axis limits...")
+            message("* Precomputed limits not supplied.  Computing axis limits...")
 
          # should have x, y, preFn
          xLimType <- lims$x
@@ -173,7 +182,7 @@ vdbPlot <- function(
             lims <- vdbSetLims(pre, x=xLimType, y=yLimType)
          } else {
             if(verbose)
-               message("... skipping this step since both are axes are free ...")
+               message("* ... skipping this step since both are axes are free ...")
          }
       }
    } else if(calledFromRhipe) {
@@ -184,7 +193,7 @@ vdbPlot <- function(
    # if it's localData, just store the data, plotFn, etc.
    if(storage == "localData" || (storage=="hdfsData" && calledFromRhipe)) {
       if(verbose)
-         message("Storing data since storage='", storage, "'.  Plots will be created on-demand in the viewer.")
+         message("* Storing data since storage='", storage, "'.  Plots will be created on-demand in the viewer.")
       
       # this happens in the plotting for the other data, so need to do it here
       splitKeys <- getKeys(data) # sapply(seq_along(data), function(x) data[[x]]$splitKey)
@@ -201,16 +210,16 @@ vdbPlot <- function(
             save(data, file=localDataPath)
 
          # save(localDataExtra, file=file.path(displayPrefix, "localDataExtra.Rdata"))
-
+         
          nPanels <- length(data)
       }
    } else {
       if(verbose)
-         message("Generating plots...")
+         message("* Generating plots...")
 
       if(isSinglePlot) {
          if(verbose)
-            message("-- Plotting trellis / ggplot / base R plot object.")
+            message("* -- Plotting trellis / ggplot / base R plot object.")
          # browser()
          
          xLimType <- NULL
@@ -231,7 +240,11 @@ vdbPlot <- function(
          
          if(storage == "mongo") {
             plotRes <- lapply(seq_along(plotLocs), function(x) mongoEncodePlot(plotLocs[x], splitKeys[x]))
+            mongoConn <- vdbMongoInit(conn)
+            mongoNS <- mongoCollName(conn$vdbName, group, name, "panel")
+            
             mongo.insert.batch(mongoConn, mongoNS, plotRes)
+            mongo.disconnect(mongoConn)
          }
       }
       
@@ -240,10 +253,6 @@ vdbPlot <- function(
       if(inherits(data, "localDiv") && storage != "hdfsData") {
          dataSig <- digest(data)
          
-         if(storage == "mongo") {
-            mongoConn <- vdbMongoInit(conn)
-            mongoNS <- paste(conn$vdbName, name, sep=".")
-         }
          nPanels <- length(data)
          
          splitKeys <- getKeys(data) # sapply(seq_along(data), function(x) data[[x]]$splitKey)
@@ -273,12 +282,15 @@ vdbPlot <- function(
             # remove old plots...
             # TODO: maybe make this more safe?
             if(!calledFromRhipe)
-               mongo.remove(mongoConn, mongoNS)
+               mongoClear(conn, group, name)
             pngPrefix <- file.path(tempdir(), group, name)
          }
          pngUniquePrefix <- file.path(pngPrefix, unique(subDirs))
 
-         sapply(pngUniquePrefix, function(x) dir.create(x, recursive=TRUE))
+         sapply(pngUniquePrefix, function(x) {
+            if(!file.exists(x))
+               dir.create(x, recursive=TRUE)
+         })
 
          # make list of plot paths
          plotLocs <- file.path(pngPrefix, subDirs, paste(splitKeys, ".png", sep=""))
@@ -291,11 +303,11 @@ vdbPlot <- function(
          #    cl <- makeCluster(detectCores()))
          #    clusterEvalQ(cl, library(lattice))
          #    # maybe use clusterMap
-
+         
          if(verbose) cat("") # avoid \r below deleting all previous messages
          plotRes <- lapply(seq_len(nPanels), function(i) {
             if(verbose)
-               message(paste("\r-- Plotting panel ", i, " of ", nPanels, sep=""), appendLF=FALSE)
+               message(paste("\r* -- Plotting panel ", i, " of ", nPanels, sep=""), appendLF=FALSE)
             
             vdbMakePNG(dat=data[[i]], plotFn=plotFn, file=plotLocs[i], width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims)
                         
@@ -311,25 +323,20 @@ vdbPlot <- function(
             message(" ")
 
          if(storage == "mongo") {
+            mongoConn <- vdbMongoInit(conn)
+            mongoNS <- mongoCollName(conn$vdbName, group, name, "panel")
             mongo.insert.batch(mongoConn, mongoNS, plotRes)
+            mongo.disconnect(mongoConn)
          }
       }
-
+      
       if(inherits(data, "rhData")) {
          # run a RHIPE job that calls this function on each k/v pair where each is turned into a localDiv with the key being the splitKey and the value being the data
          # unless a different transformation is applied
 
          # get a hash of the listing of the data
          dataSig <- digest(rhls(data$loc))
-         
-         if(storage == "mongo") {
-            library(digest)
-            mongoConn <- vdbMongoInit(conn)
-            mongoNS <- paste(conn$vdbName, name, sep=".")         
-            # first, clear out the collection:
-            mongo.remove(mongoConn, mongoNS)
-         }
-
+                  
          # a <- rhread(data$loc)
          # k <- a[[1]][[1]]
          # r <- a[[1]][[2]]
@@ -351,11 +358,11 @@ vdbPlot <- function(
                   lims=lims,
                   desc=desc,
                   cogFn=cogFn,
-                  cogDesc=cogDesc,
                   conn=conn,
                   storage=storage,
-                  subDirSize = subDirSize,
-                  subDirN = subDirN,
+                  cogStorage=cogStorage,
+                  subDirSize=subDirSize,
+                  subDirN=subDirN,
                   plotDim=plotDim,
                   calledFromRhipe=TRUE,
                   rhFail=rhFail,
@@ -420,9 +427,9 @@ vdbPlot <- function(
             lims       = lims,
             desc       = desc,
             cogFn      = cogFn,
-            cogDesc    = cogDesc,
             conn       = conn,
             storage    = storage,
+            cogStorage = cogStorage,
             subDirSize = subDirSize,
             subDirN    = subDirN,
             plotDim    = plotDim,
@@ -436,7 +443,7 @@ vdbPlot <- function(
          # (debugging and updating the package is a lot easier when just
          # sourcing the files at each change rather than building each time)
          if(! "package:vdb" %in% search()) {
-            message("---- running dev version - sending vdb functions to RHIPE")
+            message("* ---- running dev version - sending vdb functions to RHIPE")
             parList <- c(parList, list(
                vdbPlot    = vdbPlot,
                vdbCurXLim = vdbCurXLim,
@@ -506,18 +513,18 @@ vdbPlot <- function(
          # rhRes <- vdbRhStatus(id)
          
          if(verbose)
-            message(paste("Output written to a map file, ", ofolder, ".  Reading in cognostics output from this file...", sep=""))
+            message(paste("* Output written to a map file, ", ofolder, ".  Reading in cognostics output from this file...", sep=""))
          
          if(storage=="hdfs") {
             a <- suppressMessages(rhmapfile(ofolder))
-            cogDF <- suppressMessages(a[["VDB___cog"]])
+            cogDat <- suppressMessages(a[["VDB___cog"]])               
             nPanels <- suppressMessages(a[["VDB___count"]])            
             # error <- suppressMessages(a[["VDB___error"]])
             error <- NULL
          } else { # if plots are not stored in hdfs, we can read in all output
             tmp <- rhread(ofolder, type="map")
             outNames <- sapply(tmp, function(x) x[[1]])
-            cogDF <- tmp[[which(outNames=="VDB___cog")]][[2]]
+            cogDat <- tmp[[which(outNames=="VDB___cog")]][[2]]
             nPanels <- tmp[[which(outNames=="VDB___count")]][[2]]
             error <- NULL
             if(any(outNames=="error"))
@@ -534,44 +541,23 @@ vdbPlot <- function(
       }
    }
    
-   # TODO: automatically add cognostics variables for all conditioning variables
    if(!inherits(data, "rhData")) {
-      # generate cogDF
+      # generate cogDat
       
-      splitVarsDF <- NULL
-      cogDF <- NULL
-      if(inherits(data, "localDiv")) {
-         if(data$divBy$type=="condDiv") {
-            splitVarsDF <- do.call(rbind, lapply(data, function(x) {
-               attr(x, "split")
-            }))
-            rownames(splitVarsDF) <- NULL
-            
-            cogDF <- data.frame(panelKey = splitKeys, splitVarsDF, stringsAsFactors=FALSE)
-            extraCols <- c("panel key (file name)", rep("conditining variable", ncol(splitVarsDF)))
-         }
-      }
-
-      if(is.null(cogDF)) {
-         cogDF <- data.frame(panelKey = splitKeys, stringsAsFactors=FALSE)
-         extraCols <- "panel key (file name)"   
-      }
-      
-      # if(storage == "local" && nPanels > 1000) {
-      #    cogDF$subDir <- subDirs
-      #    extraCols <- c(extraCols, "plot subdirectory")
-      # }
-      
-      if(!is.null(cogFn)) {
-         if(verbose)
-            message("Computing cognostics...")
-         tmp <- lapply(data, function(x) data.frame(cogFn(x)))
-         tmp <- do.call(rbind, tmp)
+      if(verbose)
+         message("* Computing cognostics...")
          
-         # tmp <- data.frame(do.call(rbind, lapply(data, function(x) cogFn(x))), stringsAsFactors=FALSE)
-         cogDF <- cbind(cogDF, tmp)
+      cogDat <- getCognostics(data, cogFn, splitKeys)
+      if(cogStorage=="mongo") {
+         cogDatBson <- lapply(cogDat, mongo.bson.from.list)
+         mongoSaveCognostics(cogDatBson, group, name, conn)
+         # TODO: this will not scale beyond tens or hundreds of millions - do we really want to keep track of panelKey?
+         cogDat <- data.frame(panelKey=sapply(cogDat, function(x) x$panelKey))
+      } else {
+         cogDat <- do.call(rbind, lapply(cogDat, function(x) {
+            as.data.frame(x)
+         }))
       }
-      cogDesc <- c(extraCols, cogDesc)      
    }
    
    # # example of how to query a mongo plot and display it
@@ -581,18 +567,18 @@ vdbPlot <- function(
    # browseURL(aa)
    
    if(calledFromRhipe) {
-      return(list(cog=cogDF))
+      return(list(cog=cogDat))
    } else {
-      # write cognostics, inputs, cognostics, and unique keys to disk and update displayList
-      
-      cogDF <- cogDF[order(cogDF$panelKey),]
+      # write cognostics, inputs, and unique keys to disk and update displayList
       
       # TODO: aspect ratio
       if(verbose)
-         message("Updating displayList...")
+         message("* Updating displayList...")
          
       modTime <- Sys.time()
-      keySig <- digest(sort(cogDF$panelKey))
+      
+      keys <- cogDat$panelKey         
+      keySig <- digest(sort(keys))
       
       vdbUpdateDisplayList(
          vdbPrefix=vdbPrefix, 
@@ -601,6 +587,7 @@ vdbPlot <- function(
          desc=desc, 
          n=nPanels, 
          storage=storage, 
+         cogStorage=cogStorage,
          hdfsPrefix=hdfsPrefix, 
          width=plotDim$width, 
          height=plotDim$height, 
@@ -622,7 +609,7 @@ vdbPlot <- function(
       # }
 
       if(verbose)
-         message("Updating displayList...")
+         message("* Storing display object...")
       
       hdfsDataSource <- NULL
       if(storage=="hdfsData")
@@ -635,6 +622,8 @@ vdbPlot <- function(
          desc=desc, 
          n=nPanels, 
          storage=storage, 
+         cogStorage=cogStorage,
+         cogDesc=getCogDesc(cogEx),
          hdfsPrefix=hdfsPrefix, 
          updated=modTime, 
          keySig=keySig,
@@ -642,7 +631,6 @@ vdbPlot <- function(
          subDirN=subDirN,
          plotFn=plotFn,
          cogFn=cogFn,
-         cogDesc=cogDesc,
          inputVars=inputVars,
          plotDim=plotDim, 
          lims=lims,
@@ -660,25 +648,41 @@ vdbPlot <- function(
       # (this is used when linking to other displays)
       # (need the plut keys)
       if(verbose)
-         message("Writing panel keys...")
-      # keyCols <- which(names(cogDF) %in% c("panelKey", "subDir"))
-      keys <- cogDF$panelKey
+         message("* Writing panel keys...")
+      # keyCols <- which(names(cogDat) %in% c("panelKey", "subDir"))
       save(keys, file=file.path(displayPrefix, "panelKeys.Rdata"))
       
-      # write cognostics
-      # if(!is.null(cogFn)) {
-         message("Writing cognostics...")
-         cog <- list(
-            cogDF=cogDF,
-            cogDesc=cogDesc,
-            cogIndex=NULL
-         )
+      if(verbose)
+         message("* Writing cognostics...")
+      if(cogStorage=="local") {
+         cogDat <- cogDat[order(cogDat$panelKey),]
+         cog <- cogDat
          # TODO: add indexes
          save(cog, file=file.path(displayPrefix, "cog.Rdata"))
-      # }
+      } else {
+         # cogStorage=="mongo"
+         # we've already put the data in, now we just need to index it
+
+         mongoConn <- vdbMongoInit(conn)
+         mongoNS <- mongoCollName(conn$vdbName, group, name, "cog")
+         cogNames <- names(cogEx)
+         for(i in seq_along(cogEx)) {
+            if(cogNames[i] == "panelKey") {
+               mongo.index.create(mongoConn, mongoNS, cogNames[i], c(mongo.index.unique, mongo.index.background))
+            } else if(inherits(cogEx[[i]], "cogGeo")) {
+               ll <- list("2d")
+               names(ll) <- cogNames[i]
+               mongo.index.create(mongoConn, mongoNS, ll, mongo.index.background)
+            } else if(length(cogEx[[i]]) == 1) {
+               mongo.index.create(mongoConn, mongoNS, cogNames[i], mongo.index.background)
+            }
+         }
+         mongo.disconnect(mongoConn)
+         
+      }
       
       # make thumbnail
-      message("Plotting thumbnail...")
+      message("* Plotting thumbnail...")
       # thumbHeight <- conn$thumbHeight
       # if(is.null(thumbHeight))
       #    thumbHeight <- 120
@@ -688,7 +692,8 @@ vdbPlot <- function(
       
       if(storage != "mongo") {
          # browser()
-         vdbWriteCogJson(displayPrefix, group, name, cogDF, cogDesc, inputVars, plotDim$height, plotDim$width, nPanels)
+         cogDesc <- getCogDesc(cogEx)
+         vdbWriteCogJson(displayPrefix, group, name, cogDat, cogDesc, inputVars, plotDim$height, plotDim$width, nPanels)
       }
       
       return(invisible(displayObj))
@@ -697,7 +702,7 @@ vdbPlot <- function(
 
 # prefix/group/name/png/0/xxxx.png
 # prefix/group/name/cog.Rdata
-#   cogDF, cogIndex
+#   cogDat, cogIndex
 # prefix/group/name/input.Rdata
 # prefix/group/name/thumb.png
 # prefix/group/name/cog.json (for old viewer)

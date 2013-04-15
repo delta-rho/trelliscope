@@ -1,11 +1,18 @@
 
-getD3HistData <- function(dat, xlab) {
-   # TODO: add logic about number of breaks
-   hst <- hist(dat, plot=FALSE)
-   HTML(paste("{\"xlab\": \"", xlab, "\", \"data\": [", paste(apply(matrix(data=c(
-      hst$breaks,
-      c(hst$counts, 0)
-   ), ncol=2), 1, function(x) paste("{\"xdat\":", x[1], ",\"ydat\":", x[2], "}", sep="")), collapse=","), "]}", sep=""))
+getD3HistData <- function(dat, col) {
+   res <- ""
+   if(is.data.frame(dat)) {
+      dat <- dat[,col]
+      if(inherits(dat, c("numeric", "integer"))) {
+         # TODO: add logic about number of breaks
+         hst <- hist(dat, plot=FALSE)
+         res <- HTML(paste("{\"xlab\": \"", col, "\", \"data\": [", paste(apply(matrix(data=c(
+            hst$breaks,
+            c(hst$counts, 0)
+         ), ncol=2), 1, function(x) paste("{\"xdat\":", x[1], ",\"ydat\":", x[2], "}", sep="")), collapse=","), "]}", sep=""))
+      }
+   }
+   res
 }
 
 renderTimeSeries <- function(expr, env=parent.frame(), quoted=FALSE) {

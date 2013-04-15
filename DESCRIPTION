@@ -42,7 +42,6 @@ Collate:
     'bsSetup.R'
     'curLim.R'
     'encodePlot.R'
-    'getMongoPlot.R'
     'noMargins.R'
     'progressbar.R'
     'runViewer.R'
@@ -60,3 +59,4 @@ Collate:
     'vdbObject.R'
     'vdbSplod.R'
     'websync.R'
+    'mongo.R'

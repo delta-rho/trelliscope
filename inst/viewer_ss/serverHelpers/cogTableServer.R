@@ -9,7 +9,7 @@ cogTableBodyHTML <- function(data, nr) {
       tDataString <- matrix(nrow=nr, ncol=nc, data="<td>&nbsp;</td>")   
    } else {
       tDataString <- matrix(sapply(seq_len(nc), function(i) {
-         if(class(data[[i]]) %in% c("integer", "numeric")) {
+         if(inherits(data[[i]], c("integer", "numeric"))) {
             val <- format(data[[i]], big.mark=",") #, scientific=-3)
          } else {
             val <- data[[i]]

@@ -43,9 +43,9 @@ $(document).ready(function() {
    hideColumn(7);
    hideColumn(8);
    hideColumn(9);
-   hideColumn(11);
    hideColumn(12);
    hideColumn(13);
+   hideColumn(14);
    
    var appHash = window.location.hash;
    if(appHash == "") {
@@ -106,7 +106,6 @@ $(document).ready(function() {
       }
       
    });
-
    
    $("#cogFilterMenu").css("min-width", "106px");
    

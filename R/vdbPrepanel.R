@@ -369,12 +369,12 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' 
 #' @export
 vdbSetLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
-
+   
    alreadyWarned <- FALSE
-
    # xQuant=c(0,1); yQuant=c(0,1); xRangeQuant=1; yRangeQuant=1
    getLims <- function(var, type, quant, rangeQuant) {
       dat <- lims[[var]]
+      datclass <- class(dat$max)[1]
       if(!is.numeric(dat$max)) {
          if(!alreadyWarned) {
             message("At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.")
@@ -395,6 +395,11 @@ vdbSetLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), x
       } else {
          res <- list(type="free", lim=NULL, range=NULL)
       }
+      if(datclass=="Date")
+         res$lim <- as.Date(res$lim, origin="1970-01-01")
+      if(datclass=="POSIXct")
+         res$lim <- as.POSIXct(res$lim, origin="1970-01-01")
+      # TODO: need to make sure the origin is correct
       res
    }
    

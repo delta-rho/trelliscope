@@ -6,11 +6,11 @@
     plotDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
     plotFn = NULL,
     lims = list(x = "free", y = "free", preFn = NULL),
-    cogFn = NULL, cogDesc = NULL, inputVars = NULL,
+    cogFn = NULL, inputVars = NULL,
     conn = getOption("vdbConn"), storage = NULL,
-    subDirSize = 1000, subDirN = 0, verbose = TRUE,
-    parallel = FALSE, rhFail = TRUE, mapred = NULL,
-    calledFromRhipe = FALSE)
+    cogStorage = NULL, subDirSize = 1000, subDirN = 0,
+    verbose = TRUE, parallel = FALSE, rhFail = TRUE,
+    mapred = NULL, calledFromRhipe = FALSE)
 }
 \arguments{
   \item{dat}{data of class "localDiv", "rhData", "trellis",
@@ -48,9 +48,6 @@
   current split of the data being passed to it.  Useful to
   test with cogFn(divExample(dat))}
 
-  \item{cogDesc}{a vector of descriptions for the cognostic
-  variables specified by cogFn}
-
   \item{inputVars}{input variables that will allow user
   input in the viewer, defined by \code{\link{inputVars}}}
 
@@ -61,6 +58,10 @@
 
   \item{storage}{how to store the plots and metadata for
   the display.  See details}
+
+  \item{cogStorage}{how to store the cognostics data.
+  Options are "local" for R data.frame, or "mongo" to store
+  cognostics in mongodb}
 
   \item{subDirSize}{the approximate number plots per
   subdirectory.  Only used of \code{storage=="local"}.  If
@@ -95,9 +96,12 @@
   mapfile on HDFS - can only be done with data of class
   "rhSplit"} \item{localData:}{instead of storing plots,
   data, plotFn, etc. will be stored locally and plotFn will
-  be applied to the data on-the-fly in the viewer} } There
-  are so many options because there are several tradeoffs,
-  described in the vignette.
+  be applied to the data on-the-fly in the viewer}
+  \item{hdfsData:}{plotFn is applied on-the-fly to data
+  retrieved from the original data on HDFS (must be a
+  mapfile) - can only be done with data of class "rhDiv"} }
+  There are so many options because there are several
+  tradeoffs, described in the vignette.
 }
 \examples{
 # see docs
