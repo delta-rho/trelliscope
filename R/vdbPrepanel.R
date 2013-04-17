@@ -355,7 +355,6 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' @seealso \code{\link{vdbPrepanel}}, \code{\link{vdbPlot}}
 #'
 #' @examples
-#' \dontrun{
 #' irisSplit <- divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'    list(
@@ -365,7 +364,6 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' }
 #' irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)
 #' irisLims <- vdbSetLims(irisPre, x="same", y="sliced")
-#' }
 #' 
 #' @export
 vdbSetLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {

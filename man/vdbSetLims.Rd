@@ -54,7 +54,6 @@
   across panels.
 }
 \examples{
-\dontrun{
 irisSplit <- divide(iris, "Species")
 irisPreFn <- function(x) {
    list(
@@ -64,7 +63,6 @@ irisPreFn <- function(x) {
 }
 irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)
 irisLims <- vdbSetLims(irisPre, x="same", y="sliced")
-}
 }
 \author{
   Ryan Hafen
