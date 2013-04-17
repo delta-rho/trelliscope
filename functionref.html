@@ -34,6 +34,10 @@
          font-size: 14px;
       }
 
+      .fref_title {
+         border-bottom:1px solid #EEE;
+      }
+
       .myHeader {
          font-family: 'Chivo', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 400;
          letter-spacing: -1px;
@@ -161,7 +165,7 @@
 <h3>Visualization Databases</h3>
 
 <p><strong>Author:</strong> Ryan Hafen</p>
-<p><strong>Version:</strong> 0.2</p>
+<p><strong>Version:</strong> 0.3</p>
 <p><strong>Date:</strong> 2012-03-03</p>
 <p><strong>License:</strong> BSD</p>
 
@@ -204,7 +208,7 @@ ggplot2</p>
 <!-- bsSetup -->   
 <div class="tab-pane" id="bssetup">
 
-<h3>Set Up Web Notebook Using Bootstrap</h3>
+<h3 class="fref_title">Set Up Web Notebook Using Bootstrap</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#bssetup'>bsSetup</a></span><span class="keyword">(</span><span class="argument">pageTitle</span> <span class="argument">=</span> <span class="string">"test"</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"test"</span><span class="keyword">,</span> <span class="argument">author</span> <span class="argument">=</span> <span class="string">"author name"</span><span class="keyword">,</span>
@@ -257,7 +261,7 @@ ggplot2</p>
 <!-- htaccessGen -->   
 <div class="tab-pane" id="htaccessgen">
 
-<h3>Generate a .htaccess file</h3>
+<h3 class="fref_title">Generate a .htaccess file</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#htaccessgen'>htaccessGen</a></span><span class="keyword">(</span><span class="argument">vdbPath</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbPath</span><span class="keyword">,</span> <span class="argument">users</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbUsers</span><span class="keyword">)</span></pre>
@@ -307,7 +311,7 @@ ggplot2</p>
 <!-- makeInputVars -->   
 <div class="tab-pane" id="makeinputvars">
 
-<h3>Create Input Variables for a VDB Display</h3>
+<h3 class="fref_title">Create Input Variables for a VDB Display</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#makeinputvars'>makeInputVars</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="symbol">type</span><span class="keyword">,</span> <span class="argument">dataType</span> <span class="argument">=</span> <span class="string">"character"</span><span class="keyword">,</span> <span class="argument">default</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">,</span>
@@ -355,7 +359,7 @@ ggplot2</p>
 <!-- makeSplodData -->   
 <div class="tab-pane" id="makesploddata">
 
-<h3>Create Data Plottable by vdbSplod</h3>
+<h3 class="fref_title">Create Data Plottable by vdbSplod</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#makesploddata'>makeSplodData</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">id.vars</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
@@ -403,7 +407,7 @@ ggplot2</p>
 <!-- nbDisplay -->   
 <div class="tab-pane" id="nbdisplay">
 
-<h3>Make Single Display in a Notebook</h3>
+<h3 class="fref_title">Make Single Display in a Notebook</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#nbdisplay'>nbDisplay</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
@@ -445,7 +449,7 @@ ggplot2</p>
 <!-- nbDisplayList -->   
 <div class="tab-pane" id="nbdisplaylist">
 
-<h3>Make a List of Displays in a Notebook</h3>
+<h3 class="fref_title">Make a List of Displays in a Notebook</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#nbdisplaylist'>nbDisplayList</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
@@ -486,7 +490,7 @@ ggplot2</p>
 <!-- newNotebook -->   
 <div class="tab-pane" id="newnotebook">
 
-<h3>Create a New Notebook File</h3>
+<h3 class="fref_title">Create a New Notebook File</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#newnotebook'>newNotebook</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">blank</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"My Test Page"</span><span class="keyword">,</span>
@@ -542,7 +546,7 @@ ggplot2</p>
 <!-- noMargins -->   
 <div class="tab-pane" id="nomargins">
 
-<h3>Remove Margins from Trellis/Lattice Plot</h3>
+<h3 class="fref_title">Remove Margins from Trellis/Lattice Plot</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#nomargins'>noMargins</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">topkey</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">rightkey</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
@@ -567,8 +571,6 @@ ggplot2</p>
 
 
 
-<h4>Examples</h4>
-<pre class="examples"><div class='input'>## <strong>Not run</strong>: # xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),#    par.settings=noMargins()# )# # # with additional par.settings...# xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),#    par.settings=noMargins(#       list(plot.symbol=list(col="black"))#    )# )# ## <strong>End(Not run)</strong></div></pre>
 
 <h4>See also</h4>
 
@@ -585,7 +587,7 @@ ggplot2</p>
 <!-- plot.vdbPre -->   
 <div class="tab-pane" id="plotvdbpre">
 
-<h3>Plot results form vdbPrepanel</h3>
+<h3 class="fref_title">Plot results form vdbPrepanel</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#plotvdbpre'>plot.vdbPre</a></span><span class="keyword">(</span><span class="symbol">lims</span><span class="keyword">,</span> <span class="argument">layout</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">2</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">as.table</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">strip</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span>
@@ -624,8 +626,6 @@ ggplot2</p>
 
 
 
-<h4>Examples</h4>
-<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# plot(irisPre)# ## <strong>End(Not run)</strong></div></pre>
 
 <h4>See also</h4>
 
@@ -642,7 +642,7 @@ ggplot2</p>
 <!-- splodCogFn -->   
 <div class="tab-pane" id="splodcogfn">
 
-<h3>Default Cognostics Function for vdbSplod</h3>
+<h3 class="fref_title">Default Cognostics Function for vdbSplod</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#splodcogfn'>splodCogFn</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span></pre>
@@ -687,7 +687,7 @@ ggplot2</p>
 <!-- splodPlotFn -->   
 <div class="tab-pane" id="splodplotfn">
 
-<h3>Default Plot Function for vdbSplod</h3>
+<h3 class="fref_title">Default Plot Function for vdbSplod</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#splodplotfn'>splodPlotFn</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span></pre>
@@ -733,7 +733,7 @@ ggplot2</p>
 <!-- typeset -->   
 <div class="tab-pane" id="typeset">
 
-<h3>Typeset a notebook (.Rmd) File</h3>
+<h3 class="fref_title">Typeset a notebook (.Rmd) File</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#typeset'>typeset</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
@@ -782,7 +782,7 @@ ggplot2</p>
 <!-- vdbInit -->   
 <div class="tab-pane" id="vdbinit">
 
-<h3>Set up a new VDB</h3>
+<h3 class="fref_title">Set up a new VDB</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbinit'>vdbInit</a></span><span class="keyword">(</span><span class="argument">path</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">autoYes</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
@@ -824,14 +824,14 @@ ggplot2</p>
 <!-- vdbPlot -->   
 <div class="tab-pane" id="vdbplot">
 
-<h3>Create a vdb Display</h3>
+<h3 class="fref_title">Create a vdb Display</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbplot'>vdbPlot</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="symbol">name</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> <span class="string">"common"</span><span class="keyword">,</span> <span class="argument">desc</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">,</span> <span class="argument">plotDim</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">height</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
   <span class="argument">width</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">aspect</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">res</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">plotFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
   <span class="argument">lims</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"free"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"free"</span><span class="keyword">,</span> <span class="argument">preFn</span> <span class="argument">=</span> NULL<span class="keyword">)</span><span class="keyword">,</span> <span class="argument">cogFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
-  <span class="argument">cogDesc</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">inputVars</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">storage</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">subDirSize</span> <span class="argument">=</span> <span class="number">1000</span><span class="keyword">,</span> <span class="argument">subDirN</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
+  <span class="argument">inputVars</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">storage</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
+  <span class="argument">cogStorage</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">subDirSize</span> <span class="argument">=</span> <span class="number">1000</span><span class="keyword">,</span> <span class="argument">subDirN</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
   <span class="argument">parallel</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">rhFail</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">mapred</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">calledFromRhipe</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
 
 <h4>Arguments</h4>
@@ -871,9 +871,6 @@ ggplot2</p>
   The function should takes one argument, which will be the
   current split of the data being passed to it.  Useful to
   test with cogFn(divExample(dat))</dd>
-  <dt>cogDesc</dt>
-  <dd>a vector of descriptions for the cognostic
-  variables specified by cogFn</dd>
   <dt>inputVars</dt>
   <dd>input variables that will allow user
   input in the viewer, defined by <code>inputVars</code></dd>
@@ -885,6 +882,10 @@ ggplot2</p>
   <dt>storage</dt>
   <dd>how to store the plots and metadata for
   the display.  See details</dd>
+  <dt>cogStorage</dt>
+  <dd>how to store the cognostics data.
+  Options are "local" for R data.frame, or "mongo" to store
+  cognostics in mongodb</dd>
   <dt>subDirSize</dt>
   <dd>the approximate number plots per
   subdirectory.  Only used of <code>storage=="local"</code>.  If
@@ -897,7 +898,7 @@ ggplot2</p>
   parallel (currently not working)</dd>
   <dt>mapred</dt>
   <dd>parameters to be passed to the Rhipe
-  mapreduce job (see <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code>)</dd>
+  mapreduce job (see <code>rhwatch</code>)</dd>
   <dt>calledFromRhipe</dt>
   <dd>don't mess with this</dd>
 </dl>
@@ -923,19 +924,20 @@ ggplot2</p>
   mapfile on HDFS - can only be done with data of class
   "rhSplit" localData:instead of storing plots,
   data, plotFn, etc. will be stored locally and plotFn will
-  be applied to the data on-the-fly in the viewer </span> There
-  are so many options because there are several tradeoffs,
-  described in the vignette.</p>
+  be applied to the data on-the-fly in the viewer
+  hdfsData:plotFn is applied on-the-fly to data
+  retrieved from the original data on HDFS (must be a
+  mapfile) - can only be done with data of class "rhDiv" </span>
+  There are so many options because there are several
+  tradeoffs, described in the vignette.</p>
 
 
 
-<h4>Examples</h4>
-<pre class="examples"><div class='input'># see docs</div></pre>
 
 <h4>See also</h4>
 
   <code><a href='#vdbprepanel'>vdbPrepanel</a></code>, <code><a href='#vdbsetlims'>vdbSetLims</a></code>,
-  <code>inputVars</code>, <code>divide</code>
+  <code>inputVars</code>, <code><a href='http://www.inside-r.org/r-doc/datadr/divide'>divide</a></code>
 
 
 <h4>Author</h4>
@@ -948,7 +950,7 @@ ggplot2</p>
 <!-- vdbPrepanel -->   
 <div class="tab-pane" id="vdbprepanel">
 
-<h3>Prepanel Function for vdb Plots</h3>
+<h3 class="fref_title">Prepanel Function for vdb Plots</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbprepanel'>vdbPrepanel</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">preFn</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">mapred</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
@@ -969,7 +971,7 @@ ggplot2</p>
   xlim and ylim can be determined from these.</dd>
   <dt>mapred</dt>
   <dd>a list of parameters to be sent to
-  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> if dat is of class "rhData"</dd>
+  <code>rhwatch</code> if dat is of class "rhData"</dd>
   <dt>verbose</dt>
   <dd>print status messages?</dd>
   <dt>calledFromRhipe</dt>
@@ -1030,14 +1032,12 @@ ggplot2</p>
 
 
 
-<h4>Examples</h4>
-<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# plot(irisPre)#' ## <strong>End(Not run)</strong></div></pre>
 
 <h4>See also</h4>
 
   <code><a href='http://www.inside-r.org/r-doc/ggplot2/aes_position'>x</a></code> <code><a href='#plotvdbpre'>plot.vdbPre</a></code>,
   <code><a href='#vdbsetlims'>vdbSetLims</a></code>, <code><a href='#vdbplot'>vdbPlot</a></code>,
-  <code>localDiv</code>, <code>rhData</code>
+  <code>localDiv</code>, <code><a href='http://www.inside-r.org/r-doc/datadr/rhData'>rhData</a></code>
 
 
 <h4>Author</h4>
@@ -1050,7 +1050,7 @@ ggplot2</p>
 <!-- vdbSetLims -->   
 <div class="tab-pane" id="vdbsetlims">
 
-<h3>Specify rules for x and y limits for a vdbPlot</h3>
+<h3 class="fref_title">Specify rules for x and y limits for a vdbPlot</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbsetlims'>vdbSetLims</a></span><span class="keyword">(</span><span class="symbol">lims</span><span class="keyword">,</span> <span class="argument">x</span> <span class="argument">=</span> <span class="string">"same"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"same"</span><span class="keyword">,</span> <span class="argument">xQuant</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">yQuant</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span>
@@ -1113,8 +1113,6 @@ ggplot2</p>
 
 
 
-<h4>Examples</h4>
-<pre class="examples"><div class='input'>## <strong>Not run</strong>: # irisSplit <- divide(iris, "Species")# irisPreFn <- function(x) {#    list(#       xlim = range(x$Sepal.Length),#       ylim = range(x$Sepal.Width)#    )# }# irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)# irisLims <- vdbSetLims(irisPre, x="same", y="sliced")# ## <strong>End(Not run)</strong></div></pre>
 
 <h4>See also</h4>
 
@@ -1131,7 +1129,7 @@ ggplot2</p>
 <!-- vdbSplod -->   
 <div class="tab-pane" id="vdbsplod">
 
-<h3>Create a Scatterplot Display</h3>
+<h3 class="fref_title">Create a Scatterplot Display</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbsplod'>vdbSplod</a></span><span class="keyword">(</span><span class="symbol">data</span><span class="keyword">,</span> <span class="argument">id.vars</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">name</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">desc</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">cogFn</span> <span class="argument">=</span> <span class="symbol">splodCogFn</span><span class="keyword">,</span>
@@ -1184,7 +1182,7 @@ ggplot2</p>
 <!-- vdbUpdateViewer -->   
 <div class="tab-pane" id="vdbupdateviewer">
 
-<h3>Update Project VDB Client Side Viewer Files</h3>
+<h3 class="fref_title">Update Project VDB Client Side Viewer Files</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#vdbupdateviewer'>vdbUpdateViewer</a></span><span class="keyword">(</span><span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
@@ -1227,7 +1225,7 @@ ggplot2</p>
 <!-- view -->   
 <div class="tab-pane" id="view">
 
-<h3>Run Server-Side Viewer</h3>
+<h3 class="fref_title">Run Server-Side Viewer</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#view'>view</a></span><span class="keyword">(</span><span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">type</span> <span class="argument">=</span> <span class="string">"ss"</span><span class="keyword">,</span> <span class="argument">group</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
@@ -1268,7 +1266,7 @@ ggplot2</p>
 <!-- viewNotebook -->   
 <div class="tab-pane" id="viewnotebook">
 
-<h3>View a Notebook File</h3>
+<h3 class="fref_title">View a Notebook File</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#viewnotebook'>viewNotebook</a></span><span class="keyword">(</span><span class="argument">name</span> <span class="argument">=</span> <span class="string">"index"</span><span class="keyword">,</span> <span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">)</span></pre>
@@ -1311,7 +1309,7 @@ ggplot2</p>
 <!-- websync -->   
 <div class="tab-pane" id="websync">
 
-<h3>Sync vdb and notebook Files to a Web Server</h3>
+<h3 class="fref_title">Sync vdb and notebook Files to a Web Server</h3>
 
 <h4>Usage</h4>
 <pre><span class="functioncall"><a href='#websync'>websync</a></span><span class="keyword">(</span><span class="argument">vdbName</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbName</span><span class="keyword">,</span> <span class="argument">vdbPrefix</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbPrefix</span><span class="keyword">,</span>

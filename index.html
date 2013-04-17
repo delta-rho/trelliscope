@@ -184,6 +184,11 @@
 
 
       <li class='active'>
+         <a target='_self' class='nav-not-header' href='#cognostics-interactions'>Cognostics Interactions</a>
+      </li>
+
+
+      <li class='active'>
          <a target='_self' class='nav-not-header' href='#client-side-viewer'>Client-Side Viewer</a>
       </li>
 
@@ -198,7 +203,12 @@
 <li class='nav-header'>Notes on Storage</li>
       
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#storage-types'>Storage Types</a>
+         <a target='_self' class='nav-not-header' href='#panel-storage-types'>Panel Storage Types</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#cognostics-storage-types'>Cognostics Storage Types</a>
       </li>
 
 
@@ -221,11 +231,55 @@
 <div class='tab-pane active' id='background'>
 <h3>Background</h3>
 
-<p>This document provides examples of creating and viewing visualization databases (VDBs) using the <code>vdb</code> package.  Visualization databases provide a way to visualize large, complex data in great detail from within the R statistical programming environment.  It operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  This is a research effort that is evolving, and this document communicates the current state.</p>
+<p>This documentation provides examples of creating and viewing visualization databases (VDBs) using the <code>vdb</code> R package.  Visualization databases provide a way to visualize large, complex data in great detail from within the R statistical programming environment, and are greatly inspired by ideas of John Tukey.  This package operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  Data can be local R data.frames or can be very massive <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets.  This is a research effort that is evolving, and this document communicates the current state.</p>
 
-<p>In short, a visualization database is a collection of displays, each of which visualizes some aspect of the data being analyzed.  A display consists of one or more panels, where a panel is a plot method applied to each subset of the data.  This package provides mechanisms which, after using the <a href="http://github.com/hafen/datadr">datadr</a> package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways.  This package also provides some mechanisms for maintaining a &quot;lab notebook&quot; with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display.</p>
+<p>VDBs are based on the concept of Divide and Recombine (D&amp;R).  Some philosophy and background on D&amp;R can be found at <a href="http://www.datadr.org">datadr.org</a>.</p>
 
-<!-- More on philosophy, background, divide and recombine, etc. -->
+<h4>Motivation</h4>
+
+<p>Building statistical models that adequately explain the patterns in the data is an iterative process, and visualization plays a critical role throughout.  In the initial exploration phases, visualization is one of the most powerful mechanisms through which the analyst can begin to formulate and hypothesize mathematical models that represent the patterns in the data.  After applying algorithms and fitting models, visualization plays a key role in validating the adequacy of the model.  Finally, after iterating and arriving upon an adequate model, visualization plays a critical role in disseminating the results of the analytical task.  To ensure information is not lost, the ability to visualize the data at the finest level of detail is crucial at all steps in this process, regardless of the size of the data.</p>
+
+<h4>The Visualization Context: Data Analysis</h4>
+
+<p>An important point to get across is who the consumer of the visualization is in this process.  Many visualization tools are designed from the point of view that the end user is a field analyst, with little or no training in statistical modeling.  The algorithms for the data have already been specified, and the purpose of the visualization tool is to assist the field analyst in understanding the data based on these algorithms.  These types of visualization tools can be very useful for their intended purpose, but there is a need for scalable visualization tools that can be used during the statistical model building process.</p>
+
+<!-- Tools of this nature that we have had experience with can be very useful, but are not appropriate for our analysis context.   -->
+
+<!-- but are usually specialized or take a long time to develop for a specific dataset. -->
+
+<p>The context for our visualization environment is <em>deep statistical analysis and machine learning</em>, building and validating mathematical models that capture the behavior in the data.  The consumer of visualization tools in this context is not a field analyst but a statistician with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  In this context, the analyst needs tools that are very flexible that allow for rapid prototyping.  Most importantly, visualization tools in this context need to tie directly into the data analysis environment, as visual and numerical methods cannot be decoupled.</p>
+
+<!-- But where do the algorithms used by these tools come from?  In many cases they come from the iterative statistical model building process we defined previously.  In this process, the visualization consumer is a person with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  Thus the end-user of the visualization tools we are discussing is very different from what is traditionally thought of.  This is an important distinction to keep in mind. -->
+
+<!-- It is important to make sure the action of "visualization" is being thought of in the appropriate context.  The context here is *deep statistical analysis*.  The consumer of these tools is not a field analyst but a statistician who is trying to use visualization to hypothesize and validate models that account for variability in the data.  As such, we are not as interested in tools built for a specific type of data or a specific domain.  Such tools can be very useful, particularly if they are based on statistical models that have been validated against the data, but in our setting, we are actually *building* and *validating* the models.   Thus, we need a flexible tool with broad applicability, that ties directly into our data analysis environment. -->
+
+<h4>General Approach: Dividing the Data</h4>
+
+<p>An effective approach to detailed data visualization with many records or variables is to divide the data into meaningful subsets and apply a visualization method to each subset, creating a collection of <a href="http://www.edwardtufte.com/tufte/books_ei">&quot;small multiples&quot;</a>.  Viewing a collection of small multiples is effective in revealing repetitions or changes, and allows an analyst to see the data at finer levels of detail.  This visualization approach has been an effective tool for many years and is built in to many successful visualization software packages, such as the lattice package for the R statistical computing environment based on <a href="http://www.cs.ubc.ca/%7Etmm/courses/infovis/readings/trellis.jstor.pdf">trellis</a> display for S/S-plus.  The analyst creates a visual display, applying a visualization method across subsets of the data, resulting in a collection of small multiples, each of which is called a panel in the display.  Many displays are created throughout the course of an analysis. A collection of displays is called a visualization database <a href="http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf">(VDB)</a>.</p>
+
+<h4>Scaling to Massive Data</h4>
+
+<p>As the size or complexity of the data increases, the number of small multiples increases beyond the capacity of the human mind to simultaneously capture the details and larger scale trends or patterns.  A <a href="http://www.jstor.org/discover/10.2307/1558733?uid=3739960&amp;uid=2129&amp;uid=2&amp;uid=70&amp;uid=4&amp;uid=3739256&amp;sid=21102145454567">simple idea</a> put forth by John Tukey decades ago is to have the computer do the work of determining which displays might be interesting.  This is accomplished through calculating diagnostic quantities for each panel to provide a rank for its potential usefulness.  Tukey called these quantities computer guided diagnostics, or <a href="http://books.google.com/books?id=z_F5Tyt66c0C&amp;printsec=frontcover#v=onepage&amp;q&amp;f=false">cognostics</a>.  Cognostic quantities can be simple statistical quantities (range, standard deviation, model coefficients) or can be tailored to the visualization at hand to differentiate among large numbers of panels with respect to context-relevant attributes.  Panels in a display can be sorted and filtered based on cognostics of interest, or samples of panels stratified according to the distribution of various cognostics.</p>
+
+<h4>Design of a Detailed Visualization Environment for Statistical Model Building</h4>
+
+<p>Summarizing some points above, visualization in the statistical model building proces requires an environment that:</p>
+
+<ul>
+<li>provides rapid development of visualizations</li>
+<li>provides a great degree of flexibility</li>
+<li>ties directly into our data analysis environment, allowing numerical and visual methods to </li>
+</ul>
+
+<p>To address these requirements, our visualization environment is built upon R.  R satisfies all 3 of these requirements.  While there are many excellent visualization frameworks we could make use of, one of the driving forces for this choice is the tie-in with all of the thousands of numerical methods available in R, and that R vis packages such as lattice, ggplot, and base R are familiar to statisticians.  As it becomes easier to rapidly build visualizations using more modern web-based vis tools such as vega/d3 from R, we will start to consider these.  We are already investigating the use of such frameworks for the interactive panel viewer part of this environment.</p>
+
+<!-- #### The vdb Package -->
+
+<!-- In short, a visualization database is a collection of displays, each of which visualizes some aspect of the data being analyzed.  A display consists of one or more panels, where a panel is a plot method applied to each subset of the data.   -->
+
+<!-- The `vdb` package provides mechanisms which, after using the [datadr][datadr] package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways, based on cognostics computed for each panel that quantify interesting features.  This package also provides some mechanisms for maintaining a "lab notebook" with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large [RHIPE][rhipe] datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display. -->
+
+<!-- Suppose, for example, I have a large collection of high energy physics sensor data, and I am trying to study the properties of ...  I need to rapidly change between numerical and visual methods throughout the process of model building. -->
 
 <h4>Reference</h4>
 
@@ -239,7 +293,7 @@
 <p>References:</p>
 
 <ul>
-<li><a href="http://datadr.org">datadr.org</a></li>
+<li><a href="http://datadr.org">http://datadr.org</a></li>
 <li><a href="http://onlinelibrary.wiley.com/doi/10.1002/sta4.7/full">Large complex data: divide and recombine (D&amp;R) with RHIPE. <em>Stat</em>, 1(1), 53-67</a></li>
 <li><a href="http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf">Visualization Databases for the Analysis of Large Complex Datasets</a></li>
 </ul>
@@ -594,26 +648,50 @@ plot(airDatePre)
 
 <p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>vdbPlot</code>.  </p>
 
-<p>Note: Currently, the assumption is that the number of panels will always be a number small enough that all the cognostic information can reside in an R session (probably in the low millions).  If there are more, then sampling mechanisms will have to be added to allow for sampling.</p>
+<p>The cognostics function is applied to each subset just like the plot function and must return a list which can be flattened into a data.frame.  There are helper functions <code>cog()</code>, <code>cogMean()</code>, <code>cog(Range)</code>, etc. which can be used when defining this list.  The most generic, <code>cog()</code> basically wraps the metric you want to compute with additional information, such as the description of the cognostic and its type.  Current types are:</p>
+
+<ul>
+<li><code>int</code>: integer </li>
+<li><code>num</code>: floating point</li>
+<li><code>fac</code>: factor (string)</li>
+<li><code>date</code>: date</li>
+<li><code>time</code>: datetime</li>
+<li><code>geo</code>: geographic (a vector of lat and lon)</li>
+<li><code>rel</code>: relation (not implemented)</li>
+<li><code>hier</code>: hierarchy (not implemented)</li>
+</ul>
+
+<p>If type is not specified, it is inferred based on the data being processed.</p>
+
+<p>In the future, support for input variables will be added (this existed in older versions).  These will not be computed based on the data, but will be placeholders for users to provide panel-specific input.</p>
 
 <p>For our buoy data, there are several congnostics we might be interested in.  Typically the most meaningful cognostics are arrived upon iteratively.  Here, we specify the mean latitude and longitude, the drift (range) of the latitude and longitude, the range of temperature and date variables, the number of observtions, the number of missing values, and an estimate of the variability of the data around a fitted loess line of temperature vs. time.</p>
 
 <pre><code class="r">airDateCogFn &lt;- function(dat) {
-   data.frame(
-      meanLat = cogMean(dat$lat),
-      meanLon = cogMean(dat$lon),
-      latDrift = cogRange(dat$lat),
-      lonDrift = cogRange(dat$lon),
-      tempRng = cogRange(dat$airTemp),
-      dateRng = cogRange(as.numeric(dat$date)),
-      nObs = nrow(dat),
-      nNA = length(which(is.na(dat$airTemp))),
-      locVar = cogLoessRMSE(as.numeric(dat$date), dat$airTemp, degree=2, span=0.1)
+   list(
+      meanLoc = cog(c(mean(dat$lat), mean(dat$lon)), 
+         desc=&quot;Mean lat/lon buoy location&quot;,
+         type=&quot;geo&quot;),
+      latDrift = cogRange(dat$lat, 
+         desc=&quot;Range of latitude drift of the buoy over time&quot;),
+      lonDrift = cogRange(dat$lon,
+         desc=&quot;Range of longitude drift of the buoy over time&quot;),
+      tempRng = cogRange(dat$airTemp, desc=&quot;Temperature range&quot;),
+      dateRng = cogRange(as.numeric(dat$date), desc=&quot;Date range (days)&quot;),
+      startDate = cog(min(dat$date), 
+         desc=&quot;Date of first record&quot;, type=&quot;date&quot;),
+      nObs = cog(nrow(dat), desc=&quot;Number of observations&quot;),
+      nNA = cog(length(which(is.na(dat$airTemp))),
+         desc=&quot;Number of missing observations&quot;),
+      locVar = cogLoessRMSE(as.numeric(dat$date), dat$airTemp, degree=2, span=0.1,
+         desc=&quot;Variability of temperature around a time-local mean&quot;)
    )
 }
 </code></pre>
 
 <p>Notice the functions <code>cogMean</code>, <code>cogRange</code>, and <code>cogLoessRMSE</code>.  These are special cognostic functions (and there will be more) to simplify the process of specifying common cognostics.  The difference between <code>cogRange</code> and <code>range</code> and others is that there is removal of NAs and extra checking for errors (when all are NA) so that cognostic calculation is robust to errors.</p>
+
+<p>Note that if you don&#39;t want to wrap your calculations in <code>cog()</code>, you don&#39;t have to, but doing so allows you to control the type of variable and give it a description.</p>
 
 <p>Let&#39;s test it on a subset:</p>
 
@@ -624,22 +702,9 @@ plot(airDatePre)
 1 -7.976856 54.99609     1.01     0.78    4.92    2099 2090 470 0.2390464
 </code></pre>
 
-<p>The final thing to specify that makes cognostics more meaningful in the viewer is to give the variables descriptions:</p>
-
-<pre><code class="r">airDateCogDesc &lt;- c(
-   &quot;Mean latitude&quot;,
-   &quot;Mean longitude&quot;,
-   &quot;Range of latitude drift of the buoy over time&quot;,
-   &quot;Range of longitude drift of the buoy over time&quot;,
-   &quot;Temperature range&quot;,
-   &quot;Date range (days)&quot;,
-   &quot;Number of observations&quot;,
-   &quot;Number of missing observations&quot;,
-   &quot;Variability of temperature around a time-local mean&quot;
-)
-</code></pre>
-
 <p>We will see how all of these components are used in the next section.</p>
+
+<p>Note: the default behavior for storing cognostics is as an R data.frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels exceeding the low millions.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.</p>
 
 <!-- ### Input Variables ### -->
 
@@ -659,8 +724,7 @@ plot(airDatePre)
    plotFn  = airDatePlotFn, 
    plotDim = list(height=350, width=800),
    lims    = buoyLims, 
-   cogFn   = airDateCogFn, 
-   cogDesc = airDateCogDesc
+   cogFn   = airDateCogFn
 )
 </code></pre>
 
@@ -853,10 +917,29 @@ vdbSplod(batSplodDat)
 </div>
 
 
+<div class='tab-pane' id='cognostics-interactions'>
+<h3>Cognostics Interactions</h3>
+
+<p>The current viewer is a proof-of-concept, and I&#39;d like to see much more functionality here in the future.  In particular, the following are interactive filtering / sorting behaviors I would like to see for each cognostics type:</p>
+
+<ul>
+<li><strong>Numeric</strong>: filter / expore by univariate quantile plot / histogram - for groups of numeric variables, filter by scatterplot</li>
+<li><strong>Factor (Categorical)</strong>: filter / explore by dropdown of categories, frequency bar chart, regular expression input</li>
+<li><strong>Date/time</strong>: filter / explore by time window slider, time of day, day of week, calendar range, regular expression input</li>
+<li><strong>Geo</strong>: filter / explore by lat/lon projected onto map</li>
+<li><strong>Relation</strong>: specified by a list of keys pointing to other subsets (within same dataset or in others) - filter / explore by node groupings in a network graph which might be organized or colored by other cognostics variables</li>
+<li><strong>Hierarchy</strong>: a label that is found in a hierarchy specified externally to the record (in a separate metadata file) - filter / explore by treemap, etc.</li>
+</ul>
+
+<p>Filters and interactivity based on combinations of cognostics would also be desirable, such as a numeric cognostic plotted versus a time cognostic as a time series, etc.</p>
+
+</div>
+
+
 <div class='tab-pane' id='client-side-viewer'>
 <h3>Client-Side Viewer</h3>
 
-<p>There is a client-side viewer that is convenient because it does not require a web server, but is not nearly as flexible because it requires collections of plot files as the storage mechanism.  This viewer can be invoked by calling <code>view(type=&quot;cs&quot;)</code>.</p>
+<p>There is a client-side viewer that is convenient because it does not require a web server, but is not nearly as flexible because it requires collections of plot files as the storage mechanism (instead of applying the plot function on the fly or storing the plots on HDFS or in MongoDB).  This viewer can be invoked by calling <code>view(type=&quot;cs&quot;)</code>.  It has not been maintained in a while.</p>
 
 </div>
 
@@ -986,8 +1069,8 @@ airDateCogFn(divExample(byBuoy))
 </div>
 
 
-<div class='tab-pane' id='storage-types'>
-<h3>Storage Types</h3>
+<div class='tab-pane' id='panel-storage-types'>
+<h3>Panel Storage Types</h3>
 
 <p>I&#39;ve been exploring several storage types for the panels of the displays.  Here is an enumeration with some details.  In general, the main consideration is whether you want to store the raster images on disk or view them on-the-fly.</p>
 
@@ -1024,7 +1107,7 @@ airDateCogFn(divExample(byBuoy))
 
 <h4>mongo</h4>
 
-<p>Base64 encoded raster .png images are stored in mongoDB (connection parameters specified in <code>vdbConn</code>).  This is very experimental and not recommended.</p>
+<p>Base64 encoded raster .png images are stored in MongoDB (connection parameters specified in <code>vdbConn</code>).  This is very experimental and not recommended.</p>
 
 <h4>localData</h4>
 
@@ -1088,6 +1171,64 @@ airDateCogFn(divExample(byBuoy))
 <li>hdfsData</li>
 <li>hbase <em>(not implemented)</em></li>
 </ul>
+
+</div>
+
+
+<div class='tab-pane' id='cognostics-storage-types'>
+<h3>Cognostics Storage Types</h3>
+
+<p>By default, cognostics are stored as an R data.frame.  This becomes limiting when the number of panels gets into the low millions, as the viewer must read the entire cognostics data.frame in and manipulate it.  </p>
+
+<p>An alternative for storing cognostics that has been experimentally implemented is storing the cognostics as an indexed MongoDB collection.  This should provide a greater deal scalability, but we lose some flexibility of manipulating the entire cognostics data in R.  We will explore how to get around these limitations.  Another downside of using MongoDB for storing cognostics is that it requires one more component to be installed and configured.</p>
+
+<h4>MongoDB Example</h4>
+
+<p>To plot to MongoDB, you first need to set some values in your <code>vdbConn</code>:</p>
+
+<pre><code class="r">options(vdbConn = list(
+   vdbName        = &quot;vdbTest&quot;, 
+   vdbPrefix      = vdbDir,
+   mongoHost = &quot;127.0.0.1&quot;,
+   mongoName = &quot;&quot;,
+   mongoUser = &quot;&quot;,
+   mongoPass = &quot;&quot;
+))
+</code></pre>
+
+<p>The last for parameters provides information on how to connect to a MongoDB running on a local host (with no username and password).  The database in which collections are stored is provided by <code>vdbName</code>.</p>
+
+<p>Now, going back to our previous example, supposing you have the data, plot, and cognostics functions already in your session, here is how you can write the cognostics to MongoDB:</p>
+
+<pre><code class="r">vdbPlot(
+   group   = &quot;buoy&quot;,
+   name    = &quot;airTemp_vs_date_mongo&quot;,
+   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
+   data    = buoySplit,
+   plotFn  = airDatePlotFn, 
+   plotDim = list(height=350, width=800),
+   lims    = buoyLims, 
+   cogFn   = airDateCogFn,
+   storage = &quot;mongo&quot;,
+   cogStorage = &quot;mongo&quot;
+)
+</code></pre>
+
+<p>Here we also store the plots in MongoDB, although this is not necessary.  It is possible to store plots in any of the storage options while still writing cognostics to MongoDB.  In the case of RHIPE plot storage, note that all nodes on the Hadoop cluster need to be able to communicate with the MongoDB service.</p>
+
+<p>The above code created two collections in the MongoDB database, &quot;vdbTest&quot;.  These are:</p>
+
+<ul>
+<li><strong>buoy_airTemp_vs_date_mongo_cog</strong>: each document in this collection is a row of the cognostics table</li>
+<li><strong>buoy_airTemp_vs_date_mongo_panel</strong>: each document is a base64-encoded png.  The <code>_id</code> of this table is the panel key, and ties to &quot;panelKey&quot; in the _cog collection.</li>
+</ul>
+
+<p>The prefix &quot;buoy_&quot; in the collection names comes from the &quot;group&quot; argument to vdbPlot.</p>
+
+<p>You can try the viewer on this data.  You will notice that currently the interactive graphical filters do not work with cognostics stored in MongoDB.</p>
+
+<pre><code class="r">view()
+</code></pre>
 
 </div>
 
