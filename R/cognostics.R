@@ -151,7 +151,7 @@ getCognosticsSub <- function(data, cogFn, isCondDiv, splitKey) {
    if(isCondDiv)
       condList <- lapply(attr(data, "split"), function(x) {
          cog(x, desc="conditioning variable", type="fac")
-   })
+      })
 
    # if the user didn't wrap it in "cog()", do it for them...
    if(is.null(cogFn)) {

@@ -490,6 +490,16 @@ vdbPlot <- function(
          # ofolder <- Rhipe:::mkdHDFSTempFolder(file=name)
          ofolder <- paste(hdfsPrefix, "/", name, sep="")
          
+         if(ofolder==data$loc)
+            stop("vdb output cannot be the same as the input.  Consider putting all vdb plots in a vdb subdirectory on HDFS")
+         
+         ofolderExists <- try(rhls(ofolder))
+         if(!inherits(ofolderExists, "try-error")) {
+            ans <- readline(paste("The output HDFS directory ", ofolder, " does not exist.  Create? (y = yes) ", sep=""))
+         	if(!tolower(substr(ans, 1, 1)) == "y")
+         	   stop()
+         }
+         
          # a <- rhread(data$loc)
          # k <- a[[1]][[1]]
          # r <- a[[1]][[2]]
@@ -655,14 +665,14 @@ vdbPlot <- function(
       if(verbose)
          message("* Writing cognostics...")
       if(cogStorage=="local") {
-         cogDat <- cogDat[order(cogDat$panelKey),]
+         cogDat <- cogDat[order(cogDat$panelKey),,drop=FALSE]
          cog <- cogDat
          # TODO: add indexes
          save(cog, file=file.path(displayPrefix, "cog.Rdata"))
       } else {
          # cogStorage=="mongo"
          # we've already put the data in, now we just need to index it
-
+         
          mongoConn <- vdbMongoInit(conn)
          mongoNS <- mongoCollName(conn$vdbName, group, name, "cog")
          cogNames <- names(cogEx)
@@ -678,7 +688,6 @@ vdbPlot <- function(
             }
          }
          mongo.disconnect(mongoConn)
-         
       }
       
       # make thumbnail
