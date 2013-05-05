@@ -23,7 +23,7 @@ viewerBootstrapPage <- function (...) {
 }
 
 viewerPage <- function (preHeader, headerPanel, mainPanel) {
-    viewerBootstrapPage(preHeader, div(class = "container-fluid", div(class = "row-fluid", 
+    viewerBootstrapPage(preHeader, div(class = "container-fluid", style="padding-left:8px; padding-right:8px", div(class = "row-fluid", 
         headerPanel), div(class = "row-fluid", 
         mainPanel)))
 }
@@ -32,16 +32,11 @@ viewerHeaderPanel <- function() {
    div(class='navbar navbar-fixed-top',
    div(class='navbar-inner',
    div(class='container-fluid',
-      div(id='displayNameHeader', class='span3 shiny-html-output'),
+      div(id='displayNameHeader', class='span5 shiny-html-output'),
       HTML("<div class='span1'>
             <ul class='nav'>
                <li><a data-toggle='modal' href='#aboutModal' class='active'>About</a></li>
             </ul>
-         </div>
-         <div class='span2'>
-            <form class='navbar-search' id='pppForm'>
-               <input type='text' class='input-medium search-query' placeholder='panels per screen' id='pppInput'>
-            </form>
          </div>"
       ),
       div(class='span3', id='navbuttons',
@@ -110,8 +105,8 @@ tdSelectString <- function(selector) {
 
 hiddenDimInputs <- function() {
    div(style="display: none",
-      numericInput("nRow", "", 1),
-      numericInput("nCol", "", 1),
+      # numericInput("nRow", "", 1),
+      # numericInput("nCol", "", 1),
       numericInput("plotWidth", "", 0),
       numericInput("plotHeight", "", 0),
       numericInput("currentPage", "", 1),

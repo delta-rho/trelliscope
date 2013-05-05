@@ -15,33 +15,60 @@ variablePlotSelectModal <- function() {
       ),
       div(class="modal-body",
          tabsetPanel(
-            tabPanel("Vars", 
-               tags$h4("Display variables under panels", style="display:inline; line-height:25px"),
-               tags$a(id='varPanelTipPopover', rel='popover', 
-                  title='Update Variable Visibility', 
-                  'data-content'="<p>Here you can choose which variables should be visible under each panel.  Click and drag on the 'Show' column to highlight which variables to show.",
+            tabPanel("Layout", 
+               tags$h4("Panel Layout", style="display:inline; line-height:25px"),
+               tags$a(id='panelLayoutTipPopover', rel='popover', 
+                  title='Panel Layout', 
+                  'data-content'="<p>Choose either the approximate number of panels per screen you would like to view or specify number of rows and columns.  If you select panels per screen, the number of rows and columns will be chosen based on the aspect ratio of the panels.</p>",
                   tags$i(class='icon-info-sign')
                ),
+               tags$hr(),
+               tags$form(class="form-horizontal",
+                  div(class="control-group",
+                  tags$label("Panels per screen", class="control-label"),
+                  div(class="controls",
+                     tags$input(id="pppInput", type="number", value=1, class="input-small")
+                  )),
+                  div(class="control-group",
+                  tags$label("Rows", class="control-label"),
+                  div(class="controls",
+                     tags$input(id="panelRows", type="number", value=1, class="input-small")
+                  )),
+                  div(class="control-group",
+                  tags$label("Columns", class="control-label"),
+                  div(class="controls",
+                     tags$input(id="panelCols", type="number", value=1, class="input-small")
+                  ))
+               )
+            ), 
+            tabPanel("Vars", 
+               tags$h4("Display variables under panels", style="display:inline; line-height:25px"), 
+               tags$a(id='varPanelTipPopover', rel='popover', 
+                  title='Update Variable Visibility', 
+                  'data-content'="<p>Here you can choose which variables should be visible under each panel.  Click and drag on the 'Show' column to highlight which variables to show.</p>",
+                  tags$i(class='icon-info-sign')
+               ), 
+               tags$hr(),
                htmlOutput("variablePlotSelectInput")
             ), 
             tabPanel("plotFn", 
-            tags$h4("Update plot function", style="display:inline; line-height:25px"),
-            tags$a(id='varPlotFnUpdateTipPopover', rel='popover', 
+            tags$h4("Update plot function", style="display:inline; line-height:25px"), 
+            tags$a(id='plotFnUpdateTipPopover', rel='popover', 
                title='Update plotFn', 
-               'data-content'="<p>Here you can update the plot function to be applied to each subset - only works with storage method of 'localData'.  Please be careful here!",
+               'data-content'="<p>Here you can update the plot function to be applied to each subset - only works with storage method of 'localData'.  Please be careful here!", 
                tags$i(class='icon-info-sign')
-            ),
-               div(id="editorWrapper", 
-                  class="shiny-plotFn-output",
-                  div(
-                     id="editor", 
-                     class="shiny-plotFn-output"
-                  ),
-                  div(
-                     tags$textarea(id="plotFnInput"),
-                     style="display:none"
-                  ),
-                  HTML("<script src='' type='text/javascript' charset='utf-8'></script>
+            ), 
+            div(id="editorWrapper", 
+               class="shiny-plotFn-output", 
+               div(
+                  id="editor", 
+                  class="shiny-plotFn-output"
+               ), 
+               div(
+                  tags$textarea(id="plotFnInput"), 
+                  style="display:none"
+               ), 
+               HTML("<script src='' type='text/javascript' charset='utf-8'></script>
          <script>
             var editor = ace.edit('editor');
             editor.setTheme('ace/theme/tomorrow'); 

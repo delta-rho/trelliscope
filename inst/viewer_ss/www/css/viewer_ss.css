@@ -8,6 +8,10 @@ div.cogTable_wrapper {
    overflow-y: hidden;
 }
 
+.nowrap {
+   white-space: nowrap;
+}
+
 /* div.cogTablePageLength {
    width: 150px;
    float:left;
@@ -44,7 +48,7 @@ div.cogTablePaginate ul {
 div.cogTableWrap {
    display: table;
    margin: 0 auto;
-   height: 550px;
+   height: 460px;
    overflow-y: auto;
 }
 

@@ -45,7 +45,8 @@ cogTableLength <- function() {
    # si[[2]]$attribs$size <- "1"
    si <- tags$label("Show", si, " entries", class="cogTable_inputLabel")
    div(class="cogTablePageLength pull-left",
-      si
+      ""
+      # si
    )
 }
 
@@ -61,7 +62,7 @@ cogTableTable <- function(width) {
                      cellpadding='0', 
                      cellspacing='0', 
                      border='0', 
-                     class='data table table-condensed table-striped table-bordered cogTable', 
+                     class='data table table-condensed table-striped table-bordered cogTable nowrap', 
                      id="cogTable",
                      cogTableHeadOutput("cogTableHead"),
                      cogTableFootOutput("cogTableFoot"),

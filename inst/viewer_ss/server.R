@@ -5,10 +5,25 @@ library(base64enc) # this one is much faster than caTools!!
 # library(Rhipe)
 # rhinit()
 
-vdbPrefix <- getOption("vdbShinyPrefix")
 sapply(list.files("serverHelpers", full.names=TRUE), source)
 
-verbose <- getOption("vdbLogViewer", default=FALSE)
+# # try to load options (thinking it is shiny-server mode)
+# ld <- try(load("vdbConn.Rdata"))
+# if(inherits(ld), "try-error") {
+#    # must not be shiny-server mode
+#    vdbConn <- options()$vdbConn
+# } else {
+#    # since we are on the web server, we need to point to the files there...
+#    vdbConn$vdbPrefix <- vdbConn$webServerVdbPrefix
+#    # TODO: let the vdb server know how to connect to mongodb, hdfs, etc.
+# }
+
+vdbConn <- options()$vdbConn
+
+vdbPrefix <- vdbConn$vdbPrefix
+verbose <- vdbConn$viewerLog
+if(is.null(verbose))
+   verbose <- FALSE
 
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
 
@@ -71,7 +86,7 @@ shinyServer(function(input, output) {
    ########################################################
    
    nPages <- reactive({
-      ceiling(cogNrow(cdCogDF()) / (input$nRow * input$nCol))
+      ceiling(cogNrow(cdCogDF()) / (input$panelRows * input$panelCols))
    })
    
    output$nPages <- renderText({
@@ -334,7 +349,8 @@ shinyServer(function(input, output) {
          colIndex <- cogTableColVisibility()
          
          pageNum <- input$cogTablePagination
-         pageLen <- as.integer(input$cogTablePageLength)
+         # pageLen <- as.integer(input$cogTablePageLength)
+         pageLen <- 8
          if(n == 0) {
             idx <- integer(0)
          } else {
@@ -371,14 +387,16 @@ shinyServer(function(input, output) {
    
    ### hidden field
    output$cogTablePageLengthOut <- reactive({
-      HTML(input$cogTablePageLength)
+      # HTML(input$cogTablePageLength)
+      HTML(8)
    })
    outputOptions(output, 'cogTablePageLengthOut', suspendWhenHidden=FALSE)
    
    ### text indicating pagination info for cognostics modal table
    output$cogTablePaginateText <- renderText({
       n <- cdCogLength()
-      n2 <- as.integer(input$cogTablePageLength)
+      # n2 <- as.integer(input$cogTablePageLength)
+      n2 <- 8
 
       HTML(
          input$cogTablePagination, 
@@ -401,7 +419,8 @@ shinyServer(function(input, output) {
       cogDF <- cogTableCurrentData()
       
       if(!is.null(cogDF)) {
-         pageLen <- as.integer(input$cogTablePageLength)
+         # pageLen <- as.integer(input$cogTablePageLength)
+         pageLen <- 8
          cogTableBodyHTML(cogDF, pageLen)
       }
    })
@@ -426,9 +445,10 @@ shinyServer(function(input, output) {
    
    output$cogTableInfo <- renderText({
       # cat("table info\n")
-      n <- length(cdCogLength())
+      n <- cdCogLength()
       pageNum <- input$cogTablePagination
-      pageLen <- as.integer(input$cogTablePageLength)
+      # pageLen <- as.integer(input$cogTablePageLength)
+      pageLen <- 8
       
       HTML(paste(
          "Showing entries", 
@@ -526,8 +546,8 @@ shinyServer(function(input, output) {
       if(!is.null(cdo)) {
          logMsg("Updating panel layout", verbose=verbose)
          relList <- getRelatedDisplays()
-         nRow <- input$nRow
-         nCol <- input$nCol
+         nRow <- input$panelRows
+         nCol <- input$panelCols
          # plotWidth <- input$plotWidth
          # plotHeight <- input$plotHeight
          plotTabSkeleton(nRow, nCol, relList, cdo)
@@ -543,8 +563,8 @@ shinyServer(function(input, output) {
             idx <- integer(0)
          } else {
             cp <- input$currentPage
-            nr <- input$nRow
-            nc <- input$nCol
+            nr <- input$panelRows
+            nc <- input$panelCols
             idx <- ((cp - 1) * nr * nc + 1):min((cp * nr * nc), n)
          }
          res <- getCogData(cogDF, idx, seq_len(cogNcol(cogDF)))
@@ -565,7 +585,7 @@ shinyServer(function(input, output) {
             logMsg("Updating cog info in panel layout")
          relList <- getRelatedDisplays() # not used but need to react to it
          
-         totPanels <- input$nRow * input$nCol
+         totPanels <- input$panelRows * input$panelCols
          colNames <- input$selectedPlotVar
          idx <- which(names(cogDF) %in% strsplit(colNames, ",")[[1]])
          res <- lapply(seq_len(cogNrow(cogDF)), function(i) {
@@ -589,7 +609,7 @@ shinyServer(function(input, output) {
       cogDF <- curPageCogDF()
       
       if(!is.null(cogDF)) {
-         totPanels <- input$nRow * input$nCol
+         totPanels <- input$panelRows * input$panelCols
          cdo <- cdDisplayObj()
          localData <- getLocalData()
          hdfsData <- getHDFSdata()
@@ -743,7 +763,7 @@ shinyServer(function(input, output) {
    
    # output$testOutput <- reactive({
    #    cdo <- cdDisplayObj()
-   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", input$nRow, "; nCol: ", input$nCol, "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
+   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", input$panelRows, "; nCol: ", input$panelCols, "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
    # })
 })
 

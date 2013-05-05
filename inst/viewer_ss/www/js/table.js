@@ -24,15 +24,16 @@ $(document).ready(function() {
    });
    
    $('#cogTipPopover').popover({placement: 'bottom', trigger: 'click', offset: 1, html: true});
-
+   
    $('#varCogTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
-
+   
    $('#varPanelTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
-
+   
    $('#varRelatedTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
-
-   $('#varPlotFnUpdateTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
-
+   
+   $('#plotFnUpdateTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
+   
+   $('#panelLayoutTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
             
    function hideColumn(columnIndex) {
       $('#displayListTable td:nth-child('+(columnIndex+1)+'), #displayListTable th:nth-child('+(columnIndex+1)+')').hide();
@@ -43,6 +44,7 @@ $(document).ready(function() {
    hideColumn(7);
    hideColumn(8);
    hideColumn(9);
+   hideColumn(10);
    hideColumn(12);
    hideColumn(13);
    hideColumn(14);
@@ -119,10 +121,11 @@ $(document).ready(function() {
    
    var windowWidth = $(window).width();
 
+   var displayListModalWidth = Math.min(850, windowWidth - 100);
    $("#displayListModal").css("margin-left", "0px");
-   $("#displayListModal").css("width", "650px")
+   $("#displayListModal").css("width", displayListModalWidth + "px")
    $("#displayListModal").css("left", 
-      (Math.max(windowWidth - (650 + 10), 0) / 2) + "px"
+      (Math.max(windowWidth - (displayListModalWidth + 10), 0) / 2) + "px"
    );
    
    
@@ -476,7 +479,7 @@ function updateCogTableDims() {
    );
 
    // cogModal.css("height", "738px");
-   cogModal.css("top", (Math.max((windowHeight - 738) / 2, 0)) + "px");
+   cogModal.css("top", (Math.max((windowHeight - 651) / 2, 0)) + "px");
    $("#cogTable_wrapper").css("width", cogTabWidth + "px");
 }
 
@@ -488,27 +491,32 @@ function updateTableDims() {
    // the only variable will be height
    // based on height, calculate the total aspect ratio for each row
    // the maximum aspect ratio will be
-
-
-   // get window dimensions for plotting
-   var windowHeight = $(window).height() - $('#plot-navbar').height() - 40; // 18 is the bottom margin - should change this
-   var windowWidth = $(window).width();
    
-   var ppp = $("#pppInput").val();
-   if(ppp=="")
-      ppp = 1;
-   ppp = parseInt(ppp);
-
+   
+   // get window dimensions for plotting
+   var windowHeight = $(window).height() - $('#plot-navbar').height() - 50; // 18 is the bottom margin - should change this
+   var windowWidth = $(window).width() - 20;
+   
+   var nrow = $("#panelRows").val();
+   if(nrow=="")
+      nrow = 1;
+   nrow = parseInt(nrow);
+   
+   var ncol = $("#panelCols").val();
+   if(ncol=="")
+      ncol = 1;
+   ncol = parseInt(ncol);
+   
    // var panelAspect = parseFloat($("#panelAspect").val());
    var panelAspect = parseFloat($("#panelAspect").text());
    // var panelAspect = parseFloat($("#plotHeight").val()) / parseFloat($("#plotWidth").val)
-
+   
    // see if there are related displays
    var nDisp = getHighlighted($(".selectableDisplayVar")).length + 1;
-
+   
    var aspects = "";
    // TODO: add hidden output that has aspects of additional displays and take this into account with the calculation...
-
+   
    if(nDisp > 1 && aspects != "") {
       var innerNcol = Math.ceil(Math.sqrt(nDisp));
       var innerNrow = Math.ceil(nDisp / innerNcol);
@@ -519,56 +527,86 @@ function updateTableDims() {
    }
    
    if(!isNaN(panelAspect)) {
-      // console.log("aspect " + panelAspect);
-
-      var deviceAspect = windowHeight/windowWidth; 
-      var m = Math.max(1, Math.round(Math.sqrt(ppp * deviceAspect/panelAspect))); 
-      var n = Math.ceil(ppp/m);
-      m = Math.ceil(ppp/n); 
-      var nrow = m;
-      var ncol = n;
-
+      console.log("aspect " + panelAspect);
+      
       // TODO: if m*n is less than total number of panels, reduce
-
+      
       // adjust window width to take padding into account
       windowWidth -= (ncol * 3 + 20);
       windowHeight -= (nrow * 3 + 20);
       plotWidth = Math.round(Math.min(windowWidth / ncol, (windowHeight / nrow) / panelAspect));
       plotHeight = Math.round(plotWidth * panelAspect);
-
+      
       // now need to take cog values displayed under panels into account
       // each row takes 29 pixels of height, plus 1
+      // the td has padding above and below of 4px, so plus 8
       var nCog = getHighlighted($(".selectablePlotVar")).length;
       if(nCog > 0) {
          var totalPlotHeight = (plotHeight + 3) * nrow;
-         var cogVarHeight = nCog * 29 + 1;
+         var cogVarHeight = nCog * 29 + 9;
          
          if(totalPlotHeight + cogVarHeight * nrow > windowHeight) {
             plotHeight = plotHeight - cogVarHeight;
             plotWidth = Math.round(plotHeight / panelAspect);                     
          }
       }
-
-      $("#nRow").val(nrow);
-      $("#nRow").trigger("change");
-
-      $("#nCol").val(ncol);
-      $("#nCol").trigger("change");
-
+      
       $("#plotWidth").val(plotWidth);
       $("#plotWidth").trigger("change");
-
+      
       $("#plotHeight").val(plotHeight);
       $("#plotHeight").trigger("change");
    }
 };
 
+
 $(document).on("change", "#pppInput", function(evt) {
+   
+   // get window dimensions for plotting
+   var windowHeight = $(window).height() - $('#plot-navbar').height() - 50; // 18 is the bottom margin - should change this
+   var windowWidth = $(window).width() - 20;
+   var panelAspect = parseFloat($("#panelAspect").text());
+   
+   var ppp = $("#pppInput").val();
+   if(ppp=="")
+      ppp = 1;
+   ppp = parseInt(ppp);
+
+   var deviceAspect = windowHeight/windowWidth; 
+   var m = Math.max(1, Math.round(Math.sqrt(ppp * deviceAspect/panelAspect))); 
+   var n = Math.ceil(ppp/m);
+   m = Math.ceil(ppp/n); 
+   var nrow = m;
+   var ncol = n;
+
+   console.log(ppp);
+
+   
+   $("#panelRows").val(nrow);
+   $("#panelCols").val(ncol);
+
+   $("#panelRows").trigger("change");
+   $("#panelCols").trigger("change");
+   
    $("#currentPage").val(1);
    $("#currentPage").trigger("change");
+
    updateTableDims();
 });
 
+$(document).on("change", "#panelCols", function(evt) {
+   $("#currentPage").val(1);
+   $("#currentPage").trigger("change");
+
+   updateTableDims();   
+});
+
+$(document).on("change", "#panelRows", function(evt) {
+   $("#currentPage").val(1);
+   $("#currentPage").trigger("change");
+
+   updateTableDims();
+});
 
 var plotMatOutputBinding = new Shiny.OutputBinding();
 $.extend(plotMatOutputBinding, {
