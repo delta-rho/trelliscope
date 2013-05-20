@@ -1,5 +1,5 @@
 
-# TODO: remove when vdb is available - this exists in vdb
+# TODO: remove when trelliscope is available - this exists in trelliscope
 encodePNG <- function(plotLoc) {
    bytes <- file.info(plotLoc)$size
    # b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))
@@ -11,7 +11,7 @@ getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix, conn=NULL) {
    if(cdo$storage=="local") {
       hasSubDir <- cdo$subDirN > 0
       if(hasSubDir) {
-         cogDF$subDir <- sapply(cogDF$panelKey, function(x) vdb:::keyHash(x, cdo$subDirN))
+         cogDF$subDir <- sapply(cogDF$panelKey, function(x) trelliscope:::keyHash(x, cdo$subDirN))
       } else {
          cogDF$subDir <- ""
       }
@@ -29,15 +29,15 @@ getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix, conn=NULL) {
       # browser()
       pngs <- sapply(localData[cogDF$panelKey], function(x) {
          # TODO: since we're making the plot on the fly, why not make it the right size instead of creating a large one...
-         vdb:::vdbMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
-         vdb:::encodePNG(tmpfile)
+         trelliscope:::trsMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
+         trelliscope:::encodePNG(tmpfile)
       })
    } else if(cdo$storage=="hdfsData") {
       dat <- hdfsData[as.character(cogDF$panelKey)]
       tmpfile <- tempfile()
       pngs <- sapply(dat, function(x) {
-         vdb:::vdbMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
-         vdb:::encodePNG(tmpfile)
+         trelliscope:::trsMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
+         trelliscope:::encodePNG(tmpfile)
       })
    }
    pngs
@@ -124,7 +124,7 @@ plotTabSkeleton <- function(nRow, nCol, relList, cdo) {
 
 # getPlotString <- function(cogDF, plotInfo, nRow, nCol, plotWidth, plotHeight, storage) {
 #    pngs <- getPNGs(cogDF, plotInfo, storage, vdbPrefix)
-#    n <- nrow(cogDF)
+#    n <- cogNrow(cogDF))
 # 
 #    extra <- nRow*nCol - n
 #    if(n > 0)

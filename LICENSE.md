@@ -1,4 +1,4 @@
-vdb: Visualization Databases for Large Complex Data in R
+trelliscope: Detailed Visualization for Large Complex Data in R
 Copyright © 2013, Battelle Memorial Institute
 All rights reserved.
 

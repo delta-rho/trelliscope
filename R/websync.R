@@ -1,9 +1,84 @@
-#' Sync vdb and notebook Files to a Web Server
+options(vdbConn = list(
+   webServer = "hafe647@martingale",
+   vdbName = "vdbShinyTest",
+   webServerVdbPrefix = "/home/hafe647/shiny",
+   vdbPrefix = "~/Desktop/Jvdb"
+))
+
+
+websync <- function(
+   conn=getOption("vdbConn"),
+   rsync=NULL
+) {
+   
+   # conn <- getOption("vdbConn")
+   # rsync <- NULL
+   
+   vdbName <- conn$vdbName
+   vdbPrefix <- conn$vdbPrefix
+   webSyncMethod <- conn$webSyncMethod
+   webServer <- conn$webServer
+   webServerVdbPrefix <- conn$webServerVdbPrefix
+   vdbUsers <- conn$vdbWebServer
+   
+   if(is.null(vdbPrefix) || is.null(webServer) || is.null(vdbName) || is.null(webServerVdbPrefix))
+      stop("Must have vdbPrefix, webServer, vdbName, and webServerVdbprefix specified in options()$vdbConn")
+
+   # write the conn stuff to VDB directory
+   vdbConn <- conn
+   save(vdbConn, file=file.path(vdbPrefix, "conn.Rdata"))
+   
+   if(is.null(rsync))
+      rsync <- findRsync()
+      
+	# TODO: check to make sure they have passwordless ssh set up
+
+   sshFlag <- ""
+   if(grepl("@", webServer))
+      sshFlag <- "-e ssh "
+      
+   system("ssh martingale \"mkdir -p /home/hafe647/shiny\"")
+
+	cmd <- paste(rsync, " -a -v ", sshFlag, vdbPrefix, " ", webServer, ":", webServerVdbPrefix, "/", vdbName, "/", sep="")
+	system(cmd, wait=FALSE)
+
+   system("ssh martingale \"rm -rf /var/shiny-server/www/hathaway/vdbShinyTest; mkdir -p /var/shiny-server/www/hathaway/vdbShinyTest; chmod 777 /var/shiny-server/www/hathaway/vdbShinyTest; cd /var/shiny-server/www/hathaway/vdbShinyTest; unlink vdbShinyTest; ln -s /usr/local/R/current/library/vdb/viewer_ss vdbShinyTest; chmod 777 /home/hafe647/shiny/vdbShinyTest/Jvdb/conn.Rdata; cp /home/hafe647/shiny/vdbShinyTest/Jvdb/conn.Rdata /var/shiny-server/www/hathaway/vdbShinyTest\"")
+   
+}
+
+findRsync <- function(rsync=NULL, verbose = "FALSE") {
+   
+   # http://www.rsync.net/resources/howto/windows_rsync.html
+   
+   errorMsg <- "rsync executable not found. Use rsync= argument to specify the correct path."
+   
+   if (is.null(rsync))
+      rsync = "rsync"
+   
+   rsync = Sys.which(rsync)
+   if (rsync=="" || rsync=="rsync")
+      stop(errorMsg)
+   
+   if (.Platform$OS == "windows") {
+      if (length(grep("rtools", tolower(rsync))) > 0) {
+         rsync.ftype <- shell("ftype rsync", intern = TRUE)
+         if (length(grep("^rsync=", rsync.ftype)) > 0) {
+            rsync <- sub('^rsync="([^"]*)".*', "\\1", rsync.ftype)
+         }
+      }
+   }
+  
+   if (verbose) cat("Using rsync at", rsync, "\n")
+   
+   rsync
+}
+
+#' Sync VDB and notebook Files to a Web Server
 #'
-#' Sync vdb and notebook files to a web server
+#' Sync VDB and notebook files to a web server
 #'
 #' @param vdbName The name of the notebook.
-#' @param vdbPrefix The location on the local file system of the current vdb project
+#' @param vdbPrefix The location on the local file system of the current VDB project
 #' @param vdbWebSyncMethod Either "rsync" or "share".  This specifies whether you want to transfer files to the web server using rsync or using a shared drive.  Use "share" if on Windows.  If using "rsync", make sure vdbPrefix points to the web directory root on the remote machine.  If using "share", make sure vdbPrefix contains the full path of the shared drive up to the web directory root.
 #' @param vdbWebServer The location of the web server.  If it is mounted as a shared drive, this should be the path to your web root directory (this is currently not an option).  If syncing via ssh, this should contain everything necessary to make a successful ssh connection, such as "username@@server:~/www"
 #' @param rsync Location of rsync binary.  Only important in this function if dolocal=TRUE and vdbWebSyncMethod="rsync".
@@ -15,7 +90,7 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{typeset}}, \code{\link{vdbPlot}}
+#' @seealso \code{\link{typeset}}, \code{\link{makeDisplay}}
 #'
 #' @export
 websync <- function(

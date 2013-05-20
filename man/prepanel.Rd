@@ -26,10 +26,10 @@
   it)}
 }
 \value{
-  object of class "vdbPre".  This is a list of the x and y
+  object of class "trsPre".  This is a list of the x and y
   axis ranges for each split, along with the aspect ratio
   banking value if \code{dx} and \code{dy} are supplied in
-  \code{preFn}.  Can be used with \code{\link{plot.vdbPre}}
+  \code{preFn}.  Can be used with \code{\link{plot.trsPre}}
   and \code{\link{setLims}}.
 }
 \description{
@@ -48,11 +48,11 @@
   set the limits.
 
   You don not need to use \code{prepanel} to ultimately
-  create a \code{\link{makeDisplay}}, but if you bypass, you
-  will either need to specify your own limits in your plot
-  command, or do nothing, in which case each individual
-  plot will have limits based on the data in the split
-  being plotted (the axes will be "free").
+  create a \code{\link{makeDisplay}}, but if you bypass,
+  you will either need to specify your own limits in your
+  plot command, or do nothing, in which case each
+  individual plot will have limits based on the data in the
+  split being plotted (the axes will be "free").
 
   Axis limits are very important.  What makes viewing
   groups of plots of subsets of data ("small multiples") so
@@ -87,7 +87,7 @@ plot(irisPre)#' }
   Ryan Hafen
 }
 \seealso{
-  \code{\link{x}} \code{\link{plot.vdbPre}},
+  \code{\link{x}} \code{\link{plot.trsPre}},
   \code{\link{setLims}}, \code{\link{makeDisplay}},
   \code{\link{localDiv}}, \code{\link{rhData}}
 }

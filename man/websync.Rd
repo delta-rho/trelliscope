@@ -1,6 +1,6 @@
 \name{websync}
 \alias{websync}
-\title{Sync vdb and notebook Files to a Web Server}
+\title{Sync VDB and notebook Files to a Web Server}
 \usage{
   websync(vdbName = getOption("vdbConn")$vdbName,
     vdbPrefix = getOption("vdbConn")$vdbPrefix,
@@ -13,7 +13,7 @@
   \item{vdbName}{The name of the notebook.}
 
   \item{vdbPrefix}{The location on the local file system of
-  the current vdb project}
+  the current VDB project}
 
   \item{vdbWebSyncMethod}{Either "rsync" or "share".  This
   specifies whether you want to transfer files to the web
@@ -42,7 +42,7 @@
   nothing
 }
 \description{
-  Sync vdb and notebook files to a web server
+  Sync VDB and notebook files to a web server
 }
 \details{
   If you are syncing via ssh, this only works if public key
@@ -53,6 +53,6 @@
   Ryan Hafen
 }
 \seealso{
-  \code{\link{typeset}}, \code{\link{vdbPlot}}
+  \code{\link{typeset}}, \code{\link{makeDisplay}}
 }
 

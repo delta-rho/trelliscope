@@ -1,6 +1,6 @@
 #' Create Input Variables for a VDB Display
 #'
-#' Create a 'inputVars' object which can be passed to the 'inputVars' argument of \code{\link{vdbPlot}} to create per-panel input variables in the VDB viewer.
+#' Create a 'inputVars' object which can be passed to the 'inputVars' argument of \code{\link{makeDisplay}} to create per-panel input variables in the VDB viewer.
 #'
 #' @param name name of the input variable
 #' @param type variable type - must be "text", "textarea", or "select" (dropdown) - (checkbox to come?)
@@ -10,7 +10,7 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{vdbPlot}}
+#' @seealso \code{\link{makeDisplay}}
 #' 
 #' @export
 makeInputVars <- function(name, type, dataType="character", default="", description="Input variable", args=NULL) {

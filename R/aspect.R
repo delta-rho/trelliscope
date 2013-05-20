@@ -1,10 +1,10 @@
 # on last check, this stuff wasn't working - don't export it for now
 
-vdbGetWidth <- function(x, height) {
+panelGetWidth <- function(x, height) {
    # gets the aspect ratio, etc. for a lattice object
    require(grid)
 
-   lyt <- vdbTrellis.getlayout(x)
+   lyt <- trsTrellis.getlayout(x)
    page.layout <- lyt$lyt
    nrows <- lyt$nrows
    ncols <- lyt$ncols
@@ -19,9 +19,9 @@ vdbGetWidth <- function(x, height) {
    W
 }
 
-vdbGetHeight <- function(x, width) {
+panelGetHeight <- function(x, width) {
    require(grid)
-   lyt <- vdbTrellis.getlayout(x)
+   lyt <- trsTrellis.getlayout(x)
    page.layout <- lyt$lyt
    nrows <- lyt$nrows
    ncols <- lyt$ncols
@@ -36,7 +36,7 @@ vdbGetHeight <- function(x, width) {
    H
 }
 
-vdbTrellis.getNumPages <- function(p) {
+trsTrellis.getNumPages <- function(p) {
    original.condlevels <- 
       used.condlevels <-
          lapply(p$condlevels, function(x) seq_along(x))
@@ -52,7 +52,7 @@ vdbTrellis.getNumPages <- function(p) {
    panel.layout[3]  
 }
 
-vdbTrellis.getlayout <- function(x,
+trsTrellis.getlayout <- function(x,
    panel.height = lattice.getOption("layout.heights")$panel,
    panel.width = lattice.getOption("layout.widths")$panel
 ) {
@@ -174,7 +174,7 @@ vdbTrellis.getlayout <- function(x,
    list(lyt=page.layout, calcs=layoutCalculations, ncols=cols.per.page, nrows=rows.per.page, npanels=as.numeric(cond.max.levels))
 }
 
-vdbTrellis.getncond <- function(x) {
+trsTrellis.getncond <- function(x) {
    original.condlevels <- 
       used.condlevels <-
          lapply(x$condlevels, function(x) seq_along(x))

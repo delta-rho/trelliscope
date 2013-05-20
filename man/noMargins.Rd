@@ -15,7 +15,7 @@
 }
 \description{
   Removes whitespace surrounding a trellis plot.  Ideal for
-  \code{\link{vdbPlot}} because when tiling multiple
+  \code{\link{makeDisplay}} because when tiling multiple
   panels, a lot of space is wasted with the margins.
 }
 \examples{
@@ -36,6 +36,6 @@ xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
   Ryan Hafen
 }
 \seealso{
-  \code{\link{xyplot}}, \code{\link{vdbPlot}}
+  \code{\link{xyplot}}, \code{\link{makeDisplay}}
 }
 

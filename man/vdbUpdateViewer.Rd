@@ -1,8 +1,8 @@
-\name{vdbUpdateViewer}
-\alias{vdbUpdateViewer}
+\name{updateViewer}
+\alias{updateViewer}
 \title{Update Project VDB Client Side Viewer Files}
 \usage{
-  vdbUpdateViewer(conn = getOption("vdbConn"))
+  updateViewer(conn = getOption("vdbConn"))
 }
 \arguments{
   \item{conn}{vdb connection info, typically stored in
@@ -14,7 +14,7 @@
   nothing
 }
 \description{
-  Useful to do after a new update of the \code{vdb} package
+  Useful to do after a new update of the \code{trelliscope} package
   has been installed.  Moves the viewer files from the
   package to the project directory.
 }

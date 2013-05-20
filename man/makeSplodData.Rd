@@ -1,6 +1,6 @@
 \name{makeSplodData}
 \alias{makeSplodData}
-\title{Create Data Plottable by vdbSplod}
+\title{Create Data Plottable by splod}
 \usage{
   makeSplodData(data, id.vars = NULL)
 }
@@ -12,10 +12,10 @@
 }
 \value{
   an object of class 'localDiv' and 'splodDat' that can be
-  passed to \code{\link{vdbSplod}}
+  passed to \code{\link{splod}}
 }
 \description{
-  Create pairwise scatterplot data plottable by vdbSplod
+  Create pairwise scatterplot data plottable by splod
 }
 \author{
   Ryan Hafen
@@ -24,7 +24,7 @@
   Wilkinson's scagnostics paper.
 }
 \seealso{
-  \code{\link{vdbSplod}}, \code{\link{vdbCogFn}},
+  \code{\link{splod}}, \code{\link{trsCogFn}},
   \code{\link{splodPlotFn}}
 }
 

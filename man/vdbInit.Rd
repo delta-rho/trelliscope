@@ -21,6 +21,6 @@
   Ryan Hafen
 }
 \seealso{
-  \code{\link{vdbUpdateViewer}}
+  \code{\link{updateViewer}}
 }
 

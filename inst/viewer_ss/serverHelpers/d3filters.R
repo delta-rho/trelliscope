@@ -32,7 +32,7 @@ makeBivarJSON <- function(x, y, xlab="x", ylab="y", shape=460/660, xbin=50) {
    dat <- hexbin(x, y, shape=shape, xbin=xbin)
    
    # make a scatterplot of less than 2500 points
-   type <- ifelse(length(x) < 2500, "scatter", "hex")
+   type <- ifelse(length(x) < 5000, "scatter", "hex")
 
    if(type=="hex") {
       style <- "lattice"

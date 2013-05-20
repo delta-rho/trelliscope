@@ -147,6 +147,8 @@ $(document).on("click", "#d3histSubmit", function(evt) {
       var el = $(evt.target);
       var column = el.attr("name");
 
+      console.log("column" + column);
+
       // trigger a change on the appropriate range
       $("#lower_column_" + column).val(curRange[0]);
       $("#upper_column_" + column).val(curRange[1]);

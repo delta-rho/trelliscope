@@ -72,7 +72,7 @@ updateProgress <- function(value1, value2, start.time) {
 }
 
 ## internal
-vdbRhStatus <- function(job) {
+trsRhStatus <- function(job) {
    if (class(job) != "jobtoken" && class(job) != "character") 
        stop("Must give a jobtoken object(as obtained from rhex)")
    if (class(job) == "character") {
@@ -134,7 +134,7 @@ vdbRhStatus <- function(job) {
 # }))
 # 
 # 
-# vdbRhStatus(job)
+# trsRhStatus(job)
 # 
 # 
 

@@ -66,13 +66,13 @@ Syntax-highlighted code blocks (many languages available) like this:
    rnorm(n)
 }</code></pre>
 
-A list of plots from your vdb:
+A list of displays from your VDB:
 
 ```{r echo=FALSE, results="asis"}
 nbDisplayList(c("plot1", "plot2", "plot3"))
 ```
 
-A single display from your vdb:
+A single display from your VDB:
 
 ```{r echo=FALSE, results="asis"}
 nbDisplayList("plot4")

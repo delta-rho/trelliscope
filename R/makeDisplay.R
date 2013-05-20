@@ -1,12 +1,12 @@
-# if lims is of class "vdbLims" then update the plot limits
+# if lims is of class "trsLims" then update the plot limits
 # otherwise, we need to go through and compute limits
 # if both x and y are free, 
 
-# TODO: make a vdbPlotTest function that applies to an example of the data
+# TODO: make a makeDisplayTest function that applies to an example of the data
 
-#' Create a vdb Display
+#' Create a trelliscope Display
 #' 
-#' Create a vdb display
+#' Create a trelliscope display and add it to a visualization database (VDB)
 #' 
 #' @param dat data of class "localDiv", "rhData", "trellis", "ggplot", or "expression"
 #' @param name the name of the display (no spaces or special characters)
@@ -14,10 +14,10 @@
 #' @param desc a description of the display (used in the viewer and in notebooks)
 #' @param plotDim a list defining aspects of the plot dimension, including height, width, aspect, and res (resolution of raster image).  defaults are 480 (px), 40, "fill", and 150, respectively
 #' @param plotFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with plotFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)
-#' @param lims either an object of class "vdbLims" as obtained from \code{\link{vdbSetLims}} or a list with elements x, y, and preFn, that specify how to apply \code{\link{vdbPrepanel}} and \code{\link{vdbSetLims}}
+#' @param lims either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and preFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
 #' @param inputVars input variables that will allow user input in the viewer, defined by \code{\link{inputVars}}
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param storage how to store the plots and metadata for the display.  See details
 #' @param cogStorage how to store the cognostics data.  Options are "local" for R data.frame, or "mongo" to store cognostics in mongodb
 #' @param subDirSize the approximate number plots per subdirectory.  Only used of \code{storage=="local"}.  If number of plots is less, there will not be subdiretories.  If set to 0, there will not be subdirectories.
@@ -26,14 +26,14 @@
 #' @param mapred parameters to be passed to the Rhipe mapreduce job (see \code{\link{rhwatch}})
 #' @param calledFromRhipe don't mess with this
 #' 
-#' @details there are a lot of details... see the vignette: \code{browseVignettes("vdb")}
+#' @details there are a lot of details... see the documentation: \url{http://hafen.github.io/trelliscope}
 #' 
 #' Many of the parameters are optional or have defaults.
 #' 
 #' Storage options for plots:
 #' \describe{
-#'    \item{local:}{plots for each of the panels will be stored in the displays directory of the vdb directory}
-#'    \item{mongo:}{plots will be stored in mongodb using the mongodb connection as specified by "vdbConn" (see vignette) - this is very experimental}
+#'    \item{local:}{plots for each of the panels will be stored in the displays directory of the VDB directory}
+#'    \item{mongo:}{plots will be stored in mongodb using the mongodb connection as specified by "vdbConn" (see documentation on github) - this is very experimental}
 #'    \item{hdfs:}{plots will be stored in a mapfile on HDFS - can only be done with data of class "rhSplit"}
 #'    \item{localData:}{instead of storing plots, data, plotFn, etc. will be stored locally and plotFn will be applied to the data on-the-fly in the viewer}
 #'    \item{hdfsData:}{plotFn is applied on-the-fly to data retrieved from the original data on HDFS (must be a mapfile) - can only be done with data of class "rhDiv"}
@@ -42,13 +42,13 @@
 #' 
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{vdbPrepanel}}, \code{\link{vdbSetLims}}, \code{\link{inputVars}}, \code{\link{divide}}
+#' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{inputVars}}, \code{\link{divide}}
 #' 
 #' @examples
 #' # see docs
 #' 
 #' @export
-vdbPlot <- function(
+makeDisplay <- function(
    data,
    name,
    group = "common",
@@ -84,13 +84,13 @@ vdbPlot <- function(
    
    if(!calledFromRhipe) {
       if(!isSinglePlot) {
-         plotEx <- vdbValidatePlotFn(plotFn, data, verbose)         
+         plotEx <- trsValidatePlotFn(plotFn, data, verbose)         
       }
       
-      plotDim <- vdbValidatePlotDim(plotDim, data, plotFn, verbose)
-      storage <- vdbValidateStorage(storage, conn, class(data))
-      inputVars <- vdbValidateInputs(inputVars)
-      cogStorage <- vdbValidateCogStorage(cogStorage, conn)
+      plotDim <- trsValidatePlotDim(plotDim, data, plotFn, verbose)
+      storage <- trsValidateStorage(storage, conn, class(data))
+      inputVars <- trsValidateInputs(inputVars)
+      cogStorage <- trsValidateCogStorage(cogStorage, conn)
       
       if(storage=="mongo" || cogStorage=="mongo") {
          if(verbose)
@@ -98,12 +98,12 @@ vdbPlot <- function(
          mongoClear(conn, group, name)         
       }
       
-      cogEx <- vdbValidateCogFn(data, cogFn, verbose)
+      cogEx <- trsValidateCogFn(data, cogFn, verbose)
       
-      vdbPrefix <- vdbValidatePrefix(conn)
-      displayPrefix <- vdbGetDisplayPrefix(conn, group, name)   
+      vdbPrefix <- trsValidatePrefix(conn)
+      displayPrefix <- trsGetDisplayPrefix(conn, group, name)   
       
-      vdbValidateDisplayPrefix(displayPrefix)
+      trsValidateDisplayPrefix(displayPrefix)
       if(is.null(desc) || is.na(desc))
          desc <- ""
          
@@ -119,7 +119,7 @@ vdbPlot <- function(
    } else {
       # we should be here if we have been called from RHIPE
       if(storage=="local") {
-         displayPrefix <- vdbGetDisplayPrefix(conn, group, name)         
+         displayPrefix <- trsGetDisplayPrefix(conn, group, name)         
       } else {
          displayPrefix <- tempdir()         
       }
@@ -132,7 +132,7 @@ vdbPlot <- function(
    
    if(!isSinglePlot && !calledFromRhipe) {
       # if the user specified limits, use them
-      # if not, we need to call vdbPrepanel on the data
+      # if not, we need to call prepanel on the data
       if(is.null(lims)) { # 
          if(verbose)
             message("* Limits not supplied.  Applying plotFn as is.")
@@ -141,7 +141,7 @@ vdbPlot <- function(
          # lims$preFnIsTrellis <- FALSE
          # xLimType <- "free"
          # yLimType <- "free"
-      } else if(inherits(lims, "vdbLims")) {
+      } else if(inherits(lims, "trsLims")) {
          xLimType <- lims$x$type
          yLimType <- lims$y$type
       } else {
@@ -178,8 +178,8 @@ vdbPlot <- function(
             } else {
                preFn <- lims[["preFn"]]
             }
-            pre <- vdbPrepanel(data, preFn=preFn)
-            lims <- vdbSetLims(pre, x=xLimType, y=yLimType)
+            pre <- prepanel(data, preFn=preFn)
+            lims <- setLims(pre, x=xLimType, y=yLimType)
          } else {
             if(verbose)
                message("* ... skipping this step since both are axes are free ...")
@@ -230,7 +230,7 @@ vdbPlot <- function(
          
          pngPrefix <- file.path(displayPrefix, "png", paste(name, "_%04d", ".png", sep=""))
          
-         vdbMakePNG(dat=data, file=pngPrefix, width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims)
+         trsMakePNG(dat=data, file=pngPrefix, width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims)
          
          plotLocs <- list.files(file.path(displayPrefix, "png"), full.names=TRUE)
          splitKeys <- list.files(file.path(displayPrefix, "png"))
@@ -309,7 +309,7 @@ vdbPlot <- function(
             if(verbose)
                message(paste("\r* -- Plotting panel ", i, " of ", nPanels, sep=""), appendLF=FALSE)
             
-            vdbMakePNG(dat=data[[i]], plotFn=plotFn, file=plotLocs[i], width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims)
+            trsMakePNG(dat=data[[i]], plotFn=plotFn, file=plotLocs[i], width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims)
                         
             if(storage == "mongo") {
                return(mongoEncodePlot(plotLocs[i], names(data)[i]))
@@ -348,9 +348,9 @@ vdbPlot <- function(
                class(d) <- c("localDiv", "list")
                attr(d, "divBy") <- data$divBy
                
-               # d <- vdb:::vdbRhKeyValTrans(rhKeyTrans(k), rhValTrans(r))
-
-               p <- vdbPlot(
+               # d <- trelliscope:::trsRhKeyValTrans(rhKeyTrans(k), rhValTrans(r))
+               
+               p <- makeDisplay(
                   name=name,
                   group=group,
                   plotFn=plotFn,
@@ -442,28 +442,28 @@ vdbPlot <- function(
          # (assuming that they are defined in the global environment instead)
          # (debugging and updating the package is a lot easier when just
          # sourcing the files at each change rather than building each time)
-         if(! "package:vdb" %in% search()) {
+         if(! "package:trelliscope" %in% search()) {
             message("* ---- running dev version - sending vdb functions to RHIPE")
             parList <- c(parList, list(
-               vdbPlot    = vdbPlot,
-               vdbCurXLim = vdbCurXLim,
-               vdbCurYLim = vdbCurYLim,
-               vdbCurLim  = vdbCurLim,
+               makeDisplay    = makeDisplay,
+               trsCurXLim = trsCurXLim,
+               trsCurYLim = trsCurYLim,
+               trsCurLim  = trsCurLim,
                mongoEncodePlot = mongoEncodePlot,
                vdbMongoInit = vdbMongoInit,
                divide = divide,
-               # vdbRhKeyValTrans = vdbRhKeyValTrans,
+               # trsRhKeyValTrans = trsRhKeyValTrans,
                encodePNG = encodePNG,
-               vdbMakePNG = vdbMakePNG,
-               vdbGetDisplayPrefix = vdbGetDisplayPrefix,
-               vdbValidatePrefix = vdbValidatePrefix
+               trsMakePNG = trsMakePNG,
+               trsGetDisplayPrefix = trsGetDisplayPrefix,
+               trsValidatePrefix = trsValidatePrefix
             ))
          }
          
-         if("package:vdb" %in% search()) {
+         if("package:trelliscope" %in% search()) {
             setup <- expression({
                suppressMessages(require(datadr))
-               suppressMessages(require(vdb))
+               suppressMessages(require(trelliscope))
             })
          } else {
             setup <- expression({
@@ -477,7 +477,7 @@ vdbPlot <- function(
          }
          
          # if plotFn uses any data in the environment, pass that on too
-         globalVars <- vdbFindGlobals(plotFn)
+         globalVars <- trsFindGlobals(plotFn)
          # only look for objects the user has created
          globalVars <- intersect(globalVars, ls(envir=as.environment(-1)))
          if(length(globalVars) > 0) {
@@ -491,7 +491,7 @@ vdbPlot <- function(
          ofolder <- paste(hdfsPrefix, "/", name, sep="")
          
          if(ofolder==data$loc)
-            stop("vdb output cannot be the same as the input.  Consider putting all vdb plots in a vdb subdirectory on HDFS")
+            stop("display output cannot be the same as the input.  Consider putting all VDB displays in a VDB subdirectory on HDFS")
          
          ofolderExists <- try(rhls(ofolder))
          if(!inherits(ofolderExists, "try-error")) {
@@ -520,7 +520,7 @@ vdbPlot <- function(
          ) # ))
          
          # id <- gsub(".*jobid=(job_.*)", "\\1", rhJob[[1]]$tracking)
-         # rhRes <- vdbRhStatus(id)
+         # rhRes <- trsRhStatus(id)
          
          if(verbose)
             message(paste("* Output written to a map file, ", ofolder, ".  Reading in cognostics output from this file...", sep=""))
@@ -590,7 +590,7 @@ vdbPlot <- function(
       keys <- cogDat$panelKey         
       keySig <- digest(sort(keys))
       
-      vdbUpdateDisplayList(
+      trsUpdateDisplayList(
          vdbPrefix=vdbPrefix, 
          name=name, 
          group=group, 
@@ -609,7 +609,7 @@ vdbPlot <- function(
       )
       # keySig is a representation of the collection of keys, used to identify other plots with the same set of keys
       
-      vdbUpdateDisplayListJson(vdbPrefix)
+      trsUpdateDisplayListJson(vdbPrefix)
       
       # # write input variables, if specified
       # if(!is.null(inputVars)) {
@@ -697,12 +697,12 @@ vdbPlot <- function(
       #    thumbHeight <- 120
       # curWidth <- thumbHeight * plotDim$width / plotDim$height
       
-      suppressMessages(vdbMakePNG(dat=divExample(data), plotFn=plotFn, file=file.path(displayPrefix, "thumb.png"), width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims))
+      suppressMessages(trsMakePNG(dat=divExample(data), plotFn=plotFn, file=file.path(displayPrefix, "thumb.png"), width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims))
       
       if(storage != "mongo") {
          # browser()
          cogDesc <- getCogDesc(cogEx)
-         vdbWriteCogJson(displayPrefix, group, name, cogDat, cogDesc, inputVars, plotDim$height, plotDim$width, nPanels)
+         writeCogJson(displayPrefix, group, name, cogDat, cogDesc, inputVars, plotDim$height, plotDim$width, nPanels)
       }
       
       return(invisible(displayObj))

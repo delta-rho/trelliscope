@@ -10,7 +10,7 @@ cogNcol <- function(x) {
 
 cogNrow <- function(x) {
    if(inherits(x, "mongoCogConn")) {
-      return(x$nrow)
+      return(x$nr)
    } else {
       return(nrow(x))
    }

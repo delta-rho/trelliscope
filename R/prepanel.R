@@ -2,31 +2,31 @@
 #'
 #' Prepanel function for vdb plots
 #' 
-#' Apply a prepanel function to objects of class "localDiv" (obtained from splitDF()) or "rhData" to determine ranges of x and y axis limits.  Useful in conjunction with \code{\link{vdbSetLims}}.
-#'
+#' Apply a prepanel function to objects of class "localDiv" (obtained from splitDF()) or "rhData" to determine ranges of x and y axis limits.  Useful in conjunction with \code{\link{setLims}}.
+#' 
 #' @param dat an object of class "localDiv" or "rhData"
-#' @param preFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  preFn can also be a plotFn (see \code{\link{vdbPlot}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
+#' @param preFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  preFn can also be a plotFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param mapred a list of parameters to be sent to \code{\link{rhwatch}} if dat is of class "rhData"
 #' @param verbose print status messages?
 #' @param calledFromRhipe ignore this parameter (don't use it)
 #' 
-#' @return object of class "vdbPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{preFn}.  Can be used with \code{\link{plot.vdbPre}} and \code{\link{vdbSetLims}}. 
+#' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{preFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}. 
 #' 
 #' @details
 #' The plot method plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.  
 #' 
-#' You don not need to use \code{vdbPrepanel} to ultimately create a \code{\link{vdbPlot}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
+#' You don not need to use \code{prepanel} to ultimately create a \code{\link{makeDisplay}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
 #' 
 #' Axis limits are very important.  What makes viewing groups of plots of subsets of data ("small multiples") so powerful is being able to make meaningful visual comparisons across plots.  This is much easier to do if scales for each plot are commensurate.
 #' 
-#' This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{vdbSetLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
+#' This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{setLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
 #' 
 #' In the future, there will be helper functions for special types of plots, such as histograms, etc. to help the user more easily provide the \code{xlim} and \code{ylim} components of the prepanel function.
 #' 
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{x}}
-#' \code{\link{plot.vdbPre}}, \code{\link{vdbSetLims}}, \code{\link{vdbPlot}}, \code{\link{localDiv}}, \code{\link{rhData}}
+#' \code{\link{plot.trsPre}}, \code{\link{setLims}}, \code{\link{makeDisplay}}, \code{\link{localDiv}}, \code{\link{rhData}}
 #' 
 #' @examples
 #' \dontrun{
@@ -37,11 +37,11 @@
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
 #' plot(irisPre)#' }
 #' 
 #' @export
-vdbPrepanel <- function(data, preFn=NULL,
+prepanel <- function(data, preFn=NULL,
    mapred=NULL, 
    verbose=TRUE,
    calledFromRhipe = FALSE # don't mess with this
@@ -131,17 +131,18 @@ vdbPrepanel <- function(data, preFn=NULL,
          y = do.call(rbind, lapply(res, function(x) x[[2]]))
       )
    } else if(inherits(data, "rhData")) {
-
+      
       map <- expression({
          for(i in seq_along(map.keys)) {
-            curKey <- map.keys[[i]]
-            curVal <- map.values[[i]]
-            data <- list(curVal)
-            names(data) <- curKey
-            class(data) <- "localDiv"
+            k <- map.keys[[i]]
+            r <- map.values[[i]]
+            d <- list(r)
+            names(d) <- k
+            class(d) <- c("localDiv", "list")
+            attr(d, "divBy") <- divBy
             
-            tmp <- vdbPrepanel(
-               data=data,
+            tmp <- prepanel(
+               data=d,
                preFn=preFn,
                verbose=FALSE,
                calledFromRhipe=TRUE
@@ -164,24 +165,24 @@ vdbPrepanel <- function(data, preFn=NULL,
             rhcollect("1", list(x=x, y=y))
          }
       )
-
+      
       parList <- list(
-         preFn = preFn
+         preFn = preFn,
+         divBy = data$divBy
       )
       
-      if(! "package:vdb" %in% search()) {
+      if(! "package:trelliscope" %in% search()) {
          parList <- c(parList, list(
-            vdbPrepanel = vdbPrepanel, # remove when packaged 
-            divExample = divExample
+            prepanel = prepanel # remove when packaged 
          ))
       }
       
-      if("package:vdb" %in% search()) {
+      if("package:trelliscope" %in% search()) {
          setup <- expression({
             suppressMessages(require(lattice))
             suppressMessages(require(ggplot2))
             # suppressMessages(require(data.table))
-            suppressMessages(require(vdb))
+            suppressMessages(require(trelliscope))
             suppressMessages(require(datadr))
          })
       } else {
@@ -211,7 +212,7 @@ vdbPrepanel <- function(data, preFn=NULL,
       ) # ))
       
       # id <- gsub(".*jobid=(job_.*)", "\\1", rhJob[[1]]$tracking)
-      # rhRes <- vdbRhStatus(id)
+      # rhRes <- trsRhStatus(id)
       
       res <- rhread(ofolder)[[1]][[2]]
       rhdel(ofolder)
@@ -226,16 +227,16 @@ vdbPrepanel <- function(data, preFn=NULL,
          preFnIsTrellis = preFnIsTrellis,
          preFn = preFn
       )
-      class(res) <- c("vdbPre", "list")
+      class(res) <- c("trsPre", "list")
       return(res)
    }
 }
 
-#' Plot results form vdbPrepanel
+#' Plot results form prepanel
 #'
-#' Plot results form vdbPrepanel
+#' Plot results form prepanel
 #'
-#' @param lims object of class "vdbPre" created by \code{\link{vdbPrepanel}}
+#' @param lims object of class "trsPre" created by \code{\link{prepanel}}
 #' @param layout, as.table, strip, strip.left, between, xlab, ylab, \ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)
 #'
 #' @return object of class "trellis" (plotted by default)
@@ -244,7 +245,7 @@ vdbPrepanel <- function(data, preFn=NULL,
 #' 
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{vdbPrepanel}}, \code{\link{vdbPlot}}
+#' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #' 
 #' @examples
 #' \dontrun{
@@ -255,12 +256,12 @@ vdbPrepanel <- function(data, preFn=NULL,
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
 #' plot(irisPre)
 #' }
 #' 
 #' @export
-plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
+plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
 ) {
    # TODO: what about dx and dy for aspect ratio?
 
@@ -330,11 +331,11 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
    p
 }
 
-#' Specify rules for x and y limits for a vdbPlot
+#' Specify rules for x and y limits for a makeDisplay
 #'
-#' Based on results from \code{\link{vdbPrepanel}}, specify rules that will determine x and y axis limits.
+#' Based on results from \code{\link{prepanel}}, specify rules that will determine x and y axis limits.
 #'
-#' @param lims object of class "vdbPre"
+#' @param lims object of class "trsPre"
 #' @param x x-axis limits rule (either "same", "sliced", or "free" - see details)
 #' @param y y-axis limits rule (either "same", "sliced", or "free" - see details)
 #' @param xQuant lower and upper quantiles at which to cut off x-axis limits, in the case of outliers.  Used when x="same".
@@ -342,7 +343,7 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' @param xQuantRange a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
 #' @param yQuantRange same as xQuantRange but for y-axis
 #'
-#' @return object of class "vdbLims", which can be used in a call to \code{\link{vdbPlot}}
+#' @return object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}
 #'
 #' @details
 #' This function reduces the list of axis limits computed for each split of a data set to an overall axis limit rule for the plot.  
@@ -352,7 +353,7 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{vdbPrepanel}}, \code{\link{vdbPlot}}
+#' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #'
 #' @examples
 #' irisSplit <- divide(iris, "Species")
@@ -362,11 +363,11 @@ plot.vdbPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- vdbPrepanel(irisSplit, preFn=irisPreFn)
-#' irisLims <- vdbSetLims(irisPre, x="same", y="sliced")
+#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+#' irisLims <- setLims(irisPre, x="same", y="sliced")
 #' 
 #' @export
-vdbSetLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
+setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
    
    alreadyWarned <- FALSE
    # xQuant=c(0,1); yQuant=c(0,1); xRangeQuant=1; yRangeQuant=1
@@ -409,7 +410,7 @@ vdbSetLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), x
       prop = prop, 
       n=nrow(lims$x)
    )
-   class(res) <- c("vdbLims", "list")
+   class(res) <- c("trsLims", "list")
    res
 }
 

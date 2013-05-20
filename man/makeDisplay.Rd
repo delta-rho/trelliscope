@@ -1,6 +1,6 @@
 \name{makeDisplay}
 \alias{makeDisplay}
-\title{Create a vdb Display}
+\title{Create a trelliscope Display}
 \usage{
   makeDisplay(data, name, group = "common", desc = "",
     plotDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
@@ -51,7 +51,7 @@
   \item{inputVars}{input variables that will allow user
   input in the viewer, defined by \code{\link{inputVars}}}
 
-  \item{conn}{vdb connection info, typically stored in
+  \item{conn}{VDB connection info, typically stored in
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists}
@@ -79,26 +79,27 @@
   \item{calledFromRhipe}{don't mess with this}
 }
 \description{
-  Create a vdb display
+  Create a trelliscope display and add it to a
+  visualization database (VDB)
 }
 \details{
-  there are a lot of details... see the vignette:
-  \code{browseVignettes("vdb")}
+  there are a lot of details... see the documentation:
+  \url{http://hafen.github.io/trelliscope}
 
   Many of the parameters are optional or have defaults.
 
   Storage options for plots: \describe{ \item{local:}{plots
   for each of the panels will be stored in the displays
-  directory of the vdb directory} \item{mongo:}{plots will
+  directory of the VDB directory} \item{mongo:}{plots will
   be stored in mongodb using the mongodb connection as
-  specified by "vdbConn" (see vignette) - this is very
-  experimental} \item{hdfs:}{plots will be stored in a
-  mapfile on HDFS - can only be done with data of class
-  "rhSplit"} \item{localData:}{instead of storing plots,
-  data, plotFn, etc. will be stored locally and plotFn will
-  be applied to the data on-the-fly in the viewer}
-  \item{hdfsData:}{plotFn is applied on-the-fly to data
-  retrieved from the original data on HDFS (must be a
+  specified by "vdbConn" (see documentation on github) -
+  this is very experimental} \item{hdfs:}{plots will be
+  stored in a mapfile on HDFS - can only be done with data
+  of class "rhSplit"} \item{localData:}{instead of storing
+  plots, data, plotFn, etc. will be stored locally and
+  plotFn will be applied to the data on-the-fly in the
+  viewer} \item{hdfsData:}{plotFn is applied on-the-fly to
+  data retrieved from the original data on HDFS (must be a
   mapfile) - can only be done with data of class "rhDiv"} }
   There are so many options because there are several
   tradeoffs, described in the vignette.

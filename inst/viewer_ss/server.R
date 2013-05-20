@@ -1,5 +1,5 @@
 library(shiny)
-# library(vdb)
+# library(trelliscope)
 library(fastICA)
 library(base64enc) # this one is much faster than caTools!!
 # library(Rhipe)
@@ -28,7 +28,7 @@ if(is.null(verbose))
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
 
 shinyServer(function(input, output) {
-
+   
    conn <- getOption("vdbConn")
    
    # NOTE: reactive objects starting with "cd" is shorthand for "current display", meaning that it corresponds with the display currently being viewed
@@ -39,6 +39,21 @@ shinyServer(function(input, output) {
       appHash <- input$appHash
       # TODO: add check for whether the plot exists and give it a good error message
       getCdName(uid, appHash, displayList, verbose)
+   })
+   
+   getPanelRows <- reactive({
+      # pr <- as.integer(getFromAppHash(input$appHash, "nrow")$nrow)
+      # if(is.null(pr))
+         pr <- input$panelRows
+      pr
+   })
+   
+   getPanelCols <- reactive({
+      # pc <- as.integer(getFromAppHash(input$appHash, "ncol")$ncol)
+      # browser()
+      # if(is.null(pc))
+         pc <- input$panelCols
+      pc
    })
    
    ## displays the current display group / name in the page header
@@ -86,7 +101,7 @@ shinyServer(function(input, output) {
    ########################################################
    
    nPages <- reactive({
-      ceiling(cogNrow(cdCogDF()) / (input$panelRows * input$panelCols))
+      ceiling(cogNrow(cdCogDF()) / (getPanelRows() * getPanelCols()))
    })
    
    output$nPages <- renderText({
@@ -98,12 +113,11 @@ shinyServer(function(input, output) {
       HTML(paste(input$currentPage, "/", nPages()))
    })
    outputOptions(output, 'currentPageText', suspendWhenHidden=FALSE)
-
    
    ########################################################
    ### cognostics data
    ########################################################
-
+   
    ### holds the data in "cog.Rdata" for the current display
    cdCogObj <- reactive({
       cdn <- cdName()
@@ -117,7 +131,7 @@ shinyServer(function(input, output) {
          } else { # cognostics are in mongodb
             mongoConn <- vdbMongoInit(conn)
             NS <- mongoCollName(conn$vdbName, cdn[1], cdn[2], "cog")
-
+            
             ex <- mongoCog2DF(mongo.bson.to.list(mongo.find.one(mongoConn, NS))[-1])
             ex <- data.frame(ex)
             qry <- mongo.bson.empty()
@@ -175,12 +189,17 @@ shinyServer(function(input, output) {
    ### index of filtered state of cognostics data frame for current display
    cdCogFilterIndex <- reactive({
       cogDF <- cdCogObj()
+      colIndex <- cogTableColVisibility()
+
       if(!is.null(cogDF)) {
+         cogDF <- getCogData(cogDF, 1:cogNrow(cogDF), colIndex)
+         
          filterIndex <- seq_len(cogNrow(cogDF))
          # browser()
          # flt is a vector of 3-tuples - (filter type, filter column, filter value)
          # see getColumFilterInputs in table.js
          flt <- input$cogColumnFilterInput
+
          if(!is.null(flt)) {
             logMsg("Updating cognostic filter index", verbose=verbose)
             n <- length(flt)
@@ -345,7 +364,7 @@ shinyServer(function(input, output) {
          logMsg("Retrieving data to be shown in cognostics modal", verbose=verbose)
          
          n <- cogNrow(cogDF)
-
+         
          colIndex <- cogTableColVisibility()
          
          pageNum <- input$cogTablePagination
@@ -356,6 +375,7 @@ shinyServer(function(input, output) {
          } else {
             idx <- ((pageNum - 1)*pageLen + 1):min(pageNum*pageLen, n)         
          }
+         
          return(getCogData(cogDF, idx, colIndex))
       } else {
          return(NULL)
@@ -375,7 +395,6 @@ shinyServer(function(input, output) {
             colIndex <- which(cogNames(cogDF) %in% strsplit(colNames, ",")[[1]])
          }
       }
-      # browser()
       colIndex
    })
    
@@ -470,11 +489,13 @@ shinyServer(function(input, output) {
       colIndex <- cogTableColVisibility()
       cogDF <- cdCogObj()
       if(length(colIndex) > 1 && !is.null(cogDF)) {
+         # browser()
+         cogDF <- getCogData(cogDF, 1:cogNrow(cogDF), colIndex)
          cdfNames <- cogNames(cogDF)
          res <- lapply(cdfNames, function(nm) {
             getD3HistData(cogDF, nm)
          })
-         names(res) <- as.character(colIndex)
+         names(res) <- as.character(1:length(colIndex))
          return(res)
       } else {
          return(NULL)
@@ -546,8 +567,8 @@ shinyServer(function(input, output) {
       if(!is.null(cdo)) {
          logMsg("Updating panel layout", verbose=verbose)
          relList <- getRelatedDisplays()
-         nRow <- input$panelRows
-         nCol <- input$panelCols
+         nRow <- getPanelRows()
+         nCol <- getPanelCols()
          # plotWidth <- input$plotWidth
          # plotHeight <- input$plotHeight
          plotTabSkeleton(nRow, nCol, relList, cdo)
@@ -563,8 +584,8 @@ shinyServer(function(input, output) {
             idx <- integer(0)
          } else {
             cp <- input$currentPage
-            nr <- input$panelRows
-            nc <- input$panelCols
+            nr <- getPanelRows()
+            nc <- getPanelCols()
             idx <- ((cp - 1) * nr * nc + 1):min((cp * nr * nc), n)
          }
          res <- getCogData(cogDF, idx, seq_len(cogNcol(cogDF)))
@@ -585,7 +606,7 @@ shinyServer(function(input, output) {
             logMsg("Updating cog info in panel layout")
          relList <- getRelatedDisplays() # not used but need to react to it
          
-         totPanels <- input$panelRows * input$panelCols
+         totPanels <- getPanelRows() * getPanelCols()
          colNames <- input$selectedPlotVar
          idx <- which(names(cogDF) %in% strsplit(colNames, ",")[[1]])
          res <- lapply(seq_len(cogNrow(cogDF)), function(i) {
@@ -609,7 +630,7 @@ shinyServer(function(input, output) {
       cogDF <- curPageCogDF()
       
       if(!is.null(cogDF)) {
-         totPanels <- input$panelRows * input$panelCols
+         totPanels <- getPanelRows() * getPanelCols()
          cdo <- cdDisplayObj()
          localData <- getLocalData()
          hdfsData <- getHDFSdata()
@@ -763,7 +784,7 @@ shinyServer(function(input, output) {
    
    # output$testOutput <- reactive({
    #    cdo <- cdDisplayObj()
-   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", input$panelRows, "; nCol: ", input$panelCols, "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
+   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", getPanelRows(), "; nCol: ", getPanelCols(), "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
    # })
 })
 

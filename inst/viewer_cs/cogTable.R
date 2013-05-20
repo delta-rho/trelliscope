@@ -678,7 +678,7 @@ makeBivarJSON <- function(x, y, xlab="x", ylab="y", shape=460/660, xbin=50) {
 # http://stackoverflow.com/questions/2013902/select-cells-on-a-table-by-dragging
 
 
-# TODO: remove when vdb is available - this exists in vdb
+# TODO: remove when trelliscope is available - this exists in trelliscope
 encodePNG <- function(plotLoc) {
    bytes <- file.info(plotLoc)$size
    b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))
@@ -709,7 +709,7 @@ getPNGs <- function(cogDF, plotInfo, storage, localData=NULL, localDataExtra=NUL
       ind <- which(keys %in% cogDF$plotKey)
       tmpfile <- tempfile()
       pngs <- sapply(localData[ind], function(x) {
-         vdbMakePNG(dat=x, plotFn=localDataExtra$plotFn, file=tmpfile, width=localDataExtra$plotDim$width, height=localDataExtra$plotDim$height, res=localDataExtra$plotDim$res, xLimType=localDataExtra$xLimType, yLimType=localDataExtra$yLimType, lims=localDataExtra$lims)
+         trsMakePNG(dat=x, plotFn=localDataExtra$plotFn, file=tmpfile, width=localDataExtra$plotDim$width, height=localDataExtra$plotDim$height, res=localDataExtra$plotDim$res, xLimType=localDataExtra$xLimType, yLimType=localDataExtra$yLimType, lims=localDataExtra$lims)
          encodePNG(tmpfile)
       })
    }

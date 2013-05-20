@@ -1,8 +1,8 @@
-# lim is an object of class "vdbLims"
+# lim is an object of class "trsLims"
 # gives a min/max for either "x" or "y" axis based on this object
 
 ## internal
-vdbCurLim <- function(lim, which, dat, curlim) {
+trsCurLim <- function(lim, which, dat, curlim) {
    # dat <- plasma[[1]]
    # lim <- plasmaLims
    # which <- "y"
@@ -22,18 +22,18 @@ vdbCurLim <- function(lim, which, dat, curlim) {
       curRange + c(-1, 1) * delta
    } else {
       # need to add in axis padding if it was specified
-      # this has already been done for same and sliced in vdbSetLims()
+      # this has already been done for same and sliced in setLims()
       curRange + diff(curRange) * lim$prop * c(-1, 1)
    }
 }
 
 ## internal
-vdbCurXLim <- function(lim, dat, xlim) {
-   vdbCurLim(lim, "x", dat, xlim)
+trsCurXLim <- function(lim, dat, xlim) {
+   trsCurLim(lim, "x", dat, xlim)
 }
 
 ## internal
-vdbCurYLim <- function(lim, dat, ylim) {
-   vdbCurLim(lim, "y", dat, ylim)
+trsCurYLim <- function(lim, dat, ylim) {
+   trsCurLim(lim, "y", dat, ylim)
 }
 

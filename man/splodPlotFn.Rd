@@ -1,6 +1,6 @@
 \name{splodPlotFn}
 \alias{splodPlotFn}
-\title{Default Plot Function for vdbSplod}
+\title{Default Plot Function for splod}
 \usage{
   splodPlotFn(df)
 }
@@ -13,7 +13,7 @@
   subset
 }
 \description{
-  Default plot function for vdbSplod
+  Default plot function for splod
 }
 \author{
   Ryan Hafen
@@ -22,7 +22,7 @@
   Wilkinson's scagnostics paper.
 }
 \seealso{
-  \code{\link{splodCogFn}}, \code{\link{vdbSplod}},
+  \code{\link{splodCogFn}}, \code{\link{splod}},
   \code{\link{makeSplodData}}
 }
 

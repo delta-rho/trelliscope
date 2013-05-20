@@ -23,13 +23,13 @@
 }
 \description{
   Create a 'inputVars' object which can be passed to the
-  'inputVars' argument of \code{\link{vdbPlot}} to create
-  per-panel input variables in the VDB viewer.
+  'inputVars' argument of \code{\link{makeDisplay}} to
+  create per-panel input variables in the VDB viewer.
 }
 \author{
   Ryan Hafen
 }
 \seealso{
-  \code{\link{vdbPlot}}
+  \code{\link{makeDisplay}}
 }
 

@@ -1,5 +1,5 @@
 ## internal
-vdbWriteCogJson <- function(prefix, group, name, cog, cogdesc, inputVars, height, width, pp) {
+writeCogJson <- function(prefix, group, name, cog, cogdesc, inputVars, height, width, pp) {
    
 	if(!is.null(inputVars)) {
       # append inputVars to the cognostics table

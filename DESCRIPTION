@@ -1,21 +1,22 @@
-Package: vdb
+Package: trelliscope
 Type: Package
-Title: Visualization Databases
-Version: 0.3
+Title: Trelliscope
+Version: 0.4
 Date: 2012-03-03
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
-Description: Visualization databases (VDBs) provide a way to organize and
-    handle large amounts of multi-page visualizations.  This package provides a
-    mechanism for easily generating and organizing plots and provides a dynamic
-    viewer for tiling displays across the screen and paging through them. There
-    is also a mechanism to generate built-in or user-defined "cognostic"
-    metrics for each page of a plot, and the viewer has the ability to sort or
-    filter the pages based on these cognostics.  This is useful for large
-    multi-page displays where it is not possible to view each page, allowing
-    only pages with interesting features to be presented.  This package also
-    provides a way to meaningfully organize and present these displays in a
-    "lab notebook".
+Description: Trelliscope provides a way to create, organize, and view
+    multi-panel displays, a collection of which is called a visualization
+    database (VDB).  This package provides a mechanism for extending the ideas
+    of Trellis Display to easily generate and organize plots, providing a
+    dynamic viewer for tiling panels of a display across the screen and paging
+    through them. There is also a mechanism to generate built-in or
+    user-defined "cognostic" metrics for each panel of a display , and the
+    viewer has the ability to sort or filter the pages based on these
+    cognostics.  This is useful for large multi-panel displays where it is not
+    possible to view each panel, allowing only panels with interesting features
+    to be presented.  This package also provides a way to meaningfully organize
+    and present these displays in a "lab notebook".
 License: BSD
 LazyLoad: yes
 LazyData: yes
@@ -47,16 +48,15 @@ Collate:
     'runViewer.R'
     'typeset.R'
     'vdbInit.R'
-    'vdbNotebook.R'
-    'vdbPlot.R'
-    'vdbPlotInternals.R'
-    'vdbPrepanel.R'
-    'vdbWriteCogJson.R'
-    'vdbUpdateInput.R'
+    'notebook.R'
+    'makeDisplay.R'
+    'makeDisplayInternals.R'
+    'prepanel.R'
+    'writeCogJson.R'
     'cognostics.R'
     'htaccessGen.R'
     'inputVars.R'
-    'vdbObject.R'
-    'vdbSplod.R'
+    'displayObject.R'
+    'splod.R'
     'websync.R'
     'mongo.R'

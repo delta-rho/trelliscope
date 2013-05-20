@@ -107,19 +107,19 @@ print.cog <- function(x, ...) {
 ## internal
 ## some special cognostics, such as relations, need to be concatenated to a comma-separated string if we are storing them as a data.frame
 cog2df <- function(x) {
-   # TODO: when class(x[[i]])=="vdbCogRel", first concatenate
+   # TODO: when class(x[[i]])=="trsCogRel", first concatenate
    as.data.frame(x)
 }
 
 as.cogGeo <- function(x) {
    x <- x[1:2]
    names(x) <- c("lat", "lon")
-   class(x) <- c("vdbCogGeo", "list")
+   class(x) <- c("trsCogGeo", "list")
    x
 }
 
 as.cogRel <- function(x) {
-   class(x) <- c("vdbCogRel")
+   class(x) <- c("trsCogRel")
    x
 }
 
@@ -128,7 +128,7 @@ as.cogHier <- function(x) {
 }
 
 cogFlatten <- function(x) {
-   if(inherits(x, "vdbCogRel"))
+   if(inherits(x, "trsCogRel"))
       return(paste(x, collapse=","))
    x
 }

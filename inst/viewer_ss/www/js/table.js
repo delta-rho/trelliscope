@@ -138,6 +138,14 @@ $(document).ready(function() {
    filtermodals.removeClass("fade")
    filtermodals.removeClass("in")
    
+   var hp = getHashParams();
+   
+   if(hp["ncol"] != undefined) {
+      // $("#panelCols").val(hp["ncol"]);
+      alert($("#panelCols").val());
+      // $("#panelCols").trigger("change");
+   }
+   
 });
 
 
@@ -580,17 +588,16 @@ $(document).on("change", "#pppInput", function(evt) {
    var ncol = n;
 
    console.log(ppp);
-
    
    $("#panelRows").val(nrow);
    $("#panelCols").val(ncol);
-
+   
    $("#panelRows").trigger("change");
    $("#panelCols").trigger("change");
    
    $("#currentPage").val(1);
    $("#currentPage").trigger("change");
-
+   
    updateTableDims();
 });
 
@@ -729,4 +736,21 @@ $.extend(htmlGroupOutputBinding, {
 });
 Shiny.outputBindings.register(htmlGroupOutputBinding, 'shiny.htmlGroupOutput');
 Shiny.outputBindings.setPriority("shiny.htmlGroupOutput", -20);
+
+function getHashParams() {
+   var hashParams = {};
+   var e,
+      a = /\+/g,  // Regex for replacing addition symbol with a space
+      r = /([^&;=]+)=?([^&;]*)/g,
+      d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+      q = window.location.hash.substring(1);
+
+   while (e = r.exec(q))
+      hashParams[d(e[1])] = d(e[2]);
+
+   return hashParams;
+}
+
+
+
 

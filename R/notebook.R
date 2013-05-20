@@ -5,7 +5,7 @@
 #' @param name name of the .Rmd file to be created
 #' @param blank do you just want a blank page, or do you want a template with several markdown examples filled out for reference?
 #' @param pageTitle, title, author, toc, css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @return creates a new .Rmd file that will go in the "notebook" directory of the vdb directory
 #'
@@ -18,14 +18,14 @@ newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTit
    if(is.null(name))
       stop("Must specify name for new notebook")
 
-   prefix <- vdbValidatePrefix(conn)
+   prefix <- trsValidatePrefix(conn)
 
    filePath <- file.path(prefix, "notebook", paste(name, ".Rmd", sep=""))
 
    if(file.exists(filePath))
       stop(paste("File ", filePath, " already exists"))
 
-   pkgPath <- system.file(package="vdb")
+   pkgPath <- system.file(package="trelliscope")
    template <- file.path(pkgPath, "rmd_template.Rmd")
    
    fileString <- ifelse(blank, "", paste(readLines(template), collapse="\n"))
@@ -49,7 +49,7 @@ bsSetup(
 #' Use \code{\link{browseURL}} to open a notebook .html file that is in the "notebook" directory of the vdb directory and that has typically been created with \code{\link{newNotebook}} and typeset with \code{\link{typeset}}.
 #'
 #' @param name name of the notebook file (.html extension not required)
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{newNotebook}}, \code{\link{typeset}}
@@ -62,7 +62,7 @@ viewNotebook <- function(name="index", conn=getOption("vdbConn")) {
    if(is.null(name))
       stop("Must specify name for notebook")
 
-   prefix <- vdbValidatePrefix(conn)
+   prefix <- trsValidatePrefix(conn)
 
    if(grepl("~", prefix))
       prefix <- path.expand(prefix)
@@ -205,7 +205,7 @@ makeHref <- function(group, name, type, server=NULL) {
 #' 
 #' @param name a vector of display names to be in the list
 #' @param group (needs to be fixed...)
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @author Ryan Hafen
 #' 
@@ -213,7 +213,7 @@ makeHref <- function(group, name, type, server=NULL) {
 #' 
 #' @export
 nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
-   prefix <- vdbValidatePrefix(conn)
+   prefix <- trsValidatePrefix(conn)
    
    shinyServer <- conn$shinyServer
    
@@ -251,7 +251,7 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 #' 
 #' @param name a vector of display names to be in the list
 #' @param group (needs to be fixed...)
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @author Ryan Hafen
 #' 
@@ -259,7 +259,7 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 #' 
 #' @export
 nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
-   prefix <- vdbValidatePrefix(conn)
+   prefix <- trsValidatePrefix(conn)
 
    shinyServer <- conn$shinyServer
 

@@ -1,6 +1,6 @@
 #' Remove Margins from Trellis/Lattice Plot
 #'
-#' Removes whitespace surrounding a trellis plot.  Ideal for \code{\link{vdbPlot}} because when tiling multiple panels, a lot of space is wasted with the margins.
+#' Removes whitespace surrounding a trellis plot.  Ideal for \code{\link{makeDisplay}} because when tiling multiple panels, a lot of space is wasted with the margins.
 #'
 #' @param \ldots a list of other parameters to be passed to par.settings
 #' @param topkey should extra space be added for a top key?
@@ -8,7 +8,7 @@
 #' 
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{xyplot}}, \code{\link{vdbPlot}}
+#' @seealso \code{\link{xyplot}}, \code{\link{makeDisplay}}
 #'
 #' @examples
 #' \dontrun{

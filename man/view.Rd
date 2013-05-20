@@ -6,7 +6,7 @@
     group = NULL, name = NULL, port = 8100L)
 }
 \arguments{
-  \item{conn}{vdb connection info, typically stored in
+  \item{conn}{VDB connection info, typically stored in
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists}

@@ -1,8 +1,8 @@
-# vdb: Visualization Databases in R
+# Trelliscope: Detailed Visualization of Large Complex Data in R
 
-vdb is an R package to be used in conjunction with [datadr](https://github.com/hafen/datadr) and [RHIPE](https://github.com/saptarshiguha/RHIPE) to provide a framework for detailed visualization of large, complex data.
+Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/hafen/datadr) and [RHIPE](https://github.com/saptarshiguha/RHIPE) to provide a framework for detailed visualization of large, complex data.
 
-To get started, see the package documentation and function reference located [here](http://hafen.github.com/vdb/).
+To get started, see the package documentation and function reference located [here](http://hafen.github.com/trelliscope/).
 
 ## Installation
 
@@ -12,7 +12,7 @@ This package will not be submitted to CRAN until it has matured.
 ```s
 library(devtools)
 install_github("datadr", "hafen")
-install_github("vdb", "hafen")
+install_github("trelliscope", "hafen")
 ```
 
 To use RHIPE with this package, get version 0.74 (unstable branch) from [here](https://github.com/saptarshiguha/RHIPE).
@@ -23,5 +23,5 @@ This is "research-grade" software, meaning that it is prototypical, potentially 
 
 ## License
 
-This software is currently under the BSD license.  Please read the [license](https://github.com/hafen/vdb/blob/master/LICENSE.md) document.
+This software is currently under the BSD license.  Please read the [license](https://github.com/hafen/trelliscope/blob/master/LICENSE.md) document.
 

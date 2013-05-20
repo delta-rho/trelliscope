@@ -8,10 +8,27 @@ getCdName <- function(uid, appHash, displayList, verbose) {
          return(c(tmp$group, tmp$name))
       } 
    } else if(appHash!="") {
-      appHash <- strsplit(appHash, "&")[[1]]
-      appHash <- gsub(".*=(.*)", "\\1", appHash)         
-      logMsg("Display ", appHash[1], " / ", appHash[2], " specified by app hash", verbose=verbose)
-      return(appHash)
+      vals <- getFromAppHash(appHash, c("group", "name"))
+      
+      logMsg("Display ", vals$group, " / ", vals$name, " specified by app hash", verbose=verbose)
+      if(sum(sapply(vals, length)) == 2)
+         return(c(vals$group, vals$name))
    }
    return(NULL)         
 }
+
+getFromAppHash <- function(appHash, names) {
+   appHash <- strsplit(appHash, "&")[[1]]
+   appHash <- gsub("^#(.*)", "\\1", appHash)
+   keys <- gsub("(.*)=.*", "\\1", appHash)
+   vals <- gsub(".*=(.*)", "\\1", appHash)
+
+   ind <- which(keys %in% names)
+
+   res <- lapply(ind, function(x) {
+      vals[x]
+   })
+   names(res) <- keys[ind]
+   res
+}
+

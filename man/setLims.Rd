@@ -2,12 +2,12 @@
 \alias{setLims}
 \title{Specify rules for x and y limits for a makeDisplay}
 \usage{
-  setLims(lims, x = "same", y = "same",
-    xQuant = c(0, 1), yQuant = c(0, 1), xRangeQuant = 1,
-    yRangeQuant = 1, prop = 0.07)
+  setLims(lims, x = "same", y = "same", xQuant = c(0, 1),
+    yQuant = c(0, 1), xRangeQuant = 1, yRangeQuant = 1,
+    prop = 0.07)
 }
 \arguments{
-  \item{lims}{object of class "vdbPre"}
+  \item{lims}{object of class "trsPre"}
 
   \item{x}{x-axis limits rule (either "same", "sliced", or
   "free" - see details)}

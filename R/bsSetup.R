@@ -1,6 +1,6 @@
 #' Set Up Web Notebook Using Bootstrap
 #'
-#' Set up a Twitter Boostrap template for a notebook to be typeset with knitr.  This function should be called at the beginning of a .Rmd file.  If you use \code{\link{vdbNotebook}} to initialize a notebook .Rmd file, this will already be there.
+#' Set up a Twitter Boostrap template for a notebook to be typeset with knitr.  This function should be called at the beginning of a .Rmd file.  If you use \code{\link{newNotebook}} to initialize a notebook .Rmd file, this will already be there.
 #'
 #' @param pageTitle the text to display on the title bar of the web browser
 #' @param title the text to display on the header of the web page
@@ -13,7 +13,7 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{vdbNotebook}}, \code{\link{typeset}}
+#' @seealso \code{\link{newNotebook}}, \code{\link{typeset}}
 #'
 #' @export
 bsSetup <- function(

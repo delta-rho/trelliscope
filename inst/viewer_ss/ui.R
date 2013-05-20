@@ -1,7 +1,7 @@
 library(shiny)
 library(caTools)
 library(hexbin)
-# library(vdb)
+# library(trelliscope)
 
 sapply(list.files("uiHelpers", full.names=TRUE), source)
 

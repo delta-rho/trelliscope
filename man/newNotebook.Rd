@@ -19,7 +19,7 @@
   at the top of the .Rmd file, and can be ignored if you
   plan to change them later in the file itself}
 
-  \item{conn}{vdb connection info, typically stored in
+  \item{conn}{VDB connection info, typically stored in
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists}

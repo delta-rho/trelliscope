@@ -12,7 +12,7 @@ keyHash <- function(key, nbins) {
 }
 
 ## internal
-vdbFindGlobals <- function(f) {
+trsFindGlobals <- function(f) {
    tildeHandler <- codetools:::collectUsageHandlers[["~"]]
    remove("~", envir=codetools:::collectUsageHandlers)
    res <- findGlobals(f, merge=FALSE)$variables
@@ -21,7 +21,7 @@ vdbFindGlobals <- function(f) {
 }
 
 ## internal
-vdbValidateCogFn <- function(dat, cogFn, verbose=FALSE) {
+trsValidateCogFn <- function(dat, cogFn, verbose=FALSE) {
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF=FALSE)
    isCondDiv <- dat$divBy$type=="condDiv"
@@ -39,7 +39,7 @@ vdbValidateCogFn <- function(dat, cogFn, verbose=FALSE) {
 }
 
 ## internal
-vdbValidatePlotFn <- function(plotFn, dat, verbose=FALSE) {
+trsValidatePlotFn <- function(plotFn, dat, verbose=FALSE) {
    if(verbose)
       message("* Validating 'plotFn'...")
    
@@ -47,7 +47,7 @@ vdbValidatePlotFn <- function(plotFn, dat, verbose=FALSE) {
 }
 
 ## internal
-vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
+trsValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
    # browser()
    # TODO: 
    # TODO: handle aspect ratio
@@ -75,11 +75,11 @@ vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
    #       tryRes <- try({
    #          if(is.null(width) && is.null(height)) {
    #             width <- 480
-   #             height <- vdbGetHeight(p, width)
+   #             height <- panelGetHeight(p, width)
    #          } else if(!is.null(width) && is.null(height)) {
-   #             height <- vdbGetHeight(p, width)
+   #             height <- panelGetHeight(p, width)
    #          } else if(is.null(width) && !is.null(height)) {
-   #             width <- vdbGetWidth(p, height)
+   #             width <- panelGetWidth(p, height)
    #          }            
    #       })
    #       if(inherits(tryRes, "try-error") && verbose) {
@@ -119,7 +119,7 @@ vdbValidatePlotDim <- function(plotDim, dat, plotFn, verbose=FALSE) {
    list(height=height, width=width, res=res, aspect=aspect)
 }
 
-vdbValidateCogStorage <- function(cogStorage, conn) {
+trsValidateCogStorage <- function(cogStorage, conn) {
    if(is.null(cogStorage))
       cogStorage <- "local"
 
@@ -130,7 +130,7 @@ vdbValidateCogStorage <- function(cogStorage, conn) {
 }
 
 ## internal
-vdbValidateStorage <- function(storage, conn, datClass) {
+trsValidateStorage <- function(storage, conn, datClass) {
    # if "storage" is not specified, use the conn default
    if(is.null(storage))
       if("rhData" %in% datClass) {
@@ -163,8 +163,8 @@ vdbValidateStorage <- function(storage, conn, datClass) {
 
 # Check prefix and get directory ready
 ## internal
-vdbGetDisplayPrefix <- function(conn, group, name) {
-   vdbPrefix <- vdbValidatePrefix(conn)
+trsGetDisplayPrefix <- function(conn, group, name) {
+   vdbPrefix <- trsValidatePrefix(conn)
 
    if(!file.exists(vdbPrefix)) {
       stop(paste("Directory ", vdbPrefix, " does not exist.  Please use vdbInit(", vdbPrefix, ") to initialize.", sep=""))
@@ -174,7 +174,7 @@ vdbGetDisplayPrefix <- function(conn, group, name) {
 }
 
 ## internal
-vdbValidatePrefix <- function(conn) {
+trsValidatePrefix <- function(conn) {
    prefix <- conn$vdbPrefix
 
    if(is.null(prefix))
@@ -187,7 +187,7 @@ vdbValidatePrefix <- function(conn) {
 }
 
 ## internal
-vdbValidateDisplayPrefix <- function(displayPrefix) {
+trsValidateDisplayPrefix <- function(displayPrefix) {
    if(file.exists(displayPrefix)) {
       bakFile <- paste(displayPrefix, "_bak", sep="")
       message(paste("* Plot exists... backing up previous to", bakFile))
@@ -201,7 +201,7 @@ vdbValidateDisplayPrefix <- function(displayPrefix) {
 }
 
 ## internal
-vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, cogStorage, hdfsPrefix, width, height, aspect, updated=Sys.time(), keySig, dataSig=dataSig, subDirN) {
+trsUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, cogStorage, hdfsPrefix, width, height, aspect, updated=Sys.time(), keySig, dataSig=dataSig, subDirN) {
    # TODO: make this more robust (take list as parameter, etc.)
 
    if(is.null(hdfsPrefix))
@@ -256,7 +256,7 @@ vdbUpdateDisplayList <- function(vdbPrefix, name, group, desc, n, storage, cogSt
 }
 
 ## internal
-vdbUpdateDisplayListJson <- function(vdbPrefix) {
+trsUpdateDisplayListJson <- function(vdbPrefix) {
    load(file.path(vdbPrefix, "displays", "_displayList.Rdata"))
    
    string <- paste("{ \"displayList\": [\n",
@@ -275,7 +275,7 @@ vdbUpdateDisplayListJson <- function(vdbPrefix) {
 }
 
 ## internal
-vdbValidateInputs <- function(input) {
+trsValidateInputs <- function(input) {
    if(inherits(input, "inputVars")) {
       input <- list(input)
    } else if(!all(sapply(input, function(x) inherits(x, "inputVars"))) && !is.null(input)) {
@@ -300,7 +300,7 @@ vdbValidateInputs <- function(input) {
 
 
 ## internal
-vdbMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL, yLimType=NULL, lims=NULL) {
+trsMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL, yLimType=NULL, lims=NULL) {
 
    a <- suppressWarnings(try({
       png(file=file, width=width, height=height, res=res)
@@ -336,8 +336,8 @@ vdbMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL
             if(!(inherits(tmp$x.limits, "list") || inherits(tmp$y.limits, "list"))) {
                plotXLim <- tmp$x.limits
                plotYLim <- tmp$y.limits               
-               curXLim <- vdbCurXLim(lims, dat, plotXLim)
-               curYLim <- vdbCurYLim(lims, dat, plotYLim)         
+               curXLim <- trsCurXLim(lims, dat, plotXLim)
+               curYLim <- trsCurYLim(lims, dat, plotYLim)         
 
                if(xLimType != "free")
                   tmp$x.limits <- curXLim
@@ -349,8 +349,8 @@ vdbMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL
             if(length(gglims) == 1) {
                plotXLim <- gglims[[1]]$x.range
                plotYLim <- gglims[[1]]$y.range
-               curXLim <- vdbCurXLim(lims, dat, plotXLim)
-               curYLim <- vdbCurYLim(lims, dat, plotYLim)         
+               curXLim <- trsCurXLim(lims, dat, plotXLim)
+               curYLim <- trsCurYLim(lims, dat, plotYLim)         
 
                if(xLimType != "free")
                   suppressMessages(tmp <- tmp + xlim(curXLim))
@@ -373,9 +373,9 @@ vdbMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL
    dev.off()
 }
 
-# Translate Rhipe key/value pairs into a format for vdbPlot
+# Translate Rhipe key/value pairs into a format for makeDisplay
 # internal
-vdbRhKeyValTrans <- function(curKey, curVal) {
+trsRhKeyValTrans <- function(curKey, curVal) {
    # TODO: if current map.key has length 1, and if its as.character is okay for a filename, then make that the splitKey.  If not, make a md5 hash of it
    if(length(curKey) > 1)
       curKey <- paste(curKey, collapse="|")

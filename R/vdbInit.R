@@ -9,7 +9,7 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{vdbUpdateViewer}}
+#' @seealso \code{\link{updateViewer}}
 #' @export
 vdbInit <- function(path=NULL, autoYes=FALSE) {
    if(is.null(path))
@@ -38,7 +38,7 @@ vdbInit <- function(path=NULL, autoYes=FALSE) {
    }
    
    # now move files over
-	pkgPath <- system.file(package="vdb")
+	pkgPath <- system.file(package="trelliscope")
 	
    message("Moving viewer files over")
 	file.copy(file.path(pkgPath, "viewer_cs"), path, recursive=TRUE, overwrite=TRUE)
@@ -50,22 +50,22 @@ vdbInit <- function(path=NULL, autoYes=FALSE) {
 	TRUE
 }
 
-#' Update Project VDB Client Side Viewer Files
+#' Update Trelliscope Project Client Side Viewer Files
 #' 
-#' Useful to do after a new update of the \code{vdb} package has been installed.  Moves the viewer files from the package to the project directory.
+#' Useful to do after a new update of the \code{trelliscope} package has been installed.  Moves the viewer files from the package to the project directory.
 #'
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @return nothing
 #' 
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{vdbInit}}, \code{\link{vdbUpdateOptions}}
+#' @seealso \code{\link{vdbInit}}
 #' @export
-vdbUpdateViewer <- function(conn=getOption("vdbConn")) {
-   prefix <- vdbValidatePrefix(conn)
+updateViewer <- function(conn=getOption("vdbConn")) {
+   prefix <- trsValidatePrefix(conn)
    
-	packagePath <- system.file(package="vdb")
+	packagePath <- system.file(package="trelliscope")
    
    message("Moving viewer files over")
 	file.copy(file.path(packagePath, "viewer_cs"), prefix, recursive=TRUE, overwrite=TRUE)

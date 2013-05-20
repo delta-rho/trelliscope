@@ -1,6 +1,6 @@
 \name{splodCogFn}
 \alias{splodCogFn}
-\title{Default Cognostics Function for vdbSplod}
+\title{Default Cognostics Function for splod}
 \usage{
   splodCogFn(df)
 }
@@ -12,7 +12,7 @@
   a data.frame of scagnostics for the given subset
 }
 \description{
-  Default cognostics function for vdbSplod
+  Default cognostics function for splod
 }
 \author{
   Ryan Hafen
@@ -21,7 +21,7 @@
   Wilkinson's scagnostics paper.
 }
 \seealso{
-  \code{\link{splodPlotFn}}, \code{\link{vdbSplod}},
+  \code{\link{splodPlotFn}}, \code{\link{splod}},
   \code{\link{makeSplodData}}
 }
 

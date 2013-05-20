@@ -1,6 +1,6 @@
-#' Default Plot Function for vdbSplod
+#' Default Plot Function for splod
 #'
-#' Default plot function for vdbSplod
+#' Default plot function for splod
 #' 
 #' @param df a subset of data created by \code{\link{makeSplodData}}
 #'
@@ -11,7 +11,7 @@
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{splodCogFn}}, \code{\link{vdbSplod}}, \code{\link{makeSplodData}}
+#' @seealso \code{\link{splodCogFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
 #'
 #' @export
 splodPlotFn <- function(df) {
@@ -21,9 +21,9 @@ splodPlotFn <- function(df) {
    ) 
 } 
 
-#' Default Cognostics Function for vdbSplod
+#' Default Cognostics Function for splod
 #'
-#' Default cognostics function for vdbSplod
+#' Default cognostics function for splod
 #' 
 #' @param df a subset of data created by \code{\link{makeSplodData}}
 #'
@@ -34,28 +34,28 @@ splodPlotFn <- function(df) {
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{splodPlotFn}}, \code{\link{vdbSplod}}, \code{\link{makeSplodData}}
+#' @seealso \code{\link{splodPlotFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
 #'
 #' @export
 splodCogFn <- function(df) {
    cogScagnostics(df$x, df$y)
 }
 
-#' Create Data Plottable by vdbSplod
+#' Create Data Plottable by splod
 #'
-#' Create pairwise scatterplot data plottable by vdbSplod
+#' Create pairwise scatterplot data plottable by splod
 #' 
 #' @param data a data.frame
 #' @param id.vars variables to ignore when computing all pairs of variables
 #'
-#' @return an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{vdbSplod}}
+#' @return an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}
 #'
 #' @references
 #' Wilkinson's scagnostics paper.
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{vdbSplod}}, \code{\link{vdbCogFn}}, \code{\link{splodPlotFn}}
+#' @seealso \code{\link{splod}}, \code{\link{trsCogFn}}, \code{\link{splodPlotFn}}
 #'
 #' @export
 makeSplodData <- function(data, id.vars=NULL) {
@@ -93,19 +93,19 @@ makeSplodData <- function(data, id.vars=NULL) {
 #' 
 #' @param data a data.frame or an object of class "splodDat"
 #' @param id.vars variables to ignore when computing all pairs of variables
-#' @param name, desc, cogFn, plotFn, verbose, \ldots parameters passed to \code{\link{vdbPlot}}
+#' @param name, desc, cogFn, plotFn, verbose, \ldots parameters passed to \code{\link{makeDisplay}}
 #'
-#' @return an object of class 'localDiv' that can be passed to \code{\link{vdbSplod}}
+#' @return an object of class 'localDiv' that can be passed to \code{\link{splod}}
 #'
 #' @references
 #' Wilkinson's scagnostics paper.
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{vdbPlot}}, \code{\link{makeSplodDat}}, \code{\link{vdbCogFn}}, \code{\link{splodPlotFn}}
+#' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodDat}}, \code{\link{trsCogFn}}, \code{\link{splodPlotFn}}
 #'
 #' @export
-vdbSplod <- function(
+splod <- function(
    data,
    id.vars=NULL,
    name=NULL,
@@ -128,7 +128,7 @@ vdbSplod <- function(
       data <- makeSplodData(data, id.vars=id.vars)
    }
    
-   vdbPlot(data, name=name, cogFn=cogFn, plotFn=plotFn, verbose=verbose, ...)
+   makeDisplay(data, name=name, cogFn=cogFn, plotFn=plotFn, verbose=verbose, ...)
 }
 
 

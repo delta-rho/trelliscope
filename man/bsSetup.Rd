@@ -22,7 +22,7 @@
   Set up a Twitter Boostrap template for a notebook to be
   typeset with knitr.  This function should be called at
   the beginning of a .Rmd file.  If you use
-  \code{\link{vdbNotebook}} to initialize a notebook .Rmd
+  \code{\link{newNotebook}} to initialize a notebook .Rmd
   file, this will already be there.
 }
 \author{
@@ -32,6 +32,6 @@
   http://twitter.github.com/bootstrap/
 }
 \seealso{
-  \code{\link{vdbNotebook}}, \code{\link{typeset}}
+  \code{\link{newNotebook}}, \code{\link{typeset}}
 }
 

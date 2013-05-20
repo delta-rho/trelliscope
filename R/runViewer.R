@@ -2,7 +2,7 @@
 #' 
 #' Run server-side viewer on local machine
 #' 
-#' @param conn vdb connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param type there are two viewers - the server-side "ss" and client-side "cs"
 #' @param group, name optional parameters to load the viewer with a pre-specified display
 #' @param port if type="ss", what port to use for the viewer
@@ -11,8 +11,8 @@
 #' 
 #' @export
 view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, port=8100L) {
-   vdbPrefix <- vdb:::vdbValidatePrefix(conn)
-	packagePath <- system.file(package="vdb")
+   vdbPrefix <- trelliscope:::trsValidatePrefix(conn)
+	packagePath <- system.file(package="trelliscope")
    
    if(!is.null(name)) {
       displayObj <- getDisplay(name=name, group=group)
@@ -38,12 +38,12 @@ view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, po
       # if on dev machine, make the viewer path be the code source directory
       # (not the package path)
       if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
-         shinyAppPrefix <- "~/Documents/Code/vdb/inst/viewer_ss/"
+         shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/viewer_ss/"
       } else {
          shinyAppPrefix <- file.path(packagePath, "viewer_ss")
       }
       
-      vdb:::myRunApp(shinyAppPrefix, port=port, hash=hash)      
+      trelliscope:::myRunApp(shinyAppPrefix, port=port, hash=hash)      
    }
 }
 

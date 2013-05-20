@@ -34,7 +34,7 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), display
 #' @export
 getDisplay <- function(name, group=NULL, displayList=NULL, conn = getOption("vdbConn")) {
    displayInfo <- findDisplay(name=name, group=group, conn=conn, displayList=displayList)
-   vdbPrefix <- vdbValidatePrefix(conn)
+   vdbPrefix <- trsValidatePrefix(conn)
    cat(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "object.Rdata"), "\n")
    load(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "object.Rdata"))
    displayObj
