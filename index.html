@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>vdb R Package Documentation</title>
+    <title>trelliscope R Package Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -109,9 +109,9 @@
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="index.html">Docs</a></li>
           <li class=""><a href="functionref.html">Function Ref</a></li>
-          <li><a href="https://www.github.com/hafen/vdb">Github</a></li>
+          <li><a href="https://www.github.com/hafen/trelliscope">Github</a></li>
         </ul>
-        <p class="myHeader">vdb: Visualization Databases</p>
+        <p class="myHeader">Trelliscope: Detailed Vis of Large Complex Data in R</p>
       </div>
 
       <hr>
@@ -200,7 +200,7 @@
 <li class='nav-header'>RHIPE</li>
       
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#vdb-with-rhipe'>vdb with RHIPE</a>
+         <a target='_self' class='nav-not-header' href='#trelliscope-with-rhipe'>Trelliscope with RHIPE</a>
       </li>
 
 
@@ -235,9 +235,9 @@
 <div class='tab-pane active' id='background'>
 <h3>Background</h3>
 
-<p>This documentation provides examples of creating and viewing visualization databases (VDBs) using the <code>vdb</code> R package.  Visualization databases provide a way to visualize large, complex data in great detail from within the R statistical programming environment, and are greatly inspired by ideas of John Tukey.  This package operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  Data can be local R data.frames or can be very massive <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets.  This is a research effort that is evolving, and this document communicates the current state.</p>
+<p>This documentation provides examples of creating and viewing visualization databases (VDBs) using the <code>trelliscope</code> R package.  Trelliscope provides a way to visualize large, complex data in great detail from within the R statistical programming environment.  This package operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  Data can be local R data.frames or can be very massive <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets.  This is a research effort that is evolving, and this document communicates the current state.</p>
 
-<p>VDBs are based on the concept of Divide and Recombine (D&amp;R).  Some philosophy and background on D&amp;R can be found at <a href="http://www.datadr.org">datadr.org</a>.</p>
+<p>Trelliscope is based on the concept of Divide and Recombine (D&amp;R).  Some philosophy and background on D&amp;R can be found at <a href="http://www.datadr.org">datadr.org</a>.</p>
 
 <h4>Motivation</h4>
 
@@ -277,11 +277,11 @@
 
 <p>To address these requirements, our visualization environment is built upon R.  R satisfies all 3 of these requirements.  While there are many excellent visualization frameworks we could make use of, one of the driving forces for this choice is the tie-in with all of the thousands of numerical methods available in R, and that R vis packages such as lattice, ggplot, and base R are familiar to statisticians.  As it becomes easier to rapidly build visualizations using more modern web-based vis tools such as vega/d3 from R, we will start to consider these.  We are already investigating the use of such frameworks for the interactive panel viewer part of this environment.</p>
 
-<!-- #### The vdb Package -->
+<!-- #### The trelliscope Package -->
 
 <!-- In short, a visualization database is a collection of displays, each of which visualizes some aspect of the data being analyzed.  A display consists of one or more panels, where a panel is a plot method applied to each subset of the data.   -->
 
-<!-- The `vdb` package provides mechanisms which, after using the [datadr][datadr] package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways, based on cognostics computed for each panel that quantify interesting features.  This package also provides some mechanisms for maintaining a "lab notebook" with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large [RHIPE][rhipe] datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display. -->
+<!-- The `trelliscope` package provides mechanisms which, after using the [datadr][datadr] package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways, based on cognostics computed for each panel that quantify interesting features.  This package also provides some mechanisms for maintaining a "lab notebook" with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large [RHIPE][rhipe] datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display. -->
 
 <!-- Suppose, for example, I have a large collection of high energy physics sensor data, and I am trying to study the properties of ...  I need to rapidly change between numerical and visual methods throughout the process of model building. -->
 
@@ -290,7 +290,7 @@
 <p>Related projects:</p>
 
 <ul>
-<li><a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a>: the engine that makes VDBs work with large, complex data</li>
+<li><a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a>: the engine that makes Trelliscope work with large, complex data</li>
 <li><a href="http://github.com/hafen/datadr">datadr</a>: division methods</li>
 </ul>
 
@@ -308,12 +308,12 @@
 <div class='tab-pane' id='initial-setup'>
 <h3>Initial Setup</h3>
 
-<p>VDBs have a project-oriented nature.  It is expected that you will usually create a new VDB for a new project.  Within a project, there may be many analysis threads, and VDB allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify.</p>
+<p>Trelliscope has a project-oriented nature.  It is expected that you will usually create a new VDB of Trelliscope displays for a new project.  Within a project, there may be many analysis threads, and Trelliscope allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify.</p>
 
 <pre><code class="r">library(datadr)
-library(vdb)
+library(trelliscope)
 
-# initialize a vdb (do this once per project)
+# initialize a VDB (do this once per project)
 vdbDir &lt;- &quot;/tmp/vdbtest&quot;
 </code></pre>
 
@@ -338,7 +338,7 @@ Moving notebook files over
 
 <p>Two new directories exist in our VDB base directory.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  Your VDB directory will get populated with more files we we proceed.</p>
 
-<p>Now, we can set a list of options for all <code>vdb</code>-related work done in this R session, under the option name <code>vdbConn</code>.</p>
+<p>Now, we can set a list of options for all <code>trelliscope</code>-related work done in this R session, under the option name <code>vdbConn</code>.</p>
 
 <pre><code class="r"># set vdbConn option (do this once per session)
 options(vdbConn = list(
@@ -348,9 +348,9 @@ options(vdbConn = list(
 ))
 </code></pre>
 
-<p>These options tell VDB functions that the current VDB is &quot;vdbTest&quot; and its files are located in &quot;vdbDir&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
+<p>These options tell future <code>trelliscope</code> function calls that the current VDB is &quot;vdbTest&quot; and its files are located in &quot;vdbDir&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
 
-<p>The reason for setting a <code>vdbConn</code> list of options is that these options are fairly routinely required for functions in the <code>vdb</code> package and do not change over the course of an R session and are quite tedious to have to specify every time.</p>
+<p>The reason for setting a <code>vdbConn</code> list of options is that these options are fairly routinely required for functions in the <code>trelliscope</code> package and do not change over the course of an R session and are quite tedious to have to specify every time.</p>
 
 <p>We are now ready to start creating some displays, once we get data in a suitable format.</p>
 
@@ -412,7 +412,7 @@ head(elnino)
 
 <p>We see that a buoy ID, date, geolocation, and several weather-related variables are given.  The buoys for the most part stay within the vicinity of a fixed location, but some drift quite a bit.  The buoy categorization was determined by binning the geolocations, and some categorizations are suspect, as we will see.</p>
 
-<p>An important aspect of plotting with <code>vdb</code> is the notion of working with data that has been divided into subsets.  This can be done in many ways, and we use the <a href="http://github.com/hafen/datadr">datadr</a> package to do so.  The <code>datadr</code> package has facilities for dividing both in-memory data.frames and very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> data objects.  For illustrative purposes, and for easy entry, we stick to the in-memory <code>elnino</code> data for this document, but do keep in mind that this all works for (and is primarily intended for) large data as well.</p>
+<p>An important aspect of plotting with <code>trelliscope</code> is the notion of working with data that has been divided into subsets.  This can be done in many ways, and we use the <a href="http://github.com/hafen/datadr">datadr</a> package to do so.  The <code>datadr</code> package has facilities for dividing both in-memory data.frames and very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> data objects.  For illustrative purposes, and for easy entry, we stick to the in-memory <code>elnino</code> data for this document, but do keep in mind that this all works for (and is primarily intended for) large data as well.</p>
 
 <p>There are many ways we might want to split the data, depending on the purpose of our analysis.  Suppose we are interested in viewing the time series of <code>elnino</code> data by buoy.</p>
 
@@ -469,7 +469,7 @@ str(divExample(buoySplit))
 <div class='tab-pane' id='a-bare-bones-display'>
 <h3>A Bare Bones Display</h3>
 
-<p>To quickly get our feet wet with creating a display, we start with a minimal example.  Creating a plot first requires the specification of what you would like to be plotted.  You create a plot function that of what you would like to visualize for each subset.  The function takes one argument, which you can think of as any one subset of your data.  Some things to know about the plot function:</p>
+<p>To quickly get our feet wet with creating a display, we start with a minimal example.  Creating a plot first requires the specification of what you would like to be plotted.  You create a plot function of what you would like to visualize for each subset.  The function takes one argument, which you can think of as an object containing any one subset of your data.  Some things to know about the plot function:</p>
 
 <ul>
 <li>The plot function is applied to each subset of your split data object</li>
@@ -512,7 +512,7 @@ airDatePlotFn &lt;- function(dat) {
 
 <p>Now, let&#39;s create a display in our visualization database based on this plot function:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    name    = &quot;airTemp_vs_date_plain&quot;,
    group   = &quot;buoy&quot;,
    data    = buoySplit,
@@ -539,7 +539,7 @@ Plotting thumbnail...
 
 <p>The default behavior for how plots are stored when the input is a local dataset is to store a .png file for each subset on disk.  I am experimenting with many storage formats (including applying the plot function on-the-fly in the viewer), which is discussed later.</p>
 
-<p>Let&#39;s see how this effected our <code>vdb</code> directory:</p>
+<p>Let&#39;s see how this effected our VDB directory:</p>
 
 <pre><code class="r">list.files(vdbDir)
 </code></pre>
@@ -587,7 +587,7 @@ view(name=&quot;airTemp_vs_date_plain&quot;)
 
 <p>We&#39;ll also talk more about how to use the viewer later.</p>
 
-<p>Now, let&#39;s do something that shows all of the other functionality of <code>vdbPlot</code>, including prepanel functions, cognostics, etc.</p>
+<p>Now, let&#39;s do something that shows all of the other functionality of <code>makeDisplay</code>, including prepanel functions, cognostics, etc.</p>
 
 </div>
 
@@ -597,13 +597,13 @@ view(name=&quot;airTemp_vs_date_plain&quot;)
 
 <p>Usually prior to plotting you want to determine axis limits for each panel.  This is important because when viewing many small multiples, axis limits play a major role in making meaningful comparisons between panels.  Also, if a handful of panels have large outlying values, you might want to trim these so that you can view the bulk of the data in the panel at better resolution.  </p>
 
-<p>Note that if you want to skip this extra step of code, you can specify <code>lims</code> in <code>vdbPlot</code> (or explicitly in your panel function), which will automatically perform the axis limit computations prior to creating the display (as we did in our previous example).</p>
+<p>Note that if you want to skip this extra step of code, you can specify <code>lims</code> in <code>makeDisplay</code> (or explicitly in your panel function), which will automatically perform the axis limit computations prior to creating the display (as we did in our previous example).</p>
 
-<p>The <code>vdbPrepanel</code> function is the first step in determining axis limits.  For those familiar with aspect ratio banking, it also has preliminary support for calculating aspect ratios through banking.</p>
+<p>The <code>prepanel</code> function is the first step in determining axis limits.  For those familiar with aspect ratio banking, it also has preliminary support for calculating aspect ratios through banking.</p>
 
-<p>The main parameter to know about in the <code>vdbPrepanel</code> function is <code>preFn</code>, which is a function that takes a subset of your split data as an input (like <code>plotFn</code> in <code>vdbplot</code>) and returns a list including the elements <code>xlim</code> and <code>ylim</code> (each a vector of the min and max x and y ranges of the data subset), and optionally <code>dx</code> and <code>dy</code>, vectors used to determine the aspect ration when banking on 45 degrees.</p>
+<p>The main parameter to know about in the <code>prepanel</code> function is <code>preFn</code>, which is a function that takes a subset of your split data as an input (like <code>plotFn</code> in <code>makeDisplay</code>) and returns a list including the elements <code>xlim</code> and <code>ylim</code> (each a vector of the min and max x and y ranges of the data subset), and optionally <code>dx</code> and <code>dy</code>, vectors used to determine the aspect ration when banking on 45 degrees.</p>
 
-<p>If you are familiar with prepanel functions in the lattice package, you will see the similarity.  A prepanel function might sometimes be somewhat unrelated to what is actually plotted, but usually axis limits depend exactly on what is being plotted.  In this case, if your <code>plotFn</code> is a trellis object, you can simply specify your <code>plotFn</code> as <code>preFn</code>, for convenience.  The <code>vdbPrepanel</code> function will simply apply the plot and grab the axis limits from the object created (I suppose I could add this functionality for ggplot2 as well).  Note that in this case, however, you cannot specify <code>dx</code> and <code>dy</code>.</p>
+<p>If you are familiar with prepanel functions in the lattice package, you will see the similarity.  A prepanel function might sometimes be somewhat unrelated to what is actually plotted, but usually axis limits depend exactly on what is being plotted.  In this case, if your <code>plotFn</code> is a trellis object, you can simply specify your <code>plotFn</code> as <code>preFn</code>, for convenience.  The <code>prepanel</code> function will simply apply the plot and grab the axis limits from the object created (I suppose I could add this functionality for ggplot2 as well).  Note that in this case, however, you cannot specify <code>dx</code> and <code>dy</code>.</p>
 
 </div>
 
@@ -611,7 +611,7 @@ view(name=&quot;airTemp_vs_date_plain&quot;)
 <div class='tab-pane' id='determining-axis-limits'>
 <h3>Determining Axis Limits</h3>
 
-<p>We can now determine our axis limits based on the results from <code>vdbPrepanel</code>.  The output from <code>vdbPrepanel</code> is object of class &quot;vdbPre&quot; which has a plot method that can help in the decision of how to specify limits.  Before we look at this plot, let&#39;s talk about the possible choices of limit specification (those familiar with lattice will know what these are):</p>
+<p>We can now determine our axis limits based on the results from <code>prepanel</code>.  The output from <code>prepanel</code> is object of class &quot;trsPre&quot; which has a plot method that can help in the decision of how to specify limits.  Before we look at this plot, let&#39;s talk about the possible choices of limit specification (those familiar with lattice will know what these are):</p>
 
 <ul>
 <li><strong>&quot;same&quot;</strong>: the same limits are used for all the panels</li>
@@ -623,7 +623,7 @@ view(name=&quot;airTemp_vs_date_plain&quot;)
 
 <p>To view a plot of the panel axis limits to help in this determination:</p>
 
-<pre><code class="r">airDatePre &lt;- vdbPrepanel(buoySplit, airDatePlotFn)
+<pre><code class="r">airDatePre &lt;- prepanel(buoySplit, airDatePlotFn)
 plot(airDatePre)
 </code></pre>
 
@@ -637,10 +637,10 @@ plot(airDatePre)
 
 <p>To set our choice, we do the following:</p>
 
-<pre><code class="r">buoyLims &lt;- vdbSetLims(airDatePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
+<pre><code class="r">buoyLims &lt;- setLims(airDatePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
 </code></pre>
 
-<p>The <code>vdbPlot</code> function can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
+<p>The <code>makeDisplay</code> function can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
 
 </div>
 
@@ -650,7 +650,7 @@ plot(airDatePre)
 
 <p>Much of the power of the viewer for multi-panel displays (particularly when they number in the thousands or higher) lies in the ability to specify metrics that provide interesting information about each panel, with which you can filter and sort your collection of panels to look for those which are interesting.  John Tukey called such metrics &quot;cognostics&quot;.</p>
 
-<p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>vdbPlot</code>.  </p>
+<p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>makeDisplay</code>.  </p>
 
 <p>The cognostics function is applied to each subset just like the plot function and must return a list which can be flattened into a data.frame.  There are helper functions <code>cog()</code>, <code>cogMean()</code>, <code>cog(Range)</code>, etc. which can be used when defining this list.  The most generic, <code>cog()</code> basically wraps the metric you want to compute with additional information, such as the description of the cognostic and its type.  Current types are:</p>
 
@@ -720,7 +720,7 @@ plot(airDatePre)
 
 <p>This may seem like a lot of work for one display over the bare bones example we looked at.  We have done prepanel computation, set axis limits, and specified a cognostics function with cognostic variable descriptions.  This really isn&#39;t very much work for the benefit we receive from what we are able to do with the display after it&#39;s created.  So let&#39;s create it:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;airTemp_vs_date&quot;,
    desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
@@ -768,7 +768,7 @@ view(name=&quot;airTemp_vs_date&quot;)
    xyplot(lat ~ lon, groups=duplicated(date) | duplicated(date, fromLast=TRUE), data=dat)
 }
 
-vdbPlot(
+makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;lat_vs_lon&quot;,
    data    = buoySplit,
@@ -783,7 +783,7 @@ vdbPlot(
 <div class='tab-pane' id='single-panel-displays'>
 <h3>Single-Panel Displays</h3>
 
-<p>For displays with many panels, it is worth the small amount of extra effort we went through in the previous section to get a nice, viewable display.  However, we are not always doing detailed visualization that requires such displays.  Suppose we have some simple plots we want to add to our VDB.  This can be done by creating a plot object (or expression for base R graphics) and passing it to <code>vdbPlot</code> as the <code>data</code> argument.</p>
+<p>For displays with many panels, it is worth the small amount of extra effort we went through in the previous section to get a nice, viewable display.  However, we are not always doing detailed visualization that requires such displays.  Suppose we have some simple plots we want to add to our VDB.  This can be done by creating a plot object (or expression for base R graphics) and passing it to <code>makeDisplay</code> as the <code>data</code> argument.</p>
 
 <p>For example, suppose that we want to investigate the dependence of the variance of air temperature on the mean for each buoy.  Below is an example of how to create a <code>plotFn</code> for this using the three possible approaches: (1) any base R plot command wrapped in an expression, (2) lattice, (3) ggplot.</p>
 
@@ -804,7 +804,7 @@ p
 
 <p>Now to add it to the VDB:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group=&quot;buoy&quot;,
    name=&quot;tempVars_vs_tempMeans&quot;,
    desc=&quot;Average variance of temperature at each buoy vs. average mean&quot;,
@@ -828,7 +828,7 @@ Plotting thumbnail...
 <div class='tab-pane' id='splod'>
 <h3>&quot;splod&quot;</h3>
 
-<p>Scatterplot matrices become increasingly infeasible as the number of variables grows beyond \(\approx\)10.  Using <code>vdb</code>, we can create &quot;scatterplot displays&quot;, where for \(p\) variables we create a panel for each of the \(\tbinom{p}{2}\) pairwise combinations.  We can leverage research on &quot;scagnostics&quot; (scatterplot diagnostics, or cognostics for scatterplots) <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=leland%20wilkinson%20scagnostics&amp;source=web&amp;cd=1&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.62.6148%26rep%3Drep1%26type%3Dpdf&amp;ei=6spVUcCQDYWl4AOJ_oHoDw&amp;usg=AFQjCNH0rmXCgq5vR-mEkuYz8AC476e6Bw&amp;sig2=VipicfJ0CN0AOJ4pt_yuXg&amp;bvm=bv.44442042,d.dmg&amp;cad=rja">reference</a>, which includes the R package <a href="http://cran.r-project.org/web/packages/scagnostics/">scagnostics</a> to identify interesting relationships.  I have created a convenience function for doing this, <code>splod()</code> (<strong>s</strong>catter<strong>plo</strong>t <strong>d</strong>isplay -- <em>when you have so many variables that <code>splom</code> is going to make your computer <code>splod</code></em>).  This function takes a data.frame and creates a subset for the data for each pairwise combination of variables.  The plot function is a simple scatterplot, and the cognostics function is a collection of scagnostics.</p>
+<p>Scatterplot matrices become increasingly infeasible as the number of variables grows beyond \(\approx\)10.  Using <code>trelliscope</code>, we can create &quot;scatterplot displays&quot;, where for \(p\) variables we create a panel for each of the \(\tbinom{p}{2}\) pairwise combinations.  We can leverage research on &quot;scagnostics&quot; (scatterplot diagnostics, or cognostics for scatterplots) <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=leland%20wilkinson%20scagnostics&amp;source=web&amp;cd=1&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.62.6148%26rep%3Drep1%26type%3Dpdf&amp;ei=6spVUcCQDYWl4AOJ_oHoDw&amp;usg=AFQjCNH0rmXCgq5vR-mEkuYz8AC476e6Bw&amp;sig2=VipicfJ0CN0AOJ4pt_yuXg&amp;bvm=bv.44442042,d.dmg&amp;cad=rja">reference</a>, which includes the R package <a href="http://cran.r-project.org/web/packages/scagnostics/">scagnostics</a> to identify interesting relationships.  I have created a convenience function for doing this, <code>splod()</code> (<strong>s</strong>catter<strong>plo</strong>t <strong>d</strong>isplay -- <em>when you have so many variables that <code>splom</code> is going to make your computer <code>splod</code></em>).  This function takes a data.frame and creates a subset for the data for each pairwise combination of variables.  The plot function is a simple scatterplot, and the cognostics function is a collection of scagnostics.</p>
 
 <p>To illustrate this, we will shift to a dataset in a completely different domain, baseball.  In real life there would probably not be a project that included both elnino data and baseball data, but we&#39;ll put this new plot into our existing project.</p>
 
@@ -840,19 +840,19 @@ str(batting)
 
 <p>Creating a scatterplot display is as simple as</p>
 
-<pre><code class="r">vdbSplod(
+<pre><code class="r">splod(
    batting, 
    id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;)
 )
 </code></pre>
 
-<p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;localDiv&quot; object and passes them to <code>vdbPlot</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to vdbPlot such as a custom cognostics function.</p>
+<p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;localDiv&quot; object and passes them to <code>makeDisplay</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to makeDisplay such as a custom cognostics function.</p>
 
-<p>If you want to do something to the data prior to passing it to vdbSplod, you can do the above in two steps:</p>
+<p>If you want to do something to the data prior to passing it to splod, you can do the above in two steps:</p>
 
 <pre><code class="r">batSplodDat &lt;- makeSplodData(batting, id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;))
 
-vdbSplod(batSplodDat)
+splod(batSplodDat)
 </code></pre>
 
 </div>
@@ -948,10 +948,10 @@ vdbSplod(batSplodDat)
 </div>
 
 
-<div class='tab-pane' id='vdb-with-rhipe'>
-<h3>vdb with RHIPE</h3>
+<div class='tab-pane' id='trelliscope-with-rhipe'>
+<h3>Trelliscope with RHIPE</h3>
 
-<p>The true inspiration for the <code>vdb</code> package was the need to deal with very large datasets.  So far we have looked at in-memory datasets because it helps introduce the different concepts of the package without requiring the user to have a Hadoop cluster at their fingertips.  Here we look at the buoy data in RHIPE.</p>
+<p>The true inspiration for the <code>trelliscope</code> package was the need to deal with very large datasets.  So far we have looked at in-memory datasets because it helps introduce the different concepts of the package without requiring the user to have a Hadoop cluster at their fingertips.  Here we look at the buoy data in RHIPE.</p>
 
 <p>To start, we need to put the data into RHIPE and have it represented as a RHIPE data object.  This uses the <code>datadr</code> package, which is discussed in great detail <a href="http://hafen.github.com/datadr/">here</a>.  </p>
 
@@ -1044,7 +1044,7 @@ airDateCogFn(divExample(byBuoy))
 
 <p>And now to plot:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;airTemp_vs_date&quot;,
    desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
@@ -1060,7 +1060,7 @@ airDateCogFn(divExample(byBuoy))
 
 <p>We can also create a display where the actual images are not generated, but instead the viewer grabs the associated data and renders the images on-the-fly.  An example of this:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;airTemp_vs_date&quot;,
    storage = &quot;hdfsData&quot;,
@@ -1088,7 +1088,7 @@ airDateCogFn(divExample(byBuoy))
 <p><strong>In favor of generating images on-the-fly</strong></p>
 
 <ul>
-<li><code>vdbPlot()</code> is considerably faster - only need to compute cognostics and metadata about the display.  This is particularly true for very large datasets.</li>
+<li><code>makeDisplay()</code> is considerably faster - only need to compute cognostics and metadata about the display.  This is particularly true for very large datasets.</li>
 <li>If we are only ever going to view a small subset of possibly hundreds of thousands of panels, why render them all up-front instead of rendering the ones you currently want to look at?</li>
 <li>Image resolution: we do now know if the image will be viewed as a single large panel in the window, or tiled with tens or hundreds of panels in a single window.  When we render the image on-the-fly, we can render it at the resolution at which it will be viewed instead of having to store a raster image that has a resolution sufficient to be viewed at the largest scale.  A way around this would be to go away from .png to a vector format like .svg.  The only problem with that is that those files can get very large, and can be difficult to render consistently across all browsers.  In the future, this may all move toward d3...</li>
 </ul>
@@ -1119,7 +1119,7 @@ airDateCogFn(divExample(byBuoy))
 
 <p>Here is an example:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;airTemp_vs_date_ld&quot;,
    desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
@@ -1128,8 +1128,7 @@ airDateCogFn(divExample(byBuoy))
    plotFn  = airDatePlotFn, 
    plotDim = list(height=350, width=800),
    lims    = buoyLims, 
-   cogFn   = airDateCogFn, 
-   cogDesc = airDateCogDesc
+   cogFn   = airDateCogFn
 )
 </code></pre>
 
@@ -1204,7 +1203,7 @@ airDateCogFn(divExample(byBuoy))
 
 <p>Now, going back to our previous example, supposing you have the data, plot, and cognostics functions already in your session, here is how you can write the cognostics to MongoDB:</p>
 
-<pre><code class="r">vdbPlot(
+<pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
    name    = &quot;airTemp_vs_date_mongo&quot;,
    desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
@@ -1227,7 +1226,7 @@ airDateCogFn(divExample(byBuoy))
 <li><strong>buoy_airTemp_vs_date_mongo_panel</strong>: each document is a base64-encoded png.  The <code>_id</code> of this table is the panel key, and ties to &quot;panelKey&quot; in the _cog collection.</li>
 </ul>
 
-<p>The prefix &quot;buoy_&quot; in the collection names comes from the &quot;group&quot; argument to vdbPlot.</p>
+<p>The prefix &quot;buoy_&quot; in the collection names comes from the &quot;group&quot; argument to makeDisplay.</p>
 
 <p>You can try the viewer on this data.  You will notice that currently the interactive graphical filters do not work with cognostics stored in MongoDB.</p>
 
