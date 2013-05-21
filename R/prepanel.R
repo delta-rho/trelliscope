@@ -199,9 +199,9 @@ prepanel <- function(data, preFn=NULL,
       rhoptions(copyObjects=list(auto=FALSE))
       # suppressMessages(capture.output(
       rhJob <- rhwatch(
-         setup=setup,
-         map=map,
-         reduce=reduce,
+         setup=nullAttributes(setup),
+         map=nullAttributes(map),
+         reduce=nullAttributes(reduce),
          input=rhfmt(data$loc, type=data$type),
          output=ofolder,
          mapred=mapred,

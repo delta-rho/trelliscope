@@ -400,3 +400,11 @@ trsRhKeyValTrans <- function(curKey, curVal) {
    }
    dat
 }
+
+
+# internal
+nullAttributes <- function(e) { 
+   for(i in seq_along(e)) 
+      attributes(e[[i]]) <- NULL
+   e
+}
