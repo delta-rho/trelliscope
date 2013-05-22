@@ -6,8 +6,7 @@ To get started, see the package documentation and function reference located [he
 
 ## Installation
 
-This package will not be submitted to CRAN until it has matured.
- To install this package from github, do the following from the R console:
+For simple use, all that is needed for Trelliscope is R.  Trelliscope depends on the `datadr` package.  To install this package from github, do the following from the R console:
 
 ```s
 library(devtools)
@@ -15,7 +14,40 @@ install_github("datadr", "hafen")
 install_github("trelliscope", "hafen")
 ```
 
-To use RHIPE with this package, get version 0.74 (unstable branch) from [here](https://github.com/saptarshiguha/RHIPE).
+## Optional Components
+
+Trelliscope can operate on its own, but there are several optional components that help Trelliscope scale and make displays available for others to view.  These components are:
+
+- Hadoop
+- RHIPE
+- MongoDB
+- Shiny-server
+
+#### Hadoop
+
+Hadoop can be difficult to install and configure.  There are many resources on the web for this.
+
+#### RHIPE
+
+To use RHIPE with this package, get version 0.73.1 from [here](https://github.com/saptarshiguha/RHIPE).
+
+Installation instructions for RHIPE can be found [here](http://www.datadr.org/install.html).
+
+#### MongoDB
+
+Trelliscope can optionally store "cognostics" for a display in MongoDB.  This is useful for cases where there are millions of subsets in the data.
+
+MongoDB intallation instructions are found [here](http://docs.mongodb.org/manual/installation/).
+
+#### Shiny-server
+
+To share your displays with others, you can deploy your visualizations on a web server using shiny-server.
+
+Installation instructions for shiny-server are found [here](https://github.com/rstudio/shiny-server).
+
+#### Getting Started
+
+Visit the Trelliscope [tutorial page](http://hafen.github.com/trelliscope/) for examples to get started.
 
 ## Notes
 
