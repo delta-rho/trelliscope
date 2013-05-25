@@ -146,7 +146,13 @@
    <a target="_self" class="nav-not-header" href="#updateviewer">updateViewer</a>
 </li>
 <li class="">
+   <a target="_self" class="nav-not-header" href="#vdbconnect">vdbConnect</a>
+</li>
+<li class="">
    <a target="_self" class="nav-not-header" href="#vdbinit">vdbInit</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbmakeconntemplate">vdbMakeConnTemplate</a>
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#makedisplay">makeDisplay</a>
@@ -159,6 +165,9 @@
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#splod">splod</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#vdbupdateconn">vdbUpdateConn</a>
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#updateviewer">updateViewer</a>
@@ -213,8 +222,7 @@ markdown,
 shiny (&gt;= 0.5.0),
 digest,
 codetools,
-hexbin,
-fastICA</p>
+hexbin</p>
 
 <h4>Suggests</h4>
 <p>
@@ -404,7 +412,7 @@ ggplot2</p>
   parallel (currently not working)</dd>
   <dt>mapred</dt>
   <dd>parameters to be passed to the Rhipe
-  mapreduce job (see <code>rhwatch</code>)</dd>
+  mapreduce job (see <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code>)</dd>
   <dt>calledFromRhipe</dt>
   <dd>don't mess with this</dd>
 </dl>
@@ -863,7 +871,7 @@ ggplot2</p>
   xlim and ylim can be determined from these.</dd>
   <dt>mapred</dt>
   <dd>a list of parameters to be sent to
-  <code>rhwatch</code> if dat is of class "rhData"</dd>
+  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> if dat is of class "rhData"</dd>
   <dt>verbose</dt>
   <dd>print status messages?</dd>
   <dt>calledFromRhipe</dt>
@@ -1254,13 +1262,55 @@ ggplot2</p>
 </div>
 
 
+<!-- vdbConnect -->   
+<div class="tab-pane" id="vdbconnect">
+
+<h3 class="fref_title">Connect to a VDB</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbconnect'>vdbConnect</a></span><span class="keyword">(</span><span class="argument">path</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>path</dt>
+  <dd>The location of the VDB directory on the
+  local file system
+
+  #details This locates the VDB connection info (located in
+  *vdbPrefix*/conn.R) and loads it into the environment</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Connect to a VDB</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbmakeconntemplate'>vdbMakeConnTemplate</a></code>, <code><a href='#vdbinit'>vdbInit</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
 <!-- vdbInit -->   
 <div class="tab-pane" id="vdbinit">
 
 <h3 class="fref_title">Set up a new VDB</h3>
 
 <h4>Usage</h4>
-<pre><span class="functioncall"><a href='#vdbinit'>vdbInit</a></span><span class="keyword">(</span><span class="argument">path</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">autoYes</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+<pre><span class="functioncall"><a href='#vdbinit'>vdbInit</a></span><span class="keyword">(</span><span class="argument">path</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">name</span> <span class="argument">=</span> <span class="string">"myVDB"</span><span class="keyword">,</span> <span class="argument">autoYes</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
 
 <h4>Arguments</h4>
 <dl>
@@ -1287,6 +1337,55 @@ ggplot2</p>
 <h4>See also</h4>
 
   <code><a href='#updateviewer'>updateViewer</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- vdbMakeConnTemplate -->   
+<div class="tab-pane" id="vdbmakeconntemplate">
+
+<h3 class="fref_title">Create a Template VDB Connection File</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbmakeconntemplate'>vdbMakeConnTemplate</a></span><span class="keyword">(</span><span class="symbol">vdbPrefix</span><span class="keyword">,</span> <span class="argument">name</span> <span class="argument">=</span> <span class="string">"myVDB"</span><span class="keyword">,</span> <span class="argument">overwrite</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>vdbPrefix</dt>
+  <dd>The location of the VDB directory on the
+  local file system</dd>
+  <dt>name</dt>
+  <dd>name of the VDB</dd>
+  <dt>overwrite</dt>
+  <dd>Overwrite any existing 'conn.R' file</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Create a template VDB connection file</p>
+
+
+  <h4>Details</h4>
+
+  <p>This is called by vdbInit() so it should rarely need to
+  be used.</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbconnect'>vdbConnect</a></code>, <code><a href='#vdbinit'>vdbInit</a></code>
 
 
 <h4>Author</h4>
@@ -1373,7 +1472,7 @@ ggplot2</p>
   parallel (currently not working)</dd>
   <dt>mapred</dt>
   <dd>parameters to be passed to the Rhipe
-  mapreduce job (see <code>rhwatch</code>)</dd>
+  mapreduce job (see <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code>)</dd>
   <dt>calledFromRhipe</dt>
   <dd>don't mess with this</dd>
 </dl>
@@ -1445,7 +1544,7 @@ ggplot2</p>
   xlim and ylim can be determined from these.</dd>
   <dt>mapred</dt>
   <dd>a list of parameters to be sent to
-  <code>rhwatch</code> if dat is of class "rhData"</dd>
+  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> if dat is of class "rhData"</dd>
   <dt>verbose</dt>
   <dd>print status messages?</dd>
   <dt>calledFromRhipe</dt>
@@ -1653,6 +1752,51 @@ ggplot2</p>
 </div>
 
 
+<!-- vdbUpdateConn -->   
+<div class="tab-pane" id="vdbupdateconn">
+
+<h3 class="fref_title">Update VDB Connection Options</h3>
+
+<h4>Usage</h4>
+<pre><span class="functioncall"><a href='#vdbupdateconn'>vdbUpdateConn</a></span><span class="keyword">(</span><span class="symbol">conn</span><span class="keyword">)</span></pre>
+
+<h4>Arguments</h4>
+<dl>
+  <dt>conn</dt>
+  <dd>A list with names the correspond to VDB
+  connection options and the corresponding settings</dd>
+</dl>
+
+  <h4>Value</h4>
+
+  <p>nothing</p>
+
+
+  <h4>Description</h4>
+
+  <p>Update VDB connection options</p>
+
+
+  <h4>Details</h4>
+
+  <p>It is easier to simply edit the conn.R file in your VDB
+  directory</p>
+
+
+
+
+<h4>See also</h4>
+
+  <code><a href='#vdbconnect'>vdbConnect</a></code>, <code><a href='#vdbinit'>vdbInit</a></code>
+
+
+<h4>Author</h4>
+
+  Ryan Hafen
+
+</div>
+
+
 <!-- updateViewer -->   
 <div class="tab-pane" id="updateviewer">
 
@@ -1786,41 +1930,14 @@ ggplot2</p>
 <h3 class="fref_title">Sync VDB and notebook Files to a Web Server</h3>
 
 <h4>Usage</h4>
-<pre><span class="functioncall"><a href='#websync'>websync</a></span><span class="keyword">(</span><span class="argument">vdbName</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbName</span><span class="keyword">,</span> <span class="argument">vdbPrefix</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbPrefix</span><span class="keyword">,</span>
-  <span class="argument">vdbWebSyncMethod</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebSyncMethod</span><span class="keyword">,</span>
-  <span class="argument">vdbWebServer</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebServer</span><span class="keyword">,</span> <span class="argument">rsync</span> <span class="argument">=</span> NULL<span class="keyword">,</span>
-  <span class="argument">vdbUsers</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">$</span><span class="symbol">vdbWebServer</span><span class="keyword">)</span></pre>
+<pre><span class="functioncall"><a href='#websync'>websync</a></span><span class="keyword">(</span><span class="argument">conn</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/options'>getOption</a></span><span class="keyword">(</span><span class="string">"vdbConn"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">rsync</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
 
 <h4>Arguments</h4>
 <dl>
-  <dt>vdbName</dt>
-  <dd>The name of the notebook.</dd>
-  <dt>vdbPrefix</dt>
-  <dd>The location on the local file system of
-  the current VDB project</dd>
-  <dt>vdbWebSyncMethod</dt>
-  <dd>Either "rsync" or "share".  This
-  specifies whether you want to transfer files to the web
-  server using rsync or using a shared drive.  Use "share"
-  if on Windows.  If using "rsync", make sure vdbPrefix
-  points to the web directory root on the remote machine.
-  If using "share", make sure vdbPrefix contains the full
-  path of the shared drive up to the web directory root.</dd>
-  <dt>vdbWebServer</dt>
-  <dd>The location of the web server.  If
-  it is mounted as a shared drive, this should be the path
-  to your web root directory (this is currently not an
-  option).  If syncing via ssh, this should contain
-  everything necessary to make a successful ssh connection,
-  such as "username@server:~/www"</dd>
+  <dt>conn</dt>
+  <dd>The VDB connection settings</dd>
   <dt>rsync</dt>
-  <dd>Location of rsync binary.  Only important in
-  this function if dolocal=TRUE and
-  vdbWebSyncMethod="rsync".</dd>
-  <dt>vdbUsers</dt>
-  <dd>A vector of user names with which to
-  create a .htaccess file restricting access to these
-  users.</dd>
+  <dd>Location of rsync binary</dd>
 </dl>
 
   <h4>Value</h4>

@@ -227,6 +227,23 @@
          <a target='_self' class='nav-not-header' href='#syncing-files-with-the-web'>Syncing Files With the Web</a>
       </li>
 
+
+<li class='nav-header'>Scalable Setup</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#component-installation'>Component Installation</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#vdb-connections'>VDB Connections</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#example'>Example</a>
+      </li>
+
    </ul>
    </div>
 
@@ -308,7 +325,7 @@
 <div class='tab-pane' id='initial-setup'>
 <h3>Initial Setup</h3>
 
-<p>Trelliscope has a project-oriented nature.  It is expected that you will usually create a new VDB of Trelliscope displays for a new project.  Within a project, there may be many analysis threads, and Trelliscope allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify.</p>
+<p>Trelliscope has a project-oriented nature.  It is expected that you will usually create a new VDB of Trelliscope displays for a new project.  Within a project, there may be many analysis threads, and Trelliscope allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify (it&#39;s recommended to use an absolute path).</p>
 
 <pre><code class="r">library(datadr)
 library(trelliscope)
@@ -320,7 +337,7 @@ vdbDir &lt;- &quot;/tmp/vdbtest&quot;
 <p>Now, we need to initialize some files in this directory.  This again is a once-per-project task.</p>
 
 <pre><code class="r"># move files into place
-vdbInit(vdbDir, autoYes=TRUE)
+vdbInit(vdbDir, name=&quot;testVDB&quot;, autoYes=TRUE)
 # don&#39;t specify autoYes generally
 </code></pre>
 
@@ -333,24 +350,38 @@ Moving notebook files over
 <pre><code class="r">list.files(vdbDir)
 </code></pre>
 
-<pre><code>[1] &quot;notebook&quot;  &quot;viewer_cs&quot;
+<pre><code>[1] &quot;conn.R&quot;    &quot;notebook&quot;  &quot;viewer_cs&quot;
 </code></pre>
 
-<p>Two new directories exist in our VDB base directory.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  Your VDB directory will get populated with more files we we proceed.</p>
+<p>Two new directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary.  </p>
 
-<p>Now, we can set a list of options for all <code>trelliscope</code>-related work done in this R session, under the option name <code>vdbConn</code>.</p>
+<p><code>vdbInit()</code> reads the <code>conn.R</code> file and sets an option in the environment with these settings.  You can see what is set with:</p>
 
-<pre><code class="r"># set vdbConn option (do this once per session)
-options(vdbConn = list(
-   vdbName        = &quot;vdbTest&quot;, 
-   vdbPrefix      = vdbDir,
-   defaultStorage = &quot;local&quot;
-))
+<pre><code class="r"> getOption(&quot;vdbConn&quot;)
 </code></pre>
 
-<p>These options tell future <code>trelliscope</code> function calls that the current VDB is &quot;vdbTest&quot; and its files are located in &quot;vdbDir&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
+<pre><code>$vdbName
+[1] &quot;testVDB&quot;
+
+$vdbPrefix
+[1] &quot;/tmp/vdbTest&quot;
+
+$defaultStorage
+[1] &quot;local&quot;
+</code></pre>
+
+<p>These options tell future <code>trelliscope</code> function calls that the current VDB is &quot;testVDB&quot; and its files are located in &quot;/tmp/vdbTest&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
 
 <p>The reason for setting a <code>vdbConn</code> list of options is that these options are fairly routinely required for functions in the <code>trelliscope</code> package and do not change over the course of an R session and are quite tedious to have to specify every time.</p>
+
+<p>In all subsequent sessions once a VDB has been initialized, you can load the VDB connection settings using:</p>
+
+<pre><code class="r"># new R session
+library(trelliscope)
+vdbConnect(&quot;/tmp/vdbTest&quot;)
+</code></pre>
+
+<p>This will locate and load the <code>conn.R</code> file.</p>
 
 <p>We are now ready to start creating some displays, once we get data in a suitable format.</p>
 
@@ -1303,6 +1334,30 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 <h3>Syncing Files With the Web</h3>
 
 <p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  More on this to come...</p>
+
+</div>
+
+
+<div class='tab-pane' id='component-installation'>
+<h3>Component Installation</h3>
+
+<p>Under construction...</p>
+
+</div>
+
+
+<div class='tab-pane' id='vdb-connections'>
+<h3>VDB Connections</h3>
+
+<p>Under construction...</p>
+
+</div>
+
+
+<div class='tab-pane' id='example'>
+<h3>Example</h3>
+
+<p>Under construction...</p>
 
 </div>
 
