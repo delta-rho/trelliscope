@@ -1,9 +1,17 @@
 library(shiny)
 # library(trelliscope)
-library(fastICA)
 library(base64enc) # this one is much faster than caTools!!
 # library(Rhipe)
 # rhinit()
+
+if(file.exists("conn.R")) { # it is on a web server
+   source("conn.R")
+   vdbConn <- options()$vdbConn
+   vdbPrefix <- vdbConn$webConn$vdbPrefix
+} else {
+   vdbConn <- options()$vdbConn
+   vdbPrefix <- vdbConn$vdbPrefix
+}
 
 sapply(list.files("serverHelpers", full.names=TRUE), source)
 
@@ -18,9 +26,7 @@ sapply(list.files("serverHelpers", full.names=TRUE), source)
 #    # TODO: let the vdb server know how to connect to mongodb, hdfs, etc.
 # }
 
-vdbConn <- options()$vdbConn
 
-vdbPrefix <- vdbConn$vdbPrefix
 verbose <- vdbConn$viewerLog
 if(is.null(verbose))
    verbose <- FALSE
@@ -85,7 +91,7 @@ shinyServer(function(input, output) {
                # if it is "hdfs", then initialize a mapfile and append it to cdo
             }
             if(cdo$storage=="hdfs") {
-               cdo$mapfile <- rhmapfile(paste(cdo$hdfsPrefix, "/", cdo$name, sep=""))
+               cdo$mapfile <- rhmapfile(paste(cdo$hdfsConn$hdfsPrefix, "/", cdo$name, sep=""))
             }
          }
          return(cdo)
@@ -545,6 +551,7 @@ shinyServer(function(input, output) {
             makeBivarJSON(x, y, xlab=names(cogDF)[curCols[1]], ylab=names(cogDF)[curCols[2]])            
          } else {
             # do ICA
+            require(fastICA)
             ic <- fastICA(cogDF[,curCols, drop=FALSE], n.comp=2)
    
             makeBivarJSON(ic$S[,1], ic$S[,2], xlab="IC 1", ylab="IC 2")

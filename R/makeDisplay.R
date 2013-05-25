@@ -109,7 +109,7 @@ makeDisplay <- function(
          
       hdfsPrefix <- NULL
       if(inherits(data, "rhData")) {
-         hdfsPrefix <- conn$hdfsPrefix
+         hdfsPrefix <- conn$hadoopConn$hdfsPrefix
          # TODO: make sure directory exists
          if(is.null(hdfsPrefix)) {
             message("* hdfsPrefix not specified... Using current hadoop working directory.")

@@ -11,10 +11,10 @@
 #'
 #' @seealso \code{\link{updateViewer}}
 #' @export
-vdbInit <- function(path=NULL, autoYes=FALSE) {
+vdbInit <- function(path=NULL, name="myVDB", autoYes=FALSE) {
    if(is.null(path))
       stop("Must specify path")
-
+      
    if(file.exists(path)) {
       if(length(list.files(path)) > 0) {
          if(autoYes) {
@@ -43,10 +43,14 @@ vdbInit <- function(path=NULL, autoYes=FALSE) {
    message("Moving viewer files over")
 	file.copy(file.path(pkgPath, "viewer_cs"), path, recursive=TRUE, overwrite=TRUE)
    # file.copy(file.path(pkgPath, "viewer_ss"), path, recursive=TRUE, overwrite=TRUE)
-
+   
    message("Moving notebook files over")
 	file.copy(file.path(pkgPath, "notebook"), path, recursive=TRUE, overwrite=TRUE)
 
+   message(paste("Creating default 'conn.R' file in ", path, ".  Update as necessary.", sep=""))
+   vdbMakeConnTemplate(path, name)
+   
+   vdbConnect(path)
 	TRUE
 }
 

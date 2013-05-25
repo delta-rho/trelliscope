@@ -31,8 +31,7 @@ Depends:
     shiny (>= 0.5.0),
     digest,
     codetools,
-    hexbin,
-    fastICA
+    hexbin
 Suggests:
     Rhipe,
     rmongodb,
@@ -60,3 +59,4 @@ Collate:
     'splod.R'
     'websync.R'
     'mongo.R'
+    'vdbConn.R'

@@ -1,11 +1,19 @@
-options(vdbConn = list(
-   webServer = "hafe647@martingale",
-   vdbName = "vdbShinyTest",
-   webServerVdbPrefix = "/home/hafe647/shiny",
-   vdbPrefix = "~/Desktop/Jvdb"
-))
-
-
+#' Sync VDB and notebook Files to a Web Server
+#' 
+#' Sync VDB and notebook files to a web server
+#' 
+#' @param conn The VDB connection settings
+#' @param rsync Location of rsync binary
+#' 
+#' @return nothing
+#' 
+#' @details If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
+#' 
+#' @author Ryan Hafen
+#' 
+#' @seealso \code{\link{typeset}}, \code{\link{makeDisplay}}
+#' 
+#' @export
 websync <- function(
    conn=getOption("vdbConn"),
    rsync=NULL
@@ -14,36 +22,52 @@ websync <- function(
    # conn <- getOption("vdbConn")
    # rsync <- NULL
    
-   vdbName <- conn$vdbName
-   vdbPrefix <- conn$vdbPrefix
-   webSyncMethod <- conn$webSyncMethod
-   webServer <- conn$webServer
-   webServerVdbPrefix <- conn$webServerVdbPrefix
-   vdbUsers <- conn$vdbWebServer
-   
-   if(is.null(vdbPrefix) || is.null(webServer) || is.null(vdbName) || is.null(webServerVdbPrefix))
-      stop("Must have vdbPrefix, webServer, vdbName, and webServerVdbprefix specified in options()$vdbConn")
-
-   # write the conn stuff to VDB directory
-   vdbConn <- conn
-   save(vdbConn, file=file.path(vdbPrefix, "conn.Rdata"))
-   
+   ## sync local vdb directory to web server's vdb directory
    if(is.null(rsync))
       rsync <- findRsync()
       
-	# TODO: check to make sure they have passwordless ssh set up
-
-   sshFlag <- ""
-   if(grepl("@", webServer))
-      sshFlag <- "-e ssh "
-      
-   system("ssh martingale \"mkdir -p /home/hafe647/shiny\"")
-
-	cmd <- paste(rsync, " -a -v ", sshFlag, vdbPrefix, " ", webServer, ":", webServerVdbPrefix, "/", vdbName, "/", sep="")
-	system(cmd, wait=FALSE)
-
-   system("ssh martingale \"rm -rf /var/shiny-server/www/hathaway/vdbShinyTest; mkdir -p /var/shiny-server/www/hathaway/vdbShinyTest; chmod 777 /var/shiny-server/www/hathaway/vdbShinyTest; cd /var/shiny-server/www/hathaway/vdbShinyTest; unlink vdbShinyTest; ln -s /usr/local/R/current/library/vdb/viewer_ss vdbShinyTest; chmod 777 /home/hafe647/shiny/vdbShinyTest/Jvdb/conn.Rdata; cp /home/hafe647/shiny/vdbShinyTest/Jvdb/conn.Rdata /var/shiny-server/www/hathaway/vdbShinyTest\"")
+	# TODO: check to make sure passwordless ssh is set up
    
+   sshFlag <- "-e ssh "
+   user <- ""
+   if(!is.null(conn$webConn$user))
+      user <- paste(conn$webConn$user, "@", sep="")
+      
+	cmd <- paste(rsync, " -a -v ", sshFlag, path.expand(conn$vdbPrefix), " ", user, conn$webConn$ip, ":", conn$webConn$vdbPrefix, "/", sep="")
+   
+   message("Syncing local vdb directory with web server...")
+	system(cmd, wait=FALSE)
+   
+   # write the conn stuff to VDB directory if it isn't there
+   if(!file.exists(file.path(conn$vdbPrefix, "conn.R"))) {
+      stop("There is not a conn.R file in your vdb directory.  You can generate a template with vdbMakeConnTemplate(vdbPrefix) and then edit it as necessary.")
+   }
+   
+   ## make a copy from viewerDir to appDir/vdbName
+   pkgPath <- system.file(package="trelliscope")
+   
+   message("Copying viewer to web app directory...")
+   # system("ssh martingale \"mkdir -p /home/hafe647/shiny\"")
+   
+   system(paste(rsync, " -a -v ", sshFlag, 
+      file.path(pkgPath, "viewer_ss", "*"), " ",
+      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName,
+      sep=""
+   ))
+   
+   message("Copying connection info to web app directory...")
+   system(paste(rsync, " -a -v ", sshFlag, 
+      file.path(path.expand(conn$vdbPrefix), "conn.R"), " ",
+      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName, "/",
+      sep=""
+   ))
+   
+   message("Copying notebook files to web app directory...")
+   system(paste(rsync, " -a -v ", sshFlag, 
+      file.path(path.expand(conn$vdbPrefix), "notebook"), " ",
+      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName, "/",
+      sep=""
+   ))
 }
 
 findRsync <- function(rsync=NULL, verbose = "FALSE") {
@@ -73,123 +97,3 @@ findRsync <- function(rsync=NULL, verbose = "FALSE") {
    rsync
 }
 
-#' Sync VDB and notebook Files to a Web Server
-#'
-#' Sync VDB and notebook files to a web server
-#'
-#' @param vdbName The name of the notebook.
-#' @param vdbPrefix The location on the local file system of the current VDB project
-#' @param vdbWebSyncMethod Either "rsync" or "share".  This specifies whether you want to transfer files to the web server using rsync or using a shared drive.  Use "share" if on Windows.  If using "rsync", make sure vdbPrefix points to the web directory root on the remote machine.  If using "share", make sure vdbPrefix contains the full path of the shared drive up to the web directory root.
-#' @param vdbWebServer The location of the web server.  If it is mounted as a shared drive, this should be the path to your web root directory (this is currently not an option).  If syncing via ssh, this should contain everything necessary to make a successful ssh connection, such as "username@@server:~/www"
-#' @param rsync Location of rsync binary.  Only important in this function if dolocal=TRUE and vdbWebSyncMethod="rsync".
-#' @param vdbUsers A vector of user names with which to create a .htaccess file restricting access to these users.
-#'
-#' @return nothing
-#'
-#' @details If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
-#'
-#' @author Ryan Hafen
-#'
-#' @seealso \code{\link{typeset}}, \code{\link{makeDisplay}}
-#'
-#' @export
-websync <- function(
-   vdbName=getOption("vdbConn")$vdbName, 
-   vdbPrefix=getOption("vdbConn")$vdbPrefix,
-   vdbWebSyncMethod=getOption("vdbConn")$vdbWebSyncMethod,
-   vdbWebServer=getOption("vdbConn")$vdbWebServer, 
-   rsync=NULL, 
-   vdbUsers=getOption("vdbConn")$vdbWebServer) {
-   
-	if(is.null(vdbPrefix))
-		vdbPrefix <- findWebDir()
-	
-	vdbPrefix <- paste(checkpath(vdbPrefix), "/", sep="")
-   
-   
-   htaccessGen(vdbPrefix, users=users)
-
-   if(!is.null(vdbWebServer) && !is.null(vdbName)) {
-		if(vdbWebSyncMethod=="rsync") {
-		   if(is.null(rsync))
-		      rsync <- findRsync()
-			# TODO: check to make sure they have passwordless ssh set up
-	      sshFlag <- ""
-	      if(grepl("@", vdbWebServer))
-	         sshFlag <- "-e ssh "
-	      # cmd <- paste("rsync -a -v -e ssh --force --delete ", vdbPrefix, "/* ", server, "/", name, "/", sep="")
-	      # if there is an "@" in vdbWebServer, make it ssh, else just regular rsync
-	   	cmd <- paste(rsync, " -a -v ", sshFlag, vdbPrefix, " ", vdbWebServer, "/", vdbName, "/", sep="")
-	   	system(cmd, wait=FALSE)
-		} else if(vdbWebSyncMethod=="share") {
-			localprefix <- vdbPrefix
-			remoteprefix <- paste(vdbWebServer, "/", vdbName, "/", sep="")
-
-			# TODO: should I remove files on remote if they don't exist on local?
-
-			# get list of local and remote files
-			localfiles <- list.files(localprefix, recursive=TRUE, all.files=TRUE)
-			remotefiles <- list.files(remoteprefix, recursive=TRUE, all.files=TRUE)
-
-			# see which files do not exist on remote (newfiles) and modify localfiles to ignore these
-			# also remove files from remote file list that aren't on local (should these be deleted?)
-			newfiles <- localfiles[!is.element(localfiles, remotefiles)]
-			localfiles2 <- localfiles[is.element(localfiles, remotefiles)]
-			remotefiles2 <- remotefiles[is.element(remotefiles, localfiles)]
-
-			# make sure the file lists are the same
-			localfiles2 <- sort(localfiles2)
-			remotefiles2 <- sort(remotefiles2)
-			if(!all(localfiles2 == remotefiles2))
-				stop("Something went wrong with web sync.")
-
-			localfiles.info <- file.info(paste(localprefix, localfiles2, sep=""))
-			remotefiles.info <- file.info(paste(remoteprefix, remotefiles2, sep=""))
-
-			modfiles <- localfiles2[which(localfiles.info$mtime > remotefiles.info$mtime)]
-
-			modfiles.info <- localfiles.info[which(localfiles.info$mtime > remotefiles.info$mtime),]
-			newfiles.info <- file.info(paste(localprefix, newfiles, sep=""))
-
-			if(length(newfiles)==0 & length(modfiles)==0)
-				cat("All files up to date. Nothing to be done...\n")
-
-			# now copy new and modified files over
-			if(length(modfiles) > 0) {
-				mfsize <- sum(modfiles.info$size)
-				class(mfsize) <- "object_size"
-				mfsize <- capture.output(print(mfsize, units = "auto"))
-				cat(paste("Modifying ", length(modfiles), " files totaling ", mfsize, "\n", sep=""))
-				copyres <- file.copy(paste(localprefix, modfiles, sep=""), paste(remoteprefix, modfiles, sep=""), overwrite=TRUE)
-				if(all(copyres)) {
-					cat(paste(paste(modfiles, collapse="\n"), "\n"))
-					cat("Successful\n")
-				} else {
-					cat("Something went wrong with modifying files.\n")
-				}
-			}
-
-			if(length(newfiles) > 0) {
-				nfsize <- sum(newfiles.info$size)
-				class(nfsize) <- "object_size"
-				nfsize <- capture.output(print(nfsize, units = "auto"))
-				cat(paste("Moving ", length(newfiles), " new files totaling ", nfsize, "\n", sep=""))
-				newdirs <- unique(dirname(newfiles))
-				dirres <- sapply(paste(remoteprefix, newdirs, sep=""), function(x) dir.create(x, recursive=TRUE, showWarnings=FALSE))
-				if(!all(dirres)) 
-					cat("Something went wrong with creating directories for new files files.\n")
-				copyres <- file.copy(paste(localprefix, newfiles, sep=""), paste(remoteprefix, newfiles, sep=""), overwrite=TRUE)
-				if(all(copyres)) {
-					cat(paste(paste(newfiles, collapse="\n"), "\n"))
-					cat("Successful\n")
-				} else {
-					cat("Something went wrong with copying new files.\n")
-				}
-			}
-		} else {
-			cat("The option vdbWebSyncMethod was not either 'rsync' or 'share'.  Please specify it in your wnb_options.R file or explicitly in your call to websync.")
-		}
-   } else {
-      cat("Must specify a vdbWebServer and vdbName!\n")
-   }
-}

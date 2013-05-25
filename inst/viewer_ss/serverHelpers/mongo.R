@@ -31,7 +31,7 @@ mongoSaveCognostics <- function(cogDat, group, name, conn) {
 ## internal
 vdbMongoInit <- function(conn) {
    if(any(is.na(c(
-      conn$mongoHost, conn$mongoName, conn$mongoUser, conn$mongoPass
+      conn$mongoConn$mongoHost, conn$mongoConn$mongoName, conn$mongoConn$mongoUser, conn$mongoConn$mongoPass
    ))))
       stop("mongodb paramaters not set in conn")
    
@@ -40,11 +40,11 @@ vdbMongoInit <- function(conn) {
    tmpcapt <- suppressMessages(capture.output(require(rmongodb)))
    # TODO: error handling, defaults, etc.
    mongoConn <- mongo.create(
-      host = conn$mongoHost,
-      name = conn$mongoName,
-      username = conn$mongoUser,
-      password = conn$mongoPass,
-      db = conn$vdbName
+      host = conn$mongoConn$mongoHost,
+      name = conn$mongoConn$mongoName,
+      username = conn$mongoConn$mongoUser,
+      password = conn$mongoConn$mongoPass,
+      db = conn$mongoConn$vdbName
    )
    mongoConn
 }

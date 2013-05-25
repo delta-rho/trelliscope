@@ -2,7 +2,7 @@
 \alias{vdbInit}
 \title{Set up a new VDB}
 \usage{
-  vdbInit(path = NULL, autoYes = FALSE)
+  vdbInit(path = NULL, name = "myVDB", autoYes = FALSE)
 }
 \arguments{
   \item{path}{The location on the local file system where
