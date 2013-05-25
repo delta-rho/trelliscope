@@ -197,6 +197,28 @@
       </li>
 
 
+<li class='nav-header'>Scalable Setup</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#architecture'>Architecture</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#hadoop-r-rhipe'>Hadoop, R, RHIPE</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#other-components'>Other Components</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#vdb-connections'>VDB Connections</a>
+      </li>
+
+
 <li class='nav-header'>RHIPE</li>
       
       <li class='active'>
@@ -225,23 +247,6 @@
 
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#syncing-files-with-the-web'>Syncing Files With the Web</a>
-      </li>
-
-
-<li class='nav-header'>Scalable Setup</li>
-      
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#component-installation'>Component Installation</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#vdb-connections'>VDB Connections</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#example'>Example</a>
       </li>
 
    </ul>
@@ -353,7 +358,7 @@ Moving notebook files over
 <pre><code>[1] &quot;conn.R&quot;    &quot;notebook&quot;  &quot;viewer_cs&quot;
 </code></pre>
 
-<p>Two new directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary.  </p>
+<p>Two new directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary, and we discuss them in greater detail later on.  </p>
 
 <p><code>vdbInit()</code> reads the <code>conn.R</code> file and sets an option in the environment with these settings.  You can see what is set with:</p>
 
@@ -979,6 +984,343 @@ splod(batSplodDat)
 </div>
 
 
+<div class='tab-pane' id='architecture'>
+<h3>Architecture</h3>
+
+<p>So far, all examples have run easily on a local workstation, with no other components necessary.  Trelliscope is designed to scale, but to do so requires a special configuration of hardware and software to be set up.  This can be a difficult process, and I try to provide some good guidelines in this section.  </p>
+
+<!-- For now, installation and setup is geared toward the experienced.  In the future, as things mature, we hope to have a more automated approach to installation. -->
+
+<p>To help understand the architecture that Trelliscope is currently able to support, the figure below shows a diagram of the different components.</p>
+
+<p><center>
+   <img src="figs/architecture.png" width="550px">
+</center></p>
+
+<p>This is the most complex arrangement.  Each component (R workstation, web server, cognostics server, cluster) is its own entity.  In cases where there is a beefy cluster master node, it is an option to run the R workstation, web server, and cognostics server directly on the namenode.  In this setup, the &quot;R workstation&quot; functionality is attained simply by SSH-ing into the master node and running the R console.  A much better option in this scenario is to install <a href="link">RStudio Server</a> on the master node, giving any analyst a web-based R IDE running directly on the cluster.  Alternatively, RStudio Server can be installed on a separate &quot;R node&quot;.  An upside to this is that all of the configuration for how services communicate can be configured on that machine, so that the analyst doesn&#39;t need to worry about getting configurations set up on their workstation.</p>
+
+<p>In the remainder of this section, I provide installation instructions, guidelines, and references for each of the components, based on a the assumption of RHEL6 being the OS on each machine.  While what is actually required will vary from one OS to another, the general guidelines will hopefully give enough of a blueprint that installation should be doable with a little help from Google.  Given the variability even within the same OS for how things are set up (additional components being installed, firewall settings, etc.), there is no doubt that this will be necessary.  Note that you absolutely must have sudo access on these machines to install things.  I know of no way around this.</p>
+
+<p>The installation and configuration of each of these components is tricky.  However, after dealing with several Hadoop installations and configurations over the years, I don&#39;t feel bad at all about any additional difficulty I have added on top of installing Hadoop itself.  Hadoop has massive enterprise backing and still is a nightmare to install and configure.</p>
+
+</div>
+
+
+<div class='tab-pane' id='hadoop-r-rhipe'>
+<h3>Hadoop, R, RHIPE</h3>
+
+<h4>Install Hadoop:</h4>
+
+<p>There are many references for Hadoop installation and configuration.  This is not the place for details so I will provide some links.  Hopefully you either already have a Hadoop cluster, have EC2, or have someone else who is willing to be your Hadoop expert.</p>
+
+<p>RHIPE is mostly used and tested on the <a href="link">Cloudera</a> distribution.  They provide a GUI installer that you can try.  RHIPE will work with both CDH3 and CDH4 (MRv1).  </p>
+
+<p>Before you move on to the installation of R and RHIPE, run a test Hadoop job to make sure the Hadoop is working.</p>
+
+<p>The following environment variables need to be set so that RHIPE knows how to communicate with Hadoop.  Here as an example I show what these variables are set to for a default CDH4 (MRv1) cluster:</p>
+
+<pre><code>export HADOOP_HOME=/usr/lib/hadoop
+export HADOOP_LIBS=/usr/lib/hadoop-0.20-mapreduce:/usr/lib/hadoop-hdfs
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+export HADOOP_BIN=/usr/lib/hadoop/bin
+</code></pre>
+
+<p>These should go in your shell profile.</p>
+
+<h4>Note on installation of R, RHIPE</h4>
+
+<p>The components discussed in the rest of this section (protocol buffers, R, RHIPE) should all be installed on the master node of the Hadoop cluster.  If you have a nice mechanism to share these installations across all machines in the cluster (perhaps a shared drive or directory or a service like 411), you can use that to make the installation available on all nodes.</p>
+
+<p>As an alternative, if your local workstation has the same architecture and OS as the machines in the Hadoop cluster, you can build these components on your local workstation and create a RHIPE binary archive that can be distributed to the nodes using Hadoop&#39;s distributed cache (more on how to do this later).</p>
+
+<h4>Install protocol buffers:</h4>
+
+<p>Must be version 2.4.1.</p>
+
+<p>If you have a specific location you would like it to go, specify <strong>protobuf_prefix</strong>.</p>
+
+<pre><code>wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
+tar -xzf protobuf-2.4.1.tar.gz
+cd protobuf-2.4.1
+./configure --prefix=__protobuf_prefix__
+make
+sudo make install
+</code></pre>
+
+<h4>Install R:</h4>
+
+<p>I recommend installing from source.  Need to make sure it installed as a shared library.</p>
+
+<pre><code>### install R
+wget http://cran.r-project.org/src/base/R-3/R-3.0.1.tar.gz
+
+sudo mkdir -p /share/apps/R/3.0.1
+tar xvfz R-3.0.1.tar.gz
+cd R-3.0.1
+./configure --enable-R-shlib --prefix=__R_prefix__ --with-readline=no
+make
+make check
+make install
+</code></pre>
+
+<p>Install rJava and make sure R / Java is configured properly:</p>
+
+<pre><code># in R
+install.packages(&quot;rJava&quot;)
+# back out of R:
+sudo R CMD javareconf
+</code></pre>
+
+<p>This may require ensuring that environment variables such as JAVA_HOME are properly set.</p>
+
+<h4>Install RHIPE:</h4>
+
+<p>To install RHIPE, you need to make sure two environment variables are set.  For future use, these should be added to your shell profile.  I&#39;m using a bash shell here.</p>
+
+<pre><code># install RHIPE
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:__protobuf_prefix__/protobuf/lib/pkgconfig
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:__R_prefix__/lib64/R/lib:__protobuf_prefix__/protobuf/lib
+R CMD INSTALL Rhipe_0.73.1.tar.gz
+</code></pre>
+
+<h4>Making a runner for RHIPE:</h4>
+
+<p>For RHIPE jobs to run, several environment variables need to be available.  We have discussed these and have instructed you to put them in your shell profile.  Depending on your Hadoop installation, jobs may not be executed by your user, but by a special mapreduce user.  This user will not have these environment variables available, so you need will need to write a special &quot;runner&quot;, a shell script that launches each RHIPE map or reduce task.  Based on my setup, here is what a runner can look like:</p>
+
+<pre><code>#!/bin/bash
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/share/apps/protobuf/lib/pkgconfig
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib:/usr/local/lib64:/usr/java/jdk1.7.0_03/jre/lib/amd64/server:/share/apps/R/3.0.1//lib64/R/lib:/opt/openmpi/lib:/share/apps/R/3.0.1/lib64/R/lib:/share/apps/protobuf/lib
+
+export HADOOP_HOME=/usr/lib/hadoop
+export HADOOP_LIBS=/usr/lib/hadoop-0.20-mapreduce:/usr/lib/hadoop-hdfs
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+export HADOOP_BIN=/usr/lib/hadoop/bin
+
+export R_HOME=/share/apps/R/3.0.1/lib64/R
+export RHIPE_BIN=$R_HOME/library/Rhipe/bin
+exec $R_HOME/bin/Rcmd $RHIPE_BIN/RhipeMapReduce --slave --silent --vanilla
+</code></pre>
+
+<p>If you save this to a file, say <code>/tmp/rhRunner.sh</code>, then you can specify for RHIPE to use it by setting an option in R (see following example).  You might need to <code>chmod 777</code> this file.</p>
+
+<h4>A RHIPE test job:</h4>
+
+<pre><code class="r">library(Rhipe)
+rhinit()
+rhoptions(runner=&quot;/tmp/rhRunner.sh&quot;)
+
+permute &lt;- sample(1:150, 150)
+splits &lt;- split(permute, rep(1:3, 50))
+
+irisSplit &lt;- lapply(seq_along(splits), function(x) {
+   list(x, iris[splits[[x]],])
+})
+
+rhwrite(irisSplit, file=&quot;/tmp/irisData&quot;, numfiles=3)
+
+maxMap &lt;- rhmap({
+   by(r, r$Species, function(x) {
+      rhcollect(
+         as.character(x$Species[1]),
+         max(x$Sepal.Length)
+      )
+   })
+})
+
+reduce &lt;- rhoptions()$templates$range
+
+res &lt;- rhwatch(map=maxMap, reduce=reduce, input=&quot;/tmp/irisData&quot;, output=&quot;/tmp/irisMax&quot;)
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='other-components'>
+<h3>Other Components</h3>
+
+<h4>Web server: node.js</h4>
+
+<p><a href="https://github.com/joyent/node/wiki/Installation">Installation link</a> from node.js.</p>
+
+<p>Here are instructions to build node.js from source.  Note that this requires Python 2.6.  Also note that node versions change frequently, so check the latest version.</p>
+
+<pre><code>wget http://nodejs.org/dist/v0.10.6/node-v0.10.6.tar.gz
+tar xzf node-v0.10.6.tar.gz
+cd node-v0.10.6
+python ./configure
+sudo make -j 9
+sudo make install
+</code></pre>
+
+<h4>Web server: shiny-server</h4>
+
+<p>These instructions are taken from <a href="link">here</a> and <a href="link">here</a>.  Please visit these references for more details.</p>
+
+<pre><code>### Install and configure shiny-server node module
+sudo npm install -g shiny-server 
+# may need to do sudo /usr/local/bin/npm install -g shiny-server if it is not on sudo&#39;s path
+
+# Create a system account to run Shiny apps
+sudo /usr/sbin/useradd -r shiny
+# Create a root directory for your website
+sudo mkdir -p /var/shiny-server/www
+# Create a directory for application logs
+sudo mkdir -p /var/shiny-server/log
+
+# loosen up permissions on the app directory
+sudo chmod 777 /var/shiny-server/www
+
+# make a configuration file that uses port 81 (change as desired)
+sudo mkdir /etc/shiny-server
+# as root
+cat &lt;&lt;EOF &gt; /etc/shiny-server/shiny-server.conf
+run_as shiny;
+server {
+   listen 81;
+
+   location / {
+      site_dir /var/shiny-server/www;
+      log_dir /var/shiny-server/log;
+      directory_index on;
+   }
+}
+EOF
+</code></pre>
+
+<p>Might need to change firewall settings.</p>
+
+<p>Another problem I have had is sudo not having /usr/local/bin on its path.  There are lots of ways around this - this is one of them:</p>
+
+<pre><code>sudo ln -s /usr/local/bin/node /usr/bin/node
+sudo ln -s /usr/local/bin/shiny-server /usr/bin/shiny-server
+sudo /usr/local/bin/shiny-server
+</code></pre>
+
+<p>Running the server:</p>
+
+<p>On RHEL6:</p>
+
+<pre><code># shiny-server.conf
+# as root:
+cat &lt;&lt;EOF &gt; /etc/init/shiny-server.conf
+description &quot;Shiny application server&quot;
+start on stopped networking
+stop on runlevel [016]
+limit nofile 1000000 1000000
+exec shiny-server &gt;&gt; /var/log/shiny-server.log 2&gt;&amp;1
+respawn
+EOF
+
+sudo start shiny-server
+</code></pre>
+
+<p>Otherwise can start it manually with:</p>
+
+<pre><code>sudo shiny-server
+</code></pre>
+
+<p>The web server also needs R and RHIPE installed if it wants to be able to serve displays that depend on RHIPE data objects.  See the &quot;Local Workstation&quot; for more on this.</p>
+
+<h4>Cognostics server: MongoDB</h4>
+
+<p>This is based on these
+<a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">installation instructions</a>.  At this link there are also instructions for other OSes.</p>
+
+<pre><code># add repository information
+# as root:
+cat &lt;&lt;EOF &gt;&gt; /etc/yum.repos.d/10gen.repo
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1
+EOF
+
+# install
+sudo yum install mongo-10gen mongo-10gen-server
+
+# create database directory
+sudo mkdir -p /data/db
+sudo chown mongo /data/db
+
+# start service
+sudo service mongod start
+</code></pre>
+
+<h4>Local Workstation</h4>
+
+<p>The local workstation needs R, <code>datadr</code>, <code>Rhipe</code>, and <code>trelliscope</code> installed.  Recall that &quot;local workstation&quot; can simply mean installing these packages on the master node and running R from there.  In this case, we already have R and <code>Rhipe</code> installed and only need to install <code>datadr</code> and <code>trelliscope</code>, which is easy:</p>
+
+<pre><code class="r">library(devtools)
+install_github(&quot;datadr&quot;, &quot;hafen&quot;)
+install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
+</code></pre>
+
+<p>Installation of RHIPE on a local workstation requires protocol buffers and R installed as a shared library, as outlined above.  You don&#39;t need Hadoop to install RHIPE.  To run RHIPE on your local workstation, however, you need the .jar and configuration files available (a Hadoop cluster does not need to be running).  We will be adding utility functions to RHIPE that will build a bundle of these files on your cluster master node and allow you to move it to your local workstation, simplifying this process.</p>
+
+</div>
+
+
+<div class='tab-pane' id='vdb-connections'>
+<h3>VDB Connections</h3>
+
+<p>Now that all of the components are installed, they need to be able to talk to each other.  Currently, it is simply assumed that each machine can communicate with others through passwordless SSH.  Connections are managed by the <code>vdbConn</code> list of options, available in the <code>conn.R</code> file in your VDB directory.  Here is an example:</p>
+
+<pre><code class="r">options(vdbConn = list(
+   ## local machine
+   vdbName = &quot;testVDB&quot;,
+   vdbPrefix = &quot;~/Desktop/vdbTest&quot;,
+   defaultStorage = &quot;local&quot;
+
+   ## hadoop backend
+   hadoopConn = list(
+      # default HDFS location for vdb plots to go
+      hdfsPrefix = &quot;/tmp&quot;,
+      # location of a hadoop bundle (see genLocalBundleFiles in Rhipe) for communication with hadoop cluster
+      hadoopBundleDir = NULL,
+      # an alternative to hadoopBundleDir: specify locations of hadoop directories necessary for communication with cluster
+      HADOOP_CONF_DIR = NULL,
+      HADOOP_HOME = NULL,
+      HADOOP_LIBS = NULL
+      # if environment variables are already set up, environment variables and hadoopBundleDir can be NULL
+   ),
+
+   ## mongo
+   mongoConn = list(
+      mongoHost = &quot;localhost&quot;,
+      mongoName = &quot;&quot;,
+      mongoUser = &quot;&quot;,
+      mongoPass = &quot;&quot;
+   ),
+
+   ## web server
+   webConn = list(
+      # IP address of web server (need passwordless ssh to this address)
+      ip = &quot;123.45.67.8&quot;,
+      # user of 
+      user = &quot;someuser&quot;,
+      # URL at which shiny-server is broadcasting
+      url = &quot;http://something.com&quot;, 
+      port = &quot;81&quot;, # port the shiny-server is configured to broadcast on
+      # shiny app directory on web server
+      appDir = &quot;/var/shiny-server/www&quot;, 
+      # where should a copy of your local vdb files go on the web server?
+      vdbPrefix = &quot;~/Desktop/vdbTest&quot;
+   )
+))
+</code></pre>
+
+<p>The <code>hadoopConn</code> settings tell a machine (local workstation, web server) how it can talk to the Hadoop cluster.</p>
+
+<p>The <code>mongoConn</code> settings tell a machine (local workstation, web server, cluster) how to communicate with MongoDB.</p>
+
+<p>The <code>webConn</code> settings tell a machine (local workstation, web server) where the web server is and where important components of the web viewer are located.  The <code>url</code> helps Trelliscope know how to construct web URLs to your displays.  The IP and username are supplied so that the local workstation can sync files with the web server.  The <code>vdbPrefix</code> is where a copy of your local VDB directory will reside on the web server.  The <code>appDir</code> directory tells Trelliscope where to put the viewer files for your project.</p>
+
+<p>When you want to update the web server with changes you have made on your local workstation, you can simply call <code>websync()</code>.</p>
+
+</div>
+
+
 <div class='tab-pane' id='trelliscope-with-rhipe'>
 <h3>Trelliscope with RHIPE</h3>
 
@@ -1089,7 +1431,7 @@ airDateCogFn(divExample(byBuoy))
 
 <h4>hdfsData</h4>
 
-<p>We can also create a display where the actual images are not generated, but instead the viewer grabs the associated data and renders the images on-the-fly.  An example of this:</p>
+<p>We can also create a display where the actual images are not generated, but instead pointers to the data for each panel are recorded.  Then the viewer can grab the associated data and renders the images on-demand.  An example of this:</p>
 
 <pre><code class="r">makeDisplay(
    group   = &quot;buoy&quot;,
@@ -1334,30 +1676,6 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 <h3>Syncing Files With the Web</h3>
 
 <p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  More on this to come...</p>
-
-</div>
-
-
-<div class='tab-pane' id='component-installation'>
-<h3>Component Installation</h3>
-
-<p>Under construction...</p>
-
-</div>
-
-
-<div class='tab-pane' id='vdb-connections'>
-<h3>VDB Connections</h3>
-
-<p>Under construction...</p>
-
-</div>
-
-
-<div class='tab-pane' id='example'>
-<h3>Example</h3>
-
-<p>Under construction...</p>
 
 </div>
 
