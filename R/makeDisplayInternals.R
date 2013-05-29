@@ -402,16 +402,9 @@ trsRhKeyValTrans <- function(curKey, curVal) {
 }
 
 # internal
-nullAttributes <- function(e) {
-   # get rid of attributes of the expression except for class
-   aNames <- names(attributes(e))
-   aNames <- setdiff(aNames, "class")
-   for (nm in aNames) {
-      attributes(e)[[nm]] <- NULL
-   }
+nullAttributes <- function (e) {
+   environment(e) <- NULL
    
-   # get rid of attributes of each element of expression
-   for(i in seq_along(e)) 
-      attributes(e[[i]]) <- NULL
-   e
+   for (i in seq_along(e)) attributes(e[[i]]) <- NULL
+   eval(parse(text = deparse(e)))
 }
