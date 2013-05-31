@@ -18,7 +18,7 @@ vdbConnect <- function(path=NULL) {
    }
    
    # TODO: validate
-
+   
    source(file.path(path, "conn.R"))
 }
 

@@ -1,8 +1,6 @@
 library(shiny)
-# library(trelliscope)
+library(trelliscope)
 library(base64enc) # this one is much faster than caTools!!
-# library(Rhipe)
-# rhinit()
 
 if(file.exists("conn.R")) { # it is on a web server
    source("conn.R")
@@ -11,6 +9,16 @@ if(file.exists("conn.R")) { # it is on a web server
 } else {
    vdbConn <- options()$vdbConn
    vdbPrefix <- vdbConn$vdbPrefix
+}
+message("vdbPrefix is ", vdbPrefix)
+
+if(!is.null(vdbConn$hadoopConn)) {
+   Sys.setenv(HADOOP_CONF_DIR = vdbConn$hadoopConn$HADOOP_CONF_DIR)
+   Sys.setenv(HADOOP_HOME = vdbConn$hadoopConn$HADOOP_HOME)
+   Sys.setenv(HADOOP_LIBS = vdbConn$hadoopConn$HADOOP_LIBS)
+   message("loading RHIPE...")
+   library(Rhipe)
+   rhinit()
 }
 
 sapply(list.files("serverHelpers", full.names=TRUE), source)
@@ -25,7 +33,6 @@ sapply(list.files("serverHelpers", full.names=TRUE), source)
 #    vdbConn$vdbPrefix <- vdbConn$webServerVdbPrefix
 #    # TODO: let the vdb server know how to connect to mongodb, hdfs, etc.
 # }
-
 
 verbose <- vdbConn$viewerLog
 if(is.null(verbose))
@@ -91,7 +98,7 @@ shinyServer(function(input, output) {
                # if it is "hdfs", then initialize a mapfile and append it to cdo
             }
             if(cdo$storage=="hdfs") {
-               cdo$mapfile <- rhmapfile(paste(cdo$hdfsConn$hdfsPrefix, "/", cdo$name, sep=""))
+               cdo$mapfile <- rhmapfile(paste(cdo$hdfsPrefix, "/", cdo$name, sep=""))
             }
          }
          return(cdo)

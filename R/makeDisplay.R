@@ -493,8 +493,8 @@ makeDisplay <- function(
          if(ofolder==data$loc)
             stop("display output cannot be the same as the input.  Consider putting all VDB displays in a VDB subdirectory on HDFS")
          
-         ofolderExists <- try(rhls(ofolder))
-         if(!inherits(ofolderExists, "try-error")) {
+         ofolderExists <- try(rhls(ofolder), silent=TRUE)
+         if(inherits(ofolderExists, "try-error")) {
             ans <- readline(paste("The output HDFS directory ", ofolder, " does not exist.  Create? (y = yes) ", sep=""))
          	if(!tolower(substr(ans, 1, 1)) == "y")
          	   stop()
