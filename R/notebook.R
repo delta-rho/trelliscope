@@ -8,23 +8,23 @@
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @return creates a new .Rmd file that will go in the "notebook" directory of the vdb directory
-#'
+#' 
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{typeset}}, \code{\link{viewNotebook}}, \code{\link{bsSetup}}
-#'
+#' 
 #' @export
 newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTitle=title, author="Author Name", toc=TRUE, css=NULL, conn=getOption("vdbConn")) {
    if(is.null(name))
       stop("Must specify name for new notebook")
-
+      
    prefix <- trsValidatePrefix(conn)
-
+   
    filePath <- file.path(prefix, "notebook", paste(name, ".Rmd", sep=""))
-
+   
    if(file.exists(filePath))
       stop(paste("File ", filePath, " already exists"))
-
+      
    pkgPath <- system.file(package="trelliscope")
    template <- file.path(pkgPath, "rmd_template.Rmd")
    
@@ -40,8 +40,9 @@ bsSetup(
 )
 ```
 ", sep=""), fileString, collapse="\n", sep="")
-
+   
    cat(fileString, file=filePath)
+   message("New notebook available for editing at ", filePath)
 }
 
 #' View a Notebook File
@@ -55,24 +56,32 @@ bsSetup(
 #' @seealso \code{\link{newNotebook}}, \code{\link{typeset}}
 #'
 #' @export
-viewNotebook <- function(name="index", conn=getOption("vdbConn")) {
+viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
    # TODO: look at this: http://jeffreyhorner.tumblr.com/post/33814488298/deploy-rook-apps-part-ii
    # (when in local mode, only works on safari)
-
+   
    if(is.null(name))
       stop("Must specify name for notebook")
-
-   prefix <- trsValidatePrefix(conn)
-
-   if(grepl("~", prefix))
-      prefix <- path.expand(prefix)
-
-   if(!grepl("\\.html$", name))
-      name <- paste(name, ".html", sep="")
       
-   filePath <- file.path(prefix, "notebook", name)
+   if(local) {
+      prefix <- trsValidatePrefix(conn)
 
-   browseURL(filePath)
+      if(grepl("~", prefix))
+         prefix <- path.expand(prefix)
+
+      if(!grepl("\\.html$", name))
+         name <- paste(name, ".html", sep="")
+         
+      filePath <- file.path(prefix, "notebook", name)
+
+      browseURL(filePath)
+      
+      # launch shiny
+      view(openBrowser=FALSE)
+   } else {
+      # build URL for web server and launch
+   }
+   
 }
 
 # this just makes an href to be shown inline that sends you to the plot
@@ -167,34 +176,37 @@ errMsg <- function(message) {
 ## internal
 getDisplayTypes <- function(plotInfo, conn) {
    types <- NULL
+   shinyServer <- conn$webConn$url
    if(plotInfo$n==1) {
       types <- "simple" # open plot in new window
    } else if(plotInfo$storage %in% c("mongo", "hdfs")) {
-      shinyServer <- conn$shinyServer
       if(is.null(shinyServer)) {
          warning("'shinyServer' has not been specified in vdbConn")
       } else {
          types <- "ss" # server-side viewer only         
       }
    } else if(plotInfo$storage == "local") {
-      shinyServer <- conn$shinyServer
       if(is.null(shinyServer)) {
          types <- "cs" # only use client-side server if shiny server not specified
       } else {
          types <- c("ss", "cs") # client-side and server-side option         
       }
    }
-   types
+   # ssl is server-side local
+   c("ssl", types)
 }
 
 ## internal
 makeHref <- function(group, name, type, server=NULL) {
+   href <- ""
    if(type=="cs") {
-      href <- paste("<a href='../viewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
+      href <- paste("<a href='../displays/_viewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
    } else if(type=="ss") {
-      href <- paste("<a href='", server, "#group=", group, "&name=", name, "'>view (shiny)</a>", sep="")
+      href <- paste("<a class='ssShiny' href=\"", server, "/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    } else if(type=="simple") {
-      href <- paste("<a href='../displays/", group, "/", name, "/thumb.jpg'>view</a>", sep="")
+      href <- paste("<a href='../displays/", group, "/", name, "/thumb.jpg' target='_blank'>view</a>", sep="")
+   } else if(type=="ssl") {
+      href <- paste("<a class='sslShiny' href=\"http://localhost:8100/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    }
    href
 }
@@ -215,12 +227,19 @@ makeHref <- function(group, name, type, server=NULL) {
 nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- trsValidatePrefix(conn)
    
-   shinyServer <- conn$shinyServer
+   port <- ""
+   shinyServer <- NULL
+   if(!is.null(conn$webConn)) {
+      if(conn$webConn$port != "")
+         port <- paste(":", conn$webConn$port, sep="")
+         
+      shinyServer <- paste(conn$webConn$url, port, "/", conn$vdbName, sep="")
+   }
    
    thumbHeight <- conn$thumbHeight
    if(is.null(thumbHeight))
       thumbHeight <- 120
-   
+      
    load(file.path(prefix, "displays", "_displayList.Rdata"))
    
    plotIdx <- sapply(seq_along(name), function(x) 
@@ -235,7 +254,11 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
          hrefs <- sapply(displayTypes, function(curType) {
             makeHref(p$group, p$name, curType, shinyServer)
          })
-         hrefs <- paste(hrefs, collapse=" | ")
+         shinyHrefs <- displayTypes %in% c("ss", "ssl")
+         hrefs <- paste(c(
+            paste(hrefs[shinyHrefs], collapse=""),
+            hrefs[!shinyHrefs]
+         ), collapse=" | ")
          
          curWidth <- thumbHeight * p$width / p$height
          src <- paste("../displays/", p$group, "/", p$name, "/thumb.png", sep="")
@@ -261,7 +284,14 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- trsValidatePrefix(conn)
 
-   shinyServer <- conn$shinyServer
+   port <- ""
+   shinyServer <- NULL
+   if(!is.null(conn$webConn)) {
+      if(conn$webConn$port != "")
+         port <- paste(":", conn$webConn$port, sep="")
+         
+      shinyServer <- paste(conn$webConn$url, port, "/", conn$vdbName, sep="")
+   }
 
    maxHeight <- conn$maxHeight
    if(is.null(maxHeight))
@@ -291,7 +321,7 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
 # <span class="label label-info">test</span></a>
 
 #    p <- displayList[plotIdx[x],]
-#    ahrefStr1 <- paste("<a href='../viewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
+#    ahrefStr1 <- paste("<a href='../displays/_viewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
 #    ahrefStr2 <- "</a>"
 #    paste(
 #       "<tr><td>", p$desc, "</td><td>",

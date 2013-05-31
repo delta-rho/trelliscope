@@ -114,6 +114,9 @@ vdbUpdateConn <- function(conn) {
    lastUncmt <- max(which(!grepl("^[ \t]+#", a[parLines])))
    a[parLines[lastUncmt]] <- gsub(",", "", a[parLines[lastUncmt]])
    
+   # set options
+   options(vdbConn=conn)
+   
    cat(paste(a, collapse="\n"), file=file.path(conn$vdbPrefix, "conn.R"))
 }
 

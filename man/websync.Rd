@@ -2,10 +2,13 @@
 \alias{websync}
 \title{Sync VDB and notebook Files to a Web Server}
 \usage{
-  websync(conn = getOption("vdbConn"), rsync = NULL)
+  websync(conn = getOption("vdbConn"), verbose = FALSE,
+    rsync = NULL)
 }
 \arguments{
   \item{conn}{The VDB connection settings}
+
+  \item{verbose}{show rsync output}
 
   \item{rsync}{Location of rsync binary}
 }

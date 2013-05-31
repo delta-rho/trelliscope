@@ -71,6 +71,13 @@ preTOC <- paste("<!DOCTYPE html>
 	      $('#content').css('margin-left', '21px')
 	   }
 		", ifelse(toc, "", "tocOff()"), "
+		
+		if(document.URL.match('file:///') == null) {
+         $('.sslShiny').hide();
+      } else {
+         $('.ssShiny').hide();
+      }
+      
 	});
 	</script>
 

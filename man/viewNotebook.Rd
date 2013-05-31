@@ -2,7 +2,8 @@
 \alias{viewNotebook}
 \title{View a Notebook File}
 \usage{
-  viewNotebook(name = "index", conn = getOption("vdbConn"))
+  viewNotebook(name = "index", conn = getOption("vdbConn"),
+    local = TRUE)
 }
 \arguments{
   \item{name}{name of the notebook file (.html extension

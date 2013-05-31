@@ -6,11 +6,12 @@
 #' @param type there are two viewers - the server-side "ss" and client-side "cs"
 #' @param group, name optional parameters to load the viewer with a pre-specified display
 #' @param port if type="ss", what port to use for the viewer
+#' @param openBrowser should the browser be automatically launched?
 #' 
 #' @author Ryan Hafen
 #' 
 #' @export
-view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, port=8100L) {
+view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, port=8100L, openBrowser=TRUE) {
    vdbPrefix <- trelliscope:::trsValidatePrefix(conn)
 	packagePath <- system.file(package="trelliscope")
    
@@ -21,7 +22,7 @@ view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, po
    }
    
    if(type=="cs") {
-      browseURL(paste("file:///", path.expand(vdbPrefix), "/viewer_cs?group=", group, "&name=", name, sep=""))
+      browseURL(paste("file:///", path.expand(vdbPrefix), "/displays/_viewer_cs?group=", group, "&name=", name, sep=""))
    } else {
       message("attempting to launch shiny vdb viewer...")
       message("press Ctrl+C or Esc to stop viewer")
@@ -38,12 +39,12 @@ view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, po
       # if on dev machine, make the viewer path be the code source directory
       # (not the package path)
       if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
-         shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/viewer_ss/"
+         shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/_viewer_ss/"
       } else {
-         shinyAppPrefix <- file.path(packagePath, "viewer_ss")
+         shinyAppPrefix <- file.path(packagePath, "_viewer_ss")
       }
       
-      trelliscope:::myRunApp(shinyAppPrefix, port=port, hash=hash)      
+      trelliscope:::myRunApp(shinyAppPrefix, port=port, hash=hash, launch.browser=openBrowser)      
    }
 }
 

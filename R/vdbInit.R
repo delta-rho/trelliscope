@@ -39,10 +39,12 @@ vdbInit <- function(path=NULL, name="myVDB", autoYes=FALSE) {
    
    # now move files over
 	pkgPath <- system.file(package="trelliscope")
-	
+   
+   dir.create(file.path(path, "displays"))
+   
    message("Moving viewer files over")
-	file.copy(file.path(pkgPath, "viewer_cs"), path, recursive=TRUE, overwrite=TRUE)
-   # file.copy(file.path(pkgPath, "viewer_ss"), path, recursive=TRUE, overwrite=TRUE)
+	file.copy(file.path(pkgPath, "_viewer_cs"), file.path(path, "displays"), recursive=TRUE, overwrite=TRUE)
+   # file.copy(file.path(pkgPath, "_viewer_ss"), path, recursive=TRUE, overwrite=TRUE)
    
    message("Moving notebook files over")
 	file.copy(file.path(pkgPath, "notebook"), path, recursive=TRUE, overwrite=TRUE)
@@ -57,13 +59,13 @@ vdbInit <- function(path=NULL, name="myVDB", autoYes=FALSE) {
 #' Update Trelliscope Project Client Side Viewer Files
 #' 
 #' Useful to do after a new update of the \code{trelliscope} package has been installed.  Moves the viewer files from the package to the project directory.
-#'
+#' 
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @return nothing
 #' 
 #' @author Ryan Hafen
-#'
+#' 
 #' @seealso \code{\link{vdbInit}}
 #' @export
 updateViewer <- function(conn=getOption("vdbConn")) {
@@ -72,8 +74,8 @@ updateViewer <- function(conn=getOption("vdbConn")) {
 	packagePath <- system.file(package="trelliscope")
    
    message("Moving viewer files over")
-	file.copy(file.path(packagePath, "viewer_cs"), prefix, recursive=TRUE, overwrite=TRUE)
-   # file.copy(file.path(pkgPath, "viewer_ss"), prefix, recursive=TRUE, overwrite=TRUE)
+	file.copy(file.path(packagePath, "_viewer_cs"), file.path(prefix, "displays"), recursive=TRUE, overwrite=TRUE)
+   # file.copy(file.path(pkgPath, "_viewer_ss"), prefix, recursive=TRUE, overwrite=TRUE)
    
    # TODO: need to update notebook assets too...
 }

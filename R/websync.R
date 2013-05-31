@@ -3,6 +3,7 @@
 #' Sync VDB and notebook files to a web server
 #' 
 #' @param conn The VDB connection settings
+#' @param verbose show rsync output
 #' @param rsync Location of rsync binary
 #' 
 #' @return nothing
@@ -16,6 +17,7 @@
 #' @export
 websync <- function(
    conn=getOption("vdbConn"),
+   verbose=FALSE,
    rsync=NULL
 ) {
    
@@ -33,41 +35,26 @@ websync <- function(
    if(!is.null(conn$webConn$user))
       user <- paste(conn$webConn$user, "@", sep="")
       
-	cmd <- paste(rsync, " -a -v ", sshFlag, path.expand(conn$vdbPrefix), " ", user, conn$webConn$ip, ":", conn$webConn$vdbPrefix, "/", sep="")
-   
-   message("Syncing local vdb directory with web server...")
-	system(cmd, wait=FALSE)
-   
-   # write the conn stuff to VDB directory if it isn't there
-   if(!file.exists(file.path(conn$vdbPrefix, "conn.R"))) {
-      stop("There is not a conn.R file in your vdb directory.  You can generate a template with vdbMakeConnTemplate(vdbPrefix) and then edit it as necessary.")
-   }
+   message("Syncing local vdb directory to web server...")
+   system(paste(rsync, " -a -v ", sshFlag, 
+      path.expand(conn$vdbPrefix), "/* ",
+      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName,
+      sep=""
+   ), intern=verbose, ignore.stderr=!verbose, ignore.stdout=!verbose)
    
    ## make a copy from viewerDir to appDir/vdbName
    pkgPath <- system.file(package="trelliscope")
    
-   message("Copying viewer to web app directory...")
-   # system("ssh martingale \"mkdir -p /home/hafe647/shiny\"")
+   message("Syncing latest shiny viewer to web app directory...")
+   # system("ssh host \"mkdir -p /home/hafe647/shiny\"")
    
    system(paste(rsync, " -a -v ", sshFlag, 
-      file.path(pkgPath, "viewer_ss", "*"), " ",
-      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName,
+      file.path(pkgPath, "_viewer_ss", "*"), " ",
+      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName, "/displays/",
       sep=""
-   ))
+   ), intern=verbose, ignore.stderr=!verbose, ignore.stdout=!verbose)
    
-   message("Copying connection info to web app directory...")
-   system(paste(rsync, " -a -v ", sshFlag, 
-      file.path(path.expand(conn$vdbPrefix), "conn.R"), " ",
-      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName, "/",
-      sep=""
-   ))
-   
-   message("Copying notebook files to web app directory...")
-   system(paste(rsync, " -a -v ", sshFlag, 
-      file.path(path.expand(conn$vdbPrefix), "notebook"), " ",
-      user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName, "/",
-      sep=""
-   ))
+   NULL
 }
 
 findRsync <- function(rsync=NULL, verbose = "FALSE") {

@@ -36,8 +36,6 @@ options(vdbConn = list(
    #    port = @@port@@, # port the shiny-server is configured to broadcast on
    #    # shiny app directory on web server
    #    appDir = @@appDir@@, 
-   #    # where should a copy of your local vdb files go on the web server?
-   #    vdbPrefix = @@vdbPrefix@@
    # )
 ))
 

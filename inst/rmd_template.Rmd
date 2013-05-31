@@ -26,7 +26,7 @@ Ordered lists like this:
 
 Inline math like this \(x^2\)
 
-or like this $x^2$
+<!-- or like this $x^2$ -->
 
 Block math like this:
 
@@ -49,11 +49,12 @@ f <- function(n) rnorm(n)
 f(10)
 ```
 
-Plots like this:
+<!-- Plots like this:
 
 ```{r}
 plot(1:10)
 ```
+ -->
 
 Plain old html:
 <a href="http://google.com">google</a>
@@ -72,13 +73,13 @@ A list of displays from your VDB:
 nbDisplayList(c("plot1", "plot2", "plot3"))
 ```
 
-A single display from your VDB:
+For a larger thumbnail for single-panel displays:
 
 ```{r echo=FALSE, results="asis"}
-nbDisplayList("plot4")
+nbDisplay("plot4")
 ```
 
-More code for fun...
+More math for fun...
 
 A Cross Product Formula:
 
