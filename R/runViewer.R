@@ -22,11 +22,11 @@ view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, po
    }
    
    if(type=="cs") {
-      browseURL(paste("file:///", path.expand(vdbPrefix), "/displays/_viewer_cs?group=", group, "&name=", name, sep=""))
+      browseURL(paste("file:///", path.expand(vdbPrefix), "/viewer_cs?group=", group, "&name=", name, sep=""))
    } else {
       message("attempting to launch shiny vdb viewer...")
       message("press Ctrl+C or Esc to stop viewer")
-
+      
       require(shiny)
       hash <- ""
       if(!is.null(name)) {
@@ -39,9 +39,9 @@ view <- function(conn=getOption("vdbConn"), type="ss", group=NULL, name=NULL, po
       # if on dev machine, make the viewer path be the code source directory
       # (not the package path)
       if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
-         shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/_viewer_ss/"
+         shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/viewer_ss/"
       } else {
-         shinyAppPrefix <- file.path(packagePath, "_viewer_ss")
+         shinyAppPrefix <- file.path(packagePath, "viewer_ss")
       }
       
       trelliscope:::myRunApp(shinyAppPrefix, port=port, hash=hash, launch.browser=openBrowser)      

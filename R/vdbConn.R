@@ -57,10 +57,9 @@ vdbMakeConnTemplate <- function(vdbPrefix, name="myVDB", overwrite=FALSE) {
       user = "someuser",
       url = "http://something.com", 
       port = "81",
-      appDir = "/var/shiny-server/www", 
-      vdbPrefix = "/scratch/vdbTest" 
+      appDir = "/var/shiny-server/www"
    )
-
+   
    if(file.exists(file.path(vdbPrefix, "conn.R")) && !overwrite) {
       message(paste("A conn.R already exists in ", vdbPrefix, ".  Will not overwrite unless overwrite=TRUE", sep=""))
    } else {

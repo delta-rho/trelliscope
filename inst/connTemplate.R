@@ -35,7 +35,7 @@ options(vdbConn = list(
    #    url = @@url@@, 
    #    port = @@port@@, # port the shiny-server is configured to broadcast on
    #    # shiny app directory on web server
-   #    appDir = @@appDir@@, 
+   #    appDir = @@appDir@@
    # )
 ))
 

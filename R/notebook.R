@@ -200,7 +200,7 @@ getDisplayTypes <- function(plotInfo, conn) {
 makeHref <- function(group, name, type, server=NULL) {
    href <- ""
    if(type=="cs") {
-      href <- paste("<a href='../displays/_viewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
+      href <- paste("<a href='../viewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
    } else if(type=="ss") {
       href <- paste("<a class='ssShiny' href=\"", server, "/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    } else if(type=="simple") {
@@ -321,7 +321,7 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
 # <span class="label label-info">test</span></a>
 
 #    p <- displayList[plotIdx[x],]
-#    ahrefStr1 <- paste("<a href='../displays/_viewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
+#    ahrefStr1 <- paste("<a href='../viewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
 #    ahrefStr2 <- "</a>"
 #    paste(
 #       "<tr><td>", p$desc, "</td><td>",
