@@ -355,10 +355,10 @@ Moving notebook files over
 <pre><code class="r">list.files(vdbDir)
 </code></pre>
 
-<pre><code>[1] &quot;conn.R&quot;    &quot;notebook&quot;  &quot;viewer_cs&quot;
+<pre><code>[1] &quot;conn.R&quot;  &quot;displays&quot;  &quot;notebook&quot;  &quot;trelliscopeViewer_cs&quot;
 </code></pre>
 
-<p>Two new directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>viewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary, and we discuss them in greater detail later on.  </p>
+<p>Three directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>display</code> directory is where images and meta data related to our trelliscope displays are stored.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>trelliscopeViewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary, and we discuss them in greater detail later on.  </p>
 
 <p><code>vdbInit()</code> reads the <code>conn.R</code> file and sets an option in the environment with these settings.  You can see what is set with:</p>
 
@@ -575,15 +575,7 @@ Plotting thumbnail...
 
 <p>The default behavior for how plots are stored when the input is a local dataset is to store a .png file for each subset on disk.  I am experimenting with many storage formats (including applying the plot function on-the-fly in the viewer), which is discussed later.</p>
 
-<p>Let&#39;s see how this effected our VDB directory:</p>
-
-<pre><code class="r">list.files(vdbDir)
-</code></pre>
-
-<pre><code>[1] &quot;displays&quot;  &quot;notebook&quot;  &quot;viewer_cs&quot;
-</code></pre>
-
-<p>Note that we have a new directory &quot;displays&quot;.  This is where all our displays are stored (of course!).  Let&#39;s see what is in there:</p>
+<p>We now have files in our &quot;displays&quot; directory:</p>
 
 <pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;))
 </code></pre>
@@ -1614,7 +1606,7 @@ airDateCogFn(divExample(byBuoy))
 
 <p>When collaborating with others or keeping track of your own research, it is not usually natural to have a bunch of displays lying around.  It is useful to organize them.  This package contains functions that help set up and maintain a web notebook that ties in to the vdb.</p>
 
-<p>Notebooks are static pages, but are dynamically created using the <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> packages.  I&#39;m not so concerned here about the &quot;reproducible research&quot; facets of knitr the package, but they make it easier to set the notebooks up and are available if you want to use them.  Mainly, the idea is that you can write a simple notebook using the simple <a href="http://daringfireball.net/projects/markdown/">markdown syntax</a> and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.</p>
+<p>Notebooks are static pages, but are dynamically created using the <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> packages.  I&#39;m not so concerned here about the &quot;reproducible research&quot; facets of knitr the package (difficult to deal with when your code depends on various backend systems that aren&#39;t always available or code that takes a very long time to run), but they make it easier to set the notebooks up and are available if you want to use them.  Mainly, the idea is that you can write a simple notebook using the simple <a href="http://daringfireball.net/projects/markdown/">markdown syntax</a> and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.</p>
 
 <p>To create a new page, you can do the following:</p>
 
@@ -1675,7 +1667,7 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 <div class='tab-pane' id='syncing-files-with-the-web'>
 <h3>Syncing Files With the Web</h3>
 
-<p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  More on this to come...</p>
+<p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  It is done by simply setting your VDB connection to point to the web server and call <code>websync()</code>.  More on this to come...</p>
 
 </div>
 
