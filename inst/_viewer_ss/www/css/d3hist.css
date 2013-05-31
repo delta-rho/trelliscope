@@ -1,0 +1,79 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar2 {
+  fill: lightgrey;
+}
+
+/*.x.axis path {
+  display: none;
+}
+*/
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: 0.2;
+  shape-rendering: crispEdges;
+}
+
+.barFilter {
+  stroke: #steelblue;
+  fill: #steelblue;
+  fill-opacity: 0.3;
+  shape-rendering: crispEdges;
+}
+
+
+.modalFilter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1050;
+  width: 800px;
+  height: 600px;
+  margin: -350px 0 0 -400px;
+  background-color: #ffffff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  *border: 1px solid #999;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  outline: none;
+  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding-box;
+          background-clip: padding-box;
+}
+
+.modalFilter.fade {
+  top: -25%;
+  -webkit-transition: opacity 0.2s linear, top 0.2s ease-out;
+     -moz-transition: opacity 0.2s linear, top 0.2s ease-out;
+       -o-transition: opacity 0.2s linear, top 0.2s ease-out;
+          transition: opacity 0.2s linear, top 0.2s ease-out;
+}
+
+.modalFilter.fade.in {
+  top: 50%;
+}
+
+.modalFilter-body {
+  max-height: 600px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.modalFilter-form {
+  margin-bottom: 0;
+}
