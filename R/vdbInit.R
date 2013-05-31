@@ -43,8 +43,8 @@ vdbInit <- function(path=NULL, name="myVDB", autoYes=FALSE) {
    dir.create(file.path(path, "displays"))
    
    message("Moving viewer files over")
-	file.copy(file.path(pkgPath, "viewer_cs"), path, recursive=TRUE, overwrite=TRUE)
-   # file.copy(file.path(pkgPath, "viewer_ss"), path, recursive=TRUE, overwrite=TRUE)
+	file.copy(file.path(pkgPath, "trelliscopeViewer_cs"), path, recursive=TRUE, overwrite=TRUE)
+   # file.copy(file.path(pkgPath, "trelliscopeViewer"), path, recursive=TRUE, overwrite=TRUE)
    
    message("Moving notebook files over")
 	file.copy(file.path(pkgPath, "notebook"), path, recursive=TRUE, overwrite=TRUE)
@@ -74,8 +74,8 @@ updateViewer <- function(conn=getOption("vdbConn")) {
 	packagePath <- system.file(package="trelliscope")
    
    message("Moving viewer files over")
-	file.copy(file.path(packagePath, "viewer_cs"), file.path(prefix, "displays"), recursive=TRUE, overwrite=TRUE)
-   # file.copy(file.path(pkgPath, "viewer_ss"), prefix, recursive=TRUE, overwrite=TRUE)
+	file.copy(file.path(packagePath, "trelliscopeViewer_cs"), file.path(prefix, "displays"), recursive=TRUE, overwrite=TRUE)
+   # file.copy(file.path(pkgPath, "trelliscopeViewer"), prefix, recursive=TRUE, overwrite=TRUE)
    
    # TODO: need to update notebook assets too...
 }

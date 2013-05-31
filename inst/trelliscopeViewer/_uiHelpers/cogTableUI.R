@@ -56,7 +56,7 @@ cogTableTable <- function(width) {
    #       div(class="cogTableWrap3",
             div(class="cogTableWrap", #, style=paste("max-width: ", width, "px;", sep=""),
                tagList(
-                  singleton(tags$head(tags$link(href = "css/viewer_ss.css", rel="stylesheet"))),
+                  singleton(tags$head(tags$link(href = "css/trelliscopeViewer.css", rel="stylesheet"))),
                   singleton(tags$head(tags$script(src = "js/table.js"))),
                   tags$table(
                      cellpadding='0', 

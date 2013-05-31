@@ -5,12 +5,14 @@ library(base64enc) # this one is much faster than caTools!!
 if(file.exists("../conn.R")) { # it is on a web server
    source("../conn.R")
    vdbConn <- options()$vdbConn
-   vdbPrefix <- file.path(vdbConn$webConn$vdbPrefix, vdbConn$vdbName)
+   vdbPrefix <- file.path(vdbConn$webConn$appDir, vdbConn$vdbName)
 } else {
    vdbConn <- options()$vdbConn
    vdbPrefix <- vdbConn$vdbPrefix
 }
 message("vdbPrefix is ", vdbPrefix)
+
+options(vdbShinyPrefix = vdbPrefix)
 
 if(!is.null(vdbConn$hadoopConn)) {
    Sys.setenv(HADOOP_CONF_DIR = vdbConn$hadoopConn$HADOOP_CONF_DIR)

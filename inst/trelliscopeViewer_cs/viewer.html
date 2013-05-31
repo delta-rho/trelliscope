@@ -297,7 +297,7 @@
       if(ppp == null)
          ppp = 1;
          
-      var displayListData = "../_displayList.json";
+      var displayListData = "../displays/_displayList.json";
       
       var plot_list = (function () {
          var plot_list = null;
@@ -350,8 +350,8 @@
          // do necessary things with plot name
          document.title = "Viewer for \"" + plotName + "\"";
          $("#plotName").text(plotName);
-         var cognosticData = "../" + groupName + "/" + plotName + "/json/cog.json";
-         var metaData = "../" + groupName + "/" + plotName + "/json/meta.json";
+         var cognosticData = "../displays/" + groupName + "/" + plotName + "/json/cog.json";
+         var metaData = "../displays/" + groupName + "/" + plotName + "/json/meta.json";
 
          // read in meta data (aspect ratio, number of plots, cognostic column names)
          var meta_data = (function () {
@@ -372,7 +372,7 @@
          })();
 
          pageAspect = meta_data.aspect;
-         plotBaseDir = "../" + meta_data.baseDir + "/" + plotType;
+         plotBaseDir = "../displays/" + meta_data.baseDir + "/" + plotType;
          nPanels = meta_data.nPanels;
          nZeropad = meta_data.nZeropad;
 

@@ -49,7 +49,7 @@ websync <- function(
    # system("ssh host \"mkdir -p /home/hafe647/shiny\"")
    
    system(paste(rsync, " -a -v ", sshFlag, 
-      file.path(pkgPath, "viewer_ss"), " ",
+      file.path(pkgPath, "trelliscopeViewer"), " ",
       user, conn$webConn$ip, ":", conn$webConn$appDir, "/", conn$vdbName,
       sep=""
    ), intern=verbose, ignore.stderr=!verbose, ignore.stdout=!verbose)

@@ -565,7 +565,7 @@ makeDisplay <- function(
          cogDat <- data.frame(panelKey=sapply(cogDat, function(x) x$panelKey))
       } else {
          cogDat <- do.call(rbind, lapply(cogDat, function(x) {
-            as.data.frame(x)
+            as.data.frame(x, stringsAsFactors=FALSE)
          }))
       }
    }
@@ -667,6 +667,8 @@ makeDisplay <- function(
       if(cogStorage=="local") {
          cogDat <- cogDat[order(cogDat$panelKey),,drop=FALSE]
          cog <- cogDat
+         # make sure panelKey is character
+         cog$panelKey <- as.character(cog$panelKey)
          # TODO: add indexes
          save(cog, file=file.path(displayPrefix, "cog.Rdata"))
       } else {

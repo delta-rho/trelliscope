@@ -88,8 +88,6 @@ viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
 # vdbLink <- function(name, group)
 
 # if desc is null, it pulls from the displayList
-# nbDisplay <- function(name, group=NULL, desc=NULL)
-
 
 # vdb_string <- function(x, path, showthumbs, thumb_max_width, png_viewer) 
 
@@ -141,14 +139,14 @@ checkPlotExists <- function(displayList, name, group=NULL) {
 
    if(length(curPlot) == 0) {
       errMsg(paste("The plot \"", name, "\"", errStr, " wasn't found.", sep=""))
-      return(NA)
+      return(NULL)
    } else if (length(curPlot) > 1) {
       if(is.null(group)) {
          errMsg(paste("There is more than one plot of name \"", name, "\".  Try specifying a group as well.", sep=""))
-         return(NA)
+         return(NULL)
       } else {
          errMsg(paste("There is more than one plot of name \"", name, "\" from group \"", group, "\".  This should not be possible"))
-         return(NA)
+         return(NULL)
       }
    } else {
       return(curPlot)
@@ -200,9 +198,9 @@ getDisplayTypes <- function(plotInfo, conn) {
 makeHref <- function(group, name, type, server=NULL) {
    href <- ""
    if(type=="cs") {
-      href <- paste("<a href='../viewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
+      href <- paste("<a href='../trelliscopeViewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
    } else if(type=="ss") {
-      href <- paste("<a class='ssShiny' href=\"", server, "/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
+      href <- paste("<a class='ssShiny' href=\"", server, "/trelliscopeViewer/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    } else if(type=="simple") {
       href <- paste("<a href='../displays/", group, "/", name, "/thumb.jpg' target='_blank'>view</a>", sep="")
    } else if(type=="ssl") {
@@ -244,7 +242,7 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
    
    plotIdx <- sapply(seq_along(name), function(x) 
       checkPlotExists(displayList, name[x], group))
-   plotIdx <- plotIdx[!is.na(plotIdx)]
+   plotIdx <- plotIdx[!sapply(plotIdx, is.null)]
    
    # TODO: if desc is given, use that
    if(length(plotIdx) > 0) {
@@ -300,7 +298,7 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
    load(file.path(prefix, "displays", "_displayList.Rdata"))
    
    plotIdx <- checkPlotExists(displayList, name, group)
-
+   
    # TODO: if desc is given, use that
    if(length(plotIdx) > 0) {
       p <- displayList[plotIdx,]
@@ -321,7 +319,7 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
 # <span class="label label-info">test</span></a>
 
 #    p <- displayList[plotIdx[x],]
-#    ahrefStr1 <- paste("<a href='../viewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
+#    ahrefStr1 <- paste("<a href='../trelliscopeViewer_cs/viewer.html?group=", p$group, "&plot=", p$name, "' target='_blank'>", sep="")
 #    ahrefStr2 <- "</a>"
 #    paste(
 #       "<tr><td>", p$desc, "</td><td>",
