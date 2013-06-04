@@ -105,9 +105,15 @@ vdbUpdateConn <- function(conn) {
       } else {
          curVal <- paste("\"", curVal, "\"", sep="")      
       }
-
+      
       a[parLines[i]] <- gsub("@@.*@@", curVal, a[parLines[i]])
+      
+      # TODO: uncomment section if supplied
+      # a[parLines[i]] <- gsub("^([ \t]+)#", "\\1", a[parLines[i]])         
    }
+
+   # remove comments from lines for parameters that were supplied
+   
    
    # make sure there are no commas in the last uncommented parLine
    lastUncmt <- max(which(!grepl("^[ \t]+#", a[parLines])))

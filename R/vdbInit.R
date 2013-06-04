@@ -33,7 +33,7 @@ vdbInit <- function(path=NULL, name="myVDB", autoYes=FALSE) {
       }
    	if(!tolower(substr(ans, 1, 1)) == "y")
    	   return(FALSE)
-		if(!dir.create(path))
+		if(!dir.create(path, recursive=TRUE))
 			stop("Could not create directory.\n")
    }
    
