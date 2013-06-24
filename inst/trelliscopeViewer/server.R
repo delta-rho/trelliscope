@@ -142,7 +142,12 @@ shinyServer(function(input, output) {
          cdo <- cdDisplayObj()
          logMsg("Retrieving cognostics data for ", cdn[1], " / ", cdn[2], verbose=verbose)
          if(cdo$cogStorage=="local") {
-            load(file.path(vdbPrefix, "displays/", cdn[1], cdn[2], "cog.Rdata"))
+            cogFile <- file.path(vdbPrefix, "displays/", cdn[1], cdn[2], "cog.Rdata")
+            if(file.exists(cogFile)) {
+               load(cogFile)
+            } else {
+               cog <- NULL
+            }
          } else { # cognostics are in mongodb
             mongoConn <- vdbMongoInit(conn)
             NS <- mongoCollName(conn$vdbName, cdn[1], cdn[2], "cog")

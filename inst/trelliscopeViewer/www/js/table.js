@@ -488,7 +488,7 @@ function updateCogTableDims() {
 
    // cogModal.css("height", "738px");
    cogModal.css("top", (Math.max((windowHeight - 651) / 2, 0)) + "px");
-   $("#cogTable_wrapper").css("width", cogTabWidth + "px");
+   $("#cogTable_wrapper").css("width", cogTabWidth - 29 + "px");
 }
 
 function updateTableDims() {

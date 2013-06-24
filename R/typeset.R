@@ -72,5 +72,11 @@ typeset <- function(name="index", conn=getOption("vdbConn")) {
       bodyLines[i] <- gsub("<p></div></p>", "</div>", bodyLines[i])
    }
    
+   # make tables look good
+   ind <- which(grepl("<table>", bodyLines))
+   for(i in ind) {
+      bodyLines[i] <- gsub("<table>", "<table class='table table-striped'>", bodyLines[i])
+   }
+   
 	cat(paste(c(preTOC, tocLines, postTOC, bodyLines, postContent), collapse="\n"), file=outFilePath)	
 }

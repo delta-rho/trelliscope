@@ -87,23 +87,23 @@ writeCogJson <- function(prefix, group, name, cog, cogdesc, inputVars, height, w
       }
       
       # add input column information, if given
-      if(is.null(inputVars)) {
-         res <- paste(res, "}")
-      } else {
-         res <- paste(res, ", \"inputVars\": [\n", 
-				paste(sapply(inputVars, function(x) {
-					tmp <- paste("{ \"name\": \"", x$name, "\", \"type\": \"", x$type, "\"", sep="")
-					if(!is.null(x$args)) {
-						tmp <- paste(tmp, ", \"args\": [\"", paste(x$args, collapse="\", \"", sep=""), "\"]}", sep="")
-					} else {
-						tmp <- paste(tmp, "}")
-					}
-					tmp
-				}), collapse=",\n", sep=""),
-				"\n]}",
-				sep=""
-			)
-      }
+         #       if(is.null(inputVars)) {
+         #          res <- paste(res, "}")
+         #       } else {
+         #          res <- paste(res, ", \"inputVars\": [\n", 
+         #  paste(sapply(inputVars, function(x) {
+         #     tmp <- paste("{ \"name\": \"", x$name, "\", \"type\": \"", x$type, "\"", sep="")
+         #     if(!is.null(x$args)) {
+         #        tmp <- paste(tmp, ", \"args\": [\"", paste(x$args, collapse="\", \"", sep=""), "\"]}", sep="")
+         #     } else {
+         #        tmp <- paste(tmp, "}")
+         #     }
+         #     tmp
+         #  }), collapse=",\n", sep=""),
+         #  "\n]}",
+         #  sep=""
+         # )
+         #       }
       res
    }
    

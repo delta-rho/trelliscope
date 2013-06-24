@@ -20,8 +20,9 @@ getCdName <- function(uid, appHash, displayList, verbose) {
 getFromAppHash <- function(appHash, names) {
    appHash <- strsplit(appHash, "&")[[1]]
    appHash <- gsub("^#(.*)", "\\1", appHash)
-   keys <- gsub("(.*)=.*", "\\1", appHash)
-   vals <- gsub(".*=(.*)", "\\1", appHash)
+   keys <- gsub("^(.*?)=.*", "\\1", appHash)
+   vals <- gsub(".*?=(.*)", "\\1", appHash)
+   vals <- gsub("%7", "|", vals)
 
    ind <- which(keys %in% names)
 

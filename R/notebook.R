@@ -202,7 +202,7 @@ makeHref <- function(group, name, type, server=NULL) {
    } else if(type=="ss") {
       href <- paste("<a class='ssShiny' href=\"", server, "/trelliscopeViewer/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    } else if(type=="simple") {
-      href <- paste("<a href='../displays/", group, "/", name, "/thumb.jpg' target='_blank'>view</a>", sep="")
+      href <- paste("<a href='../displays/", group, "/", name, "/thumb.png' target='_blank'>view</a>", sep="")
    } else if(type=="ssl") {
       href <- paste("<a class='sslShiny' href=\"http://localhost:8100/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
    }

@@ -72,10 +72,9 @@ makeDisplay <- function(
    
    # TODO: make sure plotFn is specified (maybe test it on a subset)
    # TODO: if it's not class localDiv or rhSplit, then error out immediately
-   
    isSinglePlot <- inherits(data, "trellis") || inherits(data, "ggplot") || inherits(data, "expression")
    plotEx <- NULL
-   
+      
    # validate data (if it is NULL, stop)
    if(inherits(data, "localDiv")) {
       if(length(data) == 0)
@@ -84,7 +83,8 @@ makeDisplay <- function(
    
    if(!calledFromRhipe) {
       if(!isSinglePlot) {
-         plotEx <- trsValidatePlotFn(plotFn, data, verbose)         
+         plotEx <- trsValidatePlotFn(plotFn, data, verbose)
+         cogEx <- trsValidateCogFn(data, cogFn, verbose)
       }
       
       plotDim <- trsValidatePlotDim(plotDim, data, plotFn, verbose)
@@ -97,8 +97,6 @@ makeDisplay <- function(
             message("* Clearing out old mongodb collections, if any")
          mongoClear(conn, group, name)         
       }
-      
-      cogEx <- trsValidateCogFn(data, cogFn, verbose)
       
       vdbPrefix <- trsValidatePrefix(conn)
       displayPrefix <- trsGetDisplayPrefix(conn, group, name)   
@@ -238,6 +236,8 @@ makeDisplay <- function(
          
          nPanels <- length(splitKeys)
          
+         cogDat <- data.frame(panelKey = splitKeys)
+         
          if(storage == "mongo") {
             plotRes <- lapply(seq_along(plotLocs), function(x) mongoEncodePlot(plotLocs[x], splitKeys[x]))
             mongoConn <- vdbMongoInit(conn)
@@ -246,6 +246,9 @@ makeDisplay <- function(
             mongo.insert.batch(mongoConn, mongoNS, plotRes)
             mongo.disconnect(mongoConn)
          }
+         
+         displayObj <- NULL
+         cogEx <- NULL
       }
       
       # if object is of class "localDiv", it is plotted
@@ -551,7 +554,7 @@ makeDisplay <- function(
       }
    }
    
-   if(!inherits(data, "rhData")) {
+   if(!inherits(data, "rhData") && !isSinglePlot) {
       # generate cogDat
       
       if(verbose)
@@ -584,11 +587,16 @@ makeDisplay <- function(
       # TODO: aspect ratio
       if(verbose)
          message("* Updating displayList...")
-         
+      
       modTime <- Sys.time()
       
       keys <- cogDat$panelKey         
-      keySig <- digest(sort(keys))
+      
+      if(isSinglePlot) {
+         keySig <- NA
+      } else {
+         keySig <- digest(sort(keys))         
+      }
       
       trsUpdateDisplayList(
          vdbPrefix=vdbPrefix, 
@@ -620,11 +628,11 @@ makeDisplay <- function(
 
       if(verbose)
          message("* Storing display object...")
-      
+
       hdfsDataSource <- NULL
       if(storage=="hdfsData")
          hdfsDataSource <- list(loc=data$loc, type=data$type, class=class(data))
-      
+
       displayObj <- list(
          vdbPrefix=vdbPrefix, 
          name=name, 
@@ -651,7 +659,7 @@ makeDisplay <- function(
          # rhKeyTrans=rhKeyTrans,
          # rhValTrans=rhValTrans
       )
-      
+
       save(displayObj, file=file.path(displayPrefix, "object.Rdata"))
       
       # write panel keys
@@ -661,7 +669,7 @@ makeDisplay <- function(
          message("* Writing panel keys...")
       # keyCols <- which(names(cogDat) %in% c("panelKey", "subDir"))
       save(keys, file=file.path(displayPrefix, "panelKeys.Rdata"))
-      
+
       if(verbose)
          message("* Writing cognostics...")
       if(cogStorage=="local") {
@@ -674,7 +682,7 @@ makeDisplay <- function(
       } else {
          # cogStorage=="mongo"
          # we've already put the data in, now we just need to index it
-         
+
          mongoConn <- vdbMongoInit(conn)
          mongoNS <- mongoCollName(conn$vdbName, group, name, "cog")
          cogNames <- names(cogEx)
@@ -699,7 +707,14 @@ makeDisplay <- function(
       #    thumbHeight <- 120
       # curWidth <- thumbHeight * plotDim$width / plotDim$height
       
-      suppressMessages(trsMakePNG(dat=divExample(data), plotFn=plotFn, file=file.path(displayPrefix, "thumb.png"), width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims))
+      if(isSinglePlot) {
+         file.copy(
+            list.files(file.path(displayPrefix, "png"), full.names=TRUE)[1],
+            file.path(displayPrefix, "thumb.png")
+         )
+      } else {
+         suppressMessages(trsMakePNG(dat=divExample(data), plotFn=plotFn, file=file.path(displayPrefix, "thumb.png"), width=plotDim$width, height=plotDim$height, res=plotDim$res, xLimType=xLimType, yLimType=yLimType, lims=lims))
+      }
       
       if(storage != "mongo") {
          # browser()

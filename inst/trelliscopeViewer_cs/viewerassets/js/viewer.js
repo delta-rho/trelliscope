@@ -8,7 +8,7 @@ function updateBigModalDims() {
    if(cogw < 1100) {
       // if the table is too narrow, stretch it out to the min-width (550px)
       $("#example").css("width", 520)
-
+      
       $(".modalBig").css("margin-left", "-" + (cogw/2) + "px");
    }
    
