@@ -3,7 +3,7 @@
 // http://datatables.net/forums/discussion/8447/bootstrap-2s-glyphicons/p1
 
 $(document).ready(function() {
-      
+   
    $('#btnPrev').click(function() {
       pageBack();
    });
@@ -192,8 +192,18 @@ function adjustPlotDims() {
    $(".plotTableWrap").css("height", plotHeight);
 
    // resize each image so firefox is happy...
+   
+   // need to account for related displays
+   var panelncol = $("#plotTableWrap_1").children().find("tr:first td").length
+   if(panelncol==0)
+      panelncol = 1;
 
-   $(".panelWrap").height(plotHeight - 5);
+   var panelnrow = $("#plotTableWrap_1").children().find("tr").length
+   if(panelnrow==0)
+      panelnrow = 1;
+
+   $(".panelWrap").height(plotHeight / panelnrow - 5 * panelnrow);
+   $(".panelWrap").width(plotWidth / panelncol - 5);
    
    // $(".png_img").css("width", plotWidth - 4);
    // $(".png_img").css("height", plotHeight - 4);
@@ -285,7 +295,7 @@ $.extend(tableSortBinding, {
          if(isNaN(tmp)) {
             tmp = 0;            
          } else {
-            // console.log("** Setting cognostics sort order:"+returnVal);            
+            
          }
          return tmp;
       }).get();

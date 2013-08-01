@@ -177,7 +177,7 @@ getDisplayTypes <- function(plotInfo, conn) {
    shinyServer <- conn$webConn$url
    if(plotInfo$n==1) {
       types <- "simple" # open plot in new window
-   } else if(plotInfo$storage %in% c("mongo", "hdfs", "hdfsData")) {
+   } else if(plotInfo$storage %in% c("mongo", "hdfs", "hdfsData", "localData")) {
       if(is.null(shinyServer)) {
          warning("'shinyServer' has not been specified in vdbConn")
       } else {

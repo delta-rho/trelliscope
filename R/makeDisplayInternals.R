@@ -338,7 +338,7 @@ trsMakePNG <- function(dat, plotFn=NULL, file, width, height, res, xLimType=NULL
                plotYLim <- tmp$y.limits               
                curXLim <- trsCurXLim(lims, dat, plotXLim)
                curYLim <- trsCurYLim(lims, dat, plotYLim)         
-
+               
                if(xLimType != "free")
                   tmp$x.limits <- curXLim
                if(yLimType != "free")

@@ -1,5 +1,5 @@
 library(shiny)
-library(trelliscope)
+# library(trelliscope)
 library(base64enc) # this one is much faster than caTools!!
 
 if(file.exists("../conn.R")) { # it is on a web server
@@ -673,9 +673,12 @@ shinyServer(function(input, output) {
          relList <- getRelatedDisplays()
          if(!is.null(relList)) {
             # browser()
-   
+                        
             res2 <- do.call(c, lapply(seq_along(relList), function(i) {
-               tmp <- getPNGs(cogDF, relList[[i]], NULL, NULL, vdbPrefix, conn)
+               ld <- NULL
+               if(relList[[i]]$storage=="localData" && relList[[i]]$dataSig==cdo$dataSig)
+                  ld <- localData
+               tmp <- getPNGs(cogDF, relList[[i]], ld, NULL, vdbPrefix, conn)
                names(tmp) <- 
                if(length(tmp) < totPanels)
                   tmp <- c(tmp, rep("", totPanels - length(tmp)))
