@@ -53,4 +53,4 @@ This software is currently under the BSD license.  Please read the [license](htt
 
 ## Acknowledgement
 
-datadr development is sponsored by the DARPA XDATA program.
+Trelliscope development is sponsored by the DARPA XDATA program.
