@@ -1,0 +1,24 @@
+\name{dfCogConn}
+\alias{dfCogConn}
+\title{Initiate Data Frame Cognostics Connection}
+\usage{
+  dfCogConn()
+}
+\value{
+  "cogConn" object of class "dfCogConn"
+}
+\description{
+  Initiate data frame cognostics connection
+}
+\note{
+  This should never need to be called explicitly.  It is
+  the default mechanism for storing cognostics in
+  \code{\link{makeDisplay}}.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{makeDisplay}}
+}
+

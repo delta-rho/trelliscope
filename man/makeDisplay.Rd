@@ -1,20 +1,18 @@
 \name{makeDisplay}
 \alias{makeDisplay}
-\title{Create a trelliscope Display}
+\title{Create a Trelliscope Display}
 \usage{
   makeDisplay(data, name, group = "common", desc = "",
     plotDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
-    plotFn = NULL,
-    lims = list(x = "free", y = "free", preFn = NULL),
-    cogFn = NULL, inputVars = NULL,
-    conn = getOption("vdbConn"), storage = NULL,
-    cogStorage = NULL, subDirSize = 1000, subDirN = 0,
-    verbose = TRUE, parallel = FALSE, rhFail = TRUE,
-    mapred = NULL, calledFromRhipe = FALSE)
+    panelFn = NULL,
+    lims = list(x = "free", y = "free", prepanelFn = NULL),
+    cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(),
+    output = NULL, conn = getOption("vdbConn"),
+    verbose = TRUE, control = NULL)
 }
 \arguments{
-  \item{dat}{data of class "localDiv", "rhData", "trellis",
-  "ggplot", or "expression"}
+  \item{data}{data of class "ddo" or "ddf" (see
+  \code{\link{ddo}}, \code{\link{ddf}})}
 
   \item{name}{the name of the display (no spaces or special
   characters)}
@@ -30,16 +28,16 @@
   (resolution of raster image).  defaults are 480 (px), 40,
   "fill", and 150, respectively}
 
-  \item{plotFn}{a function that produces a plot and takes
+  \item{panelFn}{a function that produces a plot and takes
   one argument, which will be the current split of the data
   being passed to it.  Useful to test with
-  plotFn(divExample(dat)).  Must return either an object of
-  class "ggplot", "trellis", or "expression" (of base plot
-  commands)}
+  panelFn(divExample(dat)).  Must return either an object
+  of class "ggplot", "trellis", or "expression" (of base
+  plot commands)}
 
   \item{lims}{either an object of class "trsLims" as
   obtained from \code{\link{setLims}} or a list with
-  elements x, y, and preFn, that specify how to apply
+  elements x, y, and prepanelFn, that specify how to apply
   \code{\link{prepanel}} and \code{\link{setLims}}}
 
   \item{cogFn}{a function that produces a single row of a
@@ -48,61 +46,54 @@
   current split of the data being passed to it.  Useful to
   test with cogFn(divExample(dat))}
 
-  \item{inputVars}{input variables that will allow user
-  input in the viewer, defined by \code{\link{inputVars}}}
+  \item{preRender}{should the panels be pre-rendered and
+  stored (\code{TRUE}), or rendered on-the-fly in the
+  viewer (\code{FALSE}, default)?  Default is recommended
+  unless rendering is very expensive.}
+
+  \item{cogConn}{a connection to store the cognostics data.
+  By default, this is \code{\link{dfCogConn()}}, but if
+  there are many subsets (millions or more),
+  \code{\link{mongoCogConn()}} is recommended (if MongoDB
+  is an option).}
+
+  \item{output}{how to store the panels and metadata for
+  the display (unnecessary to specify in most cases -- see
+  details)}
 
   \item{conn}{VDB connection info, typically stored in
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists}
 
-  \item{storage}{how to store the plots and metadata for
-  the display.  See details}
-
-  \item{cogStorage}{how to store the cognostics data.
-  Options are "local" for R data.frame, or "mongo" to store
-  cognostics in mongodb}
-
-  \item{subDirSize}{the approximate number plots per
-  subdirectory.  Only used of \code{storage=="local"}.  If
-  number of plots is less, there will not be subdiretories.
-  If set to 0, there will not be subdirectories.}
-
   \item{verbose}{print status messages?}
 
-  \item{parallel}{for storage="local" create plots in
-  parallel (currently not working)}
-
-  \item{mapred}{parameters to be passed to the Rhipe
-  mapreduce job (see \code{\link{rhwatch}})}
-
-  \item{calledFromRhipe}{don't mess with this}
+  \item{control}{parameters specifying how the backend
+  should handle things (most-likely parameters to
+  \code{\link{rhwatch}} in RHIPE) - see
+  \code{\link{rhipeControl}} and
+  \code{\link{localDiskControl}}}
 }
 \description{
   Create a trelliscope display and add it to a
   visualization database (VDB)
 }
 \details{
-  there are a lot of details... see the documentation:
+  Many of the parameters are optional or have defaults.
+  For several examples, see the documentation on github:
   \url{http://hafen.github.io/trelliscope}
 
-  Many of the parameters are optional or have defaults.
-
-  Storage options for plots: \describe{ \item{local:}{plots
-  for each of the panels will be stored in the displays
-  directory of the VDB directory} \item{mongo:}{plots will
-  be stored in mongodb using the mongodb connection as
-  specified by "vdbConn" (see documentation on github) -
-  this is very experimental} \item{hdfs:}{plots will be
-  stored in a mapfile on HDFS - can only be done with data
-  of class "rhSplit"} \item{localData:}{instead of storing
-  plots, data, plotFn, etc. will be stored locally and
-  plotFn will be applied to the data on-the-fly in the
-  viewer} \item{hdfsData:}{plotFn is applied on-the-fly to
-  data retrieved from the original data on HDFS (must be a
-  mapfile) - can only be done with data of class "rhDiv"} }
-  There are so many options because there are several
-  tradeoffs, described in the vignette.
+  Panels by default are not pre-rendered.  Instead, this
+  function creates a display object and computes and stores
+  the cognostics.  Then panels are rendered on the fly.  If
+  a user would like to pre-render the images, then by
+  default these will be stored to a local disk connection
+  (see \code{\link{localDiskConn}}) inside the VDB
+  directory, organized in subdirectories by group and name
+  of the display.  Optionally, the user can specify the
+  \code{output} parameter to be any valid "kvConnection"
+  object, as long as it is one that persists on disk (e.g.
+  \code{\link{hdfsConn}}).
 }
 \examples{
 # see docs

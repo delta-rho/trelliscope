@@ -1,12 +1,34 @@
 
+#' Compute RMSE of Loess Fit Cognostic
+#' 
+#' Compute RMSE of loess fit as a cognostic to be used as cognostics in a trelliscope display.
+#' 
+#' @param \ldots arguments to be passed to \code{link{loess}}, such as the formula, data, smoothing parameters, etc.
+#' @param desc description of cognostic
+#' 
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}
+#' @examples
+#' cogLoessRMSE(dist ~ speed, span=0.5, data=cars)
 #' @export
-cogLoessRMSE <- function(x, y, ..., desc="RMSE of residuals from loess fit") {
-   tmp <- try(loess(y ~ x, ...))
+cogLoessRMSE <- function(..., desc="RMSE of residuals from loess fit") {
+   tmp <- try(loess(...))
    if(inherits(tmp, "try-error"))
       return(NA)
    cog(tmp$s, desc=desc, type="num")
 }
 
+#' Compute Range Cognostic
+#' 
+#' Compute range to be used as cognostics in a trelliscope display.
+#'
+#' @param x numeric vector from which to compute the range
+#' @param desc description of cognostic
+#' 
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}
+#' @examples
+#' cogRange(rnorm(100))
 #' @export
 cogRange <- function(x, desc="range (max - min)") {
    res <- suppressWarnings(diff(range(x, na.rm=TRUE)))
@@ -15,6 +37,17 @@ cogRange <- function(x, desc="range (max - min)") {
    cog(res, desc=desc, type="num")
 }
 
+#' Compute Mean Cognostic
+#' 
+#' Compute mean to be used as cognostics in a trelliscope display.
+#' 
+#' @param x numeric vector from which to compute the mean
+#' @param desc description of cognostic
+#' 
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}
+#' @examples
+#' cogMean(rnorm(100))
 #' @export
 cogMean <- function(x, desc="mean") {
    res <- suppressWarnings(mean(x, na.rm=TRUE))
@@ -23,6 +56,17 @@ cogMean <- function(x, desc="mean") {
    cog(res, desc=desc, type="num")
 }
 
+#' Compute Scagnostics
+#' 
+#' Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
+#'
+#' @param x,y
+#' @param desc description of cognostic
+#' 
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}
+#' @examples
+#' cogScagnostics(cars$dist, cars$speed)
 #' @export
 cogScagnostics <- function(x, y) {
    suppressMessages(require(scagnostics))
@@ -59,9 +103,28 @@ cogScagnostics <- function(x, y) {
    )
 }
 
+
+# TODO: document example
+#' Create a Cognostics Object
+#' 
+#' Create a cognostics object.  To be used inside of the function passed to the \code{cogFn} argument of \code{\link{makeDisplay}} for each cognostics value to be computed for each subset.
+#' 
+#' @param val a scalar value (numeric, characer, date, etc.)
+#' @param desc a description for this cognostic value
+#' @param the desired type of cognostic you would like to compute (see details)
+#' 
+#' @return object of class "cog"
+#' 
+#' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "int", "num", "fac", "date", "time", "geo", "rel", "hier".
+#' 
+#' @author Ryan Hafen
+#' 
+#' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}} 
+#' 
 #' @export
 cog <- function(val=NULL, desc="", type=NULL) {
    cogTypes <- list(
+      key  = as.character,
       int  = as.integer  ,
       num  = as.numeric  ,
       fac  = as.character,
@@ -94,21 +157,47 @@ cog <- function(val=NULL, desc="", type=NULL) {
    val
 }
 
-#' @export
+#' @S3method print cog
 print.cog <- function(x, ...) { 
    attr(x, "desc") <- NULL 
    class(x) <- setdiff(class(x), "cog")
    print(x)
 }
 
-
-
+#' Apply Cognostics Function to a Key-Value Pair
+#' 
+#' Apply cognostics function to a key-value pair
+#' 
+#' @param cogFn cognostics function
+#' @param kvSubset key-value pair
+#' 
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
+#' @export
+applyCogFn <- function(cogFn, kvSubset) {
+   res <- list(
+      panelKey = cog(digest(kvSubset[[1]]), desc="panel key", type="key")
+   )
+   splitVars <- getSplitVars(kvSubset)
+   if(!is.null(splitVars)) {
+      res$splitVars <- splitVars
+   }
+   bsvs <- getBsvs(kvSubset)
+   if(!is.null(bsvs)) {
+      res$bsv <- bsvs
+   }
+   if(!is.null(cogFn))
+      res$cog <- kvApply(cogFn, kvSubset)
+   
+   res
+}
 
 ## internal
+
 ## some special cognostics, such as relations, need to be concatenated to a comma-separated string if we are storing them as a data.frame
 cog2df <- function(x) {
    # TODO: when class(x[[i]])=="trsCogRel", first concatenate
-   as.data.frame(x)
+   as.data.frame(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog), stringsAsFactors=FALSE)
 }
 
 as.cogGeo <- function(x) {
@@ -134,47 +223,42 @@ cogFlatten <- function(x) {
 }
 
 getCogDesc <- function(x, df=TRUE) {
-   do.call(c, lapply(x, function(a) {
-      if(df) {
-         fl <- cogFlatten(a)
-         rep(attr(a, "desc"), length(fl))
-      } else {
-         attr(a, "desc")         
-      }
-   }))
-}
-
-
-# gets not only cognostics returned by cogFn, but also panelKey and levels of conditioning variables
-getCognosticsSub <- function(data, cogFn, isCondDiv, splitKey) {
-   condList <- NULL
-   if(isCondDiv)
-      condList <- lapply(attr(data, "split"), function(x) {
-         cog(x, desc="conditioning variable", type="fac")
-      })
-
-   # if the user didn't wrap it in "cog()", do it for them...
-   if(is.null(cogFn)) {
-      cd <- NULL
-   } else {
-      cd <- cogFn(data)
-      notCogClass <- which(sapply(cd, function(x) !inherits(x, "cog")))
-      for(i in notCogClass) {
-         cd[[i]] <- cog(cd[[i]])
-      }
+   getDesc <- function(a) {
+      tmp <- attr(a, "desc")
+      ifelse(is.null(tmp), "", tmp)
    }
-   
-   c(
-      list(panelKey = cog(splitKey, desc="panel key", type="fac")),
-      condList,
-      cd
+
+   pk <- data.frame(type="panelKey", name="panelKey", desc="panel key")
+   sv <- if(!is.null(x$splitVars)) {
+      tmp <- lapply(x$splitVars, function(x) "conditioning variable")
+      data.frame(type="splitVar", name=names(tmp), desc=unlist(tmp))
+   } else {
+      NULL
+   }
+   bsvs <- if(!is.null(x$bsv)) {
+      tmp <- lapply(x$bsv, getDesc)
+      data.frame(type="bsv", name=names(tmp), desc=unlist(tmp))
+   } else {
+      NULL
+   }
+   cogs <- if(!is.null(x$cog)) {
+      tmp <- lapply(x$cog, getDesc)
+      data.frame(type="cog", name=names(tmp), desc=unlist(tmp))
+   } else {
+      NULL
+   }
+
+   res <- rbind(
+      pk, sv, bsvs, cogs
    )
+   rownames(res) <- NULL
+   res
 }
 
 getCognostics <- function(data, cogFn, splitKeys=NULL) {
    if(is.null(splitKeys))
       splitKeys <- names(data)
-
+      
    isCondDiv <- data$divBy$type=="condDiv"
    lapply(seq_along(data), function(ii) {
       getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])

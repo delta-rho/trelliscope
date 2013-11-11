@@ -1,58 +1,57 @@
 \name{prepanel}
 \alias{prepanel}
-\title{Prepanel Function for vdb Plots}
+\title{Prepanel Function for Trelliscope Displays}
 \usage{
-  prepanel(data, preFn = NULL, mapred = NULL,
-    verbose = TRUE, calledFromRhipe = FALSE)
+  prepanel(data, prepanelFn = NULL, control = NULL,
+    verbose = TRUE)
 }
 \arguments{
   \item{dat}{an object of class "localDiv" or "rhData"}
 
-  \item{preFn}{a prepanel function that returns a list
+  \item{prepanelFn}{a prepanel function that returns a list
   specifying \code{xlim} and \code{ylim} for determining
   axis limits, and optionally \code{dx} and \code{dy} for
   determining aspect ratio (used to define slopes of line
-  segments used for banking computations).  preFn can also
-  be a plotFn (see \code{\link{makeDisplay}}) that returns
-  either an object of class "trellis" or "ggplot", since
-  xlim and ylim can be determined from these.}
-
-  \item{mapred}{a list of parameters to be sent to
-  \code{\link{rhwatch}} if dat is of class "rhData"}
+  segments used for banking computations).  prepanelFn can
+  also be a panelFn (see \code{\link{makeDisplay}}) that
+  returns either an object of class "trellis" or "ggplot",
+  since xlim and ylim can be determined from these.}
 
   \item{verbose}{print status messages?}
 
-  \item{calledFromRhipe}{ignore this parameter (don't use
-  it)}
+  \item{control}{parameters specifying how the backend
+  should handle things (most-likely parameters to
+  \code{\link{rhwatch}} in RHIPE) - see
+  \code{\link{rhipeControl}} and
+  \code{\link{localDiskControl}}}
 }
 \value{
   object of class "trsPre".  This is a list of the x and y
   axis ranges for each split, along with the aspect ratio
   banking value if \code{dx} and \code{dy} are supplied in
-  \code{preFn}.  Can be used with \code{\link{plot.trsPre}}
-  and \code{\link{setLims}}.
+  \code{prepanelFn}.  Can be used with
+  \code{\link{plot.trsPre}} and \code{\link{setLims}}.
 }
 \description{
-  Prepanel function for vdb plots
+  Apply a prepanel function to objects of class "ddo" or
+  "ddf" to determine ranges of x and y axis limits prior to
+  creating a trelliscope display
+  (\code{\link{makeDisplay}}).  Useful in conjunction with
+  \code{\link{setLims}}.
 }
 \details{
-  Apply a prepanel function to objects of class "localDiv"
-  (obtained from splitDF()) or "rhData" to determine ranges
-  of x and y axis limits.  Useful in conjunction with
-  \code{\link{setLims}}.
-
   The plot method plots the sorted axis ranges for the x
   and y axis for the case of "same" (all axis limits share
   the same range) and "sliced" (all axis limits share the)
   and can be useful in helping determine how to ultimately
   set the limits.
 
-  You don not need to use \code{prepanel} to ultimately
-  create a \code{\link{makeDisplay}}, but if you bypass,
-  you will either need to specify your own limits in your
-  plot command, or do nothing, in which case each
-  individual plot will have limits based on the data in the
-  split being plotted (the axes will be "free").
+  You do not need to use \code{prepanel()} to ultimately
+  create a display with \code{\link{makeDisplay()}}, but if
+  you bypass, you will either need to specify your own
+  limits in your plot command, or do nothing, in which case
+  each individual plot will have limits based on the data
+  in the split being plotted (the axes will be "free").
 
   Axis limits are very important.  What makes viewing
   groups of plots of subsets of data ("small multiples") so
@@ -65,11 +64,6 @@
   \code{\link{setLims}}, allows you to account for that
   prior to the expensive process of creating all of the
   plots.
-
-  In the future, there will be helper functions for special
-  types of plots, such as histograms, etc. to help the user
-  more easily provide the \code{xlim} and \code{ylim}
-  components of the prepanel function.
 }
 \examples{
 \dontrun{
@@ -80,7 +74,7 @@ irisPreFn <- function(x) {
       ylim = range(x$Sepal.Width)
    )
 }
-irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 plot(irisPre)#' }
 }
 \author{
@@ -88,7 +82,6 @@ plot(irisPre)#' }
 }
 \seealso{
   \code{\link{x}} \code{\link{plot.trsPre}},
-  \code{\link{setLims}}, \code{\link{makeDisplay}},
-  \code{\link{localDiv}}, \code{\link{rhData}}
+  \code{\link{setLims}}, \code{\link{makeDisplay}}
 }
 

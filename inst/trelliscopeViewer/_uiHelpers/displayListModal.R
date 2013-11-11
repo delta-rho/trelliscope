@@ -19,11 +19,11 @@ displayListModal <- function() {
 renderDisplayListTable <- function() {
    vdbPrefix <- getOption("vdbShinyPrefix")
    load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
-   
+
    HTML(paste("<table class='table table-condensed table-striped table-bordered table-hover' id='displayListTable'><thead><tr>",
-   paste("<th>", names(displayList), "</th>", collapse="", sep=""),
+   paste("<th>", displayListNames, "</th>", collapse="", sep=""),
    "</tr></thead><tbody>",
-   paste("<tr class='displayList'>", apply(displayList, 1, function(x) paste("<td>", x, "</td>", sep="", collapse="")), "</tr>", sep="", collapse="\n"),
+   paste("<tr class='displayList'>", apply(displayListDF, 1, function(x) paste("<td>", x, "</td>", sep="", collapse="")), "</tr>", sep="", collapse="\n"),
    "</tbody></table>",
    sep="")
    )

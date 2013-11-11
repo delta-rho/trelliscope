@@ -9,7 +9,7 @@ $.extend(displayListBinding, {
       clicked.removeClass("clicked");
       res = uid;
       if(uid != "") {
-         console.log("** Received input to set current display to uid =" + res);
+         console.log("** Received input to set current display to uid = " + res);
          $("#displayListModal").modal('hide');         
       }
       // set currentPage back to 1
@@ -25,6 +25,7 @@ $.extend(displayListBinding, {
       // set panelKey visible by default
       $("#selectedPlotVar").val("panelKey");
       $("#selectedPlotVar").trigger("change");
+      updateCogTableDims();
       // $(".selectablePlotVar[name='panelKey']").toggleClass("highlighted");
       
       // set all related displays to unhighlighted and trigger change

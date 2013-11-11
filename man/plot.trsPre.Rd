@@ -2,8 +2,8 @@
 \alias{plot.trsPre}
 \title{Plot results form prepanel}
 \usage{
-  plot.trsPre(lims, layout = c(2, 2), as.table = TRUE,
-    strip = FALSE, strip.left = TRUE,
+  \method{plot}{trsPre} (lims, layout = c(2, 2),
+    as.table = TRUE, strip = FALSE, strip.left = TRUE,
     between = list(y = 0.25), xlab = "Rank",
     ylab = "Panel Limits", ...)
 }
@@ -38,7 +38,7 @@ irisPreFn <- function(x) {
       ylim = range(x$Sepal.Width)
    )
 }
-irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 plot(irisPre)
 }
 }

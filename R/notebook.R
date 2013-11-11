@@ -18,7 +18,7 @@ newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTit
    if(is.null(name))
       stop("Must specify name for new notebook")
       
-   prefix <- trsValidatePrefix(conn)
+   prefix <- conn$path
    
    filePath <- file.path(prefix, "notebook", paste(name, ".Rmd", sep=""))
    
@@ -64,16 +64,16 @@ viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
       stop("Must specify name for notebook")
       
    if(local) {
-      prefix <- trsValidatePrefix(conn)
-
+      prefix <- conn$path
+      
       if(grepl("~", prefix))
          prefix <- path.expand(prefix)
-
+         
       if(!grepl("\\.html$", name))
          name <- paste(name, ".html", sep="")
          
       filePath <- file.path(prefix, "notebook", name)
-
+      
       browseURL(filePath)
       
       # launch shiny
@@ -81,7 +81,6 @@ viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
    } else {
       # build URL for web server and launch
    }
-   
 }
 
 # this just makes an href to be shown inline that sends you to the plot
@@ -223,7 +222,7 @@ makeHref <- function(group, name, type, server=NULL) {
 #' 
 #' @export
 nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
-   prefix <- trsValidatePrefix(conn)
+   prefix <- conn$path
    
    port <- ""
    shinyServer <- NULL
@@ -280,7 +279,7 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 #' 
 #' @export
 nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
-   prefix <- trsValidatePrefix(conn)
+   prefix <- conn$path
 
    port <- ""
    shinyServer <- NULL

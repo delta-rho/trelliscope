@@ -7,37 +7,23 @@ encodePNG <- function(plotLoc) {
    paste("data:image/png;base64,", b64, sep = "")   
 }
 
-getPNGs <- function(cogDF, cdo, localData, hdfsData, vdbPrefix, conn=NULL) {
-   if(cdo$storage=="local") {
-      hasSubDir <- cdo$subDirN > 0
-      if(hasSubDir) {
-         cogDF$subDir <- sapply(cogDF$panelKey, function(x) trelliscope:::keyHash(x, cdo$subDirN))
-      } else {
-         cogDF$subDir <- ""
+getPNGs <- function(cogDF, cdo, vdbPrefix, conn=NULL) {
+   if(cdo$preRender) {
+      pngs <- unlist(lapply(cdo$panelDataSource[cogDF$panelKey], "[[", 2))
+   } else {
+      # TODO: since we're making the plot on the fly, why not make it the right size instead of creating a large one...
+      tmpfile <- tempfile()
+
+      # load relatedData
+      rel <- cdo$relatedData
+      for(i in seq_along(rel)) {
+         assign(names(rel)[i], rel[[i]], environment())
       }
+      environment(cdo$panelFn) <- environment()
       
-      ff <- file.path(vdbPrefix, "displays", cdo$group, cdo$name, "png", cogDF$subDir, paste(cogDF$panelKey, ".png", sep=""))
-      pngs <- sapply(ff, encodePNG) # pngs <- ff
-   } else if(cdo$storage=="hdfs") {
-      pngs <- unlist(cdo$mapfile[cogDF$panelKey])
-   } else if(cdo$storage=="mongo") {
-      mongoConn <- vdbMongoInit(conn)
-      mongoNS <- mongoCollName(conn$vdbName, cdo$group, cdo$name, "panel")
-      pngs <- sapply(as.character(cogDF$panelKey), function(x) getMongoPlot(mongoConn, mongoNS, x))
-   } else if(cdo$storage=="localData") {
-      tmpfile <- tempfile()
-      # browser()
-      pngs <- sapply(localData[cogDF$panelKey], function(x) {
-         # TODO: since we're making the plot on the fly, why not make it the right size instead of creating a large one...
-         trelliscope:::trsMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
-         trelliscope:::encodePNG(tmpfile)
-      })
-   } else if(cdo$storage=="hdfsData") {
-      dat <- hdfsData[as.character(cogDF$panelKey)]
-      tmpfile <- tempfile()
-      pngs <- sapply(dat, function(x) {
-         trelliscope:::trsMakePNG(dat=x, plotFn=cdo$plotFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, xLimType=cdo$xLimType, yLimType=cdo$yLimType, lims=cdo$lims)
-         trelliscope:::encodePNG(tmpfile)
+      pngs <- sapply(cdo$panelDataSource[cogDF$panelKey], function(x) {
+         makePNG(dat=x, panelFn=cdo$panelFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, lims=cdo$lims)
+         encodePNG(tmpfile)
       })
    }
    pngs

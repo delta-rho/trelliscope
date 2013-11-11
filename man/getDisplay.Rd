@@ -1,0 +1,31 @@
+\name{getDisplay}
+\alias{getDisplay}
+\title{Retrieve Display Object from VDB}
+\usage{
+  getDisplay(name, group = NULL,
+    conn = getOption("vdbConn"))
+}
+\arguments{
+  \item{name}{the name of the display}
+
+  \item{group}{the group of the display}
+
+  \item{conn}{VDB connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists}
+}
+\description{
+  Retrieve a display object from a VDB.
+}
+\details{
+  If a display is uniquely determined by its name, then
+  group is not required.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
+}
+

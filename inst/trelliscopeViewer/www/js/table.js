@@ -31,7 +31,7 @@ $(document).ready(function() {
    
    $('#varRelatedTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
    
-   $('#plotFnUpdateTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
+   $('#panelFnUpdateTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
    
    $('#panelLayoutTipPopover').popover({placement: 'bottom', trigger: 'hover', offset: 1, html: true});
             
@@ -39,15 +39,12 @@ $(document).ready(function() {
       $('#displayListTable td:nth-child('+(columnIndex+1)+'), #displayListTable th:nth-child('+(columnIndex+1)+')').hide();
    }
    
-   hideColumn(0);
-   hideColumn(6);
-   hideColumn(7);
-   hideColumn(8);
-   hideColumn(9);
-   hideColumn(10);
-   hideColumn(12);
-   hideColumn(13);
-   hideColumn(14);
+   hideColumn(0);  // uid
+   hideColumn(13); // keySig
+   hideColumn(8);  // height
+   hideColumn(9);  // width
+   hideColumn(10); // resolution
+   hideColumn(11); // aspect
    
    var appHash = window.location.hash;
    if(appHash == "") {
@@ -120,14 +117,13 @@ $(document).ready(function() {
    })
    
    var windowWidth = $(window).width();
-
+   
    var displayListModalWidth = Math.min(850, windowWidth - 100);
    $("#displayListModal").css("margin-left", "0px");
    $("#displayListModal").css("width", displayListModalWidth + "px")
    $("#displayListModal").css("left", 
       (Math.max(windowWidth - (displayListModalWidth + 10), 0) / 2) + "px"
    );
-   
    
    // remove fade-in behavior of modals
    var modals = $(".modal");
@@ -639,10 +635,10 @@ $.extend(plotMatOutputBinding, {
 });
 Shiny.outputBindings.register(plotMatOutputBinding, 'shiny.plotMatOutput');
 
-var plotFnOutputBinding = new Shiny.OutputBinding();
-$.extend(plotFnOutputBinding, {
+var panelFnOutputBinding = new Shiny.OutputBinding();
+$.extend(panelFnOutputBinding, {
    find: function(scope) {
-     return $(scope).find('.shiny-plotFn-output');
+     return $(scope).find('.shiny-panelFn-output');
    },
    renderValue: function(el, data) {
       Shiny.unbindAll(el);
@@ -651,7 +647,7 @@ $.extend(plotFnOutputBinding, {
       Shiny.bindAll(el);
    }
 });
-Shiny.outputBindings.register(plotFnOutputBinding, 'shiny.plotFnOutput');
+Shiny.outputBindings.register(panelFnOutputBinding, 'shiny.panelFnOutput');
 
 $(document).on("click", "#variableCogSelectBtn", function(evt) {
    var columns = getHighlighted($(".selectableCogVar"));
@@ -670,11 +666,11 @@ $(document).on("click", "#viewOptionsBtn", function(evt) {
    var columns = getHighlighted($(".selectablePlotVar"))
    $("#selectedPlotVar").val(columns);
    $("#selectedPlotVar").trigger("change");
-
-   var plotFn = editor.getValue();
-   if(plotFn != "") {
-      $("#plotFnInput").text(plotFn);
-      $("#plotFnInput").trigger("change");
+   console.log("hi");
+   var panelFn = editor.getValue();
+   if(panelFn != "") {
+      $("#panelFnInput").text(panelFn);
+      $("#panelFnInput").trigger("change");
    }
    adjustPlotDims();
 });

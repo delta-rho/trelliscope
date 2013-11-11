@@ -1,5 +1,4 @@
 library(shiny)
-library(caTools)
 library(hexbin)
 # library(trelliscope)
 

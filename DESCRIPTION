@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.6
-Date: 2012-03-03
+Version: 0.7
+Date: 2013-10-10
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
 Description: Trelliscope provides a way to create, organize, and view
@@ -21,14 +21,13 @@ License: BSD
 LazyLoad: yes
 LazyData: yes
 Depends:
-    R (>= 2.15.0),
+    R (>= 2.15.1),
     datadr,
-    lattice (>= 0.19-26),
-    ggplot2,
+    lattice (>= 0.20-23),
     base64enc,
     knitr,
     markdown,
-    shiny (>= 0.5.0),
+    shiny (>= 0.7.0),
     digest,
     codetools,
     hexbin
@@ -39,24 +38,20 @@ Suggests:
     ggplot2
 Collate:
     'aspect.R'
-    'bsSetup.R'
     'curLim.R'
-    'encodePlot.R'
-    'noMargins.R'
-    'progressbar.R'
     'runViewer.R'
-    'typeset.R'
-    'vdbInit.R'
-    'notebook.R'
     'makeDisplay.R'
-    'makeDisplayInternals.R'
     'prepanel.R'
-    'writeCogJson.R'
     'cognostics.R'
-    'htaccessGen.R'
-    'inputVars.R'
-    'displayObject.R'
-    'splod.R'
-    'websync.R'
-    'mongo.R'
-    'vdbConn.R'
+    'conn_cog_df.R'
+    'conn_cog_methods.R'
+    'conn_cog_mongo.R'
+    'conn_vdb.R'
+    'displayObj.R'
+    'makeDisplay_internals.R'
+    'makePNG.R'
+    'globals.R'
+    'bsSetup.R'
+    'noMargins.R'
+    'notebook.R'
+    'typeset.R'

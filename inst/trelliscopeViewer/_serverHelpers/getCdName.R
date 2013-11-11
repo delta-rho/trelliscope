@@ -1,9 +1,9 @@
-getCdName <- function(uid, appHash, displayList, verbose) {
+getCdName <- function(uid, appHash, displayListDF, verbose) {
    # appHash <- "#group=common&plot=irisRhTest1"
    if(!is.na(uid)) {
       if(uid!="") {
-         # browser()
-         tmp <- displayList[displayList$uid == uid,]
+
+         tmp <- displayListDF[displayListDF$uid == uid,]
          logMsg("Display ", tmp$group, " / ", tmp$name, " chosen from display modal", verbose=verbose)
          return(c(tmp$group, tmp$name))
       } 

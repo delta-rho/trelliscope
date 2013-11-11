@@ -51,21 +51,21 @@ variablePlotSelectModal <- function() {
                tags$hr(),
                htmlOutput("variablePlotSelectInput")
             ), 
-            tabPanel("plotFn", 
+            tabPanel("panelFn", 
             tags$h4("Update plot function", style="display:inline; line-height:25px"), 
-            tags$a(id='plotFnUpdateTipPopover', rel='popover', 
-               title='Update plotFn', 
+            tags$a(id='panelFnUpdateTipPopover', rel='popover', 
+               title='Update panelFn', 
                'data-content'="<p>Here you can update the plot function to be applied to each subset - only works with storage method of 'localData'.  Please be careful here!", 
                tags$i(class='icon-info-sign')
             ), 
             div(id="editorWrapper", 
-               class="shiny-plotFn-output", 
+               class="shiny-panelFn-output", 
                div(
                   id="editor", 
-                  class="shiny-plotFn-output"
+                  class="shiny-panelFn-output"
                ), 
                div(
-                  tags$textarea(id="plotFnInput"), 
+                  tags$textarea(id="panelFnInput"), 
                   style="display:none"
                ), 
                HTML("<script src='' type='text/javascript' charset='utf-8'></script>
@@ -114,14 +114,14 @@ variableCogSelectModal <- function() {
 
 
 # type should be "Cog" or "Plot"
-makeVariableSelectTable <- function(vars, desc, type) {
-   c1 <- paste("<td>", vars, "</td>", sep="")
-   c2 <- paste("<td>", desc, "</td>", sep="")
+makeVariableSelectTable <- function(desc, type) {
+   c1 <- paste("<td>", desc$name, "</td>", sep="")
+   c2 <- paste("<td>", desc$desc, "</td>", sep="")
 
    if(type=="Cog") {
-      c3 <- paste("<td class='selectableCogVar highlighted' name='", vars, "'></td>", sep="")      
+      c3 <- paste("<td class='selectableCogVar highlighted' name='", desc$name, "'></td>", sep="")      
    } else {
-      c3 <- paste("<td class='selectablePlotVar' name='", vars, "'></td>", sep="")
+      c3 <- paste("<td class='selectablePlotVar' name='", desc$name, "'></td>", sep="")
       c3[1] <- "<td class='selectablePlotVar highlighted' name='panelKey'></td>"
    }
    

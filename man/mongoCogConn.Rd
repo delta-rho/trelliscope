@@ -1,0 +1,25 @@
+\name{mongoCogConn}
+\alias{mongoCogConn}
+\title{Initiate a MongoDB Cognostics Connection}
+\usage{
+  mongoCogConn(host = "127.0.0.1", user = "", pass = "",
+    name = "", db = "")
+}
+\arguments{
+  \item{host,user,pass,name,db}{parameters used to initiate
+  MongoDB connection (see \code{\link{mongo.create}})}
+}
+\value{
+  a "cogConn" object of class "cogMongoConn"
+}
+\description{
+  Initiate a MongoDB cognostics connection, to be passed as
+  the \code{cogConn} argument to \code{\link{makeDisplay}}.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{makeDisplay}}
+}
+

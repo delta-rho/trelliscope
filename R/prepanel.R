@@ -1,32 +1,27 @@
-#' Prepanel Function for vdb Plots
-#'
-#' Prepanel function for vdb plots
+#' Prepanel Function for Trelliscope Displays
 #' 
-#' Apply a prepanel function to objects of class "localDiv" (obtained from splitDF()) or "rhData" to determine ranges of x and y axis limits.  Useful in conjunction with \code{\link{setLims}}.
+#' Apply a prepanel function to objects of class "ddo" or "ddf" to determine ranges of x and y axis limits prior to creating a trelliscope display (\code{\link{makeDisplay}}).  Useful in conjunction with \code{\link{setLims}}.
 #' 
 #' @param dat an object of class "localDiv" or "rhData"
-#' @param preFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  preFn can also be a plotFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
-#' @param mapred a list of parameters to be sent to \code{\link{rhwatch}} if dat is of class "rhData"
+#' @param prepanelFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param verbose print status messages?
-#' @param calledFromRhipe ignore this parameter (don't use it)
+#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
 #' 
-#' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{preFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}. 
+#' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}. 
 #' 
 #' @details
 #' The plot method plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.  
 #' 
-#' You don not need to use \code{prepanel} to ultimately create a \code{\link{makeDisplay}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
+#' You do not need to use \code{prepanel()} to ultimately create a display with \code{\link{makeDisplay()}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
 #' 
 #' Axis limits are very important.  What makes viewing groups of plots of subsets of data ("small multiples") so powerful is being able to make meaningful visual comparisons across plots.  This is much easier to do if scales for each plot are commensurate.
 #' 
 #' This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{setLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
 #' 
-#' In the future, there will be helper functions for special types of plots, such as histograms, etc. to help the user more easily provide the \code{xlim} and \code{ylim} components of the prepanel function.
-#' 
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{x}}
-#' \code{\link{plot.trsPre}}, \code{\link{setLims}}, \code{\link{makeDisplay}}, \code{\link{localDiv}}, \code{\link{rhData}}
+#' \code{\link{plot.trsPre}}, \code{\link{setLims}}, \code{\link{makeDisplay}}
 #' 
 #' @examples
 #' \dontrun{
@@ -37,14 +32,14 @@
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' plot(irisPre)#' }
 #' 
 #' @export
-prepanel <- function(data, preFn=NULL,
-   mapred=NULL, 
-   verbose=TRUE,
-   calledFromRhipe = FALSE # don't mess with this
+prepanel <- function(data, 
+   prepanelFn = NULL,
+   control = NULL, 
+   verbose = TRUE
 ) {
    banking <- function(dx, dy) {
       if (length(dx)!=length(dy)) return(NA)
@@ -55,20 +50,20 @@ prepanel <- function(data, preFn=NULL,
       }
       else 1
    }
-   preFnIsTrellis <- FALSE
+   prepanelFnIsTrellis <- FALSE
    doBanking <- TRUE
    
    if(verbose)
-      message("Testing 'preFn' on a subset...")
-   p <- preFn(divExample(data))
+      message("Testing 'prepanelFn' on a subset...")
+   p <- kvApply(prepanelFn, kvExample(data))
    if(inherits(p, "trellis")) {
-      preFnIsTrellis <- TRUE
+      prepanelFnIsTrellis <- TRUE
       if(verbose)
          message("Using lattice plot to determine limits... dx and dy will not be computed.")
       doBanking <- FALSE
    } else {
       if(is.null(p$xlim) || is.null(p$ylim))
-         stop("'preFn' must either return an object of class 'trellis' or return a list with elements 'xlim' and 'ylim'.")
+         stop("'prepanelFn' must either return an object of class 'trellis' or return a list with elements 'xlim' and 'ylim'.")
       if(is.null(p$dx) || is.null(p$dy)) {
          if(verbose)
             message("dx or dy (or both) were not specified - not computing banking.")
@@ -76,19 +71,17 @@ prepanel <- function(data, preFn=NULL,
       }
    }
    
-   splitKeys <- getKeys(data)
-   
-   if(inherits(data, "localDiv")) {
-      res <- lapply(seq_along(data), function(ii) {
-         dd <- data[[ii]]
-         curSplitKey <- splitKeys[[ii]]
+   map <- expression({
+      for(i in seq_along(map.keys)) {
+         k <- map.keys[[i]]
+         r <- map.values[[i]]
          bnk <- NA
          
-         if(preFnIsTrellis) {
+         if(prepanelFnIsTrellis) {
             # temporarily remove axis padding
             curOption <- lattice.getOption("axis.padding")$numeric
             lattice.options(axis.padding=list(numeric=0))
-            p <- preFn(dd)
+            p <- prepanelFn(r)
             xr <- p$x.limits
             yr <- p$y.limits
 
@@ -98,7 +91,7 @@ prepanel <- function(data, preFn=NULL,
             # a$panel$ranges[[1]]$x.range
             # a$panel$ranges[[1]]$y.range
          } else {
-            pre <- preFn(dd)
+            pre <- prepanelFn(r)
             xr <- pre$xlim
             yr <- pre$ylim
 
@@ -109,127 +102,82 @@ prepanel <- function(data, preFn=NULL,
             }
          }
          
-         list(
-            data.frame(
-               key=as.character(curSplitKey), 
-               min=xr[1],
-               max=xr[2],
-               # med=median(x, na.rm=TRUE),
-               bnk=bnk
-            ),
-            data.frame(
-               key=as.character(curSplitKey), 
-               min=yr[1],
-               max=yr[2],
-               # med=median(y, na.rm=TRUE),
-               bnk=bnk
-            )
-         )
-      })
-      res <- list(
-         x = do.call(rbind, lapply(res, function(x) x[[1]])),
-         y = do.call(rbind, lapply(res, function(x) x[[2]]))
-      )
-   } else if(inherits(data, "rhData")) {
-      
-      map <- expression({
-         for(i in seq_along(map.keys)) {
-            k <- map.keys[[i]]
-            r <- map.values[[i]]
-            d <- list(r)
-            names(d) <- k
-            class(d) <- c("localDiv", "list")
-            attr(d, "divBy") <- divBy
-            
-            tmp <- prepanel(
-               data=d,
-               preFn=preFn,
-               verbose=FALSE,
-               calledFromRhipe=TRUE
-            )
-            rhcollect("1", tmp)
-         }
-      })
-      
-      # rbind the results
-      reduce <- expression(
-         pre = {
-            x <- NULL
-            y <- NULL
-         },
-         reduce = {
-            x <- rbind(x, do.call(rbind, lapply(reduce.values, function(a) a$x)))
-            y <- rbind(y, do.call(rbind, lapply(reduce.values, function(a) a$y)))
-         },
-         post = {
-            rhcollect("1", list(x=x, y=y))
-         }
-      )
-      
-      parList <- list(
-         preFn = preFn,
-         divBy = data$divBy
-      )
-      
-      if(! "package:trelliscope" %in% search()) {
-         parList <- c(parList, list(
-            prepanel = prepanel # remove when packaged 
+         collect("x", data.frame(
+            key=digest(k), 
+            min=xr[1],
+            max=xr[2],
+            # med=median(x, na.rm=TRUE),
+            bnk=bnk,
+            stringsAsFactors=FALSE
+         ))
+         
+         collect("y", data.frame(
+            key=digest(k),
+            min=yr[1],
+            max=yr[2],
+            # med=median(y, na.rm=TRUE),
+            bnk=bnk,
+            stringsAsFactors=FALSE
          ))
       }
-      
-      if("package:trelliscope" %in% search()) {
-         setup <- expression({
-            suppressMessages(require(lattice))
-            suppressMessages(require(ggplot2))
-            # suppressMessages(require(data.table))
-            suppressMessages(require(trelliscope))
-            suppressMessages(require(datadr))
-         })
-      } else {
-         setup <- expression({
-            suppressMessages(require(lattice))
-            suppressMessages(require(ggplot2))
-            # suppressMessages(require(data.table))
-            suppressMessages(require(datadr))
-         })
+   })
+   
+   # rbind the results
+   reduce <- expression(
+      pre = {
+         res <- NULL
+      },
+      reduce = {
+         res <- rbind(res, data.frame(rbindlist(reduce.values)))
+      },
+      post = {
+         collect(reduce.key, res)
       }
-      
-      ofolder <- Rhipe:::mkdHDFSTempFolder(file="prepanel")
-      
-      rhoptions(copyObjects=list(auto=FALSE))
-      # suppressMessages(capture.output(
-      rhJob <- rhwatch(
-         setup=nullAttributes(setup),
-         map=nullAttributes(map),
-         reduce=nullAttributes(reduce),
-         input=rhfmt(data$loc, type=data$type),
-         output=ofolder,
-         mapred=mapred,
-         combiner=TRUE,
-         param=parList,
-         # mon.sec=0,
-         readback=FALSE
-      ) # ))
-      
-      # id <- gsub(".*jobid=(job_.*)", "\\1", rhJob[[1]]$tracking)
-      # rhRes <- trsRhStatus(id)
-      
-      res <- rhread(ofolder)[[1]][[2]]
-      rhdel(ofolder)
+   )
+   
+   parList <- list(
+      prepanelFn = prepanelFn,
+      prepanelFnIsTrellis = prepanelFnIsTrellis,
+      doBanking = doBanking
+   )
+   
+   if(! "package:trelliscope" %in% search()) {
+      # parList <- c(parList, list(
+      # ))
+
+      setup <- expression({
+         suppressMessages(require(lattice))
+         suppressMessages(require(ggplot2))
+         suppressMessages(require(data.table))
+      })
+   } else {
+      setup <- expression({
+         suppressMessages(require(lattice))
+         suppressMessages(require(ggplot2))
+         suppressMessages(require(data.table))
+         suppressMessages(require(trelliscope))
+         suppressMessages(require(datadr))
+      })
    }
    
-   if(calledFromRhipe) {
-      return(res)
-   } else {
-      res <- list(
-         x = res$x,
-         y = res$y,
-         preFnIsTrellis = preFnIsTrellis,
-         preFn = preFn
-      )
-      class(res) <- c("trsPre", "list")
-      return(res)
-   }
+   # suppressMessages(capture.output(
+   jobRes <- mrExec(
+      data,
+      setup=setup,
+      map=map,
+      reduce=reduce,
+      control=control,
+      params=parList,
+   )
+
+   res <- list(
+      x = jobRes[["x"]][[2]],
+      y = jobRes[["y"]][[2]],
+      prepanelFnIsTrellis = prepanelFnIsTrellis,
+      prepanelFn = prepanelFn
+   )
+   class(res) <- c("trsPre", "list")
+   return(res)
 }
 
 #' Plot results form prepanel
@@ -256,10 +204,11 @@ prepanel <- function(data, preFn=NULL,
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' plot(irisPre)
 #' }
 #' 
+#' @method plot trsPre
 #' @export
 plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
 ) {
@@ -315,26 +264,14 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
       ylab=ylab,
       ...
    )
-
-
-
-   # # metrics:
-   # lapply(lims, function(a) {
-   #    data.frame(
-   #       minRange = min(a$max - a$min),
-   #       maxRange = max(a$max - a$min),
-   #       medRange = median(a$max - a$min),
-   #       totRange = max(a$max) - min(a$min)
-   #    )
-   # })
    
    p
 }
 
-#' Specify rules for x and y limits for a makeDisplay
-#'
-#' Based on results from \code{\link{prepanel}}, specify rules that will determine x and y axis limits.
-#'
+#' Specify Rules for x and y Limits for a Display
+#' 
+#' Based on results from \code{\link{prepanel}}, specify rules that will determine x and y axis limits to be passed as the \code{lims} argument when calling \code{\link{makeDisplay}}.
+#' 
 #' @param lims object of class "trsPre"
 #' @param x x-axis limits rule (either "same", "sliced", or "free" - see details)
 #' @param y y-axis limits rule (either "same", "sliced", or "free" - see details)
@@ -342,9 +279,9 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' @param yQuant same as xQuant but for y-axis
 #' @param xQuantRange a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
 #' @param yQuantRange same as xQuantRange but for y-axis
-#'
+#' 
 #' @return object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}
-#'
+#' 
 #' @details
 #' This function reduces the list of axis limits computed for each split of a data set to an overall axis limit rule for the plot.  
 #' 
@@ -363,7 +300,7 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' irisLims <- setLims(irisPre, x="same", y="sliced")
 #' 
 #' @export
@@ -405,13 +342,11 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
    res <- list(
       x=getLims("x", x, xQuant, xRangeQuant),
       y=getLims("y", y, yQuant, yRangeQuant),
-      preFnIsTrellis = lims$preFnIsTrellis,
-      preFn = lims$preFn,
+      prepanelFnIsTrellis = lims$prepanelFnIsTrellis,
+      prepanelFn = lims$prepanelFn,
       prop = prop, 
       n=nrow(lims$x)
    )
    class(res) <- c("trsLims", "list")
    res
 }
-
-

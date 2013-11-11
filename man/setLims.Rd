@@ -1,6 +1,6 @@
 \name{setLims}
 \alias{setLims}
-\title{Specify rules for x and y limits for a makeDisplay}
+\title{Specify Rules for x and y Limits for a Display}
 \usage{
   setLims(lims, x = "same", y = "same", xQuant = c(0, 1),
     yQuant = c(0, 1), xRangeQuant = 1, yRangeQuant = 1,
@@ -34,7 +34,9 @@
 }
 \description{
   Based on results from \code{\link{prepanel}}, specify
-  rules that will determine x and y axis limits.
+  rules that will determine x and y axis limits to be
+  passed as the \code{lims} argument when calling
+  \code{\link{makeDisplay}}.
 }
 \details{
   This function reduces the list of axis limits computed
@@ -61,7 +63,7 @@ irisPreFn <- function(x) {
       ylim = range(x$Sepal.Width)
    )
 }
-irisPre <- prepanel(irisSplit, preFn=irisPreFn)
+irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 irisLims <- setLims(irisPre, x="same", y="sliced")
 }
 \author{

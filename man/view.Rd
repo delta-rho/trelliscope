@@ -1,10 +1,9 @@
 \name{view}
 \alias{view}
-\title{Run Server-Side Viewer}
+\title{Run Shiny Display Viewer}
 \usage{
-  view(conn = getOption("vdbConn"), type = "ss",
-    group = NULL, name = NULL, port = 8100L,
-    openBrowser = TRUE)
+  view(conn = getOption("vdbConn"), group = NULL,
+    name = NULL, port = 8100L, openBrowser = TRUE)
 }
 \arguments{
   \item{conn}{VDB connection info, typically stored in
@@ -12,14 +11,10 @@
   necessary to specify here if a valid "vdbConn" object
   exists}
 
-  \item{type}{there are two viewers - the server-side "ss"
-  and client-side "cs"}
-
   \item{group,}{name optional parameters to load the viewer
   with a pre-specified display}
 
-  \item{port}{if type="ss", what port to use for the
-  viewer}
+  \item{port}{what port to use for the viewer}
 
   \item{openBrowser}{should the browser be automatically
   launched?}
