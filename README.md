@@ -1,8 +1,6 @@
 # Trelliscope: Detailed Visualization of Large Complex Data in R
 
-Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/hafen/datadr) and [RHIPE](https://github.com/saptarshiguha/RHIPE) to provide a framework for detailed visualization of large, complex data.
-
-To get started, see the package documentation and function reference located [here](http://hafen.github.com/trelliscope/).
+Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/hafen/datadr) and [RHIPE](https://github.com/saptarshiguha/RHIPE) to provide a framework for detailed visualization of large complex data.
 
 ## Installation
 
@@ -13,6 +11,10 @@ library(devtools)
 install_github("datadr", "hafen")
 install_github("trelliscope", "hafen")
 ```
+
+## Tutorial
+
+To get started, see the package documentation and function reference located [here](http://hafen.github.com/trelliscope/).
 
 ## Optional Components
 
@@ -29,7 +31,7 @@ Hadoop can be difficult to install and configure.  There are many resources on t
 
 #### RHIPE
 
-To use RHIPE with this package, get version 0.73.1 from [here](https://github.com/saptarshiguha/RHIPE).
+To use RHIPE with this package, you need RHIPE version 0.73.1-5 from [here](http://ml.stat.purdue.edu/rhipebin/Rhipe_0.73.1-5.tar.gz).
 
 Installation instructions for RHIPE can be found [here](http://www.datadr.org/install.html).
 
@@ -45,15 +47,10 @@ To share your displays with others, you can deploy your visualizations on a web 
 
 Installation instructions for shiny-server are found [here](https://github.com/rstudio/shiny-server).
 
-#### Getting Started
-
-Visit the Trelliscope [tutorial page](http://hafen.github.com/trelliscope/) for examples to get started.
-
-## Notes
-
-This is "research-grade" software, meaning that it is prototypical, potentially buggy, and will likely be changing as design issues are addressed.  While it is being actively used in many projects, the main intent currently for sharing on github is for collaboration on development and not for distribution to the masses.  Use at your own risk.
-
 ## License
 
 This software is currently under the BSD license.  Please read the [license](https://github.com/hafen/trelliscope/blob/master/LICENSE.md) document.
 
+## Acknowledgement
+
+datadr development is sponsored by the DARPA XDATA program.
