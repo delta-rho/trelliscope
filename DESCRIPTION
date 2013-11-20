@@ -30,12 +30,12 @@ Depends:
     shiny (>= 0.7.0),
     digest,
     codetools,
-    hexbin
+    hexbin,
+    ggplot2
 Suggests:
     Rhipe,
     rmongodb,
-    scagnostics,
-    ggplot2
+    scagnostics
 Collate:
     'aspect.R'
     'curLim.R'
