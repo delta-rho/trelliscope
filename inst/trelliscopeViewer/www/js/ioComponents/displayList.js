@@ -22,11 +22,6 @@ $.extend(displayListBinding, {
       // also reset column indexes
       $("#selectedCogTableVar").val("");
       $("#selectedCogTableVar").trigger("change");
-      // set panelKey visible by default
-      $("#selectedPlotVar").val("panelKey");
-      $("#selectedPlotVar").trigger("change");
-      updateCogTableDims();
-      // $(".selectablePlotVar[name='panelKey']").toggleClass("highlighted");
       
       // set all related displays to unhighlighted and trigger change
       $(".selectableDisplayVar").each(function() {

@@ -117,12 +117,15 @@ variableCogSelectModal <- function() {
 makeVariableSelectTable <- function(desc, type) {
    c1 <- paste("<td>", desc$name, "</td>", sep="")
    c2 <- paste("<td>", desc$desc, "</td>", sep="")
-
+   
    if(type=="Cog") {
-      c3 <- paste("<td class='selectableCogVar highlighted' name='", desc$name, "'></td>", sep="")      
+      highlighted <- rep(" highlighted", nrow(desc))
+      highlighted[desc$type=="panelKey"] <- ""
+      c3 <- paste("<td class='selectableCogVar", highlighted, "' name='", desc$name, "'></td>", sep="")
    } else {
-      c3 <- paste("<td class='selectablePlotVar' name='", desc$name, "'></td>", sep="")
-      c3[1] <- "<td class='selectablePlotVar highlighted' name='panelKey'></td>"
+      highlighted <- rep("", nrow(desc))
+      highlighted[desc$type=="splitVar"] <- " highlighted"
+      c3 <- paste("<td class='selectablePlotVar", highlighted, "' name='", desc$name, "'></td>", sep="")
    }
    
    header <- paste("<th>", c("Variable", "Description", "Show"), "</th>", sep="", collapse="")

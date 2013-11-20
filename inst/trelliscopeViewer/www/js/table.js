@@ -663,10 +663,9 @@ $(document).on("click", "#variableCogSelectBtn", function(evt) {
 });
 
 $(document).on("click", "#viewOptionsBtn", function(evt) {
-   var columns = getHighlighted($(".selectablePlotVar"))
+   var columns = getHighlighted($(".selectablePlotVar"));
    $("#selectedPlotVar").val(columns);
    $("#selectedPlotVar").trigger("change");
-   console.log("hi");
    var panelFn = editor.getValue();
    if(panelFn != "") {
       $("#panelFnInput").text(panelFn);
@@ -719,6 +718,11 @@ $.extend(plotGroupOutputBinding, {
                $("#"+key).append(img);
          });         
       }
+      // set panelKey visible by default
+      var columns = getHighlighted($(".selectablePlotVar"));
+      $("#selectedPlotVar").val(columns);
+      $("#selectedPlotVar").trigger("change");
+      $(window).trigger('resize');
    }
 });
 Shiny.outputBindings.register(plotGroupOutputBinding, 'shiny.plotGroupOutput');

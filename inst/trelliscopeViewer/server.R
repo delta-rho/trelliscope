@@ -1,9 +1,11 @@
 library(shiny)
 library(base64enc)
 
-if(file.exists("conn.Rdata")) { # it is on a web server
+# if(file.exists("conn.Rdata")) { # for glimmer
+if(file.exists("../conn.Rdata")) { # it is on a web server
    library(trelliscope)
-   vdbConn <- vdbConn(getwd())
+   # vdbConn <- vdbConn(getwd()) # for glimmer
+   vdbConn <- vdbConn(normalizePath(file.path(getwd(), "..")))
    vdbPrefix <- vdbConn$path
 } else {
    vdbConn <- getOption("vdbConn")
@@ -177,8 +179,9 @@ shinyServer(function(input, output) {
       colIndex <- NULL
       if(!is.null(cogDF)) {
          colNames <- input$selectedCogTableVar
+         
          if(colNames == "" || is.null(colNames)) {
-            colIndex <- seq_len(cogNcol(cogDF))
+            colIndex <- seq_len(cogNcol(cogDF))[-1] # don't show panelKey by default
          } else {
             colIndex <- which(cogNames(cogDF) %in% strsplit(colNames, ",")[[1]])
          }
