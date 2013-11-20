@@ -1,11 +1,10 @@
 library(shiny)
-# library(trelliscope)
 library(base64enc)
 
-if(file.exists("../conn.R")) { # it is on a web server
-   source("../conn.R")
-   vdbConn <- getOption("vdbConn")
-   vdbPrefix <- file.path(vdbConn$webConn$appDir, vdbConn$vdbName)
+if(file.exists("conn.Rdata")) { # it is on a web server
+   library(trelliscope)
+   vdbConn <- vdbConn(getwd())
+   vdbPrefix <- vdbConn$path
 } else {
    vdbConn <- getOption("vdbConn")
    vdbPrefix <- vdbConn$path
@@ -16,23 +15,16 @@ options(vdbShinyPrefix = vdbPrefix)
 
 sapply(list.files("_serverHelpers", full.names=TRUE), source)
 
-# # try to load options (thinking it is shiny-server mode)
-# ld <- try(load("vdbConn.Rdata"))
-# if(inherits(ld), "try-error") {
-#    # must not be shiny-server mode
-#    vdbConn <- options()$vdbConn
-# } else {
-#    # since we are on the web server, we need to point to the files there...
-#    vdbConn$path <- vdbConn$webServerVdbPrefix
-#    # TODO: let the vdb server know how to connect to mongodb, hdfs, etc.
-# }
-
-verbose <- vdbConn$viewerLog
+verbose <- FALSE
 if(is.null(verbose))
    verbose <- TRUE
 
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
-displayListDF <- subset(displayListDF, !is.na(dataClass))
+ind <- which(is.na(displayListDF$dataClass))
+if(length(ind) > 0) {
+   displayList <- displayList[-ind]
+   displayListDF <- displayListDF[-ind,]
+}
 
 shinyServer(function(input, output) {
    
@@ -45,7 +37,6 @@ shinyServer(function(input, output) {
       uid <- as.integer(input$displayListTable)
       appHash <- input$appHash
       # TODO: add check for whether the plot exists and give it a good error message
-
       getCdName(uid, appHash, displayListDF, verbose)
    })
    

@@ -18,7 +18,7 @@ displayListModal <- function() {
 
 renderDisplayListTable <- function() {
    vdbPrefix <- getOption("vdbShinyPrefix")
-   load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
+   load(file.path(vdbPrefix, "displays", "_displayList.Rdata"))
    displayListDF <- subset(displayListDF, !is.na(dataClass))
    
    HTML(paste("<table class='table table-condensed table-striped table-bordered table-hover' id='displayListTable'><thead><tr>",

@@ -16,6 +16,10 @@
 vdbConn <- function(path, name=NULL, autoYes=FALSE, reset=FALSE, verbose=TRUE) {
    if(file.exists(file.path(path, "conn.Rdata")) && !reset) {
       load(file.path(path, "conn.Rdata"))
+      # if the vdb has moved, keep the vdb name, but change the path
+      conn$path <- normalizePath(path)
+      save(conn, file=file.path(path, "conn.Rdata"))
+      options(vdbConn=conn)
       return(conn)
    } else {
       if(is.null(name)) {

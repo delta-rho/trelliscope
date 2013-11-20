@@ -25,6 +25,23 @@ getDisplay <- function(name, group=NULL, conn = getOption("vdbConn")) {
    vdbPrefix <- conn$path
    
    load(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "displayObj.Rdata"))
+   
+   # if it is a local disk connection, the location can change
+   # this happens when we move things to a web server
+   if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
+      cn <- getAttribute(displayObj$panelDataSource, "conn")
+      if(!file.exists(cn$loc)) {
+         tmp <- file.path(conn$path, "displays", displayObj$group, displayObj$name, "panels")
+         if(file.exists(tmp)) {
+            if(inherits(displayObj$panelDataSource, "ddf")) {
+               displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset=TRUE, verbose=FALSE), verbose=FALSE)
+            } else {
+               displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset=TRUE, verbose=FALSE), verbose=FALSE)
+            }
+         }
+      }
+   }
+   
    displayObj
 }
 
