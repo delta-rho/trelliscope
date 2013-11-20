@@ -51,6 +51,7 @@ prepanel <- function(data,
       else 1
    }
    prepanelFnIsTrellis <- FALSE
+   prepanelFnIsGgplot <- FALSE
    doBanking <- TRUE
    
    if(verbose)
@@ -59,11 +60,16 @@ prepanel <- function(data,
    if(inherits(p, "trellis")) {
       prepanelFnIsTrellis <- TRUE
       if(verbose)
-         message("Using lattice plot to determine limits... dx and dy will not be computed.")
+         message("Using 'trellis' panelFn to determine limits... dx and dy will not be computed.")
+      doBanking <- FALSE
+   } else if(inherits(p, "ggplot")) {
+      prepanelFnIsGgplot <- TRUE
+      if(verbose)
+         message("Using 'ggplot' panelFn to determine limits... dx and dy will not be computed.")
       doBanking <- FALSE
    } else {
       if(is.null(p$xlim) || is.null(p$ylim))
-         stop("'prepanelFn' must either return an object of class 'trellis' or return a list with elements 'xlim' and 'ylim'.")
+         stop("'prepanelFn' must either return an object of class 'trellis' or 'ggplot' or return a list with elements 'xlim' and 'ylim'.")
       if(is.null(p$dx) || is.null(p$dy)) {
          if(verbose)
             message("dx or dy (or both) were not specified - not computing banking.")
@@ -81,20 +87,36 @@ prepanel <- function(data,
             # temporarily remove axis padding
             curOption <- lattice.getOption("axis.padding")$numeric
             lattice.options(axis.padding=list(numeric=0))
-            p <- prepanelFn(r)
-            xr <- p$x.limits
-            yr <- p$y.limits
-
+            p <- kvApply(prepanelFn, list(k, r))
+            if(all(is.na(p$panel.args[[1]]$x)) || all(is.na(p$panel.args[[1]]$y))) {
+               xr <- c(NA, NA)
+               yr <- c(NA, NA)
+            } else {
+               xr <- p$x.limits
+               yr <- p$y.limits               
+            }
+            
             lattice.options(axis.padding=list(numeric=curOption))
             # # TODO: for ggplot:
             # a <- print(p) # need to not make it actually plot
             # a$panel$ranges[[1]]$x.range
             # a$panel$ranges[[1]]$y.range
+         } else if(prepanelFnIsGgplot) {
+            p <- kvApply(prepanelFn, list(k, r))
+            gglims <- try(ggplot_build(p)$panel$ranges, silent=TRUE)
+            
+            if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
+               xr <- gglims[[1]]$x.range
+               yr <- gglims[[1]]$y.range
+            } else {
+               xr <- c(NA, NA)
+               yr <- c(NA, NA)
+            }
          } else {
-            pre <- prepanelFn(r)
+            pre <- kvApply(prepanelFn, list(k, r))
             xr <- pre$xlim
             yr <- pre$ylim
-
+            
             if(doBanking) {
                dx <- pre$dx
                dy <- pre$dy
@@ -138,6 +160,7 @@ prepanel <- function(data,
    parList <- list(
       prepanelFn = prepanelFn,
       prepanelFnIsTrellis = prepanelFnIsTrellis,
+      prepanelFnIsGgplot = prepanelFnIsGgplot,
       doBanking = doBanking
    )
    
@@ -174,6 +197,7 @@ prepanel <- function(data,
       x = jobRes[["x"]][[2]],
       y = jobRes[["y"]][[2]],
       prepanelFnIsTrellis = prepanelFnIsTrellis,
+      prepanelFnIsGgplot = prepanelFnIsGgplot,
       prepanelFn = prepanelFn
    )
    class(res) <- c("trsPre", "list")
@@ -321,15 +345,16 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
       }
       
       if(type == "sliced") {
-         tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant))
+         tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant, na.rm=TRUE))
          tmp <- tmp + 2 * prop * tmp
          res <- list(type="sliced", lim=NULL, range=tmp)
       } else if(type == "same") {
-         tmp <- as.numeric(c(quantile(dat$min, quant[1]), quantile(dat$max, quant[2])))
+         tmp <- as.numeric(c(quantile(dat$min, quant[1], na.rm=TRUE), quantile(dat$max, quant[2], na.rm=TRUE)))
          tmp <- tmp + c(-1, 1) * diff(tmp) * prop
          res <- list(type="same", lim=tmp, range=NULL)
       } else {
          res <- list(type="free", lim=NULL, range=NULL)
+         return(res)
       }
       if(datclass=="Date")
          res$lim <- as.Date(res$lim, origin="1970-01-01")
@@ -343,6 +368,7 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
       x=getLims("x", x, xQuant, xRangeQuant),
       y=getLims("y", y, yQuant, yRangeQuant),
       prepanelFnIsTrellis = lims$prepanelFnIsTrellis,
+      prepanelFnIsGgplot = lims$prepanelFnIsGgplot,
       prepanelFn = lims$prepanelFn,
       prop = prop, 
       n=nrow(lims$x)

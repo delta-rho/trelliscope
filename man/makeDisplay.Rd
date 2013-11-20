@@ -3,7 +3,7 @@
 \title{Create a Trelliscope Display}
 \usage{
   makeDisplay(data, name, group = "common", desc = "",
-    plotDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
+    panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
     panelFn = NULL,
     lims = list(x = "free", y = "free", prepanelFn = NULL),
     cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(),
@@ -23,10 +23,10 @@
   \item{desc}{a description of the display (used in the
   viewer and in notebooks)}
 
-  \item{plotDim}{a list defining aspects of the plot
-  dimension, including height, width, aspect, and res
-  (resolution of raster image).  defaults are 480 (px), 40,
-  "fill", and 150, respectively}
+  \item{panelDim}{a list defining aspects of dimensions for
+  each panel, including height, width, aspect, and res
+  (resolution of raster image).  defaults are 1000 (px),
+  1000 (px), "fill", and 150, respectively}
 
   \item{panelFn}{a function that produces a plot and takes
   one argument, which will be the current split of the data

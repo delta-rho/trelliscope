@@ -680,6 +680,7 @@ h3 {
 
 h1 {
   font-size: 38.5px;
+  border-bottom: 2px solid lightgray;
 }
 
 h2 {

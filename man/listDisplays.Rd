@@ -1,0 +1,23 @@
+\name{listDisplays}
+\alias{listDisplays}
+\title{List Displays in a VDB}
+\usage{
+  listDisplays(conn = getOption("vdbConn"))
+}
+\arguments{
+  \item{conn}{VDB connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists}
+}
+\description{
+  List displays in a VDB.
+}
+\author{
+  Ryan Hafen
+}
+\seealso{
+  \code{\link{makeDisplay}}, \code{\link{addDisplay}},
+  \code{\link{removeDisplay}}, \code{\link{view}}
+}
+

@@ -14,7 +14,7 @@
 #' @seealso \code{\link{updateViewer}}
 #' @export
 vdbConn <- function(path, name=NULL, autoYes=FALSE, reset=FALSE, verbose=TRUE) {
-   if(file.exists(file.path(path, "conn.Rdata"))) {
+   if(file.exists(file.path(path, "conn.Rdata")) && !reset) {
       load(file.path(path, "conn.Rdata"))
       return(conn)
    } else {
@@ -38,14 +38,16 @@ vdbConn <- function(path, name=NULL, autoYes=FALSE, reset=FALSE, verbose=TRUE) {
       ff <- list.files(path)
       if(!all(c("displays", "notebook") %in% ff))
          stop(paste(path, "is not a valid VDB directory"))      
-
+      
       conn <- structure(list(
             path=path,
             name=name
          ), class="vdbConn")
-      
-      if(reset)
+      if(!file.exists(file.path(path, "conn.Rdata")) || reset) {
          save(conn, file=file.path(path, "conn.Rdata"))
+      } else {
+         load(file.path(path, "conn.Rdata"))
+      }
       
       options(vdbConn=conn)
       return(conn)
@@ -73,7 +75,7 @@ vdbInit <- function(path, autoYes, verbose) {
    
    # now move files over
 	pkgPath <- system.file(package="trelliscope")
-   
+      
    dir.create(file.path(path, "displays"))
    
    if(verbose)

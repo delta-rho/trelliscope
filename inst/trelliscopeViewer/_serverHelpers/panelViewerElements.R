@@ -22,7 +22,7 @@ getPNGs <- function(cogDF, cdo, vdbPrefix, conn=NULL) {
       environment(cdo$panelFn) <- environment()
       
       pngs <- sapply(cdo$panelDataSource[cogDF$panelKey], function(x) {
-         makePNG(dat=x, panelFn=cdo$panelFn, file=tmpfile, width=cdo$plotDim$width, height=cdo$plotDim$height, res=cdo$plotDim$res, lims=cdo$lims)
+         makePNG(dat=x, panelFn=cdo$panelFn, file=tmpfile, width=cdo$panelDim$width, height=cdo$panelDim$height, res=cdo$panelDim$res, lims=cdo$lims)
          encodePNG(tmpfile)
       })
    }
@@ -36,7 +36,7 @@ plotTabSkeleton <- function(nRow, nCol, relList, cdo) {
    if(!is.null(relList)) {
       # do some aspect ratio calculations...
       nDisp <- length(relList) + 1
-      aspects <- c(cdo$plotDim$aspect, sapply(relList, function(x) x$plotDim$aspect))
+      aspects <- c(cdo$panelDim$aspect, sapply(relList, function(x) x$panelDim$aspect))
       innerNcol <- ceiling(sqrt(nDisp))
       innerNrow <- ceiling(nDisp / innerNcol)
       

@@ -46,6 +46,7 @@ preTOC <- paste("<!DOCTYPE html>
 	  <title>", pageTitle, "</title>
 
 		<script type='text/javascript' src='assets/js/jquery.js'></script>
+		<script type='text/javascript' src='assets/js/notebook.js'></script>
 		<script type='text/javascript' src='assets/js/bootstrap.min.js'></script>
 
 	   <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css'>

@@ -72,7 +72,7 @@ removeDisplay <- function(name=NULL, group=NULL, conn=getOption("vdbConn"), verb
 ## ensures that a display exists and returns its name and group
 findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
-      
+   
    errStr <- ""
    if(is.null(group)) {
       curDisplay <- which(displayListDF$name==name)
@@ -97,3 +97,60 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
       return(list(name=curDisplay$name, group=curDisplay$group))
    }
 }
+
+#' List Displays in a VDB
+#' 
+#' List displays in a VDB.
+#' 
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' 
+#' @author Ryan Hafen
+#' 
+#' @seealso \code{\link{makeDisplay}}, \code{\link{addDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
+#' @export
+listDisplays <- function(conn = getOption("vdbConn")) {
+   load(file.path(conn$path, "displays", "_displayList.Rdata"))
+
+   tmp <- as.matrix(displayListDF[,c("name", "group", "desc", "n", "dataClass")])
+   rownames(tmp) <- NULL
+   # tmp[,"updated"] <- substr(tmp[,"updated"], 1, 16)
+   tmp[is.na(tmp[,"dataClass"]),"dataClass"] <- "none (R plot)"
+   tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),]
+   
+   nc <- ncol(tmp)
+   sepWidth <- (nc - 1) * 3
+
+   headers <- colnames(tmp)
+   
+   colWidths <- apply(tmp, 2, function(x) max(nchar(x)))
+   colWidths <- pmax(colWidths, nchar(headers))
+   
+   totWidth <- getOption("width")
+   
+   excess <- (totWidth - sepWidth) - sum(colWidths)
+   # (totWidth - sepWidth) - (sum(colWidths) - colWidths["desc"])
+   if(excess < 0) {
+      descCut <- excess + colWidths["desc"]
+      if(descCut < 3) {
+         tmp <- tmp[,which(colnames(tmp) != "desc")]
+      } else {
+         ell <- ifelse(tmp[,"desc"] == "", "", "...")
+         tmp[,"desc"] <- paste(substr(tmp[,"desc"], 1, descCut - 3), ell, sep="")
+      }
+   }
+   headers <- colnames(tmp)
+   colWidths <- apply(tmp, 2, function(x) max(nchar(x)))
+   colWidths <- pmax(colWidths, nchar(headers))
+   nc <- length(headers)
+   
+   fmtStr <- paste(paste("%", colWidths, "s", sep=""), collapse=" | ")
+   
+   cat(paste(c(
+      do.call(sprintf, c(list(fmt=fmtStr), as.list(headers))),
+      paste(sapply(colWidths, function(x) paste(rep("-", x), collapse="")), collapse="-+-"),
+      apply(tmp, 1, function(x) {
+      do.call(sprintf, c(list(fmt=fmtStr), as.list(x)))
+   })), collapse="\n"))
+
+}
+

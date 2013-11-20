@@ -1,11 +1,12 @@
 #' Create a New Notebook File
-#'
+#' 
 #' Create a new notebook file skeleton.
-#'
+#' 
 #' @param name name of the .Rmd file to be created
 #' @param blank do you just want a blank page, or do you want a template with several markdown examples filled out for reference?
 #' @param pageTitle, title, author, toc, css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param overwrite if the file exists, should it be overwritten?
 #' 
 #' @return creates a new .Rmd file that will go in the "notebook" directory of the vdb directory
 #' 
@@ -14,7 +15,7 @@
 #' @seealso \code{\link{typeset}}, \code{\link{viewNotebook}}, \code{\link{bsSetup}}
 #' 
 #' @export
-newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTitle=title, author="Author Name", toc=TRUE, css=NULL, conn=getOption("vdbConn")) {
+newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTitle=title, author="Author Name", toc=TRUE, css=NULL, conn=getOption("vdbConn"), overwrite=FALSE) {
    if(is.null(name))
       stop("Must specify name for new notebook")
       
@@ -22,8 +23,15 @@ newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTit
    
    filePath <- file.path(prefix, "notebook", paste(name, ".Rmd", sep=""))
    
-   if(file.exists(filePath))
-      stop(paste("File ", filePath, " already exists"))
+   if(file.exists(filePath)) {
+      if(overwrite) {
+         ans <- readline(paste("The file '", name, ".Rmd' exists.  Are you sure you want to overwrite it? (y = yes)", sep=""))
+      	if(!tolower(substr(ans, 1, 1)) == "y")
+      	   stop("Backing out...")
+      } else {
+         stop(paste("File ", filePath, " already exists"))         
+      }
+   }
       
    pkgPath <- system.file(package="trelliscope")
    template <- file.path(pkgPath, "rmd_template.Rmd")
@@ -129,13 +137,15 @@ thumbnailStr <- function(href, src, name, group, desc, height, width) {
 ## internal
 checkPlotExists <- function(displayList, name, group=NULL) {
    errStr <- ""
+   nms <- sapply(displayList, function(x) x$name)
+   gps <- sapply(displayList, function(x) x$group)
    if(is.null(group)) {
-      curPlot <- which(displayList$name==name)   
+      curPlot <- which(nms == name)
    } else {
-      curPlot <- which(displayList$name==name & displayList$group==group)
+      curPlot <- which(nms == name & gps == group)
       errStr <- paste(" from group \"", group, "\"", sep="")
    }
-
+   
    if(length(curPlot) == 0) {
       errMsg(paste("The plot \"", name, "\"", errStr, " wasn't found.", sep=""))
       return(NULL)
@@ -169,41 +179,13 @@ errMsg <- function(message) {
 
 # nbDisplayList(c("irisTest1.1", "irisTest1.2"))
 
-# rule should be: if 1 page, just open in a new window without a special viewer.  If mongo or hdfs, then just server side
-## internal
-getDisplayTypes <- function(plotInfo, conn) {
-   types <- NULL
-   shinyServer <- conn$webConn$url
-   if(plotInfo$n==1) {
-      types <- "simple" # open plot in new window
-   } else if(plotInfo$storage %in% c("mongo", "hdfs", "hdfsData", "localData")) {
-      if(is.null(shinyServer)) {
-         warning("'shinyServer' has not been specified in vdbConn")
-      } else {
-         types <- "ss" # server-side viewer only         
-      }
-   } else if(plotInfo$storage == "local") {
-      if(is.null(shinyServer)) {
-         types <- "cs" # only use client-side server if shiny server not specified
-      } else {
-         types <- c("ss", "cs") # client-side and server-side option         
-      }
-   }
-   # ssl is server-side local
-   c("ssl", types)
-}
-
 ## internal
 makeHref <- function(group, name, type, server=NULL) {
    href <- ""
-   if(type=="cs") {
-      href <- paste("<a href='../trelliscopeViewer_cs/viewer.html?group=", group, "&plot=", name, "' target='_blank'>view</a>", sep="")
-   } else if(type=="ss") {
-      href <- paste("<a class='ssShiny' href=\"", server, "/trelliscopeViewer/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
-   } else if(type=="simple") {
+   if(type=="simple") {
       href <- paste("<a href='../displays/", group, "/", name, "/thumb.png' target='_blank'>view</a>", sep="")
-   } else if(type=="ssl") {
-      href <- paste("<a class='sslShiny' href=\"http://localhost:8100/#group=", group, "&name=", name, "\" target='_blank'>view (shiny)</a>", sep="")
+   } else if(type=="shiny") {
+      href <- paste("<a class='displayHref' href=\"#group=", group, "&name=", name, "\" target='_blank'>view</a>", sep="")
    }
    href
 }
@@ -224,19 +206,10 @@ makeHref <- function(group, name, type, server=NULL) {
 nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- conn$path
    
-   port <- ""
-   shinyServer <- NULL
-   if(!is.null(conn$webConn)) {
-      if(conn$webConn$port != "")
-         port <- paste(":", conn$webConn$port, sep="")
-         
-      shinyServer <- paste(conn$webConn$url, port, "/", conn$vdbName, sep="")
-   }
-   
    thumbHeight <- conn$thumbHeight
    if(is.null(thumbHeight))
       thumbHeight <- 120
-      
+   
    load(file.path(prefix, "displays", "_displayList.Rdata"))
    
    plotIdx <- sapply(seq_along(name), function(x) 
@@ -246,20 +219,14 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
    # TODO: if desc is given, use that
    if(length(plotIdx) > 0) {
       tabStr <- sapply(plotIdx, function(x) {
-         p <- displayList[x,]
-         displayTypes <- getDisplayTypes(p, conn)
-         hrefs <- sapply(displayTypes, function(curType) {
-            makeHref(p$group, p$name, curType, shinyServer)
-         })
-         shinyHrefs <- displayTypes %in% c("ss", "ssl")
-         hrefs <- paste(c(
-            paste(hrefs[shinyHrefs], collapse=""),
-            hrefs[!shinyHrefs]
-         ), collapse=" | ")
          
-         curWidth <- thumbHeight * p$width / p$height
+         p <- displayList[[x]]
+         displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
+         href <- makeHref(p$group, p$name, displayType)
+         
+         curWidth <- thumbHeight * p$panelDim$width / p$panelDim$height
          src <- paste("../displays/", p$group, "/", p$name, "/thumb.png", sep="")
-         return(mediaListStr(hrefs, src, p$name, p$group, p$desc, p$n, thumbHeight, curWidth))
+         return(mediaListStr(href, src, p$name, p$group, p$desc, p$n, thumbHeight, curWidth))
       })
       cat(paste("<div class='thumbnail' markdown='1'>", paste(tabStr, collapse="<hr class='disphr' />"), "\n</div>\n\n<p></p>", sep=""))
    }
@@ -280,34 +247,22 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 #' @export
 nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- conn$path
-
-   port <- ""
-   shinyServer <- NULL
-   if(!is.null(conn$webConn)) {
-      if(conn$webConn$port != "")
-         port <- paste(":", conn$webConn$port, sep="")
-         
-      shinyServer <- paste(conn$webConn$url, port, "/", conn$vdbName, sep="")
-   }
-
+   
    maxHeight <- conn$maxHeight
    if(is.null(maxHeight))
       maxHeight <- 500
-      
+   
    load(file.path(prefix, "displays", "_displayList.Rdata"))
    
    plotIdx <- checkPlotExists(displayList, name, group)
    
-   # TODO: if desc is given, use that
    if(length(plotIdx) > 0) {
-      p <- displayList[plotIdx,]
+      p <- displayList[[plotIdx]]
       curWidth <- maxHeight * p$width / p$height
-      ff <- list.files(file.path(prefix, "displays", p$group, p$name, "png"), full.names=TRUE)
-      if(file.info(ff[1])$isdir) {
-         fileToPlot <- paste("../displays/", p$group, "/", p$name, "/png/", basename(ff[1]), "/", basename(list.files(ff[1])[1]), sep="")
-      } else {
-         fileToPlot <- paste("../displays/", p$group, "/", p$name, "/png/", basename(ff[1]), sep="")
-      }
+      fileToPlot <- file.path(prefix, "displays", p$group, p$name, "thumb.png")
+      displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
+      href <- makeHref(p$group, p$name, displayType)
+      
       href <- fileToPlot
       src <- fileToPlot
       cat(thumbnailStr(href, src, p$name, p$group, p$desc, maxHeight, curWidth))

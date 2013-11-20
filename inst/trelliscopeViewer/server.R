@@ -32,6 +32,7 @@ if(is.null(verbose))
    verbose <- TRUE
 
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
+displayListDF <- subset(displayListDF, !is.na(dataClass))
 
 shinyServer(function(input, output) {
    
@@ -433,8 +434,6 @@ shinyServer(function(input, output) {
          
          relList <- getRelatedDisplays()
          if(!is.null(relList)) {
-            # browser()
-                        
             res2 <- do.call(c, lapply(seq_along(relList), function(i) {
                ld <- NULL
                tmp <- getPNGs(cogDF, relList[[i]], vdbPrefix, conn)
@@ -501,7 +500,7 @@ shinyServer(function(input, output) {
    
    ### used in updateTableDims() (aspect ratio of panels in cd)
    output$panelAspect <- renderText({
-      HTML(cdDisplayObj()$plotDim$aspect)
+      HTML(cdDisplayObj()$panelDim$aspect)
    })
    outputOptions(output, 'panelAspect', suspendWhenHidden=FALSE)
    
@@ -543,7 +542,7 @@ shinyServer(function(input, output) {
    
    # output$testOutput <- reactive({
    #    cdo <- cdDisplayObj()
-   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$plotDim$aspect, "; nRow: ", getPanelRows(), "; nCol: ", getPanelCols(), "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
+   #    HTML(paste("ppp: ", pppInput(), "; aspect: ", cdo$panelDim$aspect, "; nRow: ", getPanelRows(), "; nCol: ", getPanelCols(), "; plotHeight: ", input$plotHeight, "; plotWidth: ", input$plotWidth, "; storage: ", cdo$storage, sep=""))
    # })
 })
 

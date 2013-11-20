@@ -13,23 +13,23 @@
 #' 
 #' @export
 typeset <- function(name="index", conn=getOption("vdbConn")) {
-   prefix <- trsValidatePrefix(conn)
+   prefix <- conn$path
    
    fileBase <- sub("(.+)[.][^.]+$", "\\1", name)
    if(fileBase == name)
       name <- paste(name, ".Rmd", sep="")
-
+   
    filePath <- file.path(prefix, "notebook", name)
    
    if(!file.exists(filePath))
       stop(paste("File", filePath, "doesn't exist"))
-
+   
    message(paste("Processing file:", filePath))
-
+   
    outFilePath <- file.path(prefix, "notebook", paste(fileBase, ".html", sep=""))
 	
 	tmpDir <- tempdir()
-
+   
    out <- knit(input=filePath, output=file.path(tmpDir, "tmp.md"), envir = parent.frame())
    markdownToHTML(out, file.path(tmpDir, "tmp.html"), options=c("fragment_only", "toc", "base64_images", "use_xhtml"))
    
@@ -80,3 +80,6 @@ typeset <- function(name="index", conn=getOption("vdbConn")) {
    
 	cat(paste(c(preTOC, tocLines, postTOC, bodyLines, postContent), collapse="\n"), file=outFilePath)	
 }
+
+
+

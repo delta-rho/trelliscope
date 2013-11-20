@@ -12,7 +12,7 @@
 #' cogLoessRMSE(dist ~ speed, span=0.5, data=cars)
 #' @export
 cogLoessRMSE <- function(..., desc="RMSE of residuals from loess fit") {
-   tmp <- try(loess(...))
+   suppressWarnings(tmp <- try(loess(...), silent=TRUE))
    if(inherits(tmp, "try-error"))
       return(NA)
    cog(tmp$s, desc=desc, type="num")

@@ -5,7 +5,7 @@
   newNotebook(name = "index", blank = FALSE,
     title = "My Test Page", pageTitle = title,
     author = "Author Name", toc = TRUE, css = NULL,
-    conn = getOption("vdbConn"))
+    conn = getOption("vdbConn"), overwrite = FALSE)
 }
 \arguments{
   \item{name}{name of the .Rmd file to be created}
@@ -23,6 +23,9 @@
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists}
+
+  \item{overwrite}{if the file exists, should it be
+  overwritten?}
 }
 \value{
   creates a new .Rmd file that will go in the "notebook"

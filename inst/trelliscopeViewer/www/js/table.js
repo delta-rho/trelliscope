@@ -7,11 +7,11 @@ $(document).ready(function() {
    $('#btnPrev').click(function() {
       pageBack();
    });
-
+   
    $('#btnNext').click(function() {
       pageForward();
    });
-
+   
    $('#btnBeg').click(function() {
       $("#currentPage").val(1);
       $("#currentPage").trigger("change");
@@ -153,7 +153,7 @@ $(window).resize(function() {
 });
 
 $(window).bind('resizeEnd', function() {
-   adjustPlotDims();
+   adjustpanelDims();
    updateCogTableDims();
 });
 
@@ -176,7 +176,7 @@ function getHighlighted(obj) {
    return(columns);
 }
 
-function adjustPlotDims() {
+function adjustpanelDims() {
    updateTableDims(); // this might be overkill?
       
    var plotWidth = parseInt($("#plotWidth").val());
@@ -630,7 +630,7 @@ $.extend(plotMatOutputBinding, {
       Shiny.unbindAll(el);
       $(el).html(data);
       Shiny.bindAll(el);
-      adjustPlotDims();
+      adjustpanelDims();
    }
 });
 Shiny.outputBindings.register(plotMatOutputBinding, 'shiny.plotMatOutput');
@@ -672,7 +672,7 @@ $(document).on("click", "#viewOptionsBtn", function(evt) {
       $("#panelFnInput").text(panelFn);
       $("#panelFnInput").trigger("change");
    }
-   adjustPlotDims();
+   adjustpanelDims();
 });
 
 $(document).on("click", "#cogTable_varSelect", function(evt) {
@@ -685,7 +685,7 @@ $(document).on("click", "#relatedDisplaySelectBtn", function(evt) {
    
    $("#relatedDisplayUID").val(columns);
    $("#relatedDisplayUID").trigger("change");
-   adjustPlotDims();
+   adjustpanelDims();
 });
 
 

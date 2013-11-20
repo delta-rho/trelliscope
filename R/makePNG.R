@@ -44,17 +44,25 @@ makePNG <- function(dat, panelFn=NULL, file, width, height, res, lims=NULL) {
                   tmp$y.limits <- curYLim
             }
          } else if(inherits(tmp, "ggplot")) {
-            gglims <- ggplot_build(tmp)$panel$ranges
+            # this is ugly now - make more robust, etc.
+            ggbuild <- ggplot_build(tmp)
+            gglims <- ggbuild$panel$ranges
             if(length(gglims) == 1) {
                plotXLim <- gglims[[1]]$x.range
                plotYLim <- gglims[[1]]$y.range
                curXLim <- trsCurXLim(lims, dat, plotXLim)
-               curYLim <- trsCurYLim(lims, dat, plotYLim)         
-
-               if(lims$x$type != "free")
-                  suppressMessages(tmp <- tmp + xlim(curXLim))
-               if(lims$y$type != "free")
-                  suppressMessages(tmp <- tmp + ylim(curYLim))
+               curYLim <- trsCurYLim(lims, dat, plotYLim)
+               
+               if(lims$x$type != "free") {
+                  if(ggbuild$panel$x_scales[[1]]$scale_name == "datetime") {
+                     tmp <- tmp + scale_x_datetime(limits=as.POSIXct(curXLim, origin="1970-01-01"))                  
+                  } else {
+                     tmp <- tmp + scale_x_continuous(limits=curXLim)
+                  }
+               }
+               if(lims$y$type != "free") {
+                  tmp <- tmp + scale_y_continuous(limits=curYLim)                  
+               }
             }
          }
       }

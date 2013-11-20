@@ -39,7 +39,6 @@ Suggests:
 Collate:
     'aspect.R'
     'curLim.R'
-    'runViewer.R'
     'makeDisplay.R'
     'prepanel.R'
     'cognostics.R'
@@ -55,3 +54,8 @@ Collate:
     'noMargins.R'
     'notebook.R'
     'typeset.R'
+    'addDisplay.R'
+    'conn_web.R'
+    'splod.R'
+    'view.R'
+    'websync.R'

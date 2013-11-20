@@ -1,23 +1,33 @@
-#' Run Shiny Display Viewer
+#' View a Display or Run Shiny Display Viewer
 #' 
-#' Run server-side viewer on local machine
+#' View a display or run Shiny display viewer
 #' 
-#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' @param group, name optional parameters to load the viewer with a pre-specified display
+#' @param name, group optional parameters to load the viewer with a pre-specified display
 #' @param port what port to use for the viewer
 #' @param openBrowser should the browser be automatically launched?
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @author Ryan Hafen
 #' 
 #' @export
-view <- function(conn=getOption("vdbConn"), group=NULL, name=NULL, port=8100L, openBrowser=TRUE) {
+view <- function(name=NULL, group=NULL, openBrowser=TRUE, conn=getOption("vdbConn")) {
+   port <- 8100L
+   validateConn(conn)
    vdbPrefix <- conn$path
 	packagePath <- system.file(package="trelliscope")
    
    if(!is.null(name)) {
       displayObj <- getDisplay(name=name, group=group)
       name <- displayObj$name
-      group <- displayObj$group      
+      group <- displayObj$group
+      
+      # if it's a simple display, just view it in a web browser
+      displayPrefix <- file.path(vdbPrefix, "displays", group, name)
+      load(file.path(displayPrefix, "displayObj.Rdata"))
+      if(is.na(displayObj$panelDataSource))   {
+         browseURL(file.path(displayPrefix, "thumb.png"))
+         return()
+      }
    }
    
    message("attempting to launch shiny vdb viewer...")
@@ -35,7 +45,7 @@ view <- function(conn=getOption("vdbConn"), group=NULL, name=NULL, port=8100L, o
    # if on dev machine, make the viewer path be the code source directory
    # (not the package path)
    if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
-      shinyAppPrefix <- file.path(getwd(), "inst/trelliscopeViewer/")
+      shinyAppPrefix <- "~/Documents/Code/trelliscope/inst/trelliscopeViewer/"
    } else {
       shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
    }

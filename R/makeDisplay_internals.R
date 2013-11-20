@@ -24,14 +24,14 @@ validateCogFn <- function(dat, cogFn, verbose=FALSE) {
 }
 
 ## internal
-validatePlotDim <- function(plotDim, dat, panelFn, verbose=FALSE) {
+validatepanelDim <- function(panelDim, dat, panelFn, verbose=FALSE) {
    # browser()
    # TODO: 
    # TODO: handle aspect ratio
-   width <- plotDim$width
-   height <- plotDim$height
-   res <- plotDim$res
-   aspect <- plotDim$aspect
+   width <- panelDim$width
+   height <- panelDim$height
+   res <- panelDim$res
+   aspect <- panelDim$aspect
    
    if(verbose)
       message("* Validating plot dimensions...")
@@ -114,22 +114,15 @@ validateLims <- function(lims, data, panelFn, panelEx, verbose) {
       
       # lims <- list(x=list(type="free"), y=list(type="free"))         
       
-      # # huh? panelEx is panelFn, not prepanelFn
-      # if(inherits(panelEx, "trellis")) {
-      #    lims$prepanelFnIsTrellis <- TRUE
-      # } else {
-      #    lims$prepanelFnIsTrellis <- FALSE
-      # }
-      
       # if both are free, we don't need to do anything
       if(!(xLimType == "free" && yLimType == "free")) {
          # TODO: checking to make sure things are specified correctly
          # TODO: handle dx and dy
          if(is.null(lims[["prepanelFn"]])) { # cannot do $prepanelFn because of prepanelFnIsTrellis (they both start the same)
-            if(inherits(panelEx, "trellis")) {
+            if(inherits(panelEx, c("trellis", "ggplot"))) {
                prepanelFn <- panelFn
             } else {
-               stop("'lims' argument does not specify a prepanel function.  This could be ignored if panelFn returns an object of class 'trellis', which can be used to determine axis limits.")
+               stop("'lims' argument does not specify a prepanel function.  This could be ignored if panelFn returns an object of class 'trellis' or 'ggplot', which can be used to determine axis limits.")
             }
          } else {
             prepanelFn <- lims[["prepanelFn"]]
