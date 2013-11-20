@@ -124,7 +124,7 @@ thumbnailStr <- function(href, src, name, group, desc, height, width) {
   <li>
     <div class='thumbnail'>
       <a href='", href, "' target='_blank' title='", name, ": ", desc, "'>
-      <img src='", src, "' alt='' width='", width, "' height='", height, "' class='img-polaroid'>
+      <img src='", href, "' alt='' width='", width, "' height='", height, "' class='img-polaroid'>
       </a>
       <h4 class='media-heading vdblisthead'>", group, " / ", name, "</h4>
       <p>", desc, "</p>
@@ -262,8 +262,6 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
       fileToPlot <- file.path(prefix, "displays", p$group, p$name, "thumb.png")
       displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
       href <- makeHref(p$group, p$name, displayType)
-      
-      href <- fileToPlot
       src <- fileToPlot
       cat(thumbnailStr(href, src, p$name, p$group, p$desc, maxHeight, curWidth))
    }
