@@ -261,7 +261,7 @@ nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
       curWidth <- maxHeight * p$width / p$height
       fileToPlot <- file.path(prefix, "displays", p$group, p$name, "thumb.png")
       displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
-      href <- makeHref(p$group, p$name, displayType)
+      href <- paste("..", "displays", p$group, p$name, "thumb.png", sep="/")
       src <- fileToPlot
       cat(thumbnailStr(href, src, p$name, p$group, p$desc, maxHeight, curWidth))
    }

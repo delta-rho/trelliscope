@@ -191,7 +191,14 @@ makeDisplay <- function(
          cogEmit.mongoCogConn=cogEmit.mongoCogConn, 
          cogCollect=cogCollect, 
          cogCollect.dfCogConn=cogCollect.dfCogConn, 
-         cogCollect.mongoCogConn=cogCollect.mongoCogConn
+         cogCollect.mongoCogConn=cogCollect.mongoCogConn,
+         cog=cog,
+         as.cogGeo=as.cogGeo,
+         as.cogRel=as.cogRel,
+         as.cogHier=as.cogHier,
+         cogMean=cogMean,
+         cogRange=cogRange,
+         cog2df=cog2df
       ))
       
       setup <- expression({

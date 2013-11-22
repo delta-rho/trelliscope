@@ -206,7 +206,8 @@ updateDisplayList <- function(argList, conn) {
 #    }
 # }
 
-## internal
+#' base64 Encoding of a .png File
+#' @export
 encodePNG <- function(plotLoc) {
    bytes <- file.info(plotLoc)$size
    b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))

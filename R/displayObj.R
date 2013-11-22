@@ -132,7 +132,7 @@ listDisplays <- function(conn = getOption("vdbConn")) {
    rownames(tmp) <- NULL
    # tmp[,"updated"] <- substr(tmp[,"updated"], 1, 16)
    tmp[is.na(tmp[,"dataClass"]),"dataClass"] <- "none (R plot)"
-   tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),]
+   tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),,drop=FALSE]
    
    nc <- ncol(tmp)
    sepWidth <- (nc - 1) * 3

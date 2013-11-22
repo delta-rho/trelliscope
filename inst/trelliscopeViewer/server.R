@@ -409,7 +409,7 @@ shinyServer(function(input, output) {
          cdo <- cdDisplayObj()
          # localData <- getLocalData()
          # hdfsData <- getHDFSdata()
-
+         
          if(!cdo$preRender) {
             a <- input$panelFnInput
             if(a != "") {
