@@ -98,6 +98,9 @@
    <a target="_self" class="nav-not-header" href="#packagemain">Package Info</a>
 </li>
 <li class="">
+   <a target="_self" class="nav-not-header" href="#adddisplay">addDisplay</a>
+</li>
+<li class="">
    <a target="_self" class="nav-not-header" href="#applycogfn">applyCogFn</a>
 </li>
 <li class="">
@@ -125,13 +128,22 @@
    <a target="_self" class="nav-not-header" href="#dfcogconn">dfCogConn</a>
 </li>
 <li class="">
+   <a target="_self" class="nav-not-header" href="#encodepng">encodePNG</a>
+</li>
+<li class="">
    <a target="_self" class="nav-not-header" href="#getdisplay">getDisplay</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#listdisplays">listDisplays</a>
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#makedisplay">makeDisplay</a>
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#makepng">makePNG</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#makesploddata">makeSplodData</a>
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#mongocogconn">mongoCogConn</a>
@@ -167,6 +179,15 @@
    <a target="_self" class="nav-not-header" href="#setlims">setLims</a>
 </li>
 <li class="">
+   <a target="_self" class="nav-not-header" href="#splod">splod</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#splodcogfn">splodCogFn</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#splodpanelfn">splodPanelFn</a>
+</li>
+<li class="">
    <a target="_self" class="nav-not-header" href="#typeset">typeset</a>
 </li>
 <li class="">
@@ -177,6 +198,12 @@
 </li>
 <li class="">
    <a target="_self" class="nav-not-header" href="#viewnotebook">viewNotebook</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#webconn">webConn</a>
+</li>
+<li class="">
+   <a target="_self" class="nav-not-header" href="#websync">websync</a>
 </li>
    </ul>
    </div>
@@ -189,7 +216,7 @@
 <h3>Trelliscope</h3>
 
 <p><strong>Author:</strong> Ryan Hafen</p>
-<p><strong>Version:</strong> 0.7</p>
+<p><strong>Version:</strong> 0.7-1</p>
 <p><strong>Date:</strong> 2013-10-10</p>
 <p><strong>License:</strong> BSD</p>
 
@@ -218,16 +245,66 @@ markdown,
 shiny (&gt;= 0.7.0),
 digest,
 codetools,
-hexbin</p>
+hexbin,
+ggplot2</p>
 
 <h4>Suggests</h4>
 <p>
 Rhipe,
 rmongodb,
-scagnostics,
-ggplot2</p>
+scagnostics</p>
 
 </div>
+<!-- addDisplay -->   
+<div class="tab-pane" id="adddisplay">
+
+<h3 class="fref_title">Add a Display to a VDB</h3>
+
+<h5>Usage</h5>
+<pre>addDisplay(p, name, group = "common", desc = "", dim = list(height = NULL, width = NULL, 
+  aspect = NULL, res = NULL), conn = getOption("vdbConn"))</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>p</dt>
+  <dd>an R plot object (lattice or ggplot) or an
+  expression containing code to create a plot</dd>
+  <dt>name</dt>
+  <dd>the name of the display (no spaces or special
+  characters)</dd>
+  <dt>group</dt>
+  <dd>the group the display belongs to (displays
+  are organized into groups).  Defaults to "common"</dd>
+  <dt>desc</dt>
+  <dd>a description of the display (used in the
+  viewer and in notebooks)</dd>
+  <dt>dim</dt>
+  <dd>a list defining aspects of the plot dimension,
+  including height, width, aspect, and res (resolution of
+  raster image).  defaults are 1000 (px), 1000 (px),
+  "fill", and 150, respectively</dd>
+  <dt>conn</dt>
+  <dd>VDB connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h5>Description</h5>
+
+  <p>Add an R display (lattice, ggplot, base R) to a
+  visualization database (VDB)</p>
+
+
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
 <!-- applyCogFn -->   
 <div class="tab-pane" id="applycogfn">
 
@@ -602,6 +679,23 @@ getCurCogDat(x, ...)</pre>
 </div>
 
 
+<!-- encodePNG -->   
+<div class="tab-pane" id="encodepng">
+
+<h3 class="fref_title">base64 Encoding of a .png File</h3>
+
+<h5>Usage</h5>
+<pre>encodePNG(plotLoc)</pre>
+
+  <h5>Description</h5>
+
+  <p>base64 Encoding of a .png File</p>
+
+
+
+</div>
+
+
 <!-- getDisplay -->   
 <div class="tab-pane" id="getdisplay">
 
@@ -648,13 +742,50 @@ getCurCogDat(x, ...)</pre>
 </div>
 
 
+<!-- listDisplays -->   
+<div class="tab-pane" id="listdisplays">
+
+<h3 class="fref_title">List Displays in a VDB</h3>
+
+<h5>Usage</h5>
+<pre>listDisplays(conn = getOption("vdbConn"))</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>conn</dt>
+  <dd>VDB connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
+</dl>
+
+  <h5>Description</h5>
+
+  <p>List displays in a VDB.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#makedisplay'>makeDisplay</a></code>, <code><a href='#adddisplay'>addDisplay</a></code>,
+  <code><a href='#removedisplay'>removeDisplay</a></code>, <code><a href='#view'>view</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
 <!-- makeDisplay -->   
 <div class="tab-pane" id="makedisplay">
 
 <h3 class="fref_title">Create a Trelliscope Display</h3>
 
 <h5>Usage</h5>
-<pre>makeDisplay(data, name, group = "common", desc = "", plotDim = list(height = NULL, 
+<pre>makeDisplay(data, name, group = "common", desc = "", panelDim = list(height = NULL, 
   width = NULL, aspect = NULL, res = NULL), panelFn = NULL, lims = list(x = "free", 
   y = "free", prepanelFn = NULL), cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(), 
   output = NULL, conn = getOption("vdbConn"), verbose = TRUE, control = NULL)</pre>
@@ -663,7 +794,7 @@ getCurCogDat(x, ...)</pre>
 <dl>
   <dt>data</dt>
   <dd>data of class "ddo" or "ddf" (see
-  <code><a href='http://www.inside-r.org/r-doc/datadr/ddo'>ddo</a></code>, <code><a href='http://www.inside-r.org/r-doc/datadr/ddf'>ddf</a></code>)</dd>
+  <code>ddo</code>, <code>ddf</code>)</dd>
   <dt>name</dt>
   <dd>the name of the display (no spaces or special
   characters)</dd>
@@ -673,11 +804,11 @@ getCurCogDat(x, ...)</pre>
   <dt>desc</dt>
   <dd>a description of the display (used in the
   viewer and in notebooks)</dd>
-  <dt>plotDim</dt>
-  <dd>a list defining aspects of the plot
-  dimension, including height, width, aspect, and res
-  (resolution of raster image).  defaults are 480 (px), 40,
-  "fill", and 150, respectively</dd>
+  <dt>panelDim</dt>
+  <dd>a list defining aspects of dimensions for
+  each panel, including height, width, aspect, and res
+  (resolution of raster image).  defaults are 1000 (px),
+  1000 (px), "fill", and 150, respectively</dd>
   <dt>panelFn</dt>
   <dd>a function that produces a plot and takes
   one argument, which will be the current split of the data
@@ -722,7 +853,7 @@ getCurCogDat(x, ...)</pre>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
   <code>rhwatch</code> in RHIPE) - see
-  <code><a href='http://www.inside-r.org/r-doc/datadr/rhipeControl'>rhipeControl</a></code> and
+  <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
 
@@ -743,12 +874,12 @@ getCurCogDat(x, ...)</pre>
   the cognostics.  Then panels are rendered on the fly.  If
   a user would like to pre-render the images, then by
   default these will be stored to a local disk connection
-  (see <code><a href='http://www.inside-r.org/r-doc/datadr/localDiskConn'>localDiskConn</a></code>) inside the VDB
+  (see <code>localDiskConn</code>) inside the VDB
   directory, organized in subdirectories by group and name
   of the display.  Optionally, the user can specify the
   <code>output</code> parameter to be any valid "kvConnection"
   object, as long as it is one that persists on disk (e.g.
-  <code><a href='http://www.inside-r.org/r-doc/datadr/hdfsConn'>hdfsConn</a></code>).</p>
+  <code>hdfsConn</code>).</p>
 
 
 
@@ -756,7 +887,7 @@ getCurCogDat(x, ...)</pre>
 <h5>See also</h5>
 
   <code><a href='#prepanel'>prepanel</a></code>, <code><a href='#setlims'>setLims</a></code>,
-  <code>inputVars</code>, <code><a href='http://www.inside-r.org/r-doc/datadr/divide'>divide</a></code>
+  <code>inputVars</code>, <code>divide</code>
 
 
 <h5>Author</h5>
@@ -801,6 +932,54 @@ getCurCogDat(x, ...)</pre>
 <h5>See also</h5>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- makeSplodData -->   
+<div class="tab-pane" id="makesploddata">
+
+<h3 class="fref_title">Create Data Plottable by splod</h3>
+
+<h5>Usage</h5>
+<pre>makeSplodData(data, id.vars = NULL, ...)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>data</dt>
+  <dd>a data.frame</dd>
+  <dt>id.vars</dt>
+  <dd>variables to ignore when computing all
+  pairs of variables</dd>
+</dl>
+
+  <h5>Value</h5>
+
+  <p>an object of class 'localDiv' and 'splodDat' that can be
+  passed to <code><a href='#splod'>splod</a></code></p>
+
+
+  <h5>Description</h5>
+
+  <p>Create pairwise scatterplot data plottable by splod</p>
+
+
+  <h5>References</h5>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#splod'>splod</a></code>, <code>trsCogFn</code>,
+  <code><a href='#splodpanelfn'>splodPanelFn</a></code>
 
 
 <h5>Author</h5>
@@ -981,7 +1160,8 @@ cogFinal(obj, ...)</pre>
 
 <h5>Usage</h5>
 <pre>newNotebook(name = "index", blank = FALSE, title = "My Test Page", pageTitle = title, 
-  author = "Author Name", toc = TRUE, css = NULL, conn = getOption("vdbConn"))</pre>
+  author = "Author Name", toc = TRUE, css = NULL, conn = getOption("vdbConn"), 
+  overwrite = FALSE)</pre>
 
 <h5>Arguments</h5>
 <dl>
@@ -1001,6 +1181,9 @@ cogFinal(obj, ...)</pre>
   options("vdbConn") at the beginning of a session, and not
   necessary to specify here if a valid "vdbConn" object
   exists</dd>
+  <dt>overwrite</dt>
+  <dd>if the file exists, should it be
+  overwritten?</dd>
 </dl>
 
   <h5>Value</h5>
@@ -1151,7 +1334,7 @@ cogFinal(obj, ...)</pre>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
   <code>rhwatch</code> in RHIPE) - see
-  <code><a href='http://www.inside-r.org/r-doc/datadr/rhipeControl'>rhipeControl</a></code> and
+  <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
 
@@ -1205,7 +1388,7 @@ cogFinal(obj, ...)</pre>
 
 <h5>See also</h5>
 
-  <code>x</code> <code><a href='#plottrspre'>plot.trsPre</a></code>,
+  <code><a href='http://www.inside-r.org/r-doc/ggplot2/aes_position'>x</a></code> <code><a href='#plottrspre'>plot.trsPre</a></code>,
   <code><a href='#setlims'>setLims</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
@@ -1363,6 +1546,150 @@ cogFinal(obj, ...)</pre>
 </div>
 
 
+<!-- splod -->   
+<div class="tab-pane" id="splod">
+
+<h3 class="fref_title">Create a Scatterplot Display</h3>
+
+<h5>Usage</h5>
+<pre>splod(data, id.vars = NULL, name = NULL, desc = NULL, cogFn = splodCogFn, panelFn = splodPanelFn, 
+  verbose = TRUE, ...)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>data</dt>
+  <dd>a data.frame or an object of class
+  "splodDat"</dd>
+  <dt>id.vars</dt>
+  <dd>variables to ignore when computing all
+  pairs of variables</dd>
+  <dt>name,</dt>
+  <dd>desc, cogFn, panelFn, verbose, ...
+  parameters passed to <code><a href='#makedisplay'>makeDisplay</a></code></dd>
+</dl>
+
+  <h5>Value</h5>
+
+  <p>an object of class 'localDiv' that can be passed to
+  <code><a href='#splod'>splod</a></code></p>
+
+
+  <h5>Description</h5>
+
+  <p>Create a scatterplot display (splod)</p>
+
+
+  <h5>References</h5>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#makedisplay'>makeDisplay</a></code>, <code>makeSplodDat</code>,
+  <code>trsCogFn</code>, <code><a href='#splodpanelfn'>splodPanelFn</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- splodCogFn -->   
+<div class="tab-pane" id="splodcogfn">
+
+<h3 class="fref_title">Default Cognostics Function for splod</h3>
+
+<h5>Usage</h5>
+<pre>splodCogFn(df)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>df</dt>
+  <dd>a subset of data created by
+  <code><a href='#makesploddata'>makeSplodData</a></code></dd>
+</dl>
+
+  <h5>Value</h5>
+
+  <p>a data.frame of scagnostics for the given subset</p>
+
+
+  <h5>Description</h5>
+
+  <p>Default cognostics function for splod</p>
+
+
+  <h5>References</h5>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#splodpanelfn'>splodPanelFn</a></code>, <code><a href='#splod'>splod</a></code>,
+  <code><a href='#makesploddata'>makeSplodData</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- splodPanelFn -->   
+<div class="tab-pane" id="splodpanelfn">
+
+<h3 class="fref_title">Default Plot Function for splod</h3>
+
+<h5>Usage</h5>
+<pre>splodPanelFn(df)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>df</dt>
+  <dd>a subset of data created by
+  <code><a href='#makesploddata'>makeSplodData</a></code></dd>
+</dl>
+
+  <h5>Value</h5>
+
+  <p>a trellis plot object of a scatterplot for the given
+  subset</p>
+
+
+  <h5>Description</h5>
+
+  <p>Default plot function for splod</p>
+
+
+  <h5>References</h5>
+
+  <p>Wilkinson's scagnostics paper.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#splodcogfn'>splodCogFn</a></code>, <code><a href='#splod'>splod</a></code>,
+  <code><a href='#makesploddata'>makeSplodData</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
 <!-- typeset -->   
 <div class="tab-pane" id="typeset">
 
@@ -1462,31 +1789,31 @@ cogFinal(obj, ...)</pre>
 <!-- view -->   
 <div class="tab-pane" id="view">
 
-<h3 class="fref_title">Run Shiny Display Viewer</h3>
+<h3 class="fref_title">View a Display or Run Shiny Display Viewer</h3>
 
 <h5>Usage</h5>
-<pre>view(conn = getOption("vdbConn"), group = NULL, name = NULL, port = 8100L, openBrowser = TRUE)</pre>
+<pre>view(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption("vdbConn"))</pre>
 
 <h5>Arguments</h5>
 <dl>
-  <dt>conn</dt>
-  <dd>VDB connection info, typically stored in
-  options("vdbConn") at the beginning of a session, and not
-  necessary to specify here if a valid "vdbConn" object
-  exists</dd>
-  <dt>group,</dt>
-  <dd>name optional parameters to load the viewer
+  <dt>name,</dt>
+  <dd>group optional parameters to load the viewer
   with a pre-specified display</dd>
   <dt>port</dt>
   <dd>what port to use for the viewer</dd>
   <dt>openBrowser</dt>
   <dd>should the browser be automatically
   launched?</dd>
+  <dt>conn</dt>
+  <dd>VDB connection info, typically stored in
+  options("vdbConn") at the beginning of a session, and not
+  necessary to specify here if a valid "vdbConn" object
+  exists</dd>
 </dl>
 
   <h5>Description</h5>
 
-  <p>Run server-side viewer on local machine</p>
+  <p>View a display or run Shiny display viewer</p>
 
 
 
@@ -1532,6 +1859,94 @@ cogFinal(obj, ...)</pre>
 <h5>See also</h5>
 
   <code><a href='#newnotebook'>newNotebook</a></code>, <code><a href='#typeset'>typeset</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- webConn -->   
+<div class="tab-pane" id="webconn">
+
+<h3 class="fref_title">Initialize a Web Connection</h3>
+
+<h5>Usage</h5>
+<pre>webConn(user = NULL, ip, appDir, name)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>user</dt>
+  <dd>the username to log on to the web server</dd>
+  <dt>ip</dt>
+  <dd>the IP address of the web server</dd>
+  <dt>appDir</dt>
+  <dd>the directory where Shiny apps go on the
+  web server</dd>
+  <dt>name</dt>
+  <dd>the name under which to store the
+  application</dd>
+</dl>
+
+  <h5>Description</h5>
+
+  <p>Initialize a connection to a web server</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#websync'>websync</a></code>
+
+
+<h5>Author</h5>
+
+  Ryan Hafen
+
+</div>
+
+
+<!-- websync -->   
+<div class="tab-pane" id="websync">
+
+<h3 class="fref_title">Sync VDB and notebook Files to a Web Server</h3>
+
+<h5>Usage</h5>
+<pre>websync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"), verbose = FALSE, 
+  rsync = NULL)</pre>
+
+<h5>Arguments</h5>
+<dl>
+  <dt>vdbConn</dt>
+  <dd>VDB connection settings</dd>
+  <dt>webConn</dt>
+  <dd>web connection settings</dd>
+  <dt>verbose</dt>
+  <dd>show rsync output</dd>
+  <dt>rsync</dt>
+  <dd>location of rsync binary</dd>
+</dl>
+
+  <h5>Description</h5>
+
+  <p>Sync VDB and notebook files to a web server</p>
+
+
+  <h5>Details</h5>
+
+  <p>If you are syncing via ssh, this only works if public key
+  authentication is enabled between your local machine and
+  the remote server.</p>
+
+
+
+
+<h5>See also</h5>
+
+  <code><a href='#typeset'>typeset</a></code>, <code><a href='#webconn'>webConn</a></code>
 
 
 <h5>Author</h5>
