@@ -1,0 +1,98 @@
+
+## Misc ##
+
+### Scalable System ###
+
+You can go through most of the examples we've seen so far in this tutorial with a simple installation of R and the Trelliscope package and its R package dependencies.  
+
+To deal with much larger datasets, scaling comes automatically with Trelliscope's dependency on `datadr` -- any backend supported by `datadr` is supported by Trelliscope.  These currently include Hadoop and local disk.
+
+Some of the components beyond R that you will need to make use of these capabilities include:
+
+- [Hadoop](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/CDH4-Installation-Guide.html)
+- [RHIPE](http://www.datadr.org/install.html)
+- [MongoDB](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/)
+- [Shiny Server](http://www.rstudio.com/shiny/server/)
+- [RStudio Server](http://www.rstudio.com/ide/download/server)
+
+RStudio Server is not a necessary component, but is very convenient to put on the front-end node to the cluster.
+
+#### Using data on localDisk as input
+
+Here is a quick example of how to create a Trelliscope display using input data that is stored on local disk.
+
+First, let's convert our in-memory `byLatLon` object to a "localDiskConn" object:
+
+```{r localdisk, eval=FALSE}
+# convert byLatLon to a localDiskConn object
+byLatLonLD <- convert(byLatLon, 
+   localDiskConn("/private/tmp/byLatLon", autoYes=TRUE))
+```
+
+Now, we simply specify this object as the input to `makeDisplay()`:
+
+```{r makedisplay_ld, eval=FALSE}
+# make display using local disk connection as input
+makeDisplay(byLatLonLD,
+   name      = "co_vs_time_ld",
+   group     = "co",
+   desc      = "Plot of co vs. time for each geographic 'square' with with fitted line, illustrating the use of 'same' axis limits and a cognostics function, with the data source being a local disk connection",
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   lims      = coTimeLims
+)
+```
+
+The input connection is saved with the display object, and the data is used as the input when panels are rendered.  If we want to pre-render the panels, we can specify an argument `output`, which can be any `datadr` data connection.
+
+#### Using data on HDFS as storage and Hadoop/RHIPE as compute
+
+To illustrate creating a display with data on HDFS, we first convert `byLatLon` to an "hdfsConn" object:
+
+```{r hdfs, eval=FALSE}
+# convert byLatLon to hdfsConn
+byLatLonHDFS <- convert(byLatLon, 
+   hdfsConn("/tmp/byLatLon", autoYes=TRUE))
+```
+
+Since we will be pulling data at random by key from this object, we need to convert it to a Hadoop mapfile using `makeExtractable()` (`datadr` tries to make things mapfiles as much as possible, and `makeDisplay()` will check for this and let you know if your data does not comply).  
+
+```{r makeextractable, eval=FALSE}
+# make byLatLonHDFS subsets extractable by key
+byLatLonHDFS <- makeExtractable(byLatLonHDFS)
+```
+
+Now, to create the display:
+
+```{r makedisplay_hdfs, eval=FALSE}
+# make display using local disk connection as input
+makeDisplay(byLatLonHDFS,
+   name      = "co_vs_time_hdfs",
+   group     = "co",
+   desc      = "Plot of co vs. time for each geographic 'square' with with fitted line, illustrating the use of 'same' axis limits and a cognostics function, with the data source being a HDFS connection",
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   lims      = coTimeLims
+)
+```
+
+
+### FAQ ###
+
+#### What should I do if I have an issue or feature request?
+
+Please post an issue on [github](https://github.com/hafen/trelliscope/issues).
+
+#### Who are the intended users of Trelliscope?
+
+The context for our visualization environment is *deep statistical analysis and machine learning*, building and validating mathematical models that capture systematic behavior in data while accounting for random behavior.  The consumer of visualization tools in this context is not a field analyst but a statistician with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  In this context, the analyst needs tools that are very flexible that allow for rapid prototyping.  Most importantly, visualization tools in this context need to tie directly into the data analysis environment, as visual and numerical methods cannot be decoupled in the analysis process.
+
+### R Code ###
+
+If you would like to run through all of the code examples in this documentation without having to pick out each line of code from the text, below are files with the R code for each section.  All but the final section on scalable backends should run on a workstation with no other dependencies but the required R packages.  The scalable backend code requires other components to be installed, such as Hadoop or MongoDB.
+
+- [Getting Started, Trellis Display, VDBs](docs/code/1intro.R)
+- [Trelliscope Displays](docs/code/2displays.R)
+- [Web Notebooks](docs/code/4webnotebook.R)
+- [Scalable Backends](docs/code/5misc.R)
+

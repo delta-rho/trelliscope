@@ -47,6 +47,12 @@
          text-shadow: 8px 2px 6 rgba(55, 55, 55, 0.5);
       }
 
+      .unselectable {
+         -moz-user-select: none;
+         -webkit-user-select: none;
+         -ms-user-select: none;
+      }
+
 /*      #main-content {
          margin-top: -15px;
       }
@@ -121,7 +127,7 @@
    
    <div class="span3 well">
    <ul class = "nav nav-list" id="toc">
-   <li class='nav-header'>Intro</li>
+   <li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/1intro.Rmd'>Intro</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#background'>Background</a>
@@ -129,29 +135,34 @@
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#initial-setup'>Initial Setup</a>
+         <a target='_self' class='nav-not-header' href='#getting-started'>Getting Started</a>
       </li>
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#splitting-data'>Splitting Data</a>
+         <a target='_self' class='nav-not-header' href='#trellis-display'>Trellis Display</a>
       </li>
 
 
-<li class='nav-header'>Creating Displays</li>
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#visualization-databases'>Visualization Databases</a>
+      </li>
+
+
+<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/2displays.Rmd'>Trelliscope Displays</li>
       
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#division-with-datadr'>Division with datadr</a>
+      </li>
+
+
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#a-bare-bones-display'>A Bare Bones Display</a>
       </li>
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#the-prepanel-function'>The Prepanel Function</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#determining-axis-limits'>Determining Axis Limits</a>
+         <a target='_self' class='nav-not-header' href='#axis-limits'>Axis Limits</a>
       </li>
 
 
@@ -161,26 +172,26 @@
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#putting-it-all-together'>Putting it All Together</a>
+         <a target='_self' class='nav-not-header' href='#panel-storage'>Panel Storage</a>
       </li>
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#another-display'>Another Display</a>
+         <a target='_self' class='nav-not-header' href='#cognostics-storage'>Cognostics Storage</a>
       </li>
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#single-panel-displays'>Single-Panel Displays</a>
+         <a target='_self' class='nav-not-header' href='#linking-displays'>Linking Displays</a>
       </li>
 
 
       <li class='active'>
-         <a target='_self' class='nav-not-header' href='#splod'>"splod"</a>
+         <a target='_self' class='nav-not-header' href='#scatterplot-displays'>Scatterplot Displays</a>
       </li>
 
 
-<li class='nav-header'>Viewing Displays</li>
+<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/3viewer.Rmd'>Viewing Displays</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#shiny-viewer'>Shiny Viewer</a>
@@ -192,53 +203,7 @@
       </li>
 
 
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#client-side-viewer'>Client-Side Viewer</a>
-      </li>
-
-
-<li class='nav-header'>Scalable Setup</li>
-      
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#architecture'>Architecture</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#hadoop-r-rhipe'>Hadoop, R, RHIPE</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#other-components'>Other Components</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#vdb-connections'>VDB Connections</a>
-      </li>
-
-
-<li class='nav-header'>RHIPE</li>
-      
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#trelliscope-with-rhipe'>Trelliscope with RHIPE</a>
-      </li>
-
-
-<li class='nav-header'>Notes on Storage</li>
-      
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#panel-storage-types'>Panel Storage Types</a>
-      </li>
-
-
-      <li class='active'>
-         <a target='_self' class='nav-not-header' href='#cognostics-storage-types'>Cognostics Storage Types</a>
-      </li>
-
-
-<li class='nav-header'>Lab Notebooks</li>
+<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/4webnotebook.Rmd'>Lab Notebooks</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#creating-a-notebook'>Creating a Notebook</a>
@@ -249,6 +214,23 @@
          <a target='_self' class='nav-not-header' href='#syncing-files-with-the-web'>Syncing Files With the Web</a>
       </li>
 
+
+<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/5misc.Rmd'>Misc</li>
+      
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#scalable-system'>Scalable System</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#faq'>FAQ</a>
+      </li>
+
+
+      <li class='active'>
+         <a target='_self' class='nav-not-header' href='#r-code'>R Code</a>
+      </li>
+
    </ul>
    </div>
 
@@ -257,389 +239,271 @@
 <div class='tab-pane active' id='background'>
 <h3>Background</h3>
 
-<p>This documentation provides examples of creating and viewing visualization databases (VDBs) using the <code>trelliscope</code> R package.  Trelliscope provides a way to visualize large, complex data in great detail from within the R statistical programming environment.  This package operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  Data can be local R data.frames or can be very massive <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> datasets.  This is a research effort that is evolving, and this document communicates the current state.</p>
+<p>Trelliscope provides a way to visualize large, complex data in great detail from within the R statistical programming environment.  This package operates on data that has been split into subsets using the <a href="http://github.com/hafen/datadr">datadr</a> package.  Data can be local R data objects or can be very large data sets supported by the <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> backend of <code>datadr</code>.</p>
 
 <p>Trelliscope is based on the concept of Divide and Recombine (D&amp;R).  Some philosophy and background on D&amp;R can be found at <a href="http://www.datadr.org">datadr.org</a>.</p>
-
-<h4>Motivation</h4>
-
-<p>Building statistical models that adequately explain the patterns in the data is an iterative process, and visualization plays a critical role throughout.  In the initial exploration phases, visualization is one of the most powerful mechanisms through which the analyst can begin to formulate and hypothesize mathematical models that represent the patterns in the data.  After applying algorithms and fitting models, visualization plays a key role in validating the adequacy of the model.  Finally, after iterating and arriving upon an adequate model, visualization plays a critical role in disseminating the results of the analytical task.  To ensure information is not lost, the ability to visualize the data at the finest level of detail is crucial at all steps in this process, regardless of the size of the data.</p>
-
-<h4>The Visualization Context: Data Analysis</h4>
-
-<p>An important point to get across is who the consumer of the visualization is in this process.  Many visualization tools are designed from the point of view that the end user is a field analyst, with little or no training in statistical modeling.  The algorithms for the data have already been specified, and the purpose of the visualization tool is to assist the field analyst in understanding the data based on these algorithms.  These types of visualization tools can be very useful for their intended purpose, but there is a need for scalable visualization tools that can be used during the statistical model building process.</p>
-
-<!-- Tools of this nature that we have had experience with can be very useful, but are not appropriate for our analysis context.   -->
-
-<!-- but are usually specialized or take a long time to develop for a specific dataset. -->
-
-<p>The context for our visualization environment is <em>deep statistical analysis and machine learning</em>, building and validating mathematical models that capture the behavior in the data.  The consumer of visualization tools in this context is not a field analyst but a statistician with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  In this context, the analyst needs tools that are very flexible that allow for rapid prototyping.  Most importantly, visualization tools in this context need to tie directly into the data analysis environment, as visual and numerical methods cannot be decoupled.</p>
-
-<!-- But where do the algorithms used by these tools come from?  In many cases they come from the iterative statistical model building process we defined previously.  In this process, the visualization consumer is a person with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  Thus the end-user of the visualization tools we are discussing is very different from what is traditionally thought of.  This is an important distinction to keep in mind. -->
-
-<!-- It is important to make sure the action of "visualization" is being thought of in the appropriate context.  The context here is *deep statistical analysis*.  The consumer of these tools is not a field analyst but a statistician who is trying to use visualization to hypothesize and validate models that account for variability in the data.  As such, we are not as interested in tools built for a specific type of data or a specific domain.  Such tools can be very useful, particularly if they are based on statistical models that have been validated against the data, but in our setting, we are actually *building* and *validating* the models.   Thus, we need a flexible tool with broad applicability, that ties directly into our data analysis environment. -->
-
-<h4>General Approach: Dividing the Data</h4>
-
-<p>An effective approach to detailed data visualization with many records or variables is to divide the data into meaningful subsets and apply a visualization method to each subset, creating a collection of <a href="http://www.edwardtufte.com/tufte/books_ei">&quot;small multiples&quot;</a>.  Viewing a collection of small multiples is effective in revealing repetitions or changes, and allows an analyst to see the data at finer levels of detail.  This visualization approach has been an effective tool for many years and is built in to many successful visualization software packages, such as the lattice package for the R statistical computing environment based on <a href="http://www.cs.ubc.ca/%7Etmm/courses/infovis/readings/trellis.jstor.pdf">trellis</a> display for S/S-plus.  The analyst creates a visual display, applying a visualization method across subsets of the data, resulting in a collection of small multiples, each of which is called a panel in the display.  Many displays are created throughout the course of an analysis. A collection of displays is called a visualization database <a href="http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf">(VDB)</a>.</p>
-
-<h4>Scaling to Massive Data</h4>
-
-<p>As the size or complexity of the data increases, the number of small multiples increases beyond the capacity of the human mind to simultaneously capture the details and larger scale trends or patterns.  A <a href="http://www.jstor.org/discover/10.2307/1558733?uid=3739960&amp;uid=2129&amp;uid=2&amp;uid=70&amp;uid=4&amp;uid=3739256&amp;sid=21102145454567">simple idea</a> put forth by John Tukey decades ago is to have the computer do the work of determining which displays might be interesting.  This is accomplished through calculating diagnostic quantities for each panel to provide a rank for its potential usefulness.  Tukey called these quantities computer guided diagnostics, or <a href="http://books.google.com/books?id=z_F5Tyt66c0C&amp;printsec=frontcover#v=onepage&amp;q&amp;f=false">cognostics</a>.  Cognostic quantities can be simple statistical quantities (range, standard deviation, model coefficients) or can be tailored to the visualization at hand to differentiate among large numbers of panels with respect to context-relevant attributes.  Panels in a display can be sorted and filtered based on cognostics of interest, or samples of panels stratified according to the distribution of various cognostics.</p>
-
-<h4>Design of a Detailed Visualization Environment for Statistical Model Building</h4>
-
-<p>Summarizing some points above, visualization in the statistical model building process requires an environment that:</p>
-
-<ul>
-<li>provides rapid development of visualizations</li>
-<li>provides a great degree of flexibility</li>
-<li>ties directly into our data analysis environment</li>
-</ul>
-
-<p>To address these requirements, our visualization environment is built upon R.  R satisfies all 3 of these requirements.  While there are many excellent visualization frameworks we could make use of, one of the driving forces for this choice is the tie-in with all of the thousands of numerical methods available in R, and that R vis packages such as lattice, ggplot, and base R are familiar to statisticians.  As it becomes easier to rapidly build visualizations using more modern web-based vis tools such as vega/d3 from R, we will start to consider these.  We are already investigating the use of such frameworks for the interactive panel viewer part of this environment.</p>
-
-<!-- #### The trelliscope Package -->
-
-<!-- In short, a visualization database is a collection of displays, each of which visualizes some aspect of the data being analyzed.  A display consists of one or more panels, where a panel is a plot method applied to each subset of the data.   -->
-
-<!-- The `trelliscope` package provides mechanisms which, after using the [datadr][datadr] package to divide the data, allow you to apply visualization methods to the divided data and then interactively view the panels of the display in meaningful ways, based on cognostics computed for each panel that quantify interesting features.  This package also provides some mechanisms for maintaining a "lab notebook" with hooks for injecting your displays into the notebook.  It is also useful for storing and organizing single-panel plots.  When used with very large [RHIPE][rhipe] datasets, it allows interactive detailed visualization of large, complex data, and has been tested on displays with hundreds of thousands of panels per display. -->
-
-<!-- Suppose, for example, I have a large collection of high energy physics sensor data, and I am trying to study the properties of ...  I need to rapidly change between numerical and visual methods throughout the process of model building. -->
 
 <h4>Reference</h4>
 
 <p>Related projects:</p>
 
 <ul>
-<li><a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a>: the engine that makes Trelliscope work with large, complex data</li>
-<li><a href="http://github.com/hafen/datadr">datadr</a>: division methods</li>
+<li><a href="http://github.com/hafen/datadr">datadr</a>: R package providing the D&amp;R framework</li>
+<li><a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a>: the engine that enables D&amp;R to work with large, complex data</li>
 </ul>
 
 <p>References:</p>
 
 <ul>
 <li><a href="http://datadr.org">http://datadr.org</a></li>
-<li><a href="http://onlinelibrary.wiley.com/doi/10.1002/sta4.7/full">Large complex data: divide and recombine (D&amp;R) with RHIPE. <em>Stat</em>, 1(1), 53-67</a></li>
+<li><a href="http://datadr.org/documents/trelliscope.pdf">Trelliscope: A System for Detailed Visualization in the Deep Analysis of Large Complex Data</a></li>
+<li><a href="http://onlinelibrary.wiley.com/doi/10.1002/sta4.7/full">Large complex data: divide and recombine (D&amp;R) with RHIPE</a></li>
 <li><a href="http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf">Visualization Databases for the Analysis of Large Complex Datasets</a></li>
 </ul>
 
 </div>
 
 
-<div class='tab-pane' id='initial-setup'>
-<h3>Initial Setup</h3>
+<div class='tab-pane' id='getting-started'>
+<h3>Getting Started</h3>
 
-<p>Trelliscope has a project-oriented nature.  It is expected that you will usually create a new VDB of Trelliscope displays for a new project.  Within a project, there may be many analysis threads, and Trelliscope allows for displays to be grouped.  All files for a VDB will reside in a subdirectory inside your project directory, which you can specify (it&#39;s recommended to use an absolute path).</p>
+<p>Trelliscope is a part of and depends on <code>datadr</code>.  It is recommended to spend some time in the <code>datadr</code> <a href="http://hafen.github.io/datadr/index.html">tutorial</a> to get acquainted with the package.  Mainly focusing on the <a href="http://hafen.github.io/datadr/index.html#division">division</a> aspects and the <a href="http://hafen.github.io/datadr/index.html#backend-choices">backend options</a> of the package will suffice, although it is recommended to get well-acquainted with the entire package, as Trelliscope is simply a visualization component in the D&amp;R analysis paradigm.</p>
 
-<pre><code class="r">library(datadr)
-library(trelliscope)
+<h4>Installation</h4>
 
-# initialize a VDB (do this once per project)
-vdbDir &lt;- &quot;/tmp/vdbtest&quot;
+<p>To install Trelliscope, we must first install <code>datadr</code>, which is discussed <a href="http://hafen.github.io/datadr/index.html#getting-started">here</a>.</p>
+
+<p>Then, to install Trelliscope:</p>
+
+<pre><code class="r">library(devtools)
+install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
 </code></pre>
 
-<p>Now, we need to initialize some files in this directory.  This again is a once-per-project task.</p>
+<p>Then we load the package:</p>
 
-<pre><code class="r"># move files into place
-vdbInit(vdbDir, name=&quot;testVDB&quot;, autoYes=TRUE)
-# don&#39;t specify autoYes generally
+<pre><code class="r">library(trelliscope)
 </code></pre>
 
-<pre><code>Moving viewer files over
-Moving notebook files over
+<pre><code>Loading required package: datadr
+Loading required package: data.table
+data.table 1.8.10  For help type: help(&quot;data.table&quot;)
+Loading required package: digest
+Loading required package: lattice
+Loading required package: base64enc
+Loading required package: shiny
+Loading required package: codetools
+Loading required package: hexbin
+Loading required package: grid
+Loading required package: ggplot2
 </code></pre>
 
-<p>To see what happened:</p>
+<p>and we are ready to go.</p>
 
-<pre><code class="r">list.files(vdbDir)
+<h4>Connecting to a Visualization Database (VDB)</h4>
+
+<p>Collections of Trelliscope and other displays created throughout the course of an analysis are organized into a visualization database (VDB) for the project.  Displays can be organized into groups by analysis thread.</p>
+
+<p>The first step to using Trelliscope for an analysis project is to connect to a VDB.  A VDB connection is simply a connection to a directory on disk where all of the VDB files reside or will reside.</p>
+
+<pre><code class="r"># initialize a connection to a new VDB to be located at /private/tmp/vdbtest
+vdbDir &lt;- &quot;/private/tmp/vdbtest&quot;
+conn &lt;- vdbConn(vdbDir, autoYes=TRUE, name=&quot;myProject&quot;)
 </code></pre>
 
-<pre><code>[1] &quot;conn.R&quot;  &quot;displays&quot;  &quot;notebook&quot;  &quot;trelliscopeViewer_cs&quot;
+<pre><code>* Moving notebook files over
 </code></pre>
 
-<p>Three directories exist in our VDB base directory, as well as a file, <code>conn.R</code>.  The <code>display</code> directory is where images and meta data related to our trelliscope displays are stored.  The <code>notebook</code> directory is where web reports of your project analysis can go and the <code>trelliscopeViewer_cs</code> directory contains files used for a client-side viewer for your VDB displays (more on both of these later).  The <code>conn.R</code> file is a template configuration file for your VDB connection, populated with the directory and name you specified.  Other lines with examples of other available parameters are also visible in the file which help your VDB know how to communicate with other possible services (such as a Hadoop server, MongoDB, web server).  For simple usage, these are not necessary, and we discuss them in greater detail later on.  </p>
+<p>If the VDB connection directory doesn&#39;t exist, it will ask whether it should be created.  Here, we specify <code>autoYes=TRUE</code> to automatically answer yes to this question.  In any subsequent R session, we can connect to the existing VDB directory with the same <code>vdbConn()</code> command.</p>
 
-<p><code>vdbInit()</code> reads the <code>conn.R</code> file and sets an option in the environment with these settings.  You can see what is set with:</p>
+<p>Most Trelliscope functions need the VDB connection information to know where to put things.  It can be tedious to always supply this, so <code>vdbConn()</code> sets a global R option called <code>&quot;vdbConn&quot;</code> that store the connection information.  If in a Trelliscope function we do not explicitly specify the connection, the default is to search for the global <code>vdbConn</code> option.  The assumption is that in any one R session, the user will be using just one VDB, and thus there will not be multiple conflicting connections.</p>
 
-<pre><code class="r"> getOption(&quot;vdbConn&quot;)
-</code></pre>
-
-<pre><code>$vdbName
-[1] &quot;testVDB&quot;
-
-$vdbPrefix
-[1] &quot;/tmp/vdbTest&quot;
-
-$defaultStorage
-[1] &quot;local&quot;
-</code></pre>
-
-<p>These options tell future <code>trelliscope</code> function calls that the current VDB is &quot;testVDB&quot; and its files are located in &quot;/tmp/vdbTest&quot;, and that the default storage method is &quot;local&quot; (more on storage methods later).  We will also discuss other <code>vdbConn</code> options later on.</p>
-
-<p>The reason for setting a <code>vdbConn</code> list of options is that these options are fairly routinely required for functions in the <code>trelliscope</code> package and do not change over the course of an R session and are quite tedious to have to specify every time.</p>
-
-<p>In all subsequent sessions once a VDB has been initialized, you can load the VDB connection settings using:</p>
-
-<pre><code class="r"># new R session
-library(trelliscope)
-vdbConnect(&quot;/tmp/vdbTest&quot;)
-</code></pre>
-
-<p>This will locate and load the <code>conn.R</code> file.</p>
-
-<p>We are now ready to start creating some displays, once we get data in a suitable format.</p>
+<p>We can now look at some examples and start populating the VDB with displays.</p>
 
 </div>
 
 
-<div class='tab-pane' id='splitting-data'>
-<h3>Splitting Data</h3>
+<div class='tab-pane' id='trellis-display'>
+<h3>Trellis Display</h3>
 
-<p>I have included a test dataset in this package called <code>elnino</code>.  It consists of a time series of several variables measured by several buoys located across the Pacific ocean.</p>
+<p>In this section, we will explore an example dataset using the <code>lattice</code> package, which is based on Trellis Display, upon which many of the principles of Trelliscope are built.  Note that lattice is not required for plotting in Trelliscope - you can use <code>ggplot2</code>, base R graphics, or potentially any other plotting mechanism that can be rendered in a web page.</p>
 
-<!-- 
-data(elnino)
-data(elninoMap)
-xtick <- seq(-50, 100, by=10)
-ytick <- seq(-30, 30, by=10)
-xyplot(lat ~ lon, groups=buoy, data=elnino,
+<h4><code>airplane</code> data</h4>
+
+<p>The Trelliscope package includes a dataset called <code>airplane</code> which we will use as an example dataset in this tutorial.  This data is very small and can be analyzed quite easily without the help of trelliscope, but we use it to demonstrate the functionality.  Bear in mind that the same tools apply to much larger data.</p>
+
+<p>Let&#39;s first get a feel for the data:</p>
+
+<pre><code class="r">data(airplane)
+head(airplane)
+</code></pre>
+
+<pre><code>              dat_ams    org    NO3    SO4    NH4      CHL org_err NO3_err
+1 2010-06-28 16:25:21  9.263 0.4490 0.1149 0.1256 0.011193  0.1108 0.01721
+2 2010-06-28 16:25:34 13.288 0.5890 0.1925 0.2286 0.017478  0.1165 0.01809
+3 2010-06-28 16:25:46 12.134 0.5356 0.2323 0.2240 0.006066  0.1161 0.01768
+4 2010-06-28 16:25:59 12.357 0.5700 0.3070 0.1785 0.033465  0.1164 0.01820
+5 2010-06-28 16:26:12 10.112 0.4567 0.1975 0.1718 0.006830  0.1146 0.01746
+6 2010-06-28 16:26:24  7.493 0.2889 0.2048 0.1078 0.036566  0.1116 0.01657
+  SO4_err NH4_err CHl_err latitude longitude altitude static_p altitude_p
+1 0.02220 0.03308 0.01238    38.73    -121.4    353.6    967.7      327.2
+2 0.02444 0.03305 0.01217    38.73    -121.3    368.7    966.1      340.8
+3 0.02517 0.03307 0.01231    38.74    -121.3    384.7    964.3      356.4
+4 0.02533 0.03322 0.01227    38.74    -121.3    393.2    963.4      364.9
+5 0.02503 0.03313 0.01225    38.75    -121.3    388.1    963.9      360.0
+6 0.02412 0.03303 0.01193    38.75    -121.3    379.5    964.8      352.0
+  static_t potential_t dewpt    RH h2o_MF windspd winddir cpc_3025
+1    28.43       31.34 14.13 41.64 10.544    3.45   329.8     5508
+2    28.66       31.66 13.50 39.34 10.114    3.90   325.0     3915
+3    28.60       31.72 13.38 39.28 10.054    4.14   320.2     4037
+4    28.51       31.71 12.94 38.48  9.796    4.12   317.8     3969
+5    28.80       31.98 11.10 33.50  8.680    4.70   317.4     3567
+6    28.84       31.94 11.50 34.18  8.872    4.54   316.6     2940
+  cpc_3010 ozone    co so2     no    no2   noy mz_33   mz_42 mz_45 mz_59
+1    482.8 46.79 109.7  NA 0.3074 1.7454 5.245 16.73 0.10241 5.985 8.495
+2    352.4 44.28  97.6  NA 0.0514 0.3584 3.476 14.58 0.11756 5.216 7.713
+3    364.4 45.18 101.2  NA 0.1456 0.5726 4.092 14.42 0.13327 5.188 6.852
+4    348.0 45.50 103.1  NA 0.1593 0.6876 4.024 14.08 0.09164 4.843 7.080
+5    314.0 40.42  91.8  NA 0.1150 0.8004 3.528 11.14 0.04075 5.075 6.459
+6    263.2 40.14  87.8  NA 0.0354 0.3476 3.045 10.69 0.05883 4.171 4.851
+   mz_69 mz_71  mz_79  mz_93 mz_107  mz_137 mz_43 mz_61  mz_87 mz69_71
+1 1.5888 3.880 0.4166 0.4464 0.6861 0.51914 8.521 5.386 0.3025   5.469
+2 0.8105 3.654 0.2426 0.5712 0.8691 0.45182 8.299 5.125 0.2352   4.464
+3 0.7905 3.345 0.1917 0.4538 0.6606 0.09299 8.169 5.097 0.4179   4.136
+4 0.9043 2.939 0.2614 0.2178 0.7805 0.35259 8.377 5.169 0.2983   3.843
+5 0.9109 2.744 0.1778 0.1849 0.2648 0.34773 6.872 4.961 0.3636   3.655
+6 1.1104 1.878 0.1725 0.1533 0.8381 0.16363 7.049 4.566 0.2459   2.988
+  leg_flag    nox
+1       13 2.0528
+2       13 0.4098
+3       13 0.7182
+4       13 0.8469
+5        3 0.9154
+6        3 0.3830
+</code></pre>
+
+<p>We see a date/time variable, latitude, longitude, altitude, and several measurements.  Here we will focus on the measurement of <code>co</code>.</p>
+
+<h4><code>co</code> vs. time</h4>
+
+<p>Let&#39;s take a look at <code>co</code> vs. time:</p>
+
+<pre><code class="r"># look at co vs. time
+Sys.setenv(TZ=&quot;UTC&quot;)
+xyplot(co ~ dat_ams, data=airplane, aspect=0.2)
+</code></pre>
+
+<p><img src="figure/airplane_time.png" alt="plot of chunk airplane_time"> </p>
+
+<p>This plots <code>co</code> vs. <code>dat_ams</code>, and gives the plot an aspect ratio of 0.2.  Note that aspect ratios are very important for visual perception and should not be an afterthought or not thought of at all when creating a display.</p>
+
+<p>It looks like there are several <code>co</code> measurements over the course of a day, split into two chunks with a 4-5 hour gap in between.  It turns out that there are two separate flights - one in the morning and one in the afternoon.</p>
+
+<p>To account for this in our analyses, let&#39;s create a new variable <code>flight</code> with values <code>&quot;am&quot;</code> and <code>&quot;pm&quot;</code>:</p>
+
+<pre><code class="r"># distinguish &quot;am&quot; and &quot;pm&quot; flights
+airplane$flight &lt;- ifelse(airplane$dat_ams &lt; as.POSIXct(&quot;2010-06-28 21:00:00 UTC&quot;), &quot;am&quot;, &quot;pm&quot;)
+</code></pre>
+
+<h4>Altitude vs. time</h4>
+
+<p>Another interesting variable is altitude.  If we look at altitude vs. time:</p>
+
+<pre><code class="r"># look at altitude vs. time
+xyplot(altitude ~ dat_ams, data=airplane, aspect=0.2)
+</code></pre>
+
+<p><img src="figure/ap_alt.png" alt="plot of chunk ap_alt"> </p>
+
+<p>We see that altitude typically stays fairly constant a little under 500 and 1000, with some interesting quick ascents to higher altitudes.  It may be interesting to investigate different altitude levels, and we can create a discretized altitude variable:</p>
+
+<pre><code class="r"># create a discrete version of altitude
+airplane$altCut &lt;- cut(airplane$altitude, seq(0, 3000, by=500))
+</code></pre>
+
+<h4>Flight tracks</h4>
+
+<p>We can get a feel for the flight tracks during each flight with the following:</p>
+
+<pre><code class="r"># take a look at airplane tracks
+xyplot(latitude ~ longitude, data=airplane,
+   groups=flight,
+   aspect=&quot;iso&quot;,
+   alpha=0.5,
+   auto.key=list(space=&quot;right&quot;)
+)
+</code></pre>
+
+<p><img src="figure/ap_tracks.png" alt="plot of chunk ap_tracks"> </p>
+
+<p>The <code>groups</code> argument tells lattice to use a different color to plot data corresponding to each flight.  <code>aspect=&quot;iso&quot;</code> forces the aspect ratio of the plot to be such that the units of the x and y axis are equal according to the physical screen space they cover relative to their units.</p>
+
+<h4>Adding altitude</h4>
+
+<p>Suppose we want to incorporate altitude into the tracks plot.  There are several ways we could do this.  Here, for each flight we plot the tracks colored differently for each level of altitude.</p>
+
+<pre><code class="r"># look at tracks with altitude and flight
+library(RColorBrewer)
+xyplot(latitude ~ longitude | flight, 
+   data=airplane,
    panel=function(x, y, ...) {
-      panel.fill("gray")
-      panel.abline(v=xtick, col="lightgray")
-      panel.abline(h=ytick, col="lightgray")
-      panel.superpose(x, y, ...)
-      panel.lines(elninoMap$x, elninoMap$y, col="white")      
+      panel.fill(&quot;#E0E0E0&quot;)
+      panel.grid(h=-1, v=-1, col=&quot;lightgray&quot;)
+      panel.xyplot(x, y, ...)
    },
-   panel.groups=function(x, y, ...) {
-      xmean <- mean(x, na.rm=TRUE)
-      ymean <- mean(y, na.rm=TRUE)
-      panel.points(xmean, ymean, cex=1.1)
-   },
-   ylim=c(-25, 25),
-   xlim=c(-60, 110),
-   pch=".",
-   scales=list(x=list(at=xtick), y=list(at=ytick)),
-   aspect="iso",
-   xlab="Longitude", ylab="Latitude"
+   groups=altCut,
+   between=list(x=0.5),
+   aspect=&quot;iso&quot;,
+   par.settings=list(superpose.symbol=list(col=brewer.pal(6, &quot;Accent&quot;))),
+   auto.key=list(space=&quot;right&quot;)
 )
--->
-
-<p>This map is the average location of each buoy.</p>
-
-<p><center>
-   <img src="figs/1plot.png" width="650px">
-</center></p>
-
-<p>Time series of several measurements are available at each location:</p>
-
-<pre><code class="r">data(elnino)
-head(elnino)
 </code></pre>
 
-<pre><code>       buoy       date   lat   lon zonWinds merWinds humidity airTemp ssTemp
-1 buoyid_27 1980-03-07 -0.02 70.54     -6.8      0.7       NA   26.14  26.24
-2 buoyid_27 1980-03-08 -0.02 70.54     -4.9      1.1       NA   25.66  25.97
-3 buoyid_27 1980-03-09 -0.02 70.54     -4.5      2.2       NA   25.69  25.28
-4 buoyid_27 1980-03-10 -0.02 70.54     -3.8      1.9       NA   25.57  24.31
-5 buoyid_27 1980-03-11 -0.02 70.54     -4.2      1.5       NA   25.30  23.19
-6 buoyid_27 1980-03-12 -0.02 70.54     -4.4      0.3       NA   24.72  23.64
+<p><img src="figure/ap_tracks_alt.png" alt="plot of chunk ap_tracks_alt"> </p>
+
+<p>This display introduces several more elements of Trellis Display.  The most important is <em>conditioning</em>, or <em>faceting</em> on the variable <code>flight</code>.  In the R formula interface, this is specified by the <code>|</code> operator.  This causes a panel to be rendered independently for each subset defined by the levels of <code>flight</code>.</p>
+
+<p>Another notion introduced in this example is that of a panel function.  The panel function provides instructions for what to plot for each panel in the display, and the input to the panel function is a subset of data as specified by the conditioning variables.  The default panel function for <code>xyplot()</code> is <code>panel.xyplot()</code>.  Here, we use that, but additionally fill the background of each panel and add grid lines (which can also be done by specifying <code>type=c(&quot;p&quot;, &quot;g&quot;)</code>).</p>
+
+<p>Other aspects introduced here include the key, specified by <code>auto.key</code>, and special settings for the color of the symbols, specified by <code>par.settings</code>.  There are several aspects of Trellis Display as implemented in the <code>lattice</code> package that we encourage you to look into on your own, starting <a href="http://lmdvr.r-forge.r-project.org/figures/figures.html">here</a>.</p>
+
+<h4>More on conditioning</h4>
+
+<p>As conditioning is the basis of Trelliscope display, we&#39;ll cover a few more examples of conditioning, paying particular attention the importance of axis limits for being able to make meaningful judgements of similarities or differences between panels.</p>
+
+<p>Let&#39;s take a look at the airplane tracks broken up by time.  First, we will create a new factor variable that groups time by 15 minute intervals:</p>
+
+<pre><code class="r"># break time into 15 minute intervals
+airplane$datCut &lt;- sprintf(&quot;%s:%02d&quot;,
+   format(airplane$dat_ams, &quot;%m-%d/%H&quot;), 
+   floor(as.integer(format(airplane$dat_ams, &quot;%M&quot;)) / 15) * 15
+)
 </code></pre>
 
-<p>We see that a buoy ID, date, geolocation, and several weather-related variables are given.  The buoys for the most part stay within the vicinity of a fixed location, but some drift quite a bit.  The buoy categorization was determined by binning the geolocations, and some categorizations are suspect, as we will see.</p>
+<p>One way we might view the data conditioned on this new time variable is to plot a directional arrow of the flight&#39;s path per time interval:</p>
 
-<p>An important aspect of plotting with <code>trelliscope</code> is the notion of working with data that has been divided into subsets.  This can be done in many ways, and we use the <a href="http://github.com/hafen/datadr">datadr</a> package to do so.  The <code>datadr</code> package has facilities for dividing both in-memory data.frames and very large <a href="http://github.com/saptarshiguha/RHIPE">RHIPE</a> data objects.  For illustrative purposes, and for easy entry, we stick to the in-memory <code>elnino</code> data for this document, but do keep in mind that this all works for (and is primarily intended for) large data as well.</p>
-
-<p>There are many ways we might want to split the data, depending on the purpose of our analysis.  Suppose we are interested in viewing the time series of <code>elnino</code> data by buoy.</p>
-
-<pre><code class="r">buoySplit &lt;- divide(elnino, by=&quot;buoy&quot;)
-</code></pre>
-
-<p>The <code>divide</code> function takes a data.frame as an argument and splits it by the unique levels one or more conditioning variable.  The result is a list of class &quot;localDiv&quot;:</p>
-
-<pre><code class="r">buoySplit
-</code></pre>
-
-<pre><code>An object of class localDiv with the following attributes: 
-
-&#39;localDiv&#39; attr : value
---------------------------------------------------------------------------------
-* vars          : buoy(cha), date(Dat), lat(num), lon(num), zonWinds(num), merWinds(num), humidity(num), airTemp(num), ssTemp(num)
-* totSize       : 13.04 MB
-* ndiv          : 67
-* trans         : identity transformation (original data is a data.frame)
-* nrow          : 178080
-* splitRowDistn : use dat$splitRowDistn to get distribution
-
-First-order division:
-  Type: Conditioning variable division
-    Conditioning variables: buoy
-</code></pre>
-
-<p>There are 67 subsets, one for each buoy.  We can see what the data structure looks like:</p>
-
-<pre><code class="r">str(buoySplit[[1]])
-# or
-str(divExample(buoySplit))
-</code></pre>
-
-<pre><code>&#39;data.frame&#39;:   2090 obs. of  9 variables:
- $ buoy    : chr  &quot;buoyid_01&quot; &quot;buoyid_01&quot; &quot;buoyid_01&quot; &quot;buoyid_01&quot; ...
- $ date    : Date, format: &quot;1992-09-22&quot; &quot;1992-09-23&quot; ...
- $ lat     : num  -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.97 -7.99 ...
- $ lon     : num  55 55 55 55 55 ...
- $ zonWinds: num  -4.6 -4.5 -5.4 -4.8 -5.9 -7 -6.6 -6.6 -7.6 -6.6 ...
- $ merWinds: num  -0.2 -2.1 -1.3 -0.6 -0.3 -0.6 0.1 1.8 0.2 -0.4 ...
- $ humidity: num  NA NA NA NA NA NA NA NA NA NA ...
- $ airTemp : num  NA NA NA NA NA NA NA NA NA NA ...
- $ ssTemp  : num  NA 26.4 26.4 26.3 26.3 ...
-</code></pre>
-
-<p>The convenience function <code>divExample</code> grabs the first subset.  This is a useful function as it operates on RHIPE split data as well and is useful for testing plotting functions.  Notice that <code>buoySplit</code> is simply a list of subset data.frames.</p>
-
-<p>Now we are ready to make some plots.</p>
-
-</div>
-
-
-<div class='tab-pane' id='a-bare-bones-display'>
-<h3>A Bare Bones Display</h3>
-
-<p>To quickly get our feet wet with creating a display, we start with a minimal example.  Creating a plot first requires the specification of what you would like to be plotted.  You create a plot function of what you would like to visualize for each subset.  The function takes one argument, which you can think of as an object containing any one subset of your data.  Some things to know about the plot function:</p>
-
-<ul>
-<li>The plot function is applied to each subset of your split data object</li>
-<li>The plot function takes one input, which is one of these subsets</li>
-<li>The plot function returns something that can be printed to a graphics device</li>
-<li>Those familiar with lattice can think of the plot function as the lattice panel function and the data argument as the lattice packet being plotted (except that you conveniently get the whole data structure instead of just <code>x</code> and <code>y</code>)</li>
-<li>As long as the plotting method you use can produce graphics in a graphics device, you can use it: base R graphics, lattice, or ggplot2 are all available </li>
-<li>However, using something like lattice or ggplot2 adds benefit because these create objects which can be inspected to pull out axis limits, etc. (see our discussion of prepanel functions later on)</li>
-<li>If you use something that doesn&#39;t create an object (like base R graphics), you need to wrap the list of plot commands in an expression as the return value.</li>
-</ul>
-
-<p>Suppose we want to do a simple time series plot that highlights points where there are duplicated values for a single date.  With lattice, we can do this with the following:</p>
-
-<pre><code class="r"># start with something simple...
-airDatePlotFn &lt;- function(dat) {
-   xyplot(airTemp ~ date, 
-      groups=duplicated(date) | duplicated(date, fromLast=TRUE), 
-      data=dat
-   )
+<pre><code class="r"># plot of airplane tracks by 15 minute intervals
+arrowPanel &lt;- function(x, y, ...) {
+   n &lt;- length(x)
+   panel.grid(h=-1, v=-1)
+   panel.arrows(x[1:(n-1)], y[1:(n-1)], x[2:n], y[2:n], length=0.05, alpha=0.3, col=&quot;blue&quot;)
 }
-</code></pre>
 
-<p>As mentioned, the argument <code>dat</code> (you can call it whatever you like) will have the data structure of any single split of your data.  Simply, we are plotting <code>airTemp</code> vs. <code>date</code>, and these variables reside in the data.frame of the current split being plotted, <code>dat</code>.</p>
-
-<p>When developing the plot function, it can be useful to build it up based on an example subset:</p>
-
-<pre><code class="r">dat &lt;- divExample(buoySplit)
-</code></pre>
-
-<p>The <code>groups=</code> line in the plot function basically creates a boolean that is <code>TRUE</code> if any of the time points have more than one value, which will be plotted with a different color.</p>
-
-<p>To test out this function on a subset:</p>
-
-<p><center>
-   <img src="figs/2plot1.png" width="500px">
-</center></p>
-
-<pre><code class="r">airDatePlotFn(divExample(buoySplit))
-</code></pre>
-
-<p>Now, let&#39;s create a display in our visualization database based on this plot function:</p>
-
-<pre><code class="r">makeDisplay(
-   name    = &quot;airTemp_vs_date_plain&quot;,
-   group   = &quot;buoy&quot;,
-   data    = buoySplit,
-   plotFn  = airDatePlotFn
+xyplot(latitude ~ longitude | datCut,
+   data=airplane,
+   panel=arrowPanel,
+   as.table=TRUE,
+   between=list(x=0.25, y=0.25),
+   layout=c(5, 2),
+   aspect=&quot;iso&quot;,
+   subset=flight==&quot;pm&quot;
 )
 </code></pre>
 
-<pre><code>Validating &#39;plotFn&#39;...
-Validating plot dimensions...
-Precomputed limits not supplied.  Computing axis limits...
-... skipping this step since both are axes are free ...
-Generating plots...
--- Plotting panel 67 of 67 
-Updating displayList...
-Updating displayList...
-Writing panel keys...
-Writing cognostics...
-Plotting thumbnail...
-</code></pre>
+<p><img src="figure/tracks_datcut.png" alt="plot of chunk tracks_datcut"> </p>
 
-<p>This example shows the minimum number of parameters that must be specified to create a display: we must specify a <code>name</code> and <code>group</code> for the display, the split <code>data</code> it will be based on, and the plot function, <code>plotFn</code>.  Note that this will work just the same with RHIPE split data.</p>
+<h4>Scales / axis limits</h4>
 
-<p>The name and group collectively uniquely define a display and determine where the display is stored.  The group parameter helps keep track of displays by group, as an analysis may have many different threads.  We chose &quot;buoy&quot; as the group, as this display is related to an analysis of the data split by buoys.  By default, <code>group=&quot;common&quot;</code> (so it really doesn&#39;t need to be specified either if you are happy with that).</p>
-
-<p>The default behavior for how plots are stored when the input is a local dataset is to store a .png file for each subset on disk.  I am experimenting with many storage formats (including applying the plot function on-the-fly in the viewer), which is discussed later.</p>
-
-<p>We now have files in our &quot;displays&quot; directory:</p>
-
-<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;))
-</code></pre>
-
-<pre><code>[1] &quot;_displayList.json&quot;  &quot;_displayList.Rdata&quot; &quot;buoy&quot;
-</code></pre>
-
-<p>The first two files beginning with <code>_displayList</code> are R and json versions of a master display list with different metadata about each display.  The third directory, &quot;buoy&quot; corresponds to the group that our newly created display belongs to, &quot;buoy&quot;.  Any display in the group &quot;buoy&quot; will be put here.</p>
-
-<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;, &quot;buoy&quot;))
-</code></pre>
-
-<pre><code>[1] &quot;airTemp_vs_date_plain&quot;
-</code></pre>
-
-<p>We see our display, <code>airTemp_vs_date_plain</code> in here.  Let&#39;s see what is in there:</p>
-
-<pre><code class="r">list.files(file.path(vdbDir, &quot;displays&quot;, &quot;buoy&quot;, &quot;airTemp_vs_date_plain&quot;))
-</code></pre>
-
-<pre><code>[1] &quot;cog.Rdata&quot;       &quot;json&quot;            &quot;object.Rdata&quot;    &quot;panelKeys.Rdata&quot;
-[5] &quot;png&quot;             &quot;thumb.png&quot;
-</code></pre>
-
-<p>We see several files, most of which do not need to concern the user.  However, the <code>png</code> directory is where the actual plots are stored.  The png files are named according to their split key.  It is good to know these are here if you want to pull one out at random.  However, in general, you want to get at the actual panels of the display through the viewer.</p>
-
-<p>To use the viewer, just type any of the following:</p>
-
-<pre><code class="r">view()
-view(group=&quot;buoy&quot;, name=&quot;airTemp_vs_date_plain&quot;)
-view(name=&quot;airTemp_vs_date_plain&quot;)
-</code></pre>
-
-<p>This will bring up the web-based viewer of your display.  If you do plain <code>view()</code>, you will get a list of displays to choose from (at this point, just one).  The other two lines take you directly to the display we just created.  Notice that the last one works, even though I said that a display is uniquely identified by the group and name combination.  Usually, name is unique too and if that is the case, group is inferred.</p>
-
-<p>Note that the aspect ratio is not ideal for this plot.  We&#39;ll show how to change this in the next example.</p>
-
-<p>We&#39;ll also talk more about how to use the viewer later.</p>
-
-<p>Now, let&#39;s do something that shows all of the other functionality of <code>makeDisplay</code>, including prepanel functions, cognostics, etc.</p>
-
-</div>
-
-
-<div class='tab-pane' id='the-prepanel-function'>
-<h3>The Prepanel Function</h3>
-
-<p>Usually prior to plotting you want to determine axis limits for each panel.  This is important because when viewing many small multiples, axis limits play a major role in making meaningful comparisons between panels.  Also, if a handful of panels have large outlying values, you might want to trim these so that you can view the bulk of the data in the panel at better resolution.  </p>
-
-<p>Note that if you want to skip this extra step of code, you can specify <code>lims</code> in <code>makeDisplay</code> (or explicitly in your panel function), which will automatically perform the axis limit computations prior to creating the display (as we did in our previous example).</p>
-
-<p>The <code>prepanel</code> function is the first step in determining axis limits.  For those familiar with aspect ratio banking, it also has preliminary support for calculating aspect ratios through banking.</p>
-
-<p>The main parameter to know about in the <code>prepanel</code> function is <code>preFn</code>, which is a function that takes a subset of your split data as an input (like <code>plotFn</code> in <code>makeDisplay</code>) and returns a list including the elements <code>xlim</code> and <code>ylim</code> (each a vector of the min and max x and y ranges of the data subset), and optionally <code>dx</code> and <code>dy</code>, vectors used to determine the aspect ration when banking on 45 degrees.</p>
-
-<p>If you are familiar with prepanel functions in the lattice package, you will see the similarity.  A prepanel function might sometimes be somewhat unrelated to what is actually plotted, but usually axis limits depend exactly on what is being plotted.  In this case, if your <code>plotFn</code> is a trellis object, you can simply specify your <code>plotFn</code> as <code>preFn</code>, for convenience.  The <code>prepanel</code> function will simply apply the plot and grab the axis limits from the object created (I suppose I could add this functionality for ggplot2 as well).  Note that in this case, however, you cannot specify <code>dx</code> and <code>dy</code>.</p>
-
-</div>
-
-
-<div class='tab-pane' id='determining-axis-limits'>
-<h3>Determining Axis Limits</h3>
-
-<p>We can now determine our axis limits based on the results from <code>prepanel</code>.  The output from <code>prepanel</code> is object of class &quot;trsPre&quot; which has a plot method that can help in the decision of how to specify limits.  Before we look at this plot, let&#39;s talk about the possible choices of limit specification (those familiar with lattice will know what these are):</p>
+<p>Using this example, an important issue to discuss with Trellis Display is that of <em>scales</em>.  When viewing panels of a Trellis display, meaningful visual comparisons between panels greatly depend on how the limits of the x and y axes are determined.  There are three choices for each axis:</p>
 
 <ul>
 <li><strong>&quot;same&quot;</strong>: the same limits are used for all the panels</li>
@@ -649,15 +513,631 @@ view(name=&quot;airTemp_vs_date_plain&quot;)
 
 <p>Determining suitable axis limits is dependent on what is being visualized, but typically &quot;same&quot; or &quot;sliced&quot; are good choices as they enable panel-to-panel comparisons, which is where much of the power of this type of visualization lies.  You might choose &quot;sliced&quot; if you are interested in relative behaviors in terms of scale, or &quot;same&quot; if you are interested in relative behaviors both in terms of location and scale.</p>
 
-<p>To view a plot of the panel axis limits to help in this determination:</p>
+<p>The handling of panel axis limits is specified by the <code>scales</code> argument, which takes a names list of lists with names <code>x</code> and <code>y</code> for the x and y axes respectively.  There are several options to specify for each axis scale, but <code>relation</code> specifies the axis limit behavior.</p>
 
-<pre><code class="r">airDatePre &lt;- prepanel(buoySplit, airDatePlotFn)
-plot(airDatePre)
+<p>The default in <code>lattice</code> is &quot;same&quot;, and we have seen an example of this in our previous plot.  Let&#39;s also look at the other options.</p>
+
+<h4>Free axes</h4>
+
+<p>Here is the same plot as before but with both axes &quot;free&quot;:</p>
+
+<pre><code class="r"># example of both x and y axes &quot;free&quot;
+xyplot(latitude ~ longitude | datCut,
+   data=airplane,
+   panel=arrowPanel,
+   as.table=TRUE,
+   between=list(x=0.25, y=0.25),
+   layout=c(5, 2),
+   scales=list(x=list(relation=&quot;free&quot;), y=list(relation=&quot;free&quot;)),
+   subset=flight==&quot;pm&quot;
+)
 </code></pre>
 
-<p><center>
-   <img src="figs/2plot2.png" width="650px">
-</center></p>
+<p><img src="figure/tracks_free.png" alt="plot of chunk tracks_free"> </p>
+
+<p>It is quite difficult to understand how things vary between panels in this plot.</p>
+
+<h4>Sliced axes</h4>
+
+<p>Here is the plot with both axes &quot;sliced&quot;:</p>
+
+<pre><code class="r"># example of both x and y axes &quot;sliced&quot;
+xyplot(latitude ~ longitude | datCut,
+   data=airplane,
+   panel=arrowPanel,
+   as.table=TRUE,
+   between=list(x=0.25, y=0.25),
+   layout=c(5, 2),
+   scales=list(x=list(relation=&quot;sliced&quot;), y=list(relation=&quot;sliced&quot;)),
+   subset=flight==&quot;pm&quot;
+)
+</code></pre>
+
+<p><img src="figure/tracks_sliced.png" alt="plot of chunk tracks_sliced"> </p>
+
+<p>Now we can make relative judgements between panels, but it is difficult to judge the magnitude of shifts in location from one panel to the other.</p>
+
+<h4>The prepanel function</h4>
+
+<p>One more notion to introduce in Trellis Display that will translate over to Trelliscope is that of a <em>prepanel function</em>.  A prepanel function can be used to determine the individual panel x and y axis data ranges from which the &quot;same&quot;, &quot;free&quot;, or &quot;sliced&quot; axis computations will be based.  </p>
+
+<p>For example, suppose you are introducing other visual artifact to your panels other than the original data being plotted, and you would like to make sure that the axis limits account for the possibility of these extending beyond the range of the data being plotted.</p>
+
+<p>Here is an example of using a prepanel function to specify that the axis limits should extend beyond the range of both the x and y-axis variables by 1 unit in each direction.  The prepanel function, like the panel function, takes the current x and y variables and must return a list that includes <code>xlim</code> and <code>ylim</code> which specify the axis limit range for each panel.</p>
+
+<pre><code class="r"># prepanel example
+xyplot(latitude ~ longitude | datCut,
+   data=airplane,
+   panel=arrowPanel,
+   prepanel=function(x, y) {
+      list(xlim=range(x) + c(-1, 1), ylim=range(y) + c(-1, 1))
+   },
+   as.table=TRUE,
+   between=list(x=0.25, y=0.25),
+   layout=c(5, 2),
+   scales=list(x=list(relation=&quot;free&quot;), y=list(relation=&quot;free&quot;)),
+   subset=flight==&quot;pm&quot;
+)
+</code></pre>
+
+<p><img src="figure/tracks_prepanel.png" alt="plot of chunk tracks_prepanel"> </p>
+
+<!-- latCuts <- seq(38.2, 39.4, by=0.1)
+lonCuts <- seq(-121.8, -120.8, by=0.1)
+
+xyplot(latitude ~ longitude, data=airplane,
+   groups=airplane$dat_ams < as.POSIXct("2010-06-28 21:00:00 UTC"),
+   panel=function(x, y, ...) {
+      panel.abline(v=lonCuts, col="gray")
+      panel.abline(h=latCuts, col="gray")
+      panel.xyplot(x, y, ...)
+   },
+   aspect="iso"
+) -->
+
+</div>
+
+
+<div class='tab-pane' id='visualization-databases'>
+<h3>Visualization Databases</h3>
+
+<!-- Now that we have looked a little at the data and covered some of the principles of Trellis Display, before moving on to Trelliscope Displays, let's first discuss how we can populate a visualization database with displays. -->
+
+<p>Throughout the course of an analysis, we create several visual displays, such as those seen so far.  To help both keep track of what has been done and communicate our work to others, we can organize our displays in a <em>visualization database</em> (VDB).  </p>
+
+<p>In Trelliscope, a VDB is a collection of display objects that can either be simple plots created from various R plotting packages, like the ones we have seen so far, or Trelliscope displays, which are displays created for a divided dataset with a potentially very large number of subsets.  This type of display is discussed in detail in the <a href="#division-with-datadr">Trelliscope Displays</a> section.  Trelliscope provides a way to view and interact with these displays, as well as easily embed them in a web notebook, which we discuss in the <a href="#viewing-displays">Viewing Displays</a> and <a href="#lab-notebooks">Lab Notebooks</a> sections.</p>
+
+<p>Here, we will get introduced to a few of the commands for interacting with a VDB using Trelliscope. </p>
+
+<h4>Connecting to a VDB</h4>
+
+<p>We have already initialized a VDB.  If we are in a new R session, we can re-connect to the VDB with the following:</p>
+
+<pre><code class="r"># re-connect to our VDB
+conn &lt;- vdbConn(&quot;/private/tmp/vdbtest&quot;)
+</code></pre>
+
+<p>The other information about the VDB connection (such as its name) have been stored and are read in.  If you would like to reset a VDB connection&#39;s settings (such as for changing the VDB name), you can add <code>reset=TRUE</code> to the call.</p>
+
+<p>Recall that <code>vdbConn()</code> sets a global option with the connection information such that all methods have access to this information without explicitly supplying the connection object all the time.</p>
+
+<h4>Adding a display to a VDB</h4>
+
+<p>Plots created with R packages <code>lattice</code> or <code>ggplot2</code>, as well as with any R expression that plots to a graphics device, can be added to a VDB with the function <code>addDisplay()</code>.  We will cover that here, and in the next section we will see how to create and add Trelliscope displays to a VDB.</p>
+
+<p>Say that we would like to add one of our plots we have created so far to our VDB:</p>
+
+<pre><code class="r"># add a lattice plot to our VDB
+p &lt;- xyplot(latitude ~ longitude | flight, 
+   data=airplane,
+   panel=function(x, y, ...) {
+      panel.fill(&quot;#E0E0E0&quot;)
+      panel.grid(h=-1, v=-1, col=&quot;lightgray&quot;)
+      panel.xyplot(x, y, ...)
+   },
+   groups=altCut,
+   between=list(x=0.5),
+   aspect=&quot;iso&quot;,
+   par.settings=list(superpose.symbol=list(col=brewer.pal(6, &quot;Accent&quot;))),
+   auto.key=list(space=&quot;right&quot;))
+
+addDisplay(p, 
+   name  = &quot;tracks_byflight&quot;, 
+   group = &quot;exploratory&quot;,
+   desc  = &quot;The tracks of the airplane with a panel for each of the morning and evening flights.  Color by altitude of plane.&quot;,
+   dim   = list(width=800, height=450, res=150))
+</code></pre>
+
+<p>There are three attributes we can specify to describe a display record being added to the VDB:</p>
+
+<ul>
+<li><code>name</code>: the name of the display</li>
+<li><code>group</code>: the group the display belongs to (default is <code>&quot;common&quot;</code>)</li>
+<li><code>desc</code>: a description of the display</li>
+</ul>
+
+<p>It is sufficient to just specify <code>name</code>, but specifying <code>group</code> is also recommended and is used to help organize plots by different aspects of the analysis.  It is also a good practice to provide a detailed description of the plot.</p>
+
+<p>The <code>dim</code> argument is a list specifying the width and height of the resulting plot (in pixels), and the resolution of the raster image that will be created.</p>
+
+<p>Adding displays to our VDB helps us document our displays in line with our analyses.  This makes the process of dissemination much easier, as we will see.  In the course of analysis, we can create many ineffective displays in our quest to understand the data.  But the displays that are insightful deserve the extra care of being documented and added to the VDB.</p>
+
+<h4>What a display looks like in the VDB</h4>
+
+<p>So what is actually happening when we create a display?  Trelliscope creates a directory for the display in the VDB directory and fills it with various pieces of metadata.  It also can hold the actual rendered panels, as is the case here.</p>
+
+<p>Let&#39;s see what got created for this display:</p>
+
+<pre><code class="r"># list the files in the &quot;displays&quot; directory of the VDB
+list.files(file.path(vdbDir, &quot;displays&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;_displayList.Rdata&quot; &quot;exploratory&quot;       
+</code></pre>
+
+<p>We see a file <code>_displayList.Rdata</code>, which is an object containing the grand list of all displays, as well as various pieces of metadata about the displays.  The other file, <code>&quot;exploratory&quot;</code> is a directory that corresponds to the group that our newly created display belongs to.  Any display with group <code>&quot;exploratory&quot;</code> will be put here.</p>
+
+<pre><code class="r"># list the files in the &quot;exploratory&quot; group
+list.files(file.path(vdbDir, &quot;displays&quot;, &quot;exploratory&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;tracks_byflight&quot;
+</code></pre>
+
+<p>We see a directory for our display, <code>tracks_byflight</code> in here.  Let&#39;s see what is in this directory:</p>
+
+<pre><code class="r"># look at files in the &quot;tracks_byflight&quot; directory
+list.files(file.path(vdbDir, &quot;displays&quot;, &quot;exploratory&quot;, &quot;tracks_byflight&quot;))
+</code></pre>
+
+<pre><code>[1] &quot;displayObj.Rdata&quot; &quot;thumb.png&quot;       
+</code></pre>
+
+<p>There are two files:</p>
+
+<ul>
+<li><code>displayObj.Rdata</code> is an R data object with all of the parameters that went in to creating the display</li>
+<li><code>thumb.png</code> is the rendered display</li>
+</ul>
+
+<p>For Trelliscope displays, <code>thumb.png</code> is the rendering of one subset of the data.  There will also be a subdirectory, <code>panels</code>, which is a directory either containing the data against which the display is applied, or a collection of rendered panels.</p>
+
+<h4>Listing all displays</h4>
+
+<p>To see what displays have been created in a VDB, we can do the following:</p>
+
+<pre><code class="r"># list all displays in the VDB
+listDisplays()
+</code></pre>
+
+<pre><code>           name |       group |                    desc | n |     dataClass
+----------------+-------------+-------------------------+---+--------------
+tracks_byflight | exploratory | The tracks of the ai... | 1 | none (R plot)
+</code></pre>
+
+<p>This provides some simple information about each display in the VDB.  The column <code>n</code> is the number of panels in the display, and the column <code>dataClass</code> indicates the connection type of the data from which the display was created (used for Trelliscope displays).</p>
+
+<!-- For more specific information about a display -->
+
+<h4>Viewing displays</h4>
+
+<p>We can view a display with the following:</p>
+
+<pre><code class="r"># view the tracks_by_flight display
+view(&quot;tracks_byflight&quot;)
+</code></pre>
+
+<pre><code>NULL
+</code></pre>
+
+<p>There is a much more interesting viewer for Trelliscope displays.</p>
+
+<h4>Removing displays</h4>
+
+<p>It is possible to overwrite a display, in which case the directory of the display being replaced is renamed with a <code>&quot;_bak&quot;</code> appended to its name.  </p>
+
+<p>However, we may want to completely remove a display from our VDB.  We can do this with:</p>
+
+<pre><code class="r">removeDisplay(&quot;tracks_byflight&quot;)
+</code></pre>
+
+<p>While a display is uniquely identified by its name and group, we can get away with just specifying a name if it is unique.</p>
+
+</div>
+
+
+<div class='tab-pane' id='division-with-datadr'>
+<h3>Division with datadr</h3>
+
+<p>Trelliscope is an extension of Trellis Display that allows you to create displays with potentially thousands to millions of panels.  It provides a mechanism to create and interact with these displays.</p>
+
+<p>Conditioning in Trelliscope is achieved by dividing the data into subsets, one subset for each panel.  Trelliscope uses the division mechanism of the Divide &amp; Recombine (D&amp;R) package, <code>datadr</code>.  It is assumed that you have already gone through the <code>datadr</code> <a href="http://hafen.github.io/datadr">tutorial</a>.  Essentially, Trelliscope provides <em>visual recombination</em> methods for D&amp;R.</p>
+
+<h4>Geographical division of airplane data</h4>
+
+<p>There are many ways we might want to split the data, depending on the purpose of our analysis.  One aspect of the <code>airplane</code> data that we are interested in is how different variables, such as <code>co</code> change over the course of a day in different geographical locations.  </p>
+
+<p>Looking at our previous plots of the airplane tracks, we notice that within each square defined by the grid lines the airplane recovers many of its tracks from AM to PM:</p>
+
+<p><img src="figure/ap_tracks2.png" alt="plot of chunk ap_tracks2"> </p>
+
+<p>Thus, it might be interesting to split the data into subsets by cutting the latitude and longitude into small squares (okay, so these aren&#39;t really <em>squares</em>), and then study the variables of interest within those squares.  We can do this with the following:</p>
+
+<pre><code class="r"># latitude and longitude &quot;square&quot; boundaries
+latCuts &lt;- seq(38.2, 39.4, by=0.1)
+lonCuts &lt;- seq(-121.8, -120.8, by=0.1)
+
+# divide the data by lat / lon
+byLatLon &lt;- divide(airplane, by=c(&quot;latCut&quot;, &quot;lonCut&quot;),
+   preTransFn = function(x) {
+      x$latCut &lt;- cut(x$latitude, latCuts)
+      x$lonCut &lt;- cut(x$longitude, lonCuts)
+      x
+   },
+   update=TRUE)
+</code></pre>
+
+<pre><code>* Input data is not &#39;ddf&#39; - attempting to cast it as such
+* Getting basic &#39;ddo&#39; attributes...
+* Getting basic &#39;ddf&#39; attributes...
+* Verifying parameters...
+* Applying division...
+* Getting basic &#39;ddo&#39; attributes...
+* Running map/reduce to get missing attributes...
+* Getting basic &#39;ddo&#39; attributes...
+</code></pre>
+
+<p>Note that with this small dataset, we could have appended the <code>latCuts</code> and <code>lonCuts</code> variables to the <code>airplane</code> data frame prior to calling <code>divide()</code>.</p>
+
+<p>Let&#39;s look at the resulting distributed data frame (&quot;ddf&quot;) object:</p>
+
+<pre><code class="r"># look at the resulting object
+byLatLon
+</code></pre>
+
+<pre><code>
+Distributed data object of class &#39;kvMemory&#39; with attributes: 
+
+&#39;ddo&#39; attribute | value
+----------------+-----------------------------------------------------------
+ keys           | keys are available through getKeys(dat)
+ totSize        | 1007.05 KB
+ nDiv           | 54
+ splitSizeDistn | use splitSizeDistn(dat) to get distribution
+ example        | use kvExample(dat) to get an example subset
+ bsvInfo        | [empty] no BSVs have been specified
+
+&#39;ddf&#39; attribute | value
+----------------+-----------------------------------------------------------
+ vars           | dat_ams(POS), org(POS), NO3(num), SO4(num), and 46 more
+ transFn        | identity (original data is a data frame)
+ nRow           | 1479
+ splitRowDistn  | use splitRowDistn(dat) to get distribution
+ summary        | use summary(dat) to see summaries
+
+Division:
+  Type: Conditioning variable division
+    Conditioning variables: latCut, lonCut
+
+In-memory data connection
+</code></pre>
+
+<p>Also, let&#39;s look at a key-value pair to make sure it looks how we think it should:</p>
+
+<pre><code class="r"># see what a subset key-value pair looks like
+str(byLatLon[[1]])
+</code></pre>
+
+<pre><code>List of 2
+ $ : chr &quot;latCut=(38.3,38.4]|lonCut=(-121.3,-121.2]&quot;
+ $ :Classes &#39;divValue&#39; and &#39;data.frame&#39;:    4 obs. of  50 variables:
+  ..$ dat_ams    : POSIXct[1:4], format: &quot;2010-06-28 18:19:35&quot; ...
+  ..$ org        : num [1:4] 13.3 13.3 13.3 15.2
+  ..$ NO3        : num [1:4] 0.84 0.826 0.715 1.12
+  ..$ SO4        : num [1:4] 0.72 0.642 0.679 0.905
+  ..$ NH4        : num [1:4] 0.372 0.365 0.336 0.454
+  ..$ CHL        : num [1:4] 0.00905 0.03785 0.0131 0.02075
+  ..$ org_err    : num [1:4] 0.121 0.122 0.122 0.124
+  ..$ NO3_err    : num [1:4] 0.02 0.0197 0.0192 0.0215
+  ..$ SO4_err    : num [1:4] 0.0338 0.0328 0.0327 0.0339
+  ..$ NH4_err    : num [1:4] 0.0363 0.0363 0.0364 0.0366
+  ..$ CHl_err    : num [1:4] 0.0125 0.0123 0.0122 0.0122
+  ..$ latitude   : num [1:4] 38.4 38.4 38.4 38.4
+  ..$ longitude  : num [1:4] -121 -121 -121 -121
+  ..$ altitude   : num [1:4] 364 377 400 379
+  ..$ static_p   : num [1:4] 966 965 962 965
+  ..$ altitude_p : num [1:4] 339 351 373 352
+  ..$ static_t   : num [1:4] 28.4 28.1 27.9 28.4
+  ..$ potential_t: num [1:4] 31.4 31.1 31.2 31.5
+  ..$ dewpt      : num [1:4] 14.2 14.5 15.6 15.3
+  ..$ RH         : num [1:4] 42.1 43.6 47.2 45.2
+  ..$ h2o_MF     : num [1:4] 10.6 10.8 11.7 11.4
+  ..$ windspd    : num [1:4] 1.25 1.3 0.4 1.01
+  ..$ winddir    : num [1:4] 311.3 331.2 13.6 318.7
+  ..$ cpc_3025   : num [1:4] 50563 33147 58963 62464
+  ..$ cpc_3010   : num [1:4] 3500 2350 4369 4606
+  ..$ ozone      : num [1:4] 50.5 53.6 60 60.4
+  ..$ co         : num [1:4] 154 149 NA NA
+  ..$ so2        : num [1:4] 2.73 1.99 2.98 3.18
+  ..$ no         : num [1:4] 0.383 0.303 NA NA
+  ..$ no2        : num [1:4] 2.2 1.23 NA NA
+  ..$ noy        : num [1:4] 7.45 6.94 NA NA
+  ..$ mz_33      : num [1:4] 16.6 14.6 14.3 16
+  ..$ mz_42      : num [1:4] 0.0636 -0.0207 0.076 0.0786
+  ..$ mz_45      : num [1:4] 4.7 3.99 4.43 4.14
+  ..$ mz_59      : num [1:4] 5.58 5.36 6.3 6.07
+  ..$ mz_69      : num [1:4] 0.356 0.636 0.527 0.358
+  ..$ mz_71      : num [1:4] 1.26 1.33 1.05 1.12
+  ..$ mz_79      : num [1:4] 0.09247 0.00985 0.21491 0.08101
+  ..$ mz_93      : num [1:4] 0.24394 0.00496 0.19109 0.17658
+  ..$ mz_107     : num [1:4] 0.221 0.284 0.413 0.467
+  ..$ mz_137     : num [1:4] 0.22955 0.19211 0.19416 0.00166
+  ..$ mz_43      : num [1:4] 4.95 4.15 4.56 4.36
+  ..$ mz_61      : num [1:4] 2.94 2.91 2.95 2.7
+  ..$ mz_87      : num [1:4] 0.396 0.283 0.272 0.374
+  ..$ mz69_71    : num [1:4] 1.62 1.97 1.58 1.48
+  ..$ leg_flag   : int [1:4] 6 6 6 6
+  ..$ nox        : num [1:4] 2.58 1.54 NA NA
+  ..$ flight     : chr [1:4] &quot;am&quot; &quot;am&quot; &quot;am&quot; &quot;am&quot;
+  ..$ altCut     : chr [1:4] &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot;
+  ..$ datCut     : chr [1:4] &quot;06-28/18:15&quot; &quot;06-28/18:15&quot; &quot;06-28/18:15&quot; &quot;06-28/18:15&quot;
+  ..- attr(*, &quot;split&quot;)=&#39;data.frame&#39;:    1 obs. of  2 variables:
+  .. ..$ latCut: chr &quot;(38.3,38.4]&quot;
+  .. ..$ lonCut: chr &quot;(-121.3,-121.2]&quot;
+</code></pre>
+
+<p>We have our division.  Now we are ready to make some displays.</p>
+
+</div>
+
+
+<div class='tab-pane' id='a-bare-bones-display'>
+<h3>A Bare Bones Display</h3>
+
+<p>To quickly get our feet wet with creating a display, we start with a minimal example.  Creating a plot first requires the specification of what you would like to be plotted for each subset.  Just like with <code>lattice</code>, you create a panel function that will be applied to each subset.  The function is applied to each key-value pair subset in your data.  This function behaves like all other per-subset functions in <code>datadr</code>, which can operate either on both a key and a value of just the value (see <a href="http://hafen.github.io/datadr/#key-value-pairs">here</a> for more details).</p>
+
+<p>Some things to know about the panel function:</p>
+
+<ul>
+<li>The panel function is applied to each subset of your divided data object</li>
+<li>The panel function returns something that can be printed to a graphics device</li>
+<li>Those familiar with lattice can think of the panel function as the lattice panel function and the data argument(s) as the lattice packet being plotted (except that you conveniently get the whole data structure instead of just <code>x</code> and <code>y</code>)</li>
+<li>As long as the plotting method you use can produce graphics in a graphics device, you can use it: base R graphics, lattice, or ggplot2 are all available </li>
+<li>However, using something like lattice or ggplot2 adds benefit because these create objects which can be inspected to pull out axis limits, etc. (see our discussion of <code>prepanel</code> functions later on)</li>
+<li>If you use something that doesn&#39;t create an object (such as base R graphics), you need to wrap the list of plot commands in an expression as the return value</li>
+<li>In the future, I will provide support for custom rendering hooks/methods to accommodate more plotting options</li>
+</ul>
+
+<h4>Panel function for <code>co</code> vs. time</h4>
+
+<p>Suppose we want to do a simple time series plot of the log of <code>co</code> vs. time for each geographical block, and we want to add a fitted line to the data.  Using <code>lattice</code> to create the panel function, we can do this with the following:</p>
+
+<pre><code class="r"># a simple panel function for a trelliscope display
+coPanelFn &lt;- function(d) {
+   xyplot(log2(co) ~ dat_ams, data=d, 
+      type=c(&quot;p&quot;, &quot;g&quot;),
+      panel=function(x, y, ...) {
+         panel.xyplot(x, y, ...)
+         try(panel.lmline(x, y, lty=2), silent=TRUE)
+      })
+}
+</code></pre>
+
+<p>The argument <code>d</code> (you can call it whatever you like) is the value of one of the subsets of your divided data set.  Let&#39;s test it on a subset of our data:</p>
+
+<pre><code class="r"># apply the panel function to a subset
+kvApply(coPanelFn, byLatLon[[2]])
+</code></pre>
+
+<p><img src="figure/simple_co_apply.png" alt="plot of chunk simple_co_apply"> </p>
+
+<h4>Making the display</h4>
+
+<p>To create a display, applying this panel function over the entire data set, we simply call <code>makeDisplay()</code>:</p>
+
+<pre><code class="r"># create a simple display
+makeDisplay(byLatLon,
+   panelFn = coPanelFn,
+   name    = &quot;co_vs_time_bb&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Bare bones display of co vs. time for each geographic &#39;square&#39; with fitted linear model&quot;
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+* ... skipping this step since both are axes are free ...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<p>The two most important arguments are the first argument, <code>data</code>, and the panel function, <code>panelFn</code>.  The other arguments in this example simply identify the display, as we saw previously.  We will later see other arguments to <code>makeDisplay()</code> that provide additional useful functionality.</p>
+
+<p>Here, we are putting the display in a group <code>&quot;co&quot;</code> since that is the variable we are currently studying.</p>
+
+<h4>Viewing the display</h4>
+
+<p>To view the display:</p>
+
+<pre><code class="r"># open the Trelliscope viewer for the VDB
+view()
+</code></pre>
+
+<p>This will bring up the Trelliscope viewer.  You will get a list of displays to choose from (at this point, just one).  If you aren&#39;t following along with the example in your own R console, you can look at the display on RStudio&#39;s glimmer site <a href="http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&amp;name=co_vs_time_plain">here</a>.  Later we will cover how to sync a local VDB with a web server.</p>
+
+<p>You can also launch the viewer to go directly to this display with either of the following:</p>
+
+<pre><code class="r"># open this display in the Trelliscope viewer
+view(group=&quot;co&quot;, name=&quot;co_vs_time_bb&quot;)
+view(name=&quot;co_vs_time_bb&quot;)
+</code></pre>
+
+<p>Notice that the second one works, even though a display is uniquely identified by the group and name combination.  Usually, name is unique too and if that is the case, group is inferred.</p>
+
+<p>We&#39;ll talk more about how to use the viewer later, but feel free to play around.</p>
+
+<p>Now, let&#39;s do something that shows all of the other functionality of <code>makeDisplay()</code>, including prepanel functions, cognostics, etc.</p>
+
+</div>
+
+
+<div class='tab-pane' id='axis-limits'>
+<h3>Axis Limits</h3>
+
+<p>As we discussed <a href="#trellis-display">before</a>, scales and axis limits are very important for creating meaningful Trellis displays.  In Trellis Display, axis limits can be computed by specifying the x and y axes as &quot;free&quot;, &quot;sliced&quot;, or &quot;same&quot;.  Based on the specification, each subset is checked against what is being plotted, and the axis limits are computed.  The same can be done for Trelliscope displays.  There are different ways to do this that we will cover in this section.</p>
+
+<p>In the display we just created, we see that the axis limits of the panels appear to be &quot;free&quot;.  This is different from the <code>lattice</code> default of axis limits across panels being &quot;same&quot;.  Since Trelliscope is very general -- any R plotting technology can potentially be used in a panel function -- the default is to not try to do anything with axis limits.</p>
+
+<p>Note: the discussion in this section is constrained to two-dimensional panels (with x and y axes), which covers the vast majority of useful statistical visualization techniques.  If you have panel functions that produce plots that do not fit this (e.g. pie charts -- no!!), then the functionality described in this section is not useful.</p>
+
+<h4>Simple axis limits example</h4>
+
+<pre><code class="r"># setting axis limits in the call to makeDisplay()
+makeDisplay(byLatLon,
+   name    = &quot;co_vs_time_same&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits for x and y&quot;,
+   panelFn = coPanelFn,
+   lims    = list(x=&quot;same&quot;, y=&quot;same&quot;)
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+Testing &#39;prepanelFn&#39; on a subset...
+Using &#39;trellis&#39; panelFn to determine limits... dx and dy will not be computed.
+* Getting basic &#39;ddo&#39; attributes...
+At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<p>This approach only works with <code>lattice</code> and <code>ggplot2</code> panel functions.  Per-panel axis limits are precomputed using the panel function and these are incorporated into the axis limits calculation to be applied to all panels.  The reason we are constrained to <code>lattice</code> and <code>ggplot2</code> is that Trelliscope needs to know the limits of what is being plotted in each panel to determine the overall axis limits, and these can be easily extracted from the resulting object after applying the panel function to a subset.</p>
+
+<p>Here is an example of this display, using <code>ggplot2</code>:</p>
+
+<pre><code class="r"># same display but using ggplot2
+ggCoPanelFn &lt;- function(x) {
+   qplot(dat_ams, log2(co), data=x)
+}
+
+makeDisplay(byLatLon,
+   name    = &quot;co_vs_time_gg&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits for x and y, and using ggplot2&quot;,   
+   panelFn = ggCoPanelFn,
+   lims    = list(x=&quot;same&quot;, y=&quot;same&quot;)
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+Testing &#39;prepanelFn&#39; on a subset...
+Using &#39;ggplot&#39; panelFn to determine limits... dx and dy will not be computed.
+* Getting basic &#39;ddo&#39; attributes...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<pre><code>Warning: Removed 7 rows containing missing values (geom_point).
+</code></pre>
+
+<p>Note: <code>ggplot2</code> support at the moment is pretty shaky.  For the general continuous axis scales, it should work fine, but more work needs to be done to integrate nicely.</p>
+
+<h4>Specifying a prepanel function</h4>
+
+<p>The previous example is the most simple way to specify axis limits.  However, it comes with a potential cost -- the panel function must be applied to each subset in order to obtain the limits.  For panel functions that take some time to render, this is wasted time.</p>
+
+<p>As an alternative, we can explicitly supply a prepanel function to the <code>lims</code> argument list, called <code>prepanelFn</code>.  This functions in the same way as for <code>lattice</code>, where the prepanel function takes each subset of data and returns a list with <code>xlim</code> and <code>ylim</code>.  For example:</p>
+
+<pre><code class="r"># using a prepanel function to compute axis limits
+preFn &lt;- function(x) {
+   list(ylim=range(log2(x$co)), xlim=range(x$dat_ams))
+}
+
+makeDisplay(byLatLon,
+   name    = &quot;co_vs_time_pre&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits for x and y using a prepanel function&quot;,
+   panelFn = coPanelFn,
+   lims    = list(x=&quot;same&quot;, y=&quot;same&quot; , prepanelFn=preFn)
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+Testing &#39;prepanelFn&#39; on a subset...
+dx or dy (or both) were not specified - not computing banking.
+* Getting basic &#39;ddo&#39; attributes...
+At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<h4>Determining limits beforehand with <code>prepanel()</code></h4>
+
+<p>In both of the above approaches, we computed axis limits at the time of creating the display.  This is not recommended for very large datasets.  There are a few reasons for this.  </p>
+
+<ol>
+<li>Setting the axis limits based on &quot;sliced&quot; or &quot;same&quot; is not very robust to outliers, and we may wish to understand and modify the axis limits prior to creating the display.</li>
+<li>Computing the axis limits can be more costly than creating a display, and it can be good to separate the two, particularly when we may be iterating on getting a panel function just right.</li>
+</ol>
+
+<p>We can use a function, <code>prepanel()</code>, to compute axis limits prior to creating a display.</p>
+
+<p>The main parameter to know about in <code>prepanel()</code> is <code>prepanelFn</code>, which operates in the same way as we saw before -- it is either a <code>lattice</code> or <code>ggplot2</code> panel function or it is a function that takes a subset of the data as an input and returns a list including the elements <code>xlim</code> and <code>ylim</code> (each a vector of the min and max x and y ranges of the data subset).</p>
+
+<pre><code class="r"># compute axis limits prior to creating display using prepanel()
+coTimePre &lt;- prepanel(byLatLon, prepanelFn=coPanelFn)
+</code></pre>
+
+<pre><code>Testing &#39;prepanelFn&#39; on a subset...
+Using &#39;trellis&#39; panelFn to determine limits... dx and dy will not be computed.
+* Getting basic &#39;ddo&#39; attributes...
+</code></pre>
+
+<h4>Determining axis limits from <code>prepanel()</code> output</h4>
+
+<p>We can now determine our axis limits based on the results from <code>prepanel()</code>.  The output from <code>prepanel</code> is an object which has a plot method that can help in the decision of how to specify limits.</p>
+
+<p>To view a plot of the panel axis limits to help in this determination:</p>
+
+<pre><code class="r"># visualize the axis limit computations
+plot(coTimePre)
+</code></pre>
+
+<pre><code>At least one of the variables is not numeric.  Casting as numeric for plotting purposes.
+</code></pre>
+
+<p><img src="figure/co_pre_plot.png" alt="plot of chunk co_pre_plot"> </p>
 
 <p>This plot orders the axis limits for both the x and y axes for both &quot;same&quot; and &quot;sliced&quot; (with sliced ranges centered around zero).  This can help us to see if we will be squeezing the data for a lot of panels when using &quot;same&quot;, and also helps identify outliers.  In each of the panels of this plot, you can think of the range of the &quot;Panel Limits&quot; axis as the range that will ultimately be chosen for each panel for the given axis and limit method.</p>
 
@@ -665,10 +1145,48 @@ plot(airDatePre)
 
 <p>To set our choice, we do the following:</p>
 
-<pre><code class="r">buoyLims &lt;- setLims(airDatePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
+<pre><code class="r"># set limits from our prepanel calculations
+coTimeLims &lt;- setLims(coTimePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
 </code></pre>
 
-<p>The <code>makeDisplay</code> function can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
+<pre><code>At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.
+</code></pre>
+
+<p><code>makeDisplay()</code> can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
+
+<pre><code class="r"># create a display using axis limits from prepanel() and setLims()
+makeDisplay(byLatLon,
+   name    = &quot;co_vs_time_lims&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits for x and y by pre-specifying the axis limits using prepanel() and setLims()&quot;,
+   panelFn = coPanelFn,
+   lims    = coTimeLims
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<!-- #### Setting the limits manually
+
+You can also explicitly specify limits with `lims` in `makeDisplay()`, which will automatically perform the axis limit computations prior to creating the display. -->
+
+<h4>Setting the limits in your panel function</h4>
+
+<p>Another option, of course, is to set axis limits explicitly in your panel function.</p>
+
+<!-- This really isn't very much work for the benefit we receive from what we are able to do with the display after it's created. -->
+
+<!-- Currently, this is how aspect ratios of the bounding boxes are specified.  There is functionality for you to specify an aspect ratio and either a height or a width, where the bounding box with which the panel aspect ratio is computed is based on the data, not the entire plot (including axis labels, etc.), but it isn't quite working.  You can specify aspect ratios in your lattice plots, but it is then difficult to get the panel dimensions correct such that there is not a lot of white space wasted for each panel (remember, we want to tile many of these across one screen so we don't want to waste white space).  On a related note, for lattice plots, see `?noMargins`. -->
 
 </div>
 
@@ -676,212 +1194,333 @@ plot(airDatePre)
 <div class='tab-pane' id='cognostics'>
 <h3>Cognostics</h3>
 
-<p>Much of the power of the viewer for multi-panel displays (particularly when they number in the thousands or higher) lies in the ability to specify metrics that provide interesting information about each panel, with which you can filter and sort your collection of panels to look for those which are interesting.  John Tukey called such metrics &quot;cognostics&quot;.</p>
+<p>Much of the power of the viewer for multi-panel displays (particularly when the panels number in the thousands or higher) lies in the ability to specify metrics that provide interesting information about each panel, with which you can filter and sort your collection of panels to look for those which are interesting.  John Tukey called a notion similar to this &quot;cognostics&quot;.</p>
 
-<p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>makeDisplay</code>.  </p>
+<p>We can obtain cognostics for our panels by specifying a <code>cogFn</code> function to <code>makeDisplay()</code>.</p>
 
-<p>The cognostics function is applied to each subset just like the plot function and must return a list which can be flattened into a data.frame.  There are helper functions <code>cog()</code>, <code>cogMean()</code>, <code>cog(Range)</code>, etc. which can be used when defining this list.  The most generic, <code>cog()</code> basically wraps the metric you want to compute with additional information, such as the description of the cognostic and its type.  Current types are:</p>
+<p>The cognostics function is applied to each subset just like the panel function and must return a list which can be flattened into a data frame.  For our geographically split data, there are several cognostics we might be interested in.  Typically the most useful cognostics are arrived upon iteratively.  Here, we specify the number of observations in the subset, the slope of a fitted line to <code>co</code> vs. time, the mean latitude and longitude, and the range of the time variable.</p>
 
-<ul>
-<li><code>int</code>: integer </li>
-<li><code>num</code>: floating point</li>
-<li><code>fac</code>: factor (string)</li>
-<li><code>date</code>: date</li>
-<li><code>time</code>: datetime</li>
-<li><code>geo</code>: geographic (a vector of lat and lon)</li>
-<li><code>rel</code>: relation (not implemented)</li>
-<li><code>hier</code>: hierarchy (not implemented)</li>
-</ul>
-
-<p>If type is not specified, it is inferred based on the data being processed.</p>
-
-<p>In the future, support for input variables will be added (this existed in older versions).  These will not be computed based on the data, but will be placeholders for users to provide panel-specific input.</p>
-
-<p>For our buoy data, there are several congnostics we might be interested in.  Typically the most meaningful cognostics are arrived upon iteratively.  Here, we specify the mean latitude and longitude, the drift (range) of the latitude and longitude, the range of temperature and date variables, the number of observtions, the number of missing values, and an estimate of the variability of the data around a fitted loess line of temperature vs. time.</p>
-
-<pre><code class="r">airDateCogFn &lt;- function(dat) {
+<pre><code class="r"># create a cognostics function to be applied to each subset
+coCogFn &lt;- function(x) {
+   slp &lt;- coef(lm(co ~ as.integer(dat_ams), data=x))[2]
+   if(is.na(slp))
+      slp &lt;- 0
    list(
-      meanLoc = cog(c(mean(dat$lat), mean(dat$lon)), 
-         desc=&quot;Mean lat/lon buoy location&quot;,
-         type=&quot;geo&quot;),
-      latDrift = cogRange(dat$lat, 
-         desc=&quot;Range of latitude drift of the buoy over time&quot;),
-      lonDrift = cogRange(dat$lon,
-         desc=&quot;Range of longitude drift of the buoy over time&quot;),
-      tempRng = cogRange(dat$airTemp, desc=&quot;Temperature range&quot;),
-      dateRng = cogRange(as.numeric(dat$date), desc=&quot;Date range (days)&quot;),
-      startDate = cog(min(dat$date), 
-         desc=&quot;Date of first record&quot;, type=&quot;date&quot;),
-      nObs = cog(nrow(dat), desc=&quot;Number of observations&quot;),
-      nNA = cog(length(which(is.na(dat$airTemp))),
-         desc=&quot;Number of missing observations&quot;),
-      locVar = cogLoessRMSE(as.numeric(dat$date), dat$airTemp, degree=2, span=0.1,
-         desc=&quot;Variability of temperature around a time-local mean&quot;)
+      nobs = cog(length(which(!is.na(x$co))), desc=&quot;number of observations&quot;),
+      slope = cog(slp, desc=&quot;slope of fitted line&quot;),
+      meanLat = cogMean(x$latitude, desc=&quot;mean latitude&quot;),
+      meanLon = cogMean(x$longitude, desc=&quot;mean longitude&quot;),
+      timeRange = cogRange(as.integer(x$dat_ams[!is.na(x$co)]) / 60^2, desc=&quot;Time range (hours)&quot;)
    )
 }
 </code></pre>
 
-<p>Notice the functions <code>cogMean</code>, <code>cogRange</code>, and <code>cogLoessRMSE</code>.  These are special cognostic functions (and there will be more) to simplify the process of specifying common cognostics.  The difference between <code>cogRange</code> and <code>range</code> and others is that there is removal of NAs and extra checking for errors (when all are NA) so that cognostic calculation is robust to errors.</p>
+<p>The helper functions <code>cog()</code>, <code>cogMean()</code>, <code>cogRange()</code>, etc. can be used when defining the cognostics list.  The most generic, <code>cog()</code> basically wraps the metric you want to compute with additional information, such as the description of the cognostic.  They are not necessary but are helpful.  For example, the difference between <code>cogRange()</code> and <code>range()</code> and others is that there is removal of NAs and extra checking for errors so that the cognostic calculation is robust.</p>
 
 <p>Note that if you don&#39;t want to wrap your calculations in <code>cog()</code>, you don&#39;t have to, but doing so allows you to control the type of variable and give it a description.</p>
 
-<p>Let&#39;s test it on a subset:</p>
+<!-- Current types are:
+- `int `: integer 
+- `num `: floating point
+- `fac `: factor (string)
+- `date`: date
+- `time`: datetime
+- `geo `: geographic (a vector of lat and lon)
+- `rel `: relation (not implemented)
+- `hier`: hierarchy (not implemented)
 
-<pre><code class="r">airDateCogFn(buoySplit[[1]])
+If type is not specified, it is inferred based on the data being processed.
+
+In the future, support for input variables will be added (this existed in older versions).  These will not be computed based on the data, but will be placeholders for users to provide panel-specific input. -->
+
+<p>Let&#39;s test the cognostics function on a subset:</p>
+
+<pre><code class="r"># test the cognostics function on a subset
+kvApply(coCogFn, byLatLon[[1]])
 </code></pre>
 
-<pre><code>    meanLat  meanLon latDrift lonDrift tempRng dateRng nObs nNA    locVar
-1 -7.976856 54.99609     1.01     0.78    4.92    2099 2090 470 0.2390464
+<pre><code>$nobs
+[1] 2
+
+$slope
+[1] 0
+
+$meanLat
+[1] 38.38
+
+$meanLon
+[1] -121.3
+
+$timeRange
+[1] 0.003611
 </code></pre>
 
-<p>We will see how all of these components are used in the next section.</p>
+<p>Now, let&#39;s add these cognostics to our display:</p>
 
-<p>Note: the default behavior for storing cognostics is as an R data.frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels exceeding the low millions.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.</p>
-
-<!-- ### Input Variables ### -->
-
-</div>
-
-
-<div class='tab-pane' id='putting-it-all-together'>
-<h3>Putting it All Together</h3>
-
-<p>This may seem like a lot of work for one display over the bare bones example we looked at.  We have done prepanel computation, set axis limits, and specified a cognostics function with cognostic variable descriptions.  This really isn&#39;t very much work for the benefit we receive from what we are able to do with the display after it&#39;s created.  So let&#39;s create it:</p>
-
-<pre><code class="r">makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;airTemp_vs_date&quot;,
-   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
-   data    = buoySplit,
-   plotFn  = airDatePlotFn, 
-   plotDim = list(height=350, width=800),
-   lims    = buoyLims, 
-   cogFn   = airDateCogFn
+<pre><code class="r"># add cognostics to the display
+makeDisplay(byLatLon,
+   name    = &quot;co_vs_time&quot;,
+   group   = &quot;co&quot;,
+   desc    = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits and a cognostics function&quot;,
+   panelFn = coPanelFn,
+   cogFn   = coCogFn,
+   lims    = coTimeLims
 )
 </code></pre>
 
-<pre><code>Validating &#39;plotFn&#39;...
-Validating plot dimensions...
-Testing cognostics function on a subset ... ok
-Generating plots...
--- Plotting panel 67 of 67 
-Computing cognostics...
-Updating displayList...
-Updating displayList...
-Writing panel keys...
-Writing cognostics...
-Plotting thumbnail...
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
 </code></pre>
 
-<p>Note that in addition to everything else we have done to prepare for the display, we also specify the dimensions of each panel (in pixels) - (perhaps I should change parameters to <code>panelFn</code> and <code>panelDim</code>).  Currently, this is how aspect ratios of the bounding boxes are specified.  There is functionality for you to specify an aspect ratio and either a height or a width, where the bounding box with which the panel aspect ratio is computed is based on the data, not the entire plot (including axis labels, etc.), but it isn&#39;t quite working.  You can specify aspect ratios in your lattice plots, but it is then difficult to get the panel dimensions correct such that there is not a lot of white space wasted for each panel (remember, we want to tile many of these across one screen so we don&#39;t want to waste white space).  On a related note, for lattice plots, see <code>?noMargins</code>.</p>
-
-<p>Now, you can view the display:</p>
-
-<pre><code class="r">view()
-# or
-view(name=&quot;airTemp_vs_date&quot;)
-</code></pre>
-
-<p>We will put off details of the viewer again, although feel free to play around with it.</p>
+<p>This display can be viewed <a href="http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&amp;name=co_vs_time">here</a>.  With this display, we can start to see the utility of cognostics.  Pressing the &quot;cog&quot; button in the viewer brings up a table of cognostics with ways to sort and filter the panels based on the values of the cognostics.  This is particularly useful when there are more panels than you could possibly view.</p>
 
 </div>
 
 
-<div class='tab-pane' id='another-display'>
-<h3>Another Display</h3>
+<div class='tab-pane' id='panel-storage'>
+<h3>Panel Storage</h3>
 
-<p>Now that we went through a detailed description of how to create a display, let&#39;s get a little more practice and create another display.  It might be interesting to make a plot for each buoy of how it has moved over time, with the same color indication of whether one date has more than observation.  Since every buoy is at a different latitude and longitude, we already know that we want the x and y axes to be sliced so we will skip the prepanel steps.</p>
+<p>The default behavior for how panels are stored is to store the data subsets and then render the panels on-the-fly in the viewer.  </p>
 
-<pre><code class="r">buoyMovePlotFn &lt;- function(dat) {
-   xyplot(lat ~ lon, groups=duplicated(date) | duplicated(date, fromLast=TRUE), data=dat)
+<p>When we are not pre-rendering, if the input data is already a persistent divided data object, then that data object is simply used as the input when rendering is done by the viewer on-the-fly.  For example, if we have a very large data set on HDFS with a very large number of subsets, we can simply specify the HDFS connection as the input, and the only computation that needs to be done is the prepanel of cognostics computations, if specified.</p>
+
+<p>When we are pre-rendering, the panels are rendered at the time <code>makeDisplay()</code> is called and the output is stored somewhere, which can be on any valid <code>datadr</code> storage backend such as local disk or HDFS.  The default is local disk in the display&#39;s VDB directory.</p>
+
+<p>For the examples we have seen so far, our input has been an in-memory divided data object, which is not persistent.  By default, Trelliscope takes such input and stores it as to &quot;localDiskConn&quot; connection in the <code>&quot;panels&quot;</code> subdirectory of the display&#39;s directory in the VDB.  If we were to pre-render, the data would still go to this location, but instead of being the input data, it will be the rendered panel images.</p>
+
+<h4>When to pre-render</h4>
+
+<p>There are trade-offs for pre-rendering or not:</p>
+
+<p><strong>In favor of pre-rendering</strong></p>
+
+<ul>
+<li>Paging through panels can be faster as we don&#39;t have to render them prior to displaying them</li>
+<li>Less work for the web server</li>
+</ul>
+
+<p><strong>In favor of rendering on-the-fly</strong></p>
+
+<ul>
+<li><code>makeDisplay()</code> is considerably faster - we only need to compute cognostics and metadata about the display.  This is particularly true for very large datasets.</li>
+<li>If we are only ever going to view a small subset of possibly hundreds of thousands of panels, why render them all up-front instead of rendering the ones you currently want to look at?</li>
+<li>Image resolution: we do now know if the image will be viewed as a single large panel in the window, or tiled with tens or hundreds of panels in a single window.  When we render the image on-the-fly, we can render it at the resolution at which it will be viewed instead of having to store a raster image that has a resolution sufficient to be viewed at the largest scale.  A way around this would be to go away from .png to a vector format like .svg.  The only problem with that is that those files can get very large, and can be difficult to render consistently across all browsers.  In the future, this may all move toward using something like d3 as the rendering engine.</li>
+</ul>
+
+<h4>Pre-rendering example</h4>
+
+<p>Here is an example of how to specify pre-rendering when creating a display:</p>
+
+<!-- fix this -->
+
+<pre><code class="r"># make display with panels pre-rendered
+makeDisplay(byLatLon,
+   name      = &quot;co_vs_time_rend&quot;,
+   group     = &quot;co&quot;,
+   desc      = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits and a cognostics function, and pre-rendered panels&quot;,
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   lims      = coTimeLims,
+   preRender = TRUE
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<p>The only thing that changes is that we specify <code>preRender=TRUE</code>.  Now, the data stored as the output for this display are a binary png blob for each panel.</p>
+
+</div>
+
+
+<div class='tab-pane' id='cognostics-storage'>
+<h3>Cognostics Storage</h3>
+
+<p>The default behavior for storing cognostics is as an R data frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels exceeding the low millions.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.</p>
+
+<p>To store cognostics in MongoDB, we must first initiate a cognostics MongoDB connection.  This of course requires a MongoDB instance to be running somewhere that you have access to.</p>
+
+<pre><code class="r"># initiate a MongoDB cognostics connection
+mongoConn &lt;- mongoCogConn()   
+</code></pre>
+
+<p>In <code>mongoCogConn()</code>, you can specify information such as the host address, etc. of MongoDB.  The parameters and their defaults can be seen with<code>?mongoCogConn</code>.</p>
+
+<p>Now, we can simply specify this as the <code>cogConn</code> argument in our call to <code>makeDisplay()</code> and cognostics will be stored in this connection.</p>
+
+<pre><code class="r"># create the display using MongoDB to store the cognostics
+makeDisplay(byLatLon,
+   name      = &quot;co_vs_time_mon&quot;,
+   group     = &quot;co&quot;,
+   desc      = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits and a cognostics function, and storing cognostics in MongoDB&quot;,
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   cogConn   = mongoConn,
+   lims      = coTimeLims
+)
+</code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<p>When this display is being viewed, the MongoDB database will be queried as we interact with the panels of the display.</p>
+
+<p>We chose MongoDB as a potential cognostics storage backend simply because it provides a scalable database, allows for indexing, and has a flexible aggregation framework.  The Trelliscope cognostics connection interface is extendable, such that other cognostic storage backends could be explored as well.</p>
+
+</div>
+
+
+<div class='tab-pane' id='linking-displays'>
+<h3>Linking Displays</h3>
+
+<p>We typically have many different ways to look at the same division of data.  When creating a display against a divided dataset, Trelliscope keeps track of the division of the input data, and all displays created on the same division can be linked together in the Trelliscope viewer.</p>
+
+<p>To illustrate this, here we create a display with a panel function that, for each geographical subset, simply shows all of the airplane&#39;s tracks on the grid, with the grid location of the current subset highlighted in gray.  We will see how this display can be useful when being viewed in conjunction with other displays in the <a href="#shiny-viewer">following section</a>.</p>
+
+<pre><code class="r"># panel function for a geographical display
+latLonPanelFn &lt;- function(a) {
+   yy &lt;- as.numeric(strsplit(gsub(&quot;\\(|\\]&quot;, &quot;&quot;, attr(a, &quot;split&quot;)$latCut), &quot;,&quot;)[[1]])
+   xx &lt;- as.numeric(strsplit(gsub(&quot;\\(|\\]&quot;, &quot;&quot;, attr(a, &quot;split&quot;)$lonCut), &quot;,&quot;)[[1]])
+
+   xyplot(airplane$latitude ~ airplane$longitude,
+      groups=airplane$dat_ams &lt; as.POSIXct(&quot;2010-06-28 21:00:00 UTC&quot;),
+      panel=function(x, y, ...) {
+         panel.rect(xx[1], yy[1], xx[2], yy[2], col=&quot;darkgray&quot;)
+         panel.abline(v=lonCuts, col=&quot;gray&quot;)
+         panel.abline(h=latCuts, col=&quot;gray&quot;)
+         panel.xyplot(x, y, ...)
+      }
+   )
 }
 
+# test the panel function on a subset
+kvApply(latLonPanelFn, byLatLon[[2]])
+</code></pre>
+
+<p><img src="figure/lat_lon_display.png" alt="plot of chunk lat_lon_display"> </p>
+
+<pre><code class="r">
+# create the display
 makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;lat_vs_lon&quot;,
-   data    = buoySplit,
-   plotFn  = buoyMovePlotFn,
-   lims    = list(x=&quot;sliced&quot;, y=&quot;sliced&quot;)
+   data = byLatLon,
+   name = &quot;lat_vs_lon&quot;,
+   group = &quot;co&quot;,
+   desc = &quot;airplane tracks&quot;,
+   panelFn = latLonPanelFn
 )
 </code></pre>
+
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+* ... skipping this step since both are axes are free ...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
+</code></pre>
+
+<p>Note that the panel function uses data objects <code>lonCuts</code> and <code>latCuts</code>, data objects that are only visible in our local environment.  <code>makeDisplay()</code> checks the panel and cognostics functions to detect locally stored data and attaches it to the display object so it will be available at the time of rendering.</p>
 
 </div>
 
 
-<div class='tab-pane' id='single-panel-displays'>
-<h3>Single-Panel Displays</h3>
+<div class='tab-pane' id='scatterplot-displays'>
+<h3>Scatterplot Displays</h3>
 
-<p>For displays with many panels, it is worth the small amount of extra effort we went through in the previous section to get a nice, viewable display.  However, we are not always doing detailed visualization that requires such displays.  Suppose we have some simple plots we want to add to our VDB.  This can be done by creating a plot object (or expression for base R graphics) and passing it to <code>makeDisplay</code> as the <code>data</code> argument.</p>
+<p>Scatterplot matrices become increasingly infeasible as the number of variables grows beyond \(\approx\)10.  Using <code>trelliscope</code>, we can create &quot;scatterplot displays&quot;, where for \(p\) variables we create a panel for each of the \(\tbinom{p}{2}\) pairwise combinations.  We can leverage research on &quot;scagnostics&quot; (scatterplot diagnostics, or cognostics for scatterplots) <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=leland%20wilkinson%20scagnostics&amp;source=web&amp;cd=1&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.62.6148%26rep%3Drep1%26type%3Dpdf&amp;ei=6spVUcCQDYWl4AOJ_oHoDw&amp;usg=AFQjCNH0rmXCgq5vR-mEkuYz8AC476e6Bw&amp;sig2=VipicfJ0CN0AOJ4pt_yuXg&amp;bvm=bv.44442042,d.dmg&amp;cad=rja)">reference</a>, which includes the R package <a href="http://cran.r-project.org/web/packages/scagnostics/">scagnostics</a> to identify interesting relationships.  I have created a convenience function for doing this, <code>splod()</code> (<strong>s</strong>catter<strong>plo</strong>t <strong>d</strong>isplay).  This function takes a data frame and creates a subset for the data for each pairwise combination of variables.  The panel function is a simple scatterplot, and the cognostics function is a collection of scagnostics.</p>
 
-<p>For example, suppose that we want to investigate the dependence of the variance of air temperature on the mean for each buoy.  Below is an example of how to create a <code>plotFn</code> for this using the three possible approaches: (1) any base R plot command wrapped in an expression, (2) lattice, (3) ggplot.</p>
+<p>To illustrate this, we can create a scatterplot display for all of the variables in the <code>airplane</code> data.  First, we call <code>makeSplodDat()</code> to get the data into the correct format:</p>
 
-<pre><code class="r">means &lt;- sapply(buoySplit, function(x) 
-   median(x$airTemp, na.rm=TRUE))
-vars &lt;- sapply(buoySplit, function(x) 
-   mad(x$airTemp, na.rm=TRUE))
-
-p &lt;- expression(plot(means, vars))  # base R
-p &lt;- xyplot(vars ~ means, aspect=1) # lattice
-p &lt;- qplot(means, vars, aspect=1)   # ggplot2
-p
+<pre><code class="r"># create data for scatterplot display
+airplaneSplodDat &lt;- makeSplodData(airplane, 
+   id.vars=c(&quot;dat_ams&quot;, &quot;flight&quot;, &quot;datCut&quot;))
 </code></pre>
 
-<p><center>
-   <img src="figs/2plot3.png" width="550px">
-</center></p>
-
-<p>Now to add it to the VDB:</p>
-
-<pre><code class="r">makeDisplay(
-   group=&quot;buoy&quot;,
-   name=&quot;tempVars_vs_tempMeans&quot;,
-   desc=&quot;Average variance of temperature at each buoy vs. average mean&quot;,
-   data=p
-)
+<pre><code>* Input data is not &#39;ddf&#39; - attempting to cast it as such
+* Getting basic &#39;ddo&#39; attributes...
+* Getting basic &#39;ddf&#39; attributes...
+* Verifying parameters...
+* Applying division...
+* Getting basic &#39;ddo&#39; attributes...
 </code></pre>
 
-<pre><code>Validating plot dimensions...
-Generating plots...
--- Plotting trellis / ggplot / base R plot object.
-Updating displayList...
-Updating displayList...
-Writing panel keys...
-Writing cognostics...
-Plotting thumbnail...
+<p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;ddf&quot; object.  </p>
+
+<p>Here&#39;s an example of what a subset looks like:</p>
+
+<pre><code class="r"># look at a subset of airplaneSplotDat
+str(kvExample(airplaneSplodDat))
 </code></pre>
 
-</div>
-
-
-<div class='tab-pane' id='splod'>
-<h3>&quot;splod&quot;</h3>
-
-<p>Scatterplot matrices become increasingly infeasible as the number of variables grows beyond \(\approx\)10.  Using <code>trelliscope</code>, we can create &quot;scatterplot displays&quot;, where for \(p\) variables we create a panel for each of the \(\tbinom{p}{2}\) pairwise combinations.  We can leverage research on &quot;scagnostics&quot; (scatterplot diagnostics, or cognostics for scatterplots) <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=leland%20wilkinson%20scagnostics&amp;source=web&amp;cd=1&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.62.6148%26rep%3Drep1%26type%3Dpdf&amp;ei=6spVUcCQDYWl4AOJ_oHoDw&amp;usg=AFQjCNH0rmXCgq5vR-mEkuYz8AC476e6Bw&amp;sig2=VipicfJ0CN0AOJ4pt_yuXg&amp;bvm=bv.44442042,d.dmg&amp;cad=rja">reference</a>, which includes the R package <a href="http://cran.r-project.org/web/packages/scagnostics/">scagnostics</a> to identify interesting relationships.  I have created a convenience function for doing this, <code>splod()</code> (<strong>s</strong>catter<strong>plo</strong>t <strong>d</strong>isplay -- <em>when you have so many variables that <code>splom</code> is going to make your computer <code>splod</code></em>).  This function takes a data.frame and creates a subset for the data for each pairwise combination of variables.  The plot function is a simple scatterplot, and the cognostics function is a collection of scagnostics.</p>
-
-<p>To illustrate this, we will shift to a dataset in a completely different domain, baseball.  In real life there would probably not be a project that included both elnino data and baseball data, but we&#39;ll put this new plot into our existing project.</p>
-
-<pre><code class="r">data(batting)
-str(batting)
+<pre><code>List of 2
+ $ : chr &quot;xVar=altitude_p|yVar=altitude&quot;
+ $ :Classes &#39;divValue&#39; and &#39;data.frame&#39;:    1479 obs. of  6 variables:
+  ..$ x      : num [1:1479] 327 341 356 365 360 ...
+  ..$ y      : num [1:1479] 354 369 385 393 388 ...
+  ..$ dat_ams: POSIXct[1:1479], format: &quot;2010-06-28 16:25:21&quot; ...
+  ..$ flight : chr [1:1479] &quot;am&quot; &quot;am&quot; &quot;am&quot; &quot;am&quot; ...
+  ..$ altCut : chr [1:1479] &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot; ...
+  ..$ datCut : chr [1:1479] &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; ...
+  ..- attr(*, &quot;split&quot;)=&#39;data.frame&#39;:    1 obs. of  2 variables:
+  .. ..$ xVar: chr &quot;altitude_p&quot;
+  .. ..$ yVar: chr &quot;altitude&quot;
 </code></pre>
 
-<p>There are 24 variables.  The first 5 variables are descriptive and we do not want to include them in our scatterplot display.</p>
+<p>We can now create a display for this with <code>splod()</code>:</p>
 
-<p>Creating a scatterplot display is as simple as</p>
-
-<pre><code class="r">splod(
-   batting, 
-   id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;)
-)
+<pre><code class="r">splod(airplaneSplodDat)
 </code></pre>
 
-<p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;localDiv&quot; object and passes them to <code>makeDisplay</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to makeDisplay such as a custom cognostics function.</p>
-
-<p>If you want to do something to the data prior to passing it to splod, you can do the above in two steps:</p>
-
-<pre><code class="r">batSplodDat &lt;- makeSplodData(batting, id.vars=c(&quot;playerID&quot;, &quot;yearID&quot;, &quot;stint&quot;, &quot;teamID&quot;, &quot;lgID&quot;))
-
-splod(batSplodDat)
+<pre><code>* Attempting to create directory ... ok
+* Saving connection attributes
+* Directory is empty - use addData() to add k/v pairs to this directory
+* Validating &#39;panelFn&#39;...
+* Testing cognostics function on a subset ... ok
+* Validating plot dimensions...
+* Precomputed limits not supplied.  Computing axis limits...
+* ... skipping this step since both are axes are free ...
+* Getting basic &#39;ddo&#39; attributes...
+* Updating displayList...
+* Storing display object...
+* Plotting thumbnail...
 </code></pre>
+
+<p>This passes <code>airplaneSplodDat</code> to <code>makeDisplay()</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to makeDisplay such as a custom cognostics function.</p>
+
+<!-- ```{r airplane_splod, cache=TRUE}
+splod(airplane, id.vars=c("dat_ams", "flight", "datCut"))
+``` -->
 
 </div>
 
@@ -889,9 +1528,9 @@ splod(batSplodDat)
 <div class='tab-pane' id='shiny-viewer'>
 <h3>Shiny Viewer</h3>
 
-<p>The VDB viewer we have encountered throughout this document is a server-side web viewer that uses <a href="http://www.rstudio.com/shiny/">Shiny</a>.  This viewer basically provides a live R session running behind the web viewer, facilitating all of the interaction.  </p>
+<p>The VDB viewer we have encountered throughout this document is a server-side web viewer that uses <a href="http://www.rstudio.com/shiny/">Shiny</a>.  Shiny basically provides a live R session running behind the web viewer, facilitating all of the interaction.</p>
 
-<p>This viewer is very much a work in progress.  There are many possible features.  Focus is given first to functionality - I will work to optimize things (such as indexing the cognostics data.frame for faster sorting / filtering) once things settle.</p>
+<p>This viewer is a work in progress.  There are many possible features.  Focus is given first to functionality - I will work to optimize things once things settle.</p>
 
 <p>Below I describe some of the components of the viewer.</p>
 
@@ -929,22 +1568,17 @@ splod(batSplodDat)
 <li><strong>esc</strong>: leave a modal and return to panel view</li>
 </ul>
 
-<h4>To Come</h4>
+<!-- #### To Come
 
-<ul>
-<li>A dropdown for each column (variable) in the cognostics table with options to:
-
-<ul>
-<li>apply a transformation to the variable</li>
-<li>randomly sample displays to view across the distribution of this variable</li>
-<li>if a continuous variable, discretize into bins</li>
-</ul></li>
-<li>A collapsible sidebar in the panel view that allows you to see where specified cognostics for the panels currently being viewed lie with respect those cognostics of all panels - either in a univariate or bivariate view</li>
-<li>Ability to specify panel-to-panel relationships within and between displays through cognostics, specified with something like <code>&quot;group1/name1/key1;group2/name2/key2&quot;</code></li>
-<li>Add an interactive network graph using d3 for panel-to-panel relationships, used to select panels of interest</li>
-<li>Multi-user per-panel input / user &quot;authentication&quot;</li>
-<li>...</li>
-</ul>
+- A dropdown for each column (variable) in the cognostics table with options to:
+  - apply a transformation to the variable
+  - randomly sample displays to view across the distribution of this variable
+  - if a continuous variable, discretize into bins
+- A collapsible sidebar in the panel view that allows you to see where specified cognostics for the panels currently being viewed lie with respect those cognostics of all panels - either in a univariate or bivariate view
+- Ability to specify panel-to-panel relationships within and between displays through cognostics, specified with something like `"group1/name1/key1;group2/name2/key2"`
+- Add an interactive network graph using d3 for panel-to-panel relationships, used to select panels of interest
+- Multi-user per-panel input / user "authentication"
+- ... -->
 
 </div>
 
@@ -965,638 +1599,9 @@ splod(batSplodDat)
 
 <p>Filters and interactivity based on combinations of cognostics would also be desirable, such as a numeric cognostic plotted versus a time cognostic as a time series, etc.</p>
 
-</div>
+<!-- ### Client-Side Viewer ###
 
-
-<div class='tab-pane' id='client-side-viewer'>
-<h3>Client-Side Viewer</h3>
-
-<p>There is a client-side viewer that is convenient because it does not require a web server, but is not nearly as flexible because it requires collections of plot files as the storage mechanism (instead of applying the plot function on the fly or storing the plots on HDFS or in MongoDB).  This viewer can be invoked by calling <code>view(type=&quot;cs&quot;)</code>.  It has not been maintained in a while.</p>
-
-</div>
-
-
-<div class='tab-pane' id='architecture'>
-<h3>Architecture</h3>
-
-<p>So far, all examples have run easily on a local workstation, with no other components necessary.  Trelliscope is designed to scale, but to do so requires a special configuration of hardware and software to be set up.  This can be a difficult process, and I try to provide some good guidelines in this section.  </p>
-
-<!-- For now, installation and setup is geared toward the experienced.  In the future, as things mature, we hope to have a more automated approach to installation. -->
-
-<p>To help understand the architecture that Trelliscope is currently able to support, the figure below shows a diagram of the different components.</p>
-
-<p><center>
-   <img src="figs/architecture.png" width="550px">
-</center></p>
-
-<p>This is the most complex arrangement.  Each component (R workstation, web server, cognostics server, cluster) is its own entity.  In cases where there is a beefy cluster master node, it is an option to run the R workstation, web server, and cognostics server directly on the namenode.  In this setup, the &quot;R workstation&quot; functionality is attained simply by SSH-ing into the master node and running the R console.  A much better option in this scenario is to install <a href="link">RStudio Server</a> on the master node, giving any analyst a web-based R IDE running directly on the cluster.  Alternatively, RStudio Server can be installed on a separate &quot;R node&quot;.  An upside to this is that all of the configuration for how services communicate can be configured on that machine, so that the analyst doesn&#39;t need to worry about getting configurations set up on their workstation.</p>
-
-<p>In the remainder of this section, I provide installation instructions, guidelines, and references for each of the components, based on a the assumption of RHEL6 being the OS on each machine.  While what is actually required will vary from one OS to another, the general guidelines will hopefully give enough of a blueprint that installation should be doable with a little help from Google.  Given the variability even within the same OS for how things are set up (additional components being installed, firewall settings, etc.), there is no doubt that this will be necessary.  Note that you absolutely must have sudo access on these machines to install things.  I know of no way around this.</p>
-
-<p>The installation and configuration of each of these components is tricky.  However, after dealing with several Hadoop installations and configurations over the years, I don&#39;t feel bad at all about any additional difficulty I have added on top of installing Hadoop itself.  Hadoop has massive enterprise backing and still is a nightmare to install and configure.</p>
-
-</div>
-
-
-<div class='tab-pane' id='hadoop-r-rhipe'>
-<h3>Hadoop, R, RHIPE</h3>
-
-<h4>Install Hadoop:</h4>
-
-<p>There are many references for Hadoop installation and configuration.  This is not the place for details so I will provide some links.  Hopefully you either already have a Hadoop cluster, have EC2, or have someone else who is willing to be your Hadoop expert.</p>
-
-<p>RHIPE is mostly used and tested on the <a href="link">Cloudera</a> distribution.  They provide a GUI installer that you can try.  RHIPE will work with both CDH3 and CDH4 (MRv1).  </p>
-
-<p>Before you move on to the installation of R and RHIPE, run a test Hadoop job to make sure the Hadoop is working.</p>
-
-<p>The following environment variables need to be set so that RHIPE knows how to communicate with Hadoop.  Here as an example I show what these variables are set to for a default CDH4 (MRv1) cluster:</p>
-
-<pre><code>export HADOOP_HOME=/usr/lib/hadoop
-export HADOOP_LIBS=/usr/lib/hadoop-0.20-mapreduce:/usr/lib/hadoop-hdfs
-export HADOOP_CONF_DIR=/etc/hadoop/conf
-export HADOOP_BIN=/usr/lib/hadoop/bin
-</code></pre>
-
-<p>These should go in your shell profile.</p>
-
-<h4>Note on installation of R, RHIPE</h4>
-
-<p>The components discussed in the rest of this section (protocol buffers, R, RHIPE) should all be installed on the master node of the Hadoop cluster.  If you have a nice mechanism to share these installations across all machines in the cluster (perhaps a shared drive or directory or a service like 411), you can use that to make the installation available on all nodes.</p>
-
-<p>As an alternative, if your local workstation has the same architecture and OS as the machines in the Hadoop cluster, you can build these components on your local workstation and create a RHIPE binary archive that can be distributed to the nodes using Hadoop&#39;s distributed cache (more on how to do this later).</p>
-
-<h4>Install protocol buffers:</h4>
-
-<p>Must be version 2.4.1.</p>
-
-<p>If you have a specific location you would like it to go, specify <strong>protobuf_prefix</strong>.</p>
-
-<pre><code>wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
-tar -xzf protobuf-2.4.1.tar.gz
-cd protobuf-2.4.1
-./configure --prefix=__protobuf_prefix__
-make
-sudo make install
-</code></pre>
-
-<h4>Install R:</h4>
-
-<p>I recommend installing from source.  Need to make sure it installed as a shared library.</p>
-
-<pre><code>### install R
-wget http://cran.r-project.org/src/base/R-3/R-3.0.1.tar.gz
-
-sudo mkdir -p /share/apps/R/3.0.1
-tar xvfz R-3.0.1.tar.gz
-cd R-3.0.1
-./configure --enable-R-shlib --prefix=__R_prefix__ --with-readline=no
-make
-make check
-make install
-</code></pre>
-
-<p>Install rJava and make sure R / Java is configured properly:</p>
-
-<pre><code># in R
-install.packages(&quot;rJava&quot;)
-# back out of R:
-sudo R CMD javareconf
-</code></pre>
-
-<p>This may require ensuring that environment variables such as JAVA_HOME are properly set.</p>
-
-<h4>Install RHIPE:</h4>
-
-<p>To install RHIPE, you need to make sure two environment variables are set.  For future use, these should be added to your shell profile.  I&#39;m using a bash shell here.</p>
-
-<pre><code># install RHIPE
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:__protobuf_prefix__/protobuf/lib/pkgconfig
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:__R_prefix__/lib64/R/lib:__protobuf_prefix__/protobuf/lib
-R CMD INSTALL Rhipe_0.73.1.tar.gz
-</code></pre>
-
-<h4>Making a runner for RHIPE:</h4>
-
-<p>For RHIPE jobs to run, several environment variables need to be available.  We have discussed these and have instructed you to put them in your shell profile.  Depending on your Hadoop installation, jobs may not be executed by your user, but by a special mapreduce user.  This user will not have these environment variables available, so you need will need to write a special &quot;runner&quot;, a shell script that launches each RHIPE map or reduce task.  Based on my setup, here is what a runner can look like:</p>
-
-<pre><code>#!/bin/bash
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/share/apps/protobuf/lib/pkgconfig
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib:/usr/local/lib64:/usr/java/jdk1.7.0_03/jre/lib/amd64/server:/share/apps/R/3.0.1//lib64/R/lib:/opt/openmpi/lib:/share/apps/R/3.0.1/lib64/R/lib:/share/apps/protobuf/lib
-
-export HADOOP_HOME=/usr/lib/hadoop
-export HADOOP_LIBS=/usr/lib/hadoop-0.20-mapreduce:/usr/lib/hadoop-hdfs
-export HADOOP_CONF_DIR=/etc/hadoop/conf
-export HADOOP_BIN=/usr/lib/hadoop/bin
-
-export R_HOME=/share/apps/R/3.0.1/lib64/R
-export RHIPE_BIN=$R_HOME/library/Rhipe/bin
-exec $R_HOME/bin/Rcmd $RHIPE_BIN/RhipeMapReduce --slave --silent --vanilla
-</code></pre>
-
-<p>If you save this to a file, say <code>/tmp/rhRunner.sh</code>, then you can specify for RHIPE to use it by setting an option in R (see following example).  You might need to <code>chmod 777</code> this file.</p>
-
-<h4>A RHIPE test job:</h4>
-
-<pre><code class="r">library(Rhipe)
-rhinit()
-rhoptions(runner=&quot;/tmp/rhRunner.sh&quot;)
-
-permute &lt;- sample(1:150, 150)
-splits &lt;- split(permute, rep(1:3, 50))
-
-irisSplit &lt;- lapply(seq_along(splits), function(x) {
-   list(x, iris[splits[[x]],])
-})
-
-rhwrite(irisSplit, file=&quot;/tmp/irisData&quot;, numfiles=3)
-
-maxMap &lt;- rhmap({
-   by(r, r$Species, function(x) {
-      rhcollect(
-         as.character(x$Species[1]),
-         max(x$Sepal.Length)
-      )
-   })
-})
-
-reduce &lt;- rhoptions()$templates$range
-
-res &lt;- rhwatch(map=maxMap, reduce=reduce, input=&quot;/tmp/irisData&quot;, output=&quot;/tmp/irisMax&quot;)
-</code></pre>
-
-</div>
-
-
-<div class='tab-pane' id='other-components'>
-<h3>Other Components</h3>
-
-<h4>Web server: node.js</h4>
-
-<p><a href="https://github.com/joyent/node/wiki/Installation">Installation link</a> from node.js.</p>
-
-<p>Here are instructions to build node.js from source.  Note that this requires Python 2.6.  Also note that node versions change frequently, so check the latest version.</p>
-
-<pre><code>wget http://nodejs.org/dist/v0.10.6/node-v0.10.6.tar.gz
-tar xzf node-v0.10.6.tar.gz
-cd node-v0.10.6
-python ./configure
-sudo make -j 9
-sudo make install
-</code></pre>
-
-<h4>Web server: shiny-server</h4>
-
-<p>These instructions are taken from <a href="link">here</a> and <a href="link">here</a>.  Please visit these references for more details.</p>
-
-<pre><code>### Install and configure shiny-server node module
-sudo npm install -g shiny-server 
-# may need to do sudo /usr/local/bin/npm install -g shiny-server if it is not on sudo&#39;s path
-
-# Create a system account to run Shiny apps
-sudo /usr/sbin/useradd -r shiny
-# Create a root directory for your website
-sudo mkdir -p /var/shiny-server/www
-# Create a directory for application logs
-sudo mkdir -p /var/shiny-server/log
-
-# loosen up permissions on the app directory
-sudo chmod 777 /var/shiny-server/www
-
-# make a configuration file that uses port 81 (change as desired)
-sudo mkdir /etc/shiny-server
-# as root
-cat &lt;&lt;EOF &gt; /etc/shiny-server/shiny-server.conf
-run_as shiny;
-server {
-   listen 81;
-
-   location / {
-      site_dir /var/shiny-server/www;
-      log_dir /var/shiny-server/log;
-      directory_index on;
-   }
-}
-EOF
-</code></pre>
-
-<p>Might need to change firewall settings.</p>
-
-<p>Another problem I have had is sudo not having /usr/local/bin on its path.  There are lots of ways around this - this is one of them:</p>
-
-<pre><code>sudo ln -s /usr/local/bin/node /usr/bin/node
-sudo ln -s /usr/local/bin/shiny-server /usr/bin/shiny-server
-sudo /usr/local/bin/shiny-server
-</code></pre>
-
-<p>Running the server:</p>
-
-<p>On RHEL6:</p>
-
-<pre><code># shiny-server.conf
-# as root:
-cat &lt;&lt;EOF &gt; /etc/init/shiny-server.conf
-description &quot;Shiny application server&quot;
-start on stopped networking
-stop on runlevel [016]
-limit nofile 1000000 1000000
-exec shiny-server &gt;&gt; /var/log/shiny-server.log 2&gt;&amp;1
-respawn
-EOF
-
-sudo start shiny-server
-</code></pre>
-
-<p>Otherwise can start it manually with:</p>
-
-<pre><code>sudo shiny-server
-</code></pre>
-
-<p>The web server also needs R and RHIPE installed if it wants to be able to serve displays that depend on RHIPE data objects.  See the &quot;Local Workstation&quot; for more on this.</p>
-
-<h4>Cognostics server: MongoDB</h4>
-
-<p>This is based on these
-<a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">installation instructions</a>.  At this link there are also instructions for other OSes.</p>
-
-<pre><code># add repository information
-# as root:
-cat &lt;&lt;EOF &gt;&gt; /etc/yum.repos.d/10gen.repo
-[10gen]
-name=10gen Repository
-baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
-gpgcheck=0
-enabled=1
-EOF
-
-# install
-sudo yum install mongo-10gen mongo-10gen-server
-
-# create database directory
-sudo mkdir -p /data/db
-sudo chown mongo /data/db
-
-# start service
-sudo service mongod start
-</code></pre>
-
-<h4>Local Workstation</h4>
-
-<p>The local workstation needs R, <code>datadr</code>, <code>Rhipe</code>, and <code>trelliscope</code> installed.  Recall that &quot;local workstation&quot; can simply mean installing these packages on the master node and running R from there.  In this case, we already have R and <code>Rhipe</code> installed and only need to install <code>datadr</code> and <code>trelliscope</code>, which is easy:</p>
-
-<pre><code class="r">library(devtools)
-install_github(&quot;datadr&quot;, &quot;hafen&quot;)
-install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
-</code></pre>
-
-<p>Installation of RHIPE on a local workstation requires protocol buffers and R installed as a shared library, as outlined above.  You don&#39;t need Hadoop to install RHIPE.  To run RHIPE on your local workstation, however, you need the .jar and configuration files available (a Hadoop cluster does not need to be running).  We will be adding utility functions to RHIPE that will build a bundle of these files on your cluster master node and allow you to move it to your local workstation, simplifying this process.</p>
-
-</div>
-
-
-<div class='tab-pane' id='vdb-connections'>
-<h3>VDB Connections</h3>
-
-<p>Now that all of the components are installed, they need to be able to talk to each other.  Currently, it is simply assumed that each machine can communicate with others through passwordless SSH.  Connections are managed by the <code>vdbConn</code> list of options, available in the <code>conn.R</code> file in your VDB directory.  Here is an example:</p>
-
-<pre><code class="r">options(vdbConn = list(
-   ## local machine
-   vdbName = &quot;testVDB&quot;,
-   vdbPrefix = &quot;~/Desktop/vdbTest&quot;,
-   defaultStorage = &quot;local&quot;
-
-   ## hadoop backend
-   hadoopConn = list(
-      # default HDFS location for vdb plots to go
-      hdfsPrefix = &quot;/tmp&quot;,
-      # location of a hadoop bundle (see genLocalBundleFiles in Rhipe) for communication with hadoop cluster
-      hadoopBundleDir = NULL,
-      # an alternative to hadoopBundleDir: specify locations of hadoop directories necessary for communication with cluster
-      HADOOP_CONF_DIR = NULL,
-      HADOOP_HOME = NULL,
-      HADOOP_LIBS = NULL
-      # if environment variables are already set up, environment variables and hadoopBundleDir can be NULL
-   ),
-
-   ## mongo
-   mongoConn = list(
-      mongoHost = &quot;localhost&quot;,
-      mongoName = &quot;&quot;,
-      mongoUser = &quot;&quot;,
-      mongoPass = &quot;&quot;
-   ),
-
-   ## web server
-   webConn = list(
-      # IP address of web server (need passwordless ssh to this address)
-      ip = &quot;123.45.67.8&quot;,
-      # user of 
-      user = &quot;someuser&quot;,
-      # URL at which shiny-server is broadcasting
-      url = &quot;http://something.com&quot;, 
-      port = &quot;81&quot;, # port the shiny-server is configured to broadcast on
-      # shiny app directory on web server
-      appDir = &quot;/var/shiny-server/www&quot;, 
-      # where should a copy of your local vdb files go on the web server?
-      vdbPrefix = &quot;~/Desktop/vdbTest&quot;
-   )
-))
-</code></pre>
-
-<p>The <code>hadoopConn</code> settings tell a machine (local workstation, web server) how it can talk to the Hadoop cluster.</p>
-
-<p>The <code>mongoConn</code> settings tell a machine (local workstation, web server, cluster) how to communicate with MongoDB.</p>
-
-<p>The <code>webConn</code> settings tell a machine (local workstation, web server) where the web server is and where important components of the web viewer are located.  The <code>url</code> helps Trelliscope know how to construct web URLs to your displays.  The IP and username are supplied so that the local workstation can sync files with the web server.  The <code>vdbPrefix</code> is where a copy of your local VDB directory will reside on the web server.  The <code>appDir</code> directory tells Trelliscope where to put the viewer files for your project.</p>
-
-<p>When you want to update the web server with changes you have made on your local workstation, you can simply call <code>websync()</code>.</p>
-
-</div>
-
-
-<div class='tab-pane' id='trelliscope-with-rhipe'>
-<h3>Trelliscope with RHIPE</h3>
-
-<p>The true inspiration for the <code>trelliscope</code> package was the need to deal with very large datasets.  So far we have looked at in-memory datasets because it helps introduce the different concepts of the package without requiring the user to have a Hadoop cluster at their fingertips.  Here we look at the buoy data in RHIPE.</p>
-
-<p>To start, we need to put the data into RHIPE and have it represented as a RHIPE data object.  This uses the <code>datadr</code> package, which is discussed in great detail <a href="http://hafen.github.com/datadr/">here</a>.  </p>
-
-<p>RHIPE data is stored as key/value pairs, where each pair is a subset of the data split up in some way.  The first step to getting the buoy data into a RHIPE data format on HDFS is to use the <code>rhwrite()</code> function:</p>
-
-<pre><code class="r">library(Rhipe)
-rhinit()
-
-hdfs.setwd(&quot;/tmp&quot;)
-
-# write buoySplit data to disk
-rhwrite(elnino, file = &quot;elnino&quot;, chunk = 10000, style = &quot;new&quot;)
-</code></pre>
-
-<p>Here we set the HDFS working directory to <code>/tmp</code> and write the data.frame into chunks of 10000 rows each.</p>
-
-<p>We can see what this data looks like on HDFS:</p>
-
-<pre><code class="r">rhls(&quot;elnino&quot;)
-</code></pre>
-
-<pre><code>  permission   owner      group     size          modtime                 file
-1 drwxr-xr-x hafe647 supergroup        0 2013-03-27 01:22 /tmp/elnino/_rh_meta
-2 -rw-r--r-- hafe647 supergroup 14221646 2013-03-27 01:22   /tmp/elnino/part_1
-</code></pre>
-
-<p>The <code>part_1</code> file holds the data, and the <code>_rh_meta</code> directory is a place for metadata to reside.  Typically large files will be stored across many <code>part_</code> files which are distributed across a multi-node Hadoop cluster, but in this case, the data is very small and we wrote it all to one file.</p>
-
-<p>We can represent this in R as a <strong>&quot;rhDF&quot;</strong> (RHIPE data.frame) object using the following:</p>
-
-<pre><code class="r">library(datadr)
-rhElnino &lt;- rhDF(&quot;elnino&quot;)
-rhElnino
-</code></pre>
-
-<pre><code>An object of class rhDF, rhData with the following attributes: 
-
-&#39;rhData&#39; attr    : value
-----------------------------------------------------------------------------
-* hasKeys        : [empty] call updateAttributes(dat) to get this value
-* loc            : /tmp/elnino
-* type           : sequence
-* nfile          : 1
-* totSize        : 13.56 MB
-* ndiv           : [empty] call updateAttributes(dat) to get this value
-* splitSizeDistn : [empty] call updateAttributes(dat) to get this value
-* sourceData     : [empty] - no source job
-* sourceJobData  : [empty] - no source job
-* example        : use divExample(dat) or dat$example to get example subset(s)
-
-&#39;rhDF&#39; attr     : value
---------------------------------------------------------------------------------
-* vars          : buoy(cha), date(Dat), lat(num), lon(num), zonWinds(num), merWinds(num), humidity(num), airTemp(num), ssTemp(num)
-* trans         : identity transformation (original data is a data.frame)
-* badSchema     : (not implemented)
-* nrow          : [empty] call updateAttributes(dat) to get this value
-* splitRowDistn : [empty] call updateAttributes(dat) to get this value
-* summary       : (not implemented)
-</code></pre>
-
-<p>See the <code>datadr</code> package docs for more details.  With the data represented in this way, we can now apply the buoy division we had done with the local data previously.</p>
-
-<pre><code class="r">byBuoy &lt;- divide(rhElnino, by=&quot;buoy&quot;, output=&quot;byBuoy&quot;)
-</code></pre>
-
-<p>The code looks the same as before with the addition of the <code>output</code> argument, which tells where the divided data should reside on HDFS.  Now this data representation, <code>byBuoy</code> behaves pretty much identically to how local data does, which we already know how to handle.</p>
-
-<p>Let&#39;s look at what one subset will look like to our plot function and cognostics function:</p>
-
-<pre><code class="r">str(divExample(byBuoy))
-</code></pre>
-
-<pre><code>&#39;data.frame&#39;:   2133 obs. of  9 variables:
- $ buoy    : chr  &quot;buoyid_06&quot; &quot;buoyid_06&quot; &quot;buoyid_06&quot; &quot;buoyid_06&quot; ...
- $ date    : Date, format: &quot;1992-08-21&quot; &quot;1992-08-22&quot; ...
- $ lat     : num  -8.01 -8.01 -8.01 -8 -8 -8.01 -8 -8 -8.01 -8 ...
- $ lon     : num  9.95 9.97 9.97 9.96 9.96 ...
- $ zonWinds: num  -6.5 -6.9 -5.9 -6.8 -7.6 -7.6 -4.3 -3.3 -4.3 -3.5 ...
- $ merWinds: num  -1.1 -1 -1.2 -0.2 2 -0.9 -2.9 -6.4 -3.1 1 ...
- $ humidity: num  78.5 78.1 77 77.3 80.1 77.3 84.8 75.8 73.8 78.1 ...
- $ airTemp : num  NA 29 28.9 28.9 28.9 ...
- $ ssTemp  : num  NA 29.3 29.3 29.4 29.3 ...
-</code></pre>
-
-<p>Now you can test the plot and cognostics functions we defined previously:</p>
-
-<pre><code class="r">airDatePlotFn(divExample(byBuoy))
-airDateCogFn(divExample(byBuoy))
-</code></pre>
-
-<p>And now to plot:</p>
-
-<pre><code class="r">makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;airTemp_vs_date&quot;,
-   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
-   data    = byBuoy,
-   plotFn  = airDatePlotFn, 
-   plotDim = list(height=350, width=800)
-)
-</code></pre>
-
-<p>This looks just the same as before except that we are now operating on RHIPE data.  The default storage is &quot;hdfs&quot;, meaning the plots will be put on HDFS and read from the with the viewer.  </p>
-
-<h4>hdfsData</h4>
-
-<p>We can also create a display where the actual images are not generated, but instead pointers to the data for each panel are recorded.  Then the viewer can grab the associated data and renders the images on-demand.  An example of this:</p>
-
-<pre><code class="r">makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;airTemp_vs_date&quot;,
-   storage = &quot;hdfsData&quot;,
-   data    = byBuoy,
-   plotFn  = airDatePlotFn, 
-   plotDim = list(height=350, width=800)
-)
-</code></pre>
-
-</div>
-
-
-<div class='tab-pane' id='panel-storage-types'>
-<h3>Panel Storage Types</h3>
-
-<p>I&#39;ve been exploring several storage types for the panels of the displays.  Here is an enumeration with some details.  In general, the main consideration is whether you want to store the raster images on disk or view them on-the-fly.</p>
-
-<p><strong>In favor of storing raster images on disk</strong></p>
-
-<ul>
-<li>Paging through panels can be faster as we don&#39;t have to render them prior to displaying them</li>
-<li>Less work for the web server</li>
-</ul>
-
-<p><strong>In favor of generating images on-the-fly</strong></p>
-
-<ul>
-<li><code>makeDisplay()</code> is considerably faster - only need to compute cognostics and metadata about the display.  This is particularly true for very large datasets.</li>
-<li>If we are only ever going to view a small subset of possibly hundreds of thousands of panels, why render them all up-front instead of rendering the ones you currently want to look at?</li>
-<li>Image resolution: we do now know if the image will be viewed as a single large panel in the window, or tiled with tens or hundreds of panels in a single window.  When we render the image on-the-fly, we can render it at the resolution at which it will be viewed instead of having to store a raster image that has a resolution sufficient to be viewed at the largest scale.  A way around this would be to go away from .png to a vector format like .svg.  The only problem with that is that those files can get very large, and can be difficult to render consistently across all browsers.  In the future, this may all move toward d3...</li>
-</ul>
-
-<!-- Another option that might be explored is storing the data for the plots in a way that some .json representation of it can be sent to the browser and rendered very quickly using d3.js... -->
-
-<p>Here is a list of storage types:</p>
-
-<h4>local</h4>
-
-<p>This is what we&#39;ve been dealing with for the most part and is the default for an input of class &quot;localDiv&quot;.  A raster .png image for each panel is stored to local disk in the &quot;displays&quot; directory.</p>
-
-<h4>hdfs</h4>
-
-<p>This is the default when the input is of class <strong>&quot;rhDiv&quot;</strong>.  Base64 encoded raster .png images are stored in a mapfile on HDFS.</p>
-
-<h4>hbase</h4>
-
-<p><em>(Coming soon)</em>.  Base64 encoded raster .png images are stored in an HBASE table.</p>
-
-<h4>mongo</h4>
-
-<p>Base64 encoded raster .png images are stored in MongoDB (connection parameters specified in <code>vdbConn</code>).  This is very experimental and not recommended.</p>
-
-<h4>localData</h4>
-
-<p>The data object of class <strong>&quot;localDiv&quot;</strong> is stored in the vdb directory and the viewer reads the data directly from this object and applies <code>plotFn</code> on-the-fly.  This allows you to change the plot function on-the-fly as well.</p>
-
-<p>Here is an example:</p>
-
-<pre><code class="r">makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;airTemp_vs_date_ld&quot;,
-   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
-   storage = &quot;localData&quot;,
-   data    = buoySplit,
-   plotFn  = airDatePlotFn, 
-   plotDim = list(height=350, width=800),
-   lims    = buoyLims, 
-   cogFn   = airDateCogFn
-)
-</code></pre>
-
-<p>Navigate to the &quot;View&quot; modal and click the &quot;plotFn&quot; tab.  Now try changing the text of the plot to this, for example, to add a loess smooth:</p>
-
-<pre><code class="r">airDatePlotFn &lt;- function(dat) {
-   xyplot(airTemp ~ date, 
-      groups=duplicated(date) | duplicated(date, fromLast=TRUE), 
-      panel=function(x, y, ...) {
-         panel.xyplot(x, y, ...)
-         panel.loess(x, y, degree=2, span=0.1, 
-            evaluation=300, col=&quot;black&quot;))
-      },
-      data=dat$data
-   )
-}
-</code></pre>
-
-<h4>hdfsData</h4>
-
-<p>This will allows the same thing to be done with <strong>&#39;rhDiv&#39;</strong> data as with <strong>&#39;localDiv&#39;</strong> - data is rapidly retrieved based on its key and plots are rendered on-the-fly.</p>
-
-<p>Of all of these storage options, the client side viewer can only deal with &quot;local&quot;.  All others require the Shiny viewer.</p>
-
-<h4>Enumeration of input/output options</h4>
-
-<p>As you have seen, I&#39;ve implemented support for a lot of input/output types.  Part of this is to be flexible.  Part is because I&#39;m trying to evaluate what is the best way to go.  The two input formats are objects of class <strong>&#39;localDiv&#39;</strong> and <strong>&#39;rhDiv&#39;</strong>.  The output (&quot;storage&quot;) formats for a given input format are:</p>
-
-<p><strong>Output possibilities for input type &#39;localDiv&#39;</strong>:</p>
-
-<ul>
-<li>local <em>(default)</em></li>
-<li>localData</li>
-<li>mongodb</li>
-</ul>
-
-<p><strong>Output possibilities for input type &#39;rhDiv&#39;</strong>:</p>
-
-<ul>
-<li>hdfs <em>(default)</em></li>
-<li>local (not a good idea unless you have a common file system mounted on all nodes - like LUSTRE)</li>
-<li>mongodb</li>
-<li>hdfsData</li>
-<li>hbase <em>(not implemented)</em></li>
-</ul>
-
-</div>
-
-
-<div class='tab-pane' id='cognostics-storage-types'>
-<h3>Cognostics Storage Types</h3>
-
-<p>By default, cognostics are stored as an R data.frame.  This becomes limiting when the number of panels gets into the low millions, as the viewer must read the entire cognostics data.frame in and manipulate it.  </p>
-
-<p>An alternative for storing cognostics that has been experimentally implemented is storing the cognostics as an indexed MongoDB collection.  This should provide a greater deal scalability, but we lose some flexibility of manipulating the entire cognostics data in R.  We will explore how to get around these limitations.  Another downside of using MongoDB for storing cognostics is that it requires one more component to be installed and configured.</p>
-
-<h4>MongoDB Example</h4>
-
-<p>To plot to MongoDB, you first need to set some values in your <code>vdbConn</code>:</p>
-
-<pre><code class="r">options(vdbConn = list(
-   vdbName        = &quot;vdbTest&quot;, 
-   vdbPrefix      = vdbDir,
-   mongoHost = &quot;127.0.0.1&quot;,
-   mongoName = &quot;&quot;,
-   mongoUser = &quot;&quot;,
-   mongoPass = &quot;&quot;
-))
-</code></pre>
-
-<p>The last for parameters provides information on how to connect to a MongoDB running on a local host (with no username and password).  The database in which collections are stored is provided by <code>vdbName</code>.</p>
-
-<p>Now, going back to our previous example, supposing you have the data, plot, and cognostics functions already in your session, here is how you can write the cognostics to MongoDB:</p>
-
-<pre><code class="r">makeDisplay(
-   group   = &quot;buoy&quot;,
-   name    = &quot;airTemp_vs_date_mongo&quot;,
-   desc    = &quot;Time series plot of air temperature vs. date for each buoy&quot;,
-   data    = buoySplit,
-   plotFn  = airDatePlotFn, 
-   plotDim = list(height=350, width=800),
-   lims    = buoyLims, 
-   cogFn   = airDateCogFn,
-   storage = &quot;mongo&quot;,
-   cogStorage = &quot;mongo&quot;
-)
-</code></pre>
-
-<p>Here we also store the plots in MongoDB, although this is not necessary.  It is possible to store plots in any of the storage options while still writing cognostics to MongoDB.  In the case of RHIPE plot storage, note that all nodes on the Hadoop cluster need to be able to communicate with the MongoDB service.</p>
-
-<p>The above code created two collections in the MongoDB database, &quot;vdbTest&quot;.  These are:</p>
-
-<ul>
-<li><strong>buoy_airTemp_vs_date_mongo_cog</strong>: each document in this collection is a row of the cognostics table</li>
-<li><strong>buoy_airTemp_vs_date_mongo_panel</strong>: each document is a base64-encoded png.  The <code>_id</code> of this table is the panel key, and ties to &quot;panelKey&quot; in the _cog collection.</li>
-</ul>
-
-<p>The prefix &quot;buoy_&quot; in the collection names comes from the &quot;group&quot; argument to makeDisplay.</p>
-
-<p>You can try the viewer on this data.  You will notice that currently the interactive graphical filters do not work with cognostics stored in MongoDB.</p>
-
-<pre><code class="r">view()
-</code></pre>
+There is a client-side viewer that is convenient because it does not require a web server, but is not nearly as flexible because it requires collections of plot files as the storage mechanism (instead of applying the plot function on the fly or storing the plots on HDFS or in MongoDB).  This viewer can be invoked by calling `view(type="cs")`.  It has not been maintained in a while. -->
 
 </div>
 
@@ -1606,52 +1611,53 @@ airDateCogFn(divExample(byBuoy))
 
 <p>When collaborating with others or keeping track of your own research, it is not usually natural to have a bunch of displays lying around.  It is useful to organize them.  This package contains functions that help set up and maintain a web notebook that ties in to the vdb.</p>
 
-<p>Notebooks are static pages, but are dynamically created using the <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> packages.  I&#39;m not so concerned here about the &quot;reproducible research&quot; facets of knitr the package (difficult to deal with when your code depends on various backend systems that aren&#39;t always available or code that takes a very long time to run), but they make it easier to set the notebooks up and are available if you want to use them.  Mainly, the idea is that you can write a simple notebook using the simple <a href="http://daringfireball.net/projects/markdown/">markdown syntax</a> and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.</p>
+<p>Notebooks are static pages, but are dynamically created using the <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> packages.  I&#39;m not so concerned here about the &quot;reproducible research&quot; facets of knitr the package (difficult to deal with when your code depends on various backend systems that aren&#39;t always available, etc.), but they make things nice.  Mainly, the idea is that you can write a simple notebook using the simple <a href="http://daringfireball.net/projects/markdown/">markdown syntax</a> and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.</p>
 
 <p>To create a new page, you can do the following:</p>
 
-<pre><code class="r">newNotebook(
-   title=&quot;El Nino Buoy Data Exploratory Analysis&quot;, 
-   author=&quot;Bob&quot;
-)
+<pre><code class="r">newNotebook(title=&quot;Airplane data exploratory analysis&quot;)
 </code></pre>
 
-<p>There is also an argument, <code>name</code>, which determines the name of the <code>.Rmd</code> file generated.  The default is <code>&quot;index&quot;</code>, so that the new notebook page we set up has the name &quot;index.Rmd&quot; with the specified title and author.  If you recall from earlier, there is a <code>notebook</code> subdirectory in your VDB directory.  This is where the notebook files go.</p>
+<pre><code>New notebook available for editing at /private/tmp/vdbtest/notebook/index.Rmd
+</code></pre>
+
+<p>There is also an argument, <code>name</code>, which determines the name of the <code>.Rmd</code> file generated.  The default is <code>&quot;index&quot;</code>, so that the new notebook page we set up has the name &quot;index.Rmd&quot; with the specified title and author.  If you recall from earlier, there is a <code>notebook</code> subdirectory in your VDB directory.  This is where the notebook files go.  Other options for <code>newNotebook()</code> include <code>toc</code> for whether you want a table of contents, and <code>css</code> if you would like to use a custom style sheet.</p>
 
 <p>Let&#39;s look at the first few lines of the file we just created:</p>
 
-<pre><code class="r">vdbDir &lt;- getOption(&quot;vdbConn&quot;)$vdbPrefix
-list.files(file.path(vdbDir, &quot;notebook&quot;))
-cat(paste(readLines(file.path(vdbDir, &quot;notebook&quot;, &quot;index.Rmd&quot;))[1:10], collapse=&quot;\n&quot;))
+<pre><code class="r">cat(paste(readLines(file.path(vdbDir, &quot;notebook&quot;, &quot;index.Rmd&quot;))[1:10], collapse=&quot;\n&quot;))
 </code></pre>
 
 <pre><code>```{r, echo=FALSE}
 # do not remove this block - set parameters accordingly
 bsSetup(
-   pageTitle = &quot;El Nino Buoy Data Exploratory Analysis&quot;, 
-   title     = &quot;El Nino Buoy Data Exploratory Analysis&quot;,
-   author    = &quot;Bob&quot;,
-   toc       = &quot;TRUE&quot;,
+   pageTitle = "Airplane data exploratory analysis", 
+   title     = "Airplane data exploratory analysis",
+   author    = "Author Name",
+   toc       = "TRUE",
    css       = NULL
 )
-</code></pre>
+```</code></pre>
 
-<p>We see that there is a knitr R code block that gets executed.  This sets up the skeleton of the page using a function <code>bsSetup()</code>.  You can change the options here - (see the function reference for more details).  This sets up a skeleton of a page with a header, optional sidebar with table of contents, etc.  Below this first code chunk in the .Rmd file is where you put your notebook text.  By default, the <code>newNotebook()</code> function creates some default content here that illustrates various aspects of markdown.</p>
+<p>We see that there is a knitr R code block at the top that sets up the skeleton of the page using a function <code>bsSetup()</code>.  You can manually change options here to override what you initially specified when you called <code>newNotebook()</code> - (see the function reference for more details).  This first R code block sets up a skeleton of a web page with a header, optional sidebar with table of contents, etc.  Below this first code chunk in the .Rmd file is where you put your notebook text.  By default, the <code>newNotebook()</code> function creates some default content here that illustrates various aspects of markdown.</p>
 
-<p>Go ahead and open this file in your favorite editor and try pasting in the following lines:</p>
+<p>Go ahead and open this file in your favorite editor and try replacing the default content (leave the <code>bsSetup()</code> block in place) with the following:</p>
 
-<pre><code class="r"># A look at time series plots by buoy
+<pre><code># Initial exploratory plots
 
-Some text...
+A list of displays from your VDB:
 
-nbDisplay(&quot;tempVars_vs_tempMeans&quot;)
+```{r echo=FALSE, results="asis"}
+nbDisplayList(c("co_vs_time_plain", "co_vs_time_plain_ggplot", "lat_vs_lon", "test"))
+```
 
-Some text...
+For a larger thumbnail for single-panel displays:
 
-nbDisplayList(c(&quot;airTemp_vs_date&quot;, &quot;airTemp_vs_date_ld&quot;))
-</code></pre>
+```{r echo=FALSE, results="asis"}
+nbDisplay("test")
+```</code></pre>
 
-<p>The function <code>nbDisplay()</code> is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The <code>nbDisplayList()</code> function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links to viewing the display on in the viewer.  </p>
+<p>The function <code>nbDisplay()</code> is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The <code>nbDisplayList()</code> function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links for viewing the display.  </p>
 
 <p>Now typeset it and view:</p>
 
@@ -1667,7 +1673,124 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 <div class='tab-pane' id='syncing-files-with-the-web'>
 <h3>Syncing Files With the Web</h3>
 
-<p>This package tries to make it as easy as possible to sync files with the web so that changes to a VDB or notebook can easily be pushed out to everyone.  It is done by simply setting your VDB connection to point to the web server and call <code>websync()</code>.  More on this to come...</p>
+<p>Often our D&amp;R environment is on a local workstation which is connected to a distributed computing backend.  We might build up our VDB and web notebook locally and then desire to push the results to a web server which is running <a href="http://www.rstudio.com/shiny/server/">Shiny server</a>.  This is very useful for sharing analysis results with others.</p>
+
+<p>There is some simple support for this in Trelliscope.  You can initialize a web connection using <code>webConn()</code>, which assumes that your web server is a Linux machine to which you have passwordless ssh capability.  You specify the address of the server, the directory of the VDB, and the name of the VDB under which you would like things stored.</p>
+
+<pre><code class="r"># set up a web connection
+wc &lt;- webConn(user=&quot;rhafen&quot;, ip=&quot;glimmer.rstudio.com&quot;, appDir=&quot;~/ShinyApps&quot;, name=&quot;vdbexample2&quot;)
+</code></pre>
+
+<p>Now we can sync our VDB with the web:</p>
+
+<pre><code class="r"># sync files with the web server
+websync()
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='scalable-system'>
+<h3>Scalable System</h3>
+
+<p>You can go through most of the examples we&#39;ve seen so far in this tutorial with a simple installation of R and the Trelliscope package and its R package dependencies.  </p>
+
+<p>To deal with much larger datasets, scaling comes automatically with Trelliscope&#39;s dependency on <code>datadr</code> -- any backend supported by <code>datadr</code> is supported by Trelliscope.  These currently include Hadoop and local disk.</p>
+
+<p>Some of the components beyond R that you will need to make use of these capabilities include:</p>
+
+<ul>
+<li><a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/CDH4-Installation-Guide.html">Hadoop</a></li>
+<li><a href="http://www.datadr.org/install.html">RHIPE</a></li>
+<li><a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">MongoDB</a></li>
+<li><a href="http://www.rstudio.com/shiny/server/">Shiny Server</a></li>
+<li><a href="http://www.rstudio.com/ide/download/server">RStudio Server</a></li>
+</ul>
+
+<p>RStudio Server is not a necessary component, but is very convenient to put on the front-end node to the cluster.</p>
+
+<h4>Using data on localDisk as input</h4>
+
+<p>Here is a quick example of how to create a Trelliscope display using input data that is stored on local disk.</p>
+
+<p>First, let&#39;s convert our in-memory <code>byLatLon</code> object to a &quot;localDiskConn&quot; object:</p>
+
+<pre><code class="r"># convert byLatLon to a localDiskConn object
+byLatLonLD &lt;- convert(byLatLon, 
+   localDiskConn(&quot;/private/tmp/byLatLon&quot;, autoYes=TRUE))
+</code></pre>
+
+<p>Now, we simply specify this object as the input to <code>makeDisplay()</code>:</p>
+
+<pre><code class="r"># make display using local disk connection as input
+makeDisplay(byLatLonLD,
+   name      = &quot;co_vs_time_ld&quot;,
+   group     = &quot;co&quot;,
+   desc      = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits and a cognostics function, with the data source being a local disk connection&quot;,
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   lims      = coTimeLims
+)
+</code></pre>
+
+<p>The input connection is saved with the display object, and the data is used as the input when panels are rendered.  If we want to pre-render the panels, we can specify an argument <code>output</code>, which can be any <code>datadr</code> data connection.</p>
+
+<h4>Using data on HDFS as storage and Hadoop/RHIPE as compute</h4>
+
+<p>To illustrate creating a display with data on HDFS, we first convert <code>byLatLon</code> to an &quot;hdfsConn&quot; object:</p>
+
+<pre><code class="r"># convert byLatLon to hdfsConn
+byLatLonHDFS &lt;- convert(byLatLon, 
+   hdfsConn(&quot;/tmp/byLatLon&quot;, autoYes=TRUE))
+</code></pre>
+
+<p>Since we will be pulling data at random by key from this object, we need to convert it to a Hadoop mapfile using <code>makeExtractable()</code> (<code>datadr</code> tries to make things mapfiles as much as possible, and <code>makeDisplay()</code> will check for this and let you know if your data does not comply).  </p>
+
+<pre><code class="r"># make byLatLonHDFS subsets extractable by key
+byLatLonHDFS &lt;- makeExtractable(byLatLonHDFS)
+</code></pre>
+
+<p>Now, to create the display:</p>
+
+<pre><code class="r"># make display using local disk connection as input
+makeDisplay(byLatLonHDFS,
+   name      = &quot;co_vs_time_hdfs&quot;,
+   group     = &quot;co&quot;,
+   desc      = &quot;Plot of co vs. time for each geographic &#39;square&#39; with with fitted line, illustrating the use of &#39;same&#39; axis limits and a cognostics function, with the data source being a HDFS connection&quot;,
+   panelFn   = coPanelFn,
+   cogFn     = coCogFn,
+   lims      = coTimeLims
+)
+</code></pre>
+
+</div>
+
+
+<div class='tab-pane' id='faq'>
+<h3>FAQ</h3>
+
+<h4>What should I do if I have an issue or feature request?</h4>
+
+<p>Please post an issue on <a href="https://github.com/hafen/trelliscope/issues">github</a>.</p>
+
+<h4>Who are the intended users of Trelliscope?</h4>
+
+<p>The context for our visualization environment is <em>deep statistical analysis and machine learning</em>, building and validating mathematical models that capture systematic behavior in data while accounting for random behavior.  The consumer of visualization tools in this context is not a field analyst but a statistician with in-depth knowledge about a wealth of statistical methods, the assumptions these methods make about the data, and with experience in fitting and validating models.  In this context, the analyst needs tools that are very flexible that allow for rapid prototyping.  Most importantly, visualization tools in this context need to tie directly into the data analysis environment, as visual and numerical methods cannot be decoupled in the analysis process.</p>
+
+</div>
+
+
+<div class='tab-pane' id='r-code'>
+<h3>R Code</h3>
+
+<p>If you would like to run through all of the code examples in this documentation without having to pick out each line of code from the text, below are files with the R code for each section.  All but the final section on scalable backends should run on a workstation with no other dependencies but the required R packages.  The scalable backend code requires other components to be installed, such as Hadoop or MongoDB.</p>
+
+<ul>
+<li><a href="docs/code/1intro.R">Getting Started, Trellis Display, VDBs</a></li>
+<li><a href="docs/code/2displays.R">Trelliscope Displays</a></li>
+<li><a href="docs/code/4webnotebook.R">Web Notebooks</a></li>
+<li><a href="docs/code/5misc.R">Scalable Backends</a></li>
+</ul>
 
 </div>
 
@@ -1697,6 +1820,7 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 function manageNextPrev() {
    $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);
    $('a#previous').parent().toggleClass('disabled', $('#toc.nav li.active').prevAll('li:not(.nav-header)').size() == 0);
+   $("html, body").animate({ scrollTop: 0 }, "fast");
 }
 manageNextPrev();
 
@@ -1721,6 +1845,14 @@ $(window).hashchange(function() {
   manageNextPrev();
 });
 $(window).hashchange();
+
+$('li.nav-header').dblclick(function(e) {
+   var url = $(this).data('edit-href');
+   if(url!="")
+      window.open(url, '', '');
+   return false;
+});
+
 </script>
 </body>
 </html>

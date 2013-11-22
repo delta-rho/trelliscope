@@ -1,0 +1,80 @@
+## Lab Notebooks ##
+
+### Creating a Notebook ###
+
+When collaborating with others or keeping track of your own research, it is not usually natural to have a bunch of displays lying around.  It is useful to organize them.  This package contains functions that help set up and maintain a web notebook that ties in to the vdb.
+
+Notebooks are static pages, but are dynamically created using the [knitr](http://yihui.name/knitr/) and [markdown](http://cran.r-project.org/web/packages/markdown/index.html) packages.  I'm not so concerned here about the "reproducible research" facets of knitr the package (difficult to deal with when your code depends on various backend systems that aren't always available, etc.), but they make things nice.  Mainly, the idea is that you can write a simple notebook using the simple [markdown syntax](http://daringfireball.net/projects/markdown/) and not have to focus on layout, etc.  This of course comes with some lack of flexibility - a common tradeoff.
+
+To create a new page, you can do the following:
+
+```{r new_notebook}
+newNotebook(title="Airplane data exploratory analysis")
+```
+
+There is also an argument, `name`, which determines the name of the `.Rmd` file generated.  The default is `"index"`, so that the new notebook page we set up has the name "index.Rmd" with the specified title and author.  If you recall from earlier, there is a `notebook` subdirectory in your VDB directory.  This is where the notebook files go.  Other options for `newNotebook()` include `toc` for whether you want a table of contents, and `css` if you would like to use a custom style sheet.
+
+Let's look at the first few lines of the file we just created:
+
+```{r, eval=FALSE}
+cat(paste(readLines(file.path(vdbDir, "notebook", "index.Rmd"))[1:10], collapse="\n"))
+```
+
+<pre><code>\```{r, echo=FALSE}
+# do not remove this block - set parameters accordingly
+bsSetup(
+   pageTitle = "Airplane data exploratory analysis", 
+   title     = "Airplane data exploratory analysis",
+   author    = "Author Name",
+   toc       = "TRUE",
+   css       = NULL
+)
+\```</code></pre>
+
+We see that there is a knitr R code block at the top that sets up the skeleton of the page using a function `bsSetup()`.  You can manually change options here to override what you initially specified when you called `newNotebook()` - (see the function reference for more details).  This first R code block sets up a skeleton of a web page with a header, optional sidebar with table of contents, etc.  Below this first code chunk in the .Rmd file is where you put your notebook text.  By default, the `newNotebook()` function creates some default content here that illustrates various aspects of markdown.
+
+Go ahead and open this file in your favorite editor and try replacing the default content (leave the `bsSetup()` block in place) with the following:
+
+<pre><code># Initial exploratory plots
+
+A list of displays from your VDB:
+
+\```{r echo=FALSE, results="asis"}
+nbDisplayList(c("co_vs_time_plain", "co_vs_time_plain_ggplot", "lat_vs_lon", "test"))
+\```
+
+For a larger thumbnail for single-panel displays:
+
+\```{r echo=FALSE, results="asis"}
+nbDisplay("test")
+\```</code></pre>
+
+The function `nbDisplay()` is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The `nbDisplayList()` function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links for viewing the display.  
+
+Now typeset it and view:
+
+```r
+typeset() # or typeset(name="index")
+viewNotebook() # or viewNotebook(name="index")
+```
+
+Note that "index" is the default page name but you can make pages with other names.
+
+### Syncing Files With the Web ###
+
+Often our D&R environment is on a local workstation which is connected to a distributed computing backend.  We might build up our VDB and web notebook locally and then desire to push the results to a web server which is running [Shiny server](http://www.rstudio.com/shiny/server/).  This is very useful for sharing analysis results with others.
+
+There is some simple support for this in Trelliscope.  You can initialize a web connection using `webConn()`, which assumes that your web server is a Linux machine to which you have passwordless ssh capability.  You specify the address of the server, the directory of the VDB, and the name of the VDB under which you would like things stored.
+
+```{r web_conn}
+# set up a web connection
+wc <- webConn(user="rhafen", ip="glimmer.rstudio.com", appDir="~/ShinyApps", name="vdbexample2")
+```
+
+Now we can sync our VDB with the web:
+
+```r
+# sync files with the web server
+websync()
+```
+

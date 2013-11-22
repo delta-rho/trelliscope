@@ -658,7 +658,7 @@ a:focus {
 
 p {
   font-weight: 300;
-  margin: 0 0 10px;
+  margin: 15px 0 10px;
 }
 
 .lead {
@@ -753,6 +753,16 @@ h6 {
   line-height: 20px;
   color: #444;
   text-rendering: optimizelegibility;
+}
+
+h4 {
+   line-height: 40px;
+   padding-left: 10px;
+   margin-top: 20px;
+/*   background-color: lightblue;*/
+   background-color: #C1ECFA;
+   border-bottom: 3px solid lightblue;
+/*   border-top: 1px solid #eee;*/
 }
 
 h1 small,
@@ -986,7 +996,8 @@ code {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 14px;
   font-weight: 500;
-  color: #333333;
+/*  color: #333333;*/
+  color: #777777;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
@@ -997,15 +1008,16 @@ pre {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 14px;
   font-weight: 500;
-  color: #333333;
+/*  color: #333333;*/
+  color: #777777;
 }
 
 code {
-  padding: 2px 4px;
+/*  padding: 2px 4px;*/
   color: #d14;
   white-space: nowrap;
-  background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
+/*  background-color: #f7f7f9;*/
+/*  border: 1px solid #e1e1e8;*/
 }
 
 pre {
@@ -1028,9 +1040,11 @@ pre {
 */
 }
 
-li code { font-size: 12px; }
+li code { font-size: 14px; }
 
-p code { font-size: 12px; }
+p code { font-size: 14px; }
+
+h4 code { font-size: 16px; }
 
 pre.prettyprint {
   margin-bottom: 20px;
@@ -1049,7 +1063,7 @@ pre code.r {
    display: block;
    padding-left: 4px;
    margin-left: -4px;
-   border-left: 3px solid #ddd;
+   border-left: 3px solid #ccc;
    -webkit-border-radius: 0px;
       -moz-border-radius: 0px;
            border-radius: 0px;
