@@ -40,14 +40,15 @@ Go ahead and open this file in your favorite editor and try replacing the defaul
 A list of displays from your VDB:
 
 \```{r echo=FALSE, results="asis"}
-nbDisplayList(c("co_vs_time_plain", "co_vs_time_plain_ggplot", "lat_vs_lon", "test"))
+nbDisplayList(c("co_vs_time", "co_vs_time_gg", "lat_vs_lon"))
 \```
 
 For a larger thumbnail for single-panel displays:
 
 \```{r echo=FALSE, results="asis"}
-nbDisplay("test")
+nbDisplay("tracks_byflight")
 \```</code></pre>
+
 
 The function `nbDisplay()` is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The `nbDisplayList()` function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links for viewing the display.  
 

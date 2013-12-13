@@ -285,16 +285,12 @@ install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
 </code></pre>
 
 <pre><code>Loading required package: datadr
-Loading required package: data.table
-data.table 1.8.10  For help type: help(&quot;data.table&quot;)
 Loading required package: digest
 Loading required package: lattice
 Loading required package: base64enc
 Loading required package: shiny
 Loading required package: codetools
 Loading required package: hexbin
-Loading required package: grid
-Loading required package: ggplot2
 </code></pre>
 
 <p>and we are ready to go.</p>
@@ -648,6 +644,8 @@ addDisplay(p,
    dim   = list(width=800, height=450, res=150))
 </code></pre>
 
+<p><img src="figure/add_display.png" alt="plot of chunk add_display"> </p>
+
 <p>There are three attributes we can specify to describe a display record being added to the VDB:</p>
 
 <ul>
@@ -958,6 +956,8 @@ makeDisplay(byLatLon,
 * Plotting thumbnail...
 </code></pre>
 
+<p><img src="figure/simple_co_display.png" alt="plot of chunk simple_co_display"> </p>
+
 <p>The two most important arguments are the first argument, <code>data</code>, and the panel function, <code>panelFn</code>.  The other arguments in this example simply identify the display, as we saw previously.  We will later see other arguments to <code>makeDisplay()</code> that provide additional useful functionality.</p>
 
 <p>Here, we are putting the display in a group <code>&quot;co&quot;</code> since that is the variable we are currently studying.</p>
@@ -1175,6 +1175,8 @@ makeDisplay(byLatLon,
 * Storing display object...
 * Plotting thumbnail...
 </code></pre>
+
+<p><img src="figure/co_time_lims_display.png" alt="plot of chunk co_time_lims_display"> </p>
 
 <!-- #### Setting the limits manually
 
@@ -1423,7 +1425,7 @@ latLonPanelFn &lt;- function(a) {
 kvApply(latLonPanelFn, byLatLon[[2]])
 </code></pre>
 
-<p><img src="figure/lat_lon_display.png" alt="plot of chunk lat_lon_display"> </p>
+<p><img src="figure/lat_lon_display1.png" alt="plot of chunk lat_lon_display"> </p>
 
 <pre><code class="r">
 # create the display
@@ -1449,6 +1451,8 @@ makeDisplay(
 * Storing display object...
 * Plotting thumbnail...
 </code></pre>
+
+<p><img src="figure/lat_lon_display2.png" alt="plot of chunk lat_lon_display"> </p>
 
 <p>Note that the panel function uses data objects <code>lonCuts</code> and <code>latCuts</code>, data objects that are only visible in our local environment.  <code>makeDisplay()</code> checks the panel and cognostics functions to detect locally stored data and attaches it to the display object so it will be available at the time of rendering.</p>
 
@@ -1648,13 +1652,13 @@ bsSetup(
 A list of displays from your VDB:
 
 ```{r echo=FALSE, results="asis"}
-nbDisplayList(c("co_vs_time_plain", "co_vs_time_plain_ggplot", "lat_vs_lon", "test"))
+nbDisplayList(c("co_vs_time", "co_vs_time_gg", "lat_vs_lon"))
 ```
 
 For a larger thumbnail for single-panel displays:
 
 ```{r echo=FALSE, results="asis"}
-nbDisplay("test")
+nbDisplay("tracks_byflight")
 ```</code></pre>
 
 <p>The function <code>nbDisplay()</code> is a convenience function for embedding a display into your notebook.  It is typically good for single-panel displays.  The <code>nbDisplayList()</code> function takes a list of display names and creates a block of HTML that provides the thumbnail, name, and description about the display along with links for viewing the display.  </p>

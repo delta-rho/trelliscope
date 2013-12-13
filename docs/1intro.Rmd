@@ -46,7 +46,7 @@ install_github("trelliscope", "hafen")
 
 Then we load the package:
 
-```{r echo=FALSE, include=FALSE}
+```{r echo=FALSE, include=FALSE, purl=FALSE}
 # require(lattice)
 # require(ggplot2)
 # require(digest)

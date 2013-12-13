@@ -1,26 +1,3 @@
-
-
-# require(lattice)
-# require(ggplot2)
-# require(digest)
-# require(knitr)
-# require(markdown)
-# require(base64enc)
-# require(scagnostics)
-# require(data.table)
-# ff <- list.files("~/Documents/Code/datadr/R", full.names=TRUE)
-# for(f in ff) {
-#    cat(f, "\n"); source(f)
-# }
-# ff <- list.files("~/Documents/Code/trelliscope/R", full.names=TRUE)
-# for(f in ff) {
-#    cat(f, "\n"); source(f)
-# }
-# load("~/Documents/Code/trelliscope/inst/data/elnino.rda")
-# load("~/Documents/Code/trelliscope/inst/data/airplane.rda")
-
-
-
 library(trelliscope)
 
 
