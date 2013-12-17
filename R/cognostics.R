@@ -197,7 +197,8 @@ applyCogFn <- function(cogFn, kvSubset) {
 ## some special cognostics, such as relations, need to be concatenated to a comma-separated string if we are storing them as a data.frame
 cog2df <- function(x) {
    # TODO: when class(x[[i]])=="trsCogRel", first concatenate
-   as.data.frame(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog), stringsAsFactors=FALSE)
+   # TODO: make sure it is 1 row
+   data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors=FALSE)
 }
 
 as.cogGeo <- function(x) {
