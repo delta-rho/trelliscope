@@ -1,11 +1,17 @@
 library(shiny)
 library(base64enc)
 
-# if(file.exists("conn.Rdata")) { # for glimmer
-if(file.exists("../conn.Rdata")) { # it is on a web server
+connFile <- "../conn.Rdata"
+vdbDir <- normalizePath(file.path(getwd(), ".."))
+hostname <- system("hostname", intern = TRUE)
+if(hostname == "glimmer.rstudio.com") {
+   connFile <- "conn.Rdata"
+   vdbDir <- getwd()
+}
+
+if(file.exists(connFile)) {
    library(trelliscope)
-   # vdbConn <- vdbConn(getwd()) # for glimmer
-   vdbConn <- vdbConn(normalizePath(file.path(getwd(), "..")))
+   vdbConn <- vdbConn(vdbDir)
    vdbPrefix <- vdbConn$path
 } else {
    vdbConn <- getOption("vdbConn")
@@ -17,7 +23,7 @@ options(vdbShinyPrefix = vdbPrefix)
 
 sapply(list.files("_serverHelpers", full.names=TRUE), source)
 
-verbose <- FALSE
+verbose <- TRUE
 if(is.null(verbose))
    verbose <- TRUE
 
@@ -422,6 +428,7 @@ shinyServer(function(input, output) {
          res <- getPNGs(cogDF, cdo, vdbPrefix, conn)
          # })
          # cat(a, "\n")
+         # browser()
          if(length(res) < totPanels)
          res <- c(res, rep("", totPanels - length(res)))
          names(res) <- paste("plotTable_panel_", seq_along(res), sep="")

@@ -70,11 +70,11 @@ cogMean <- function(x, desc="mean") {
 #' @export
 cogScagnostics <- function(x, y) {
    suppressMessages(require(scagnostics))
-   tmp <- try(scagnostics(x, y))
+   tmp <- try(scagnostics(x, y), silent = TRUE)
    if(inherits(tmp, "try-error")) {
       # make a data.frame of NA
       res <- scagnostics(1:10, 1:10)
-      res <- list(t(as.matrix(res)))
+      res <- as.data.frame(t(as.matrix(res)))
       res[1,] <- NA
       res$cor <- NA
    } else {

@@ -21,7 +21,11 @@ getPNGs <- function(cogDF, cdo, vdbPrefix, conn=NULL) {
       }
       environment(cdo$panelFn) <- environment()
       
-      pngs <- sapply(cdo$panelDataSource[cogDF$panelKey], function(x) {
+      curDat <- cdo$panelDataSource[cogDF$panelKey]
+      if(is.null(curDat))
+         warning("data for key ", cogDF$panelKey, " could not be found.")
+      
+      pngs <- sapply(curDat, function(x) {
          makePNG(dat=x, panelFn=cdo$panelFn, file=tmpfile, width=cdo$panelDim$width, height=cdo$panelDim$height, res=cdo$panelDim$res, lims=cdo$lims)
          encodePNG(tmpfile)
       })
