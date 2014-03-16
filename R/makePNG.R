@@ -76,6 +76,22 @@ makePNG <- function(dat, panelFn=NULL, file, width, height, res, lims=NULL) {
       if(inherits(tmp, "expression")) {
          eval(tmp)
       }
-   }
+   }   
    dev.off()
+   
+   # if panel function didn't plot anything then make a blank panel
+   if(!file.exists(file)) {
+      a <- suppressWarnings(try({
+         png(file=file, width=width, height=height, res=res)
+      }, silent=TRUE))
+      if(inherits(a, "try-error")) {
+         suppressMessages(require(Cairo))
+         CairoPNG(file=file, width=width, height=height, dpi=res, pointsize=12*res/72)
+      }
+      
+      print(xyplot(NA ~ NA, xlab = "", ylab = "", scales = list(draw = FALSE), panel = function(x, y, ...) panel.text(0.5, 0.5, "no panel")))
+      
+      dev.off()
+   }
 }
+
