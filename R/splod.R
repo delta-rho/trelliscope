@@ -18,7 +18,7 @@ splodPanelFn <- function(df) {
    xyplot(y ~ x, data=df,
       xlab=attr(df, "split")$xVar,
       ylab=attr(df, "split")$yVar
-   ) 
+   )
 } 
 
 #' Default Cognostics Function for splod
@@ -71,16 +71,20 @@ makeSplodData <- function(data, id.vars=NULL, ...) {
    
    combs <- combn(nSplodVars, 2)
    
-   newData <- do.call(rbind, lapply(1:ncol(combs), function(j) {
+   res <- ddf(lapply(1:ncol(combs), function(j) {
       yInd <- splodVars[combs[1,j]]
       xInd <- splodVars[combs[2,j]]
       
-      data.frame(x=data[,xInd], y=data[,yInd], xVar=dataNames[xInd], yVar=dataNames[yInd], data[nonSplodVars], stringsAsFactors=FALSE)
+      res <- list(
+         paste("xVar=", dataNames[xInd], "|yVar=", dataNames[yInd], sep = ""),
+         data.frame(x = data[,xInd], y = data[,yInd], data[nonSplodVars], stringsAsFactors = FALSE)
+      )
+      attr(res[[2]], "split") <- list(xVar = dataNames[xInd], yVar = dataNames[yInd])
+      res
    }))
    
-   data <- divide(newData, c("xVar", "yVar"), ...)
-   class(data) <- c(class(data), "splodDat")
-   data
+   class(res) <- c(class(res), "splodDat")
+   res
 }
 
 #' Create a Scatterplot Display
