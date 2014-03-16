@@ -92,6 +92,8 @@ prepanel <- function(data,
                xr <- c(NA, NA)
                yr <- c(NA, NA)
             } else {
+               if(is.list(p$x.limits) || is.list(p$y.limits))
+                  stop("Either x or y scales for lattice prepanel function is 'sliced' or 'fill' - currently can't compute limits when these are set")
                xr <- p$x.limits
                yr <- p$y.limits               
             }
