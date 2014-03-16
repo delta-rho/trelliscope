@@ -13,7 +13,7 @@ getPNGs <- function(cogDF, cdo, vdbPrefix, conn=NULL) {
    } else {
       # TODO: since we're making the plot on the fly, why not make it the right size instead of creating a large one...
       tmpfile <- tempfile()
-
+      
       # load relatedData
       rel <- cdo$relatedData
       for(i in seq_along(rel)) {
@@ -57,10 +57,10 @@ plotTabSkeleton <- function(nRow, nCol, relList, cdo) {
       inner[,-1] <- paste("<div id='plotTable_panel_", tmp$panel, "_rel_", tmp$rel, "' class='panelWrap'><span class='relatedInfo'>", tmp$group, " / ", tmp$name, "</span></div>", sep="")
       
       # pngs[-1] <- paste("<div><img src='", pngs[-1], "' class='png_img' alt='not loaded'/><span class='relatedInfo'>", paste(groups, names, sep=" / "), "</span></div>", sep="")
-
+      
       innerInner <- apply(inner, 1, function(x) {
          x <- matrix(data=x, ncol=innerNcol, byrow=TRUE)
-
+         
          paste("
       <table class='table-borderless' cellpadding='0' cellspacing='0' align='center' valign='center'>
       <tbody>",

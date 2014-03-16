@@ -8,8 +8,8 @@ validateConn <- function(conn) {
 validateCogFn <- function(dat, cogFn, verbose=FALSE) {
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF=FALSE)
-   ex <- applyCogFn(cogFn, kvExample(dat))
-
+   ex <- applyCogFn(cogFn, kvExample(dat), getAttribute(dat, "conn"))
+   
    # if(!is.list(ex))
    #    stop("cogFn should return a list")
    # if(!all(sapply(ex, function(x) inherits(x, "cog"))))
@@ -105,12 +105,14 @@ validateLims <- function(lims, data, panelFn, panelEx, verbose) {
    } else if(!inherits(lims, "trsLims")) {
       if(verbose)
          message("* Precomputed limits not supplied.  Computing axis limits...")
-         
+      
       # should have x, y, prepanelFn
       xLimType <- lims$x
       yLimType <- lims$y
-      if(is.null(xLimType)) xLimType <- "free"
-      if(is.null(yLimType)) yLimType <- "free"
+      if(is.null(xLimType)) 
+         xLimType <- "free"
+      if(is.null(yLimType)) 
+         yLimType <- "free"
       
       # lims <- list(x=list(type="free"), y=list(type="free"))         
       

@@ -174,9 +174,14 @@ print.cog <- function(x, ...) {
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
 #' @export
-applyCogFn <- function(cogFn, kvSubset) {
+applyCogFn <- function(cogFn, kvSubset, conn) {
+   if(inherits(conn, "localDiskConn")) {
+      panelKey <- conn$fileHashFn(list(kvSubset[[1]]), conn)
+   } else {
+      panelKey <- digest(kvSubset[[1]])
+   }
    res <- list(
-      panelKey = cog(digest(kvSubset[[1]]), desc="panel key", type="key")
+      panelKey = cog(panelKey, desc="panel key", type="key")
    )
    splitVars <- getSplitVars(kvSubset)
    if(!is.null(splitVars)) {

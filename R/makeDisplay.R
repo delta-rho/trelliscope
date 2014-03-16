@@ -15,6 +15,7 @@
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
+#' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
 #' 
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
@@ -34,15 +35,16 @@ makeDisplay <- function(
    name,
    group = "common",
    desc = "",
-   panelDim = list(height=NULL, width=NULL, aspect=NULL, res=NULL),
+   panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
    panelFn = NULL, # function to be applied to each split,
-   lims = list(x="free", y="free", prepanelFn=NULL),
+   lims = list(x = "free", y = "free", prepanelFn = NULL),
    cogFn = NULL,
    preRender = FALSE,
    cogConn = dfCogConn(),
    output = NULL,
    conn = getOption("vdbConn"),
    verbose = TRUE,
+   params = NULL,
    control = NULL
 ) {
    # group <- "test"
@@ -50,17 +52,17 @@ makeDisplay <- function(
    # desc <- NULL
    # lims <- NULL
    # panelFn <- function(x) {
-   #    xyplot(Sepal.Length ~ Petal.Length, data=x)
+   #    xyplot(Sepal.Length ~ Petal.Length, data = x)
    # }
    # cogFn <- function(x) {
-   #    list(mean = cog(mean(x$Sepal.Length), desc="Mean sepal length"))
+   #    list(mean = cog(mean(x$Sepal.Length), desc = "Mean sepal length"))
    # }
    # cogConn <- NULL
    # preRender <- TRUE
    # output <- NULL
    # verbose <- TRUE
-   # panelDim <- list(height=NULL, width=NULL, aspect=NULL, res=NULL)
-   # conn <- vdbConn(file.path(tempdir(), "vdbtest"), autoYes=TRUE)
+   # panelDim <- list(height = NULL, width = NULL, aspect = NULL, res = NULL)
+   # conn <- vdbConn(file.path(tempdir(), "vdbtest"), autoYes = TRUE)
    # cogStorage <- "local"
    # control <- NULL
    
@@ -72,14 +74,18 @@ makeDisplay <- function(
       stop("Input data must be an object of class 'ddo'")
    }
    
-   if(!preRender && !hasExtractableKV(data))
-      stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender==FALSE.  Try calling makeExtractable() on the data.")
+   if(!preRender && !hasExtractableKV(data)) {
+      if(!inherits(data, "kvLocalDisk"))
+         stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender == FALSE.  Try calling makeExtractable() on the data.")
+   }
    
    vdbPrefix <- conn$path
    
    # get display prefix (and move old display to backup if it already exists)
    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
    checkDisplayPath(displayPrefix, verbose)
+   
+   dataConn <- getAttribute(data, "conn")
    
    # if no cognostics connection was specified, use cogDatConn
    if(is.null(cogConn))
@@ -92,13 +98,13 @@ makeDisplay <- function(
    # then store on disk in the VDB directory
    if(preRender) {
       if(is.null(output)) {
-         output <- localDiskConn(file.path(displayPrefix, "panels"), autoYes=TRUE)
+         output <- localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE)
       } else if(!inherits(output, "kvConnection")) {
-         stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output=NULL when pre-rendering.")
+         stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output = NULL when pre-rendering.")
       }
    } else {
       if(inherits(data, "kvMemory"))
-         data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes=TRUE))
+         data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE))
       
       panelDataSource <- data
    }
@@ -121,19 +127,19 @@ makeDisplay <- function(
    cogPre(cogConn, conn, group, name)
    
    ## set up a mr job -- this job simply applies the 
-   ## cognostics (and panel if preRender=TRUE) to each subset
+   ## cognostics (and panel if preRender = TRUE) to each subset
    map <- expression({
       cogRes <- list()
       for(i in seq_along(map.keys)) {
          # make plot if you need to
          if(preRender) {
             ff <- tempfile()
-            makePNG(dat=list(map.keys[[i]], map.values[[i]]), 
-               panelFn=panelFn, file=ff, width=panelDim$width, 
-               height=panelDim$height, res=panelDim$res, lims=lims)
+            makePNG(dat = list(map.keys[[i]], map.values[[i]]), 
+               panelFn = panelFn, file = ff, width = panelDim$width, 
+               height = panelDim$height, res = panelDim$res, lims = lims)
             collect(map.keys[[i]], encodePNG(ff))
          }
-         cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]))
+         cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
          collect("TRS___panelkey", cogRes[[i]]$panelKey) # to build key signature
       }
       cogEmit(cogConn, cogRes, conn, group, name)
@@ -162,6 +168,7 @@ makeDisplay <- function(
    )
    
    parList <- list(
+      dataConn    = dataConn,
       group       = group,
       name        = name,
       preRender   = preRender,
@@ -170,35 +177,38 @@ makeDisplay <- function(
       cogFn       = cogFn,
       lims        = lims,
       conn        = conn,
-      panelDim     = panelDim
+      panelDim    = panelDim
    )
    
    # if the package isn't loaded, need to pass other functions as well
    # (assuming that they are defined in the global environment instead)
    # (debugging and updating the package is a lot easier when just
    # sourcing the files at each change rather than building each time)
-   if(! "package:trelliscope" %in% search()) {
-      message("* ---- running dev version - sending trelliscope functions to mr job")
+   # if(! "package:trelliscope" %in% search()) {
+   #    message("* ---- running dev version - sending trelliscope functions to mr job")
       parList <- c(parList, list(
-         kvApply=kvApply,
-         applyCogFn=applyCogFn,
-         getSplitVars=getSplitVars,
-         getBsvs=getBsvs,
-         makePNG=makePNG,
-         encodePNG=encodePNG,
-         cogEmit=cogEmit, 
-         cogEmit.dfCogConn=cogEmit.dfCogConn, 
-         cogEmit.mongoCogConn=cogEmit.mongoCogConn, 
-         cogCollect=cogCollect, 
-         cogCollect.dfCogConn=cogCollect.dfCogConn, 
-         cogCollect.mongoCogConn=cogCollect.mongoCogConn,
-         cog=cog,
-         as.cogGeo=as.cogGeo,
-         as.cogRel=as.cogRel,
-         as.cogHier=as.cogHier,
-         cogMean=cogMean,
-         cogRange=cogRange,
-         cog2df=cog2df
+         kvApply = kvApply,
+         applyCogFn = applyCogFn,
+         getSplitVars = getSplitVars,
+         getBsvs = getBsvs,
+         makePNG = makePNG,
+         encodePNG = encodePNG,
+         cogEmit = cogEmit, 
+         cogEmit.dfCogConn = cogEmit.dfCogConn, 
+         cogEmit.mongoCogConn = cogEmit.mongoCogConn, 
+         cogCollect = cogCollect, 
+         cogCollect.dfCogConn = cogCollect.dfCogConn, 
+         cogCollect.mongoCogConn = cogCollect.mongoCogConn,
+         cog = cog,
+         as.cogGeo = as.cogGeo,
+         as.cogRel = as.cogRel,
+         as.cogHier = as.cogHier,
+         cogMean = cogMean,
+         cogRange = cogRange,
+         cog2df = cog2df,
+         trsCurLim = trsCurLim,
+         trsCurXLim = trsCurXLim,
+         trsCurYLim = trsCurYLim
       ))
       
       setup <- expression({
@@ -209,26 +219,29 @@ makeDisplay <- function(
          suppressMessages(require(scagnostics))
          suppressMessages(require(data.table))
       })
-   } else {
-      setup <- expression({
-         suppressMessages(require(trelliscope))
-      })
-   }
+   # } else {
+   #    setup <- expression({
+   #       suppressMessages(require(trelliscope))
+   #    })
+   # }
    
    # if panelFn uses any data in the environment, pass that on too
-   globalVars <- findGlobals(panelFn)
+   globalVars <- unique(c(findGlobals(panelFn), findGlobals(cogFn)))
    globalVarList <- getGlobalVarList(globalVars, parent.frame())
    
    if(length(globalVarList) > 0)
       parList <- c(parList, globalVarList)
    
+   if(length(params) > 0)
+      parList <- c(parList, params)
+   
    jobRes <- mrExec(data,
-      setup=setup,
-      map=map,
-      reduce=reduce,
-      output=output,
-      control=control,
-      params=parList
+      setup   = setup,
+      map     = map,
+      reduce  = reduce,
+      output  = output,
+      control = control,
+      params  = parList
    )
    
    if(preRender)
@@ -280,40 +293,40 @@ makeDisplay <- function(
    )
    class(displayObj) <- "displayObj"
    
-   save(displayObj, file=file.path(displayPrefix, "displayObj.Rdata"))
+   save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
    
    # make thumbnail
    message("* Plotting thumbnail...")
-   suppressMessages(makePNG(kvExample(data), panelFn=panelFn, file=file.path(displayPrefix, "thumb.png"), width=panelDim$width, height=panelDim$height, res=panelDim$res, lims=lims))
+   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = panelDim$width, height = panelDim$height, res = panelDim$res, lims = lims))
    
    return(invisible(displayObj))
 }
 
-removeDisplay <- function(name, group, conn=getOption("vdbConn")) {
+removeDisplay <- function(name, group, conn = getOption("vdbConn")) {
    validateConn(conn)
    
    # load the object
    displayPrefix <- file.path(conn$path, "displays", group, name)
-   displayPrefix2 <- paste(displayPrefix, "_bak", sep="")
+   displayPrefix2 <- paste(displayPrefix, "_bak", sep = "")
    if(file.exists(file.path(displayPrefix, "displayObj.Rdata"))) {
       load(file.path(displayPrefix, "displayObj.Rdata"))
       # TODO: remove cognostics (if stored elsewhere)
    }
    # remove the display directory (and _bak if exists)
-   unlink(displayPrefix, recursive=TRUE)
+   unlink(displayPrefix, recursive = TRUE)
    if(file.exists(displayPrefix2))
-      unlink(displayPrefix2, recursive=TRUE)
+      unlink(displayPrefix2, recursive = TRUE)
    # remove from displayList
    updateDisplayList(NULL, conn)
 }
 
 ## remove all _bak directories
-cleanupDisplays <- function(conn=getOption("vdbConn")) {
+cleanupDisplays <- function(conn = getOption("vdbConn")) {
    validateConn(conn)
 
-   ff <- list.files(file.path(conn$path, "displays"), recursive=TRUE, include.dirs=TRUE, pattern="_bak$", full.names=TRUE)
+   ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
    for(f in ff) {
-      unlink(f, recursive=TRUE)
+      unlink(f, recursive = TRUE)
    }
 }
 
