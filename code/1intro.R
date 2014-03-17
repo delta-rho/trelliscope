@@ -1,3 +1,7 @@
+
+
+
+
 library(trelliscope)
 
 
@@ -22,7 +26,8 @@ xyplot(co ~ dat_ams, data=airplane, aspect=0.2)
 
 
 # distinguish "am" and "pm" flights
-airplane$flight <- ifelse(airplane$dat_ams < as.POSIXct("2010-06-28 21:00:00 UTC"), "am", "pm")
+midTime <- as.POSIXct("2010-06-28 21:00:00 UTC")
+airplane$flight <- ifelse(airplane$dat_ams < midTime, "am", "pm")
 
 
 

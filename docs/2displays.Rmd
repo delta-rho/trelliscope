@@ -1,3 +1,5 @@
+```
+
 ## Trelliscope Displays ##
 
 ### Division with datadr ###
@@ -23,7 +25,7 @@ xyplot(latitude ~ longitude, data=airplane,
 
 Thus, it might be interesting to split the data into subsets by cutting the latitude and longitude into small squares (okay, so these aren't really *squares*), and then study the variables of interest within those squares.  We can do this with the following:
 
-```{r bylatlon}
+```{r bylatlon, message=FALSE}
 # latitude and longitude "square" boundaries
 latCuts <- seq(38.2, 39.4, by=0.1)
 lonCuts <- seq(-121.8, -120.8, by=0.1)
@@ -97,7 +99,7 @@ kvApply(coPanelFn, byLatLon[[2]])
 
 To create a display, applying this panel function over the entire data set, we simply call `makeDisplay()`:
 
-```{r simple_co_display, fig.show=FALSE}
+```{r simple_co_display, fig.show=FALSE, message=FALSE}
 # create a simple display
 makeDisplay(byLatLon,
    panelFn = coPanelFn,
@@ -120,7 +122,9 @@ To view the display:
 view()
 ```
 
-This will bring up the Trelliscope viewer.  You will get a list of displays to choose from (at this point, just one).  If you aren't following along with the example in your own R console, you can look at the display on RStudio's glimmer site [here](http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&name=co_vs_time_plain).  Later we will cover how to sync a local VDB with a web server.
+This will bring up the Trelliscope viewer.  You will get a list of displays to choose from (at this point, just one).  
+<!--If you aren't following along with the example in your own R console, you can look at the display on RStudio's glimmer site [here](http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&name=co_vs_time_plain).-->
+Later we will cover how to sync a local VDB with a web server.
 
 You can also launch the viewer to go directly to this display with either of the following:
 
@@ -161,7 +165,7 @@ This approach only works with `lattice` and `ggplot2` panel functions.  Per-pane
 
 Here is an example of this display, using `ggplot2`:
 
-```{r simple_scales_ggplot}
+```{r simple_scales_ggplot, message=FALSE}
 # same display but using ggplot2
 ggCoPanelFn <- function(x) {
    qplot(dat_ams, log2(co), data=x)
@@ -184,7 +188,7 @@ The previous example is the most simple way to specify axis limits.  However, it
 
 As an alternative, we can explicitly supply a prepanel function to the `lims` argument list, called `prepanelFn`.  This functions in the same way as for `lattice`, where the prepanel function takes each subset of data and returns a list with `xlim` and `ylim`.  For example:
 
-```{r co_display_prepanel}
+```{r co_display_prepanel, message=FALSE}
 # using a prepanel function to compute axis limits
 preFn <- function(x) {
    list(ylim=range(log2(x$co)), xlim=range(x$dat_ams))
@@ -210,7 +214,7 @@ We can use a function, `prepanel()`, to compute axis limits prior to creating a 
 
 The main parameter to know about in `prepanel()` is `prepanelFn`, which operates in the same way as we saw before -- it is either a `lattice` or `ggplot2` panel function or it is a function that takes a subset of the data as an input and returns a list including the elements `xlim` and `ylim` (each a vector of the min and max x and y ranges of the data subset).
 
-```{r co_prepanel}
+```{r co_prepanel, message=FALSE}
 # compute axis limits prior to creating display using prepanel()
 coTimePre <- prepanel(byLatLon, prepanelFn=coPanelFn)
 ```
@@ -232,14 +236,14 @@ For this plot, it appears that slicing the axis limits does not buy us much reso
 
 To set our choice, we do the following:
 
-```{r set_co_time_lims}
+```{r set_co_time_lims, message=FALSE}
 # set limits from our prepanel calculations
 coTimeLims <- setLims(coTimePre) # default is x="same", y="same"
 ```
 
 `makeDisplay()` can take this object as is argument for `lims` and will set panel limits accordingly.
 
-```{r co_time_lims_display}
+```{r co_time_lims_display, message=FALSE}
 # create a display using axis limits from prepanel() and setLims()
 makeDisplay(byLatLon,
    name    = "co_vs_time_lims",
@@ -313,7 +317,7 @@ kvApply(coCogFn, byLatLon[[1]])
 
 Now, let's add these cognostics to our display:
 
-```{r set_time_lims}
+```{r set_time_lims, message=FALSE}
 # add cognostics to the display
 makeDisplay(byLatLon,
    name    = "co_vs_time",
@@ -325,7 +329,8 @@ makeDisplay(byLatLon,
 )
 ```
 
-This display can be viewed [here](http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&name=co_vs_time).  With this display, we can start to see the utility of cognostics.  Pressing the "cog" button in the viewer brings up a table of cognostics with ways to sort and filter the panels based on the values of the cognostics.  This is particularly useful when there are more panels than you could possibly view.
+<!--This display can be viewed [here](http://glimmer.rstudio.com/rhafen/vdbexample/#group=co&name=co_vs_time).-->
+With this display, we can start to see the utility of cognostics.  Pressing the "cog" button in the viewer brings up a table of cognostics with ways to sort and filter the panels based on the values of the cognostics.  This is particularly useful when there are more panels than you could possibly view.
 
 ### Panel Storage ###
 
@@ -354,9 +359,7 @@ There are trade-offs for pre-rendering or not:
 
 Here is an example of how to specify pre-rendering when creating a display:
 
-<!-- fix this -->
-
-```{r pre_render, eval=FALSE}
+```{r pre_render, message=FALSE}
 # make display with panels pre-rendered
 makeDisplay(byLatLon,
    name      = "co_vs_time_rend",
@@ -369,28 +372,15 @@ makeDisplay(byLatLon,
 )
 ```
 
-```
-* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating 'panelFn'...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Getting basic 'ddo' attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-```
-
 The only thing that changes is that we specify `preRender=TRUE`.  Now, the data stored as the output for this display are a binary png blob for each panel.
 
 ### Cognostics Storage ###
 
-The default behavior for storing cognostics is as an R data frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels exceeding the low millions.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.
+The default behavior for storing cognostics is as an R data frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels beyond the hundreds of thousands.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.
 
-To store cognostics in MongoDB, we must first initiate a cognostics MongoDB connection.  This of course requires a MongoDB instance to be running somewhere that you have access to.
+To store cognostics in MongoDB, we must first initiate a cognostics MongoDB connection.  This of course requires a MongoDB instance to be running somewhere that you have access to - the following code will only work if this is the case.
 
-```{r mongo_cog_conn, cache=TRUE}
+```{r mongo_cog_conn, eval=FALSE}
 # initiate a MongoDB cognostics connection
 mongoConn <- mongoCogConn()   
 ```
@@ -399,7 +389,7 @@ In `mongoCogConn()`, you can specify information such as the host address, etc. 
 
 Now, we can simply specify this as the `cogConn` argument in our call to `makeDisplay()` and cognostics will be stored in this connection.
 
-```{r mongo_cog, cache=TRUE}
+```{r mongo_cog, eval=FALSE}
 # create the display using MongoDB to store the cognostics
 makeDisplay(byLatLon,
    name      = "co_vs_time_mon",
@@ -422,7 +412,7 @@ We typically have many different ways to look at the same division of data.  Whe
 
 To illustrate this, here we create a display with a panel function that, for each geographical subset, simply shows all of the airplane's tracks on the grid, with the grid location of the current subset highlighted in gray.  We will see how this display can be useful when being viewed in conjunction with other displays in the [following section](#shiny-viewer).
 
-```{r lat_lon_display}
+```{r lat_lon_display, message=FALSE}
 # panel function for a geographical display
 latLonPanelFn <- function(a) {
    yy <- as.numeric(strsplit(gsub("\\(|\\]", "", attr(a, "split")$latCut), ",")[[1]])
@@ -441,7 +431,6 @@ latLonPanelFn <- function(a) {
 
 # test the panel function on a subset
 kvApply(latLonPanelFn, byLatLon[[2]])
-
 # create the display
 makeDisplay(
    data = byLatLon,
@@ -460,7 +449,7 @@ Scatterplot matrices become increasingly infeasible as the number of variables g
 
 To illustrate this, we can create a scatterplot display for all of the variables in the `airplane` data.  First, we call `makeSplodDat()` to get the data into the correct format:
 
-```{r sploddat, cache=TRUE}
+```{r sploddat, message=FALSE}
 # create data for scatterplot display
 airplaneSplodDat <- makeSplodData(airplane, 
    id.vars=c("dat_ams", "flight", "datCut"))
@@ -470,14 +459,14 @@ This creates all pairwise groupings of variables not found in `id.vars` and puts
 
 Here's an example of what a subset looks like:
 
-```{r sploddat_example, cache=TRUE}
+```{r sploddat_example}
 # look at a subset of airplaneSplotDat
 str(kvExample(airplaneSplodDat))
 ```
 
 We can now create a display for this with `splod()`:
 
-```{r splod, cache=TRUE}
+```{r splod, cache=TRUE, message=FALSE}
 splod(airplaneSplodDat)
 ```
 

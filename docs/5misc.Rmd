@@ -1,3 +1,4 @@
+```
 
 ## Misc ##
 
@@ -91,8 +92,8 @@ The context for our visualization environment is *deep statistical analysis and 
 
 If you would like to run through all of the code examples in this documentation without having to pick out each line of code from the text, below are files with the R code for each section.  All but the final section on scalable backends should run on a workstation with no other dependencies but the required R packages.  The scalable backend code requires other components to be installed, such as Hadoop or MongoDB.
 
-- [Getting Started, Trellis Display, VDBs](docs/code/1intro.R)
-- [Trelliscope Displays](docs/code/2displays.R)
-- [Web Notebooks](docs/code/4webnotebook.R)
-- [Scalable Backends](docs/code/5misc.R)
+- [Getting Started, Trellis Display, VDBs](code/1intro.R)
+- [Trelliscope Displays](code/2displays.R)
+- [Web Notebooks](code/4webnotebook.R)
+- [Scalable Backends](code/5misc.R)
 

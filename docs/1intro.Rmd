@@ -1,3 +1,5 @@
+```
+
 # Trelliscope: Detailed Vis of Large Complex Data in R #
 
 ## Intro ##
@@ -83,7 +85,7 @@ The first step to using Trelliscope for an analysis project is to connect to a V
 unlink("/private/tmp/vdbtest", recursive=TRUE)
 ```
 
-```{r vdb_conn}
+```{r vdb_conn, message=FALSE}
 # initialize a connection to a new VDB to be located at /private/tmp/vdbtest
 vdbDir <- "/private/tmp/vdbtest"
 conn <- vdbConn(vdbDir, autoYes=TRUE, name="myProject")
@@ -130,7 +132,8 @@ To account for this in our analyses, let's create a new variable `flight` with v
 
 ```{r ap_flight}
 # distinguish "am" and "pm" flights
-airplane$flight <- ifelse(airplane$dat_ams < as.POSIXct("2010-06-28 21:00:00 UTC"), "am", "pm")
+midTime <- as.POSIXct("2010-06-28 21:00:00 UTC")
+airplane$flight <- ifelse(airplane$dat_ams < midTime, "am", "pm")
 ```
 
 #### Altitude vs. time
@@ -429,7 +432,7 @@ This provides some simple information about each display in the VDB.  The column
 
 We can view a display with the following:
 
-```{r view_example}
+```{r view_example, eval=FALSE}
 # view the tracks_by_flight display
 view("tracks_byflight")
 ```

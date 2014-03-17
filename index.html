@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>trelliscope R Package Documentation</title>
+    <title>Trelliscope: Detailed Vis of Large Complex Data in R</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="css/pygment.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/pygment.css" rel="stylesheet">
     
     <style type="text/css">
       body {
@@ -92,7 +92,7 @@
       "HTML-CSS": { scale: 100}    
     });    
     </script>
-    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -113,9 +113,7 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="index.html">Docs</a></li>
-          <li class=""><a href="functionref.html">Function Ref</a></li>
-          <li><a href="https://www.github.com/hafen/trelliscope">Github</a></li>
+           <li class='active'><a href='index.html'>Docs</a></li><li class=''><a href='functionref.html'>Function Ref</a></li><li><a href='https://github.com/hafen/trelliscope'>Github</a></li>
         </ul>
         <p class="myHeader">Trelliscope: Detailed Vis of Large Complex Data in R</p>
       </div>
@@ -127,7 +125,7 @@
    
    <div class="span3 well">
    <ul class = "nav nav-list" id="toc">
-   <li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/1intro.Rmd'>Intro</li>
+   <li class='nav-header unselectable' data-edit-href='https://github.com/hafen/trelliscope/edit/gh-pages/docs/1intro.Rmd'>Intro</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#background'>Background</a>
@@ -149,7 +147,7 @@
       </li>
 
 
-<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/2displays.Rmd'>Trelliscope Displays</li>
+<li class='nav-header unselectable' data-edit-href='https://github.com/hafen/trelliscope/edit/gh-pages/docs/2displays.Rmd'>Trelliscope Displays</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#division-with-datadr'>Division with datadr</a>
@@ -191,7 +189,7 @@
       </li>
 
 
-<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/3viewer.Rmd'>Viewing Displays</li>
+<li class='nav-header unselectable' data-edit-href='https://github.com/hafen/trelliscope/edit/gh-pages/docs/3viewer.Rmd'>Viewing Displays</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#shiny-viewer'>Shiny Viewer</a>
@@ -203,7 +201,7 @@
       </li>
 
 
-<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/4webnotebook.Rmd'>Lab Notebooks</li>
+<li class='nav-header unselectable' data-edit-href='https://github.com/hafen/trelliscope/edit/gh-pages/docs/4webnotebook.Rmd'>Lab Notebooks</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#creating-a-notebook'>Creating a Notebook</a>
@@ -215,7 +213,7 @@
       </li>
 
 
-<li class='nav-header unselectable' data-edit-href='https://www.github.com/hafen/trelliscope/edit/gh-pages/docs/5misc.Rmd'>Misc</li>
+<li class='nav-header unselectable' data-edit-href='https://github.com/hafen/trelliscope/edit/gh-pages/docs/5misc.Rmd'>Misc</li>
       
       <li class='active'>
          <a target='_self' class='nav-not-header' href='#scalable-system'>Scalable System</a>
@@ -285,12 +283,17 @@ install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
 </code></pre>
 
 <pre><code>Loading required package: datadr
-Loading required package: digest
+Loading required package: parallel
+Loading required package: data.table
+data.table 1.9.2  For help type: help(&quot;data.table&quot;)
+Loading required package: codetools
+Loading required package: testthat
 Loading required package: lattice
 Loading required package: base64enc
 Loading required package: shiny
-Loading required package: codetools
 Loading required package: hexbin
+Loading required package: grid
+Loading required package: ggplot2
 </code></pre>
 
 <p>and we are ready to go.</p>
@@ -304,9 +307,6 @@ Loading required package: hexbin
 <pre><code class="r"># initialize a connection to a new VDB to be located at /private/tmp/vdbtest
 vdbDir &lt;- &quot;/private/tmp/vdbtest&quot;
 conn &lt;- vdbConn(vdbDir, autoYes=TRUE, name=&quot;myProject&quot;)
-</code></pre>
-
-<pre><code>* Moving notebook files over
 </code></pre>
 
 <p>If the VDB connection directory doesn&#39;t exist, it will ask whether it should be created.  Here, we specify <code>autoYes=TRUE</code> to automatically answer yes to this question.  In any subsequent R session, we can connect to the existing VDB directory with the same <code>vdbConn()</code> command.</p>
@@ -388,7 +388,7 @@ Sys.setenv(TZ=&quot;UTC&quot;)
 xyplot(co ~ dat_ams, data=airplane, aspect=0.2)
 </code></pre>
 
-<p><img src="figure/airplane_time.png" alt="plot of chunk airplane_time"> </p>
+<p><img src="figures/knitr/airplane_time.png" alt="plot of chunk airplane_time"> </p>
 
 <p>This plots <code>co</code> vs. <code>dat_ams</code>, and gives the plot an aspect ratio of 0.2.  Note that aspect ratios are very important for visual perception and should not be an afterthought or not thought of at all when creating a display.</p>
 
@@ -397,7 +397,8 @@ xyplot(co ~ dat_ams, data=airplane, aspect=0.2)
 <p>To account for this in our analyses, let&#39;s create a new variable <code>flight</code> with values <code>&quot;am&quot;</code> and <code>&quot;pm&quot;</code>:</p>
 
 <pre><code class="r"># distinguish &quot;am&quot; and &quot;pm&quot; flights
-airplane$flight &lt;- ifelse(airplane$dat_ams &lt; as.POSIXct(&quot;2010-06-28 21:00:00 UTC&quot;), &quot;am&quot;, &quot;pm&quot;)
+midTime &lt;- as.POSIXct(&quot;2010-06-28 21:00:00 UTC&quot;)
+airplane$flight &lt;- ifelse(airplane$dat_ams &lt; midTime, &quot;am&quot;, &quot;pm&quot;)
 </code></pre>
 
 <h4>Altitude vs. time</h4>
@@ -408,7 +409,7 @@ airplane$flight &lt;- ifelse(airplane$dat_ams &lt; as.POSIXct(&quot;2010-06-28 2
 xyplot(altitude ~ dat_ams, data=airplane, aspect=0.2)
 </code></pre>
 
-<p><img src="figure/ap_alt.png" alt="plot of chunk ap_alt"> </p>
+<p><img src="figures/knitr/ap_alt.png" alt="plot of chunk ap_alt"> </p>
 
 <p>We see that altitude typically stays fairly constant a little under 500 and 1000, with some interesting quick ascents to higher altitudes.  It may be interesting to investigate different altitude levels, and we can create a discretized altitude variable:</p>
 
@@ -429,7 +430,7 @@ xyplot(latitude ~ longitude, data=airplane,
 )
 </code></pre>
 
-<p><img src="figure/ap_tracks.png" alt="plot of chunk ap_tracks"> </p>
+<p><img src="figures/knitr/ap_tracks.png" alt="plot of chunk ap_tracks"> </p>
 
 <p>The <code>groups</code> argument tells lattice to use a different color to plot data corresponding to each flight.  <code>aspect=&quot;iso&quot;</code> forces the aspect ratio of the plot to be such that the units of the x and y axis are equal according to the physical screen space they cover relative to their units.</p>
 
@@ -454,7 +455,7 @@ xyplot(latitude ~ longitude | flight,
 )
 </code></pre>
 
-<p><img src="figure/ap_tracks_alt.png" alt="plot of chunk ap_tracks_alt"> </p>
+<p><img src="figures/knitr/ap_tracks_alt.png" alt="plot of chunk ap_tracks_alt"> </p>
 
 <p>This display introduces several more elements of Trellis Display.  The most important is <em>conditioning</em>, or <em>faceting</em> on the variable <code>flight</code>.  In the R formula interface, this is specified by the <code>|</code> operator.  This causes a panel to be rendered independently for each subset defined by the levels of <code>flight</code>.</p>
 
@@ -495,7 +496,7 @@ xyplot(latitude ~ longitude | datCut,
 )
 </code></pre>
 
-<p><img src="figure/tracks_datcut.png" alt="plot of chunk tracks_datcut"> </p>
+<p><img src="figures/knitr/tracks_datcut.png" alt="plot of chunk tracks_datcut"> </p>
 
 <h4>Scales / axis limits</h4>
 
@@ -529,7 +530,7 @@ xyplot(latitude ~ longitude | datCut,
 )
 </code></pre>
 
-<p><img src="figure/tracks_free.png" alt="plot of chunk tracks_free"> </p>
+<p><img src="figures/knitr/tracks_free.png" alt="plot of chunk tracks_free"> </p>
 
 <p>It is quite difficult to understand how things vary between panels in this plot.</p>
 
@@ -549,7 +550,7 @@ xyplot(latitude ~ longitude | datCut,
 )
 </code></pre>
 
-<p><img src="figure/tracks_sliced.png" alt="plot of chunk tracks_sliced"> </p>
+<p><img src="figures/knitr/tracks_sliced.png" alt="plot of chunk tracks_sliced"> </p>
 
 <p>Now we can make relative judgements between panels, but it is difficult to judge the magnitude of shifts in location from one panel to the other.</p>
 
@@ -576,7 +577,7 @@ xyplot(latitude ~ longitude | datCut,
 )
 </code></pre>
 
-<p><img src="figure/tracks_prepanel.png" alt="plot of chunk tracks_prepanel"> </p>
+<p><img src="figures/knitr/tracks_prepanel.png" alt="plot of chunk tracks_prepanel"> </p>
 
 <!-- latCuts <- seq(38.2, 39.4, by=0.1)
 lonCuts <- seq(-121.8, -120.8, by=0.1)
@@ -643,8 +644,6 @@ addDisplay(p,
    desc  = &quot;The tracks of the airplane with a panel for each of the morning and evening flights.  Color by altitude of plane.&quot;,
    dim   = list(width=800, height=450, res=150))
 </code></pre>
-
-<p><img src="figure/add_display.png" alt="plot of chunk add_display"> </p>
 
 <p>There are three attributes we can specify to describe a display record being added to the VDB:</p>
 
@@ -725,9 +724,6 @@ tracks_byflight | exploratory | The tracks of the ai... | 1 | none (R plot)
 view(&quot;tracks_byflight&quot;)
 </code></pre>
 
-<pre><code>NULL
-</code></pre>
-
 <p>There is a much more interesting viewer for Trelliscope displays.</p>
 
 <h4>Removing displays</h4>
@@ -757,7 +753,7 @@ view(&quot;tracks_byflight&quot;)
 
 <p>Looking at our previous plots of the airplane tracks, we notice that within each square defined by the grid lines the airplane recovers many of its tracks from AM to PM:</p>
 
-<p><img src="figure/ap_tracks2.png" alt="plot of chunk ap_tracks2"> </p>
+<p><img src="figures/knitr/ap_tracks2.png" alt="plot of chunk ap_tracks2"> </p>
 
 <p>Thus, it might be interesting to split the data into subsets by cutting the latitude and longitude into small squares (okay, so these aren&#39;t really <em>squares</em>), and then study the variables of interest within those squares.  We can do this with the following:</p>
 
@@ -775,16 +771,6 @@ byLatLon &lt;- divide(airplane, by=c(&quot;latCut&quot;, &quot;lonCut&quot;),
    update=TRUE)
 </code></pre>
 
-<pre><code>* Input data is not &#39;ddf&#39; - attempting to cast it as such
-* Getting basic &#39;ddo&#39; attributes...
-* Getting basic &#39;ddf&#39; attributes...
-* Verifying parameters...
-* Applying division...
-* Getting basic &#39;ddo&#39; attributes...
-* Running map/reduce to get missing attributes...
-* Getting basic &#39;ddo&#39; attributes...
-</code></pre>
-
 <p>Note that with this small dataset, we could have appended the <code>latCuts</code> and <code>lonCuts</code> variables to the <code>airplane</code> data frame prior to calling <code>divide()</code>.</p>
 
 <p>Let&#39;s look at the resulting distributed data frame (&quot;ddf&quot;) object:</p>
@@ -799,7 +785,8 @@ Distributed data object of class &#39;kvMemory&#39; with attributes:
 &#39;ddo&#39; attribute | value
 ----------------+-----------------------------------------------------------
  keys           | keys are available through getKeys(dat)
- totSize        | 1007.05 KB
+ totStorageSize | 1007.05 KB
+ totObjectSize  | 1007.05 KB
  nDiv           | 54
  splitSizeDistn | use splitSizeDistn(dat) to get distribution
  example        | use kvExample(dat) to get an example subset
@@ -927,7 +914,7 @@ coPanelFn &lt;- function(d) {
 kvApply(coPanelFn, byLatLon[[2]])
 </code></pre>
 
-<p><img src="figure/simple_co_apply.png" alt="plot of chunk simple_co_apply"> </p>
+<p><img src="figures/knitr/simple_co_apply.png" alt="plot of chunk simple_co_apply"> </p>
 
 <h4>Making the display</h4>
 
@@ -942,22 +929,6 @@ makeDisplay(byLatLon,
 )
 </code></pre>
 
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Precomputed limits not supplied.  Computing axis limits...
-* ... skipping this step since both are axes are free ...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
-<p><img src="figure/simple_co_display.png" alt="plot of chunk simple_co_display"> </p>
-
 <p>The two most important arguments are the first argument, <code>data</code>, and the panel function, <code>panelFn</code>.  The other arguments in this example simply identify the display, as we saw previously.  We will later see other arguments to <code>makeDisplay()</code> that provide additional useful functionality.</p>
 
 <p>Here, we are putting the display in a group <code>&quot;co&quot;</code> since that is the variable we are currently studying.</p>
@@ -970,7 +941,11 @@ makeDisplay(byLatLon,
 view()
 </code></pre>
 
-<p>This will bring up the Trelliscope viewer.  You will get a list of displays to choose from (at this point, just one).  If you aren&#39;t following along with the example in your own R console, you can look at the display on RStudio&#39;s glimmer site <a href="http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&amp;name=co_vs_time_plain">here</a>.  Later we will cover how to sync a local VDB with a web server.</p>
+<p>This will bring up the Trelliscope viewer.  You will get a list of displays to choose from (at this point, just one).  </p>
+
+<!--If you aren't following along with the example in your own R console, you can look at the display on RStudio's glimmer site [here](http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&name=co_vs_time_plain).-->
+
+<p>Later we will cover how to sync a local VDB with a web server.</p>
 
 <p>You can also launch the viewer to go directly to this display with either of the following:</p>
 
@@ -1044,22 +1019,6 @@ makeDisplay(byLatLon,
 )
 </code></pre>
 
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Precomputed limits not supplied.  Computing axis limits...
-Testing &#39;prepanelFn&#39; on a subset...
-Using &#39;ggplot&#39; panelFn to determine limits... dx and dy will not be computed.
-* Getting basic &#39;ddo&#39; attributes...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
 <pre><code>Warning: Removed 7 rows containing missing values (geom_point).
 </code></pre>
 
@@ -1085,23 +1044,6 @@ makeDisplay(byLatLon,
 )
 </code></pre>
 
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Precomputed limits not supplied.  Computing axis limits...
-Testing &#39;prepanelFn&#39; on a subset...
-dx or dy (or both) were not specified - not computing banking.
-* Getting basic &#39;ddo&#39; attributes...
-At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
 <h4>Determining limits beforehand with <code>prepanel()</code></h4>
 
 <p>In both of the above approaches, we computed axis limits at the time of creating the display.  This is not recommended for very large datasets.  There are a few reasons for this.  </p>
@@ -1119,11 +1061,6 @@ At least one of the variables is not numeric.  Casting as numeric for quantile c
 coTimePre &lt;- prepanel(byLatLon, prepanelFn=coPanelFn)
 </code></pre>
 
-<pre><code>Testing &#39;prepanelFn&#39; on a subset...
-Using &#39;trellis&#39; panelFn to determine limits... dx and dy will not be computed.
-* Getting basic &#39;ddo&#39; attributes...
-</code></pre>
-
 <h4>Determining axis limits from <code>prepanel()</code> output</h4>
 
 <p>We can now determine our axis limits based on the results from <code>prepanel()</code>.  The output from <code>prepanel</code> is an object which has a plot method that can help in the decision of how to specify limits.</p>
@@ -1137,7 +1074,7 @@ plot(coTimePre)
 <pre><code>At least one of the variables is not numeric.  Casting as numeric for plotting purposes.
 </code></pre>
 
-<p><img src="figure/co_pre_plot.png" alt="plot of chunk co_pre_plot"> </p>
+<p><img src="figures/knitr/co_pre_plot.png" alt="plot of chunk co_pre_plot"> </p>
 
 <p>This plot orders the axis limits for both the x and y axes for both &quot;same&quot; and &quot;sliced&quot; (with sliced ranges centered around zero).  This can help us to see if we will be squeezing the data for a lot of panels when using &quot;same&quot;, and also helps identify outliers.  In each of the panels of this plot, you can think of the range of the &quot;Panel Limits&quot; axis as the range that will ultimately be chosen for each panel for the given axis and limit method.</p>
 
@@ -1147,9 +1084,6 @@ plot(coTimePre)
 
 <pre><code class="r"># set limits from our prepanel calculations
 coTimeLims &lt;- setLims(coTimePre) # default is x=&quot;same&quot;, y=&quot;same&quot;
-</code></pre>
-
-<pre><code>At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.
 </code></pre>
 
 <p><code>makeDisplay()</code> can take this object as is argument for <code>lims</code> and will set panel limits accordingly.</p>
@@ -1163,20 +1097,6 @@ makeDisplay(byLatLon,
    lims    = coTimeLims
 )
 </code></pre>
-
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
-<p><img src="figure/co_time_lims_display.png" alt="plot of chunk co_time_lims_display"> </p>
 
 <!-- #### Setting the limits manually
 
@@ -1270,19 +1190,9 @@ makeDisplay(byLatLon,
 )
 </code></pre>
 
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
+<!--This display can be viewed [here](http://glimmer.rstudio.com/rhafen/vdbexample/#group=co&name=co_vs_time).-->
 
-<p>This display can be viewed <a href="http://glimmer.rstudio.com/rhafen/vdbexample2/#group=co&amp;name=co_vs_time">here</a>.  With this display, we can start to see the utility of cognostics.  Pressing the &quot;cog&quot; button in the viewer brings up a table of cognostics with ways to sort and filter the panels based on the values of the cognostics.  This is particularly useful when there are more panels than you could possibly view.</p>
+<p>With this display, we can start to see the utility of cognostics.  Pressing the &quot;cog&quot; button in the viewer brings up a table of cognostics with ways to sort and filter the panels based on the values of the cognostics.  This is particularly useful when there are more panels than you could possibly view.</p>
 
 </div>
 
@@ -1321,8 +1231,6 @@ makeDisplay(byLatLon,
 
 <p>Here is an example of how to specify pre-rendering when creating a display:</p>
 
-<!-- fix this -->
-
 <pre><code class="r"># make display with panels pre-rendered
 makeDisplay(byLatLon,
    name      = &quot;co_vs_time_rend&quot;,
@@ -1335,18 +1243,6 @@ makeDisplay(byLatLon,
 )
 </code></pre>
 
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
 <p>The only thing that changes is that we specify <code>preRender=TRUE</code>.  Now, the data stored as the output for this display are a binary png blob for each panel.</p>
 
 </div>
@@ -1355,9 +1251,9 @@ makeDisplay(byLatLon,
 <div class='tab-pane' id='cognostics-storage'>
 <h3>Cognostics Storage</h3>
 
-<p>The default behavior for storing cognostics is as an R data frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels exceeding the low millions.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.</p>
+<p>The default behavior for storing cognostics is as an R data frame.  This provides convenience in computations regarding cognostics in the viewer, but is limiting from a scalability point of view, as it will become difficult to manage with the number of panels beyond the hundreds of thousands.  There is now experimental support for storing cognostics in a MongoDB collection.  In this case, it should be possible to handle a much larger number of panels.</p>
 
-<p>To store cognostics in MongoDB, we must first initiate a cognostics MongoDB connection.  This of course requires a MongoDB instance to be running somewhere that you have access to.</p>
+<p>To store cognostics in MongoDB, we must first initiate a cognostics MongoDB connection.  This of course requires a MongoDB instance to be running somewhere that you have access to - the following code will only work if this is the case.</p>
 
 <pre><code class="r"># initiate a MongoDB cognostics connection
 mongoConn &lt;- mongoCogConn()   
@@ -1377,18 +1273,6 @@ makeDisplay(byLatLon,
    cogConn   = mongoConn,
    lims      = coTimeLims
 )
-</code></pre>
-
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
 </code></pre>
 
 <p>When this display is being viewed, the MongoDB database will be queried as we interact with the panels of the display.</p>
@@ -1425,10 +1309,9 @@ latLonPanelFn &lt;- function(a) {
 kvApply(latLonPanelFn, byLatLon[[2]])
 </code></pre>
 
-<p><img src="figure/lat_lon_display1.png" alt="plot of chunk lat_lon_display"> </p>
+<p><img src="figures/knitr/lat_lon_display.png" alt="plot of chunk lat_lon_display"> </p>
 
-<pre><code class="r">
-# create the display
+<pre><code class="r"># create the display
 makeDisplay(
    data = byLatLon,
    name = &quot;lat_vs_lon&quot;,
@@ -1437,22 +1320,6 @@ makeDisplay(
    panelFn = latLonPanelFn
 )
 </code></pre>
-
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Precomputed limits not supplied.  Computing axis limits...
-* ... skipping this step since both are axes are free ...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
-</code></pre>
-
-<p><img src="figure/lat_lon_display2.png" alt="plot of chunk lat_lon_display"> </p>
 
 <p>Note that the panel function uses data objects <code>lonCuts</code> and <code>latCuts</code>, data objects that are only visible in our local environment.  <code>makeDisplay()</code> checks the panel and cognostics functions to detect locally stored data and attaches it to the display object so it will be available at the time of rendering.</p>
 
@@ -1471,14 +1338,6 @@ airplaneSplodDat &lt;- makeSplodData(airplane,
    id.vars=c(&quot;dat_ams&quot;, &quot;flight&quot;, &quot;datCut&quot;))
 </code></pre>
 
-<pre><code>* Input data is not &#39;ddf&#39; - attempting to cast it as such
-* Getting basic &#39;ddo&#39; attributes...
-* Getting basic &#39;ddf&#39; attributes...
-* Verifying parameters...
-* Applying division...
-* Getting basic &#39;ddo&#39; attributes...
-</code></pre>
-
 <p>This creates all pairwise groupings of variables not found in <code>id.vars</code> and puts them into a &quot;ddf&quot; object.  </p>
 
 <p>Here&#39;s an example of what a subset looks like:</p>
@@ -1488,36 +1347,22 @@ str(kvExample(airplaneSplodDat))
 </code></pre>
 
 <pre><code>List of 2
- $ : chr &quot;xVar=altitude_p|yVar=altitude&quot;
- $ :Classes &#39;divValue&#39; and &#39;data.frame&#39;:    1479 obs. of  6 variables:
-  ..$ x      : num [1:1479] 327 341 356 365 360 ...
-  ..$ y      : num [1:1479] 354 369 385 393 388 ...
+ $ : chr &quot;xVar=NO3|yVar=org&quot;
+ $ :&#39;data.frame&#39;:   1479 obs. of  6 variables:
+  ..$ x      : num [1:1479] 0.449 0.589 0.536 0.57 0.457 ...
+  ..$ y      : num [1:1479] 9.26 13.29 12.13 12.36 10.11 ...
   ..$ dat_ams: POSIXct[1:1479], format: &quot;2010-06-28 16:25:21&quot; ...
   ..$ flight : chr [1:1479] &quot;am&quot; &quot;am&quot; &quot;am&quot; &quot;am&quot; ...
-  ..$ altCut : chr [1:1479] &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot; &quot;(0,500]&quot; ...
+  ..$ altCut : Factor w/ 6 levels &quot;(0,500]&quot;,&quot;(500,1e+03]&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
   ..$ datCut : chr [1:1479] &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; &quot;06-28/16:15&quot; ...
-  ..- attr(*, &quot;split&quot;)=&#39;data.frame&#39;:    1 obs. of  2 variables:
-  .. ..$ xVar: chr &quot;altitude_p&quot;
-  .. ..$ yVar: chr &quot;altitude&quot;
+  ..- attr(*, &quot;split&quot;)=List of 2
+  .. ..$ xVar: chr &quot;NO3&quot;
+  .. ..$ yVar: chr &quot;org&quot;
 </code></pre>
 
 <p>We can now create a display for this with <code>splod()</code>:</p>
 
 <pre><code class="r">splod(airplaneSplodDat)
-</code></pre>
-
-<pre><code>* Attempting to create directory ... ok
-* Saving connection attributes
-* Directory is empty - use addData() to add k/v pairs to this directory
-* Validating &#39;panelFn&#39;...
-* Testing cognostics function on a subset ... ok
-* Validating plot dimensions...
-* Precomputed limits not supplied.  Computing axis limits...
-* ... skipping this step since both are axes are free ...
-* Getting basic &#39;ddo&#39; attributes...
-* Updating displayList...
-* Storing display object...
-* Plotting thumbnail...
 </code></pre>
 
 <p>This passes <code>airplaneSplodDat</code> to <code>makeDisplay()</code>, with the default name being the same as the name of the data passed in concatenated with &quot;_splod&quot;, a default description of &quot;Scatterplot display&quot;, a cognostics function that computes several scagnostics (see <code>cogScagnostics()</code>), and a default plotting function that simply plots one variable vs. another.  You can override these and pass additional parameters to makeDisplay such as a custom cognostics function.</p>
@@ -1682,7 +1527,7 @@ viewNotebook() # or viewNotebook(name=&quot;index&quot;)
 <p>There is some simple support for this in Trelliscope.  You can initialize a web connection using <code>webConn()</code>, which assumes that your web server is a Linux machine to which you have passwordless ssh capability.  You specify the address of the server, the directory of the VDB, and the name of the VDB under which you would like things stored.</p>
 
 <pre><code class="r"># set up a web connection
-wc &lt;- webConn(user=&quot;rhafen&quot;, ip=&quot;glimmer.rstudio.com&quot;, appDir=&quot;~/ShinyApps&quot;, name=&quot;vdbexample2&quot;)
+wc &lt;- webConn(user=&quot;rhafen&quot;, ip=&quot;glimmer.rstudio.com&quot;, appDir=&quot;~/ShinyApps&quot;, name=&quot;vdbexample&quot;)
 </code></pre>
 
 <p>Now we can sync our VDB with the web:</p>
@@ -1790,15 +1635,14 @@ makeDisplay(byLatLonHDFS,
 <p>If you would like to run through all of the code examples in this documentation without having to pick out each line of code from the text, below are files with the R code for each section.  All but the final section on scalable backends should run on a workstation with no other dependencies but the required R packages.  The scalable backend code requires other components to be installed, such as Hadoop or MongoDB.</p>
 
 <ul>
-<li><a href="docs/code/1intro.R">Getting Started, Trellis Display, VDBs</a></li>
-<li><a href="docs/code/2displays.R">Trelliscope Displays</a></li>
-<li><a href="docs/code/4webnotebook.R">Web Notebooks</a></li>
-<li><a href="docs/code/5misc.R">Scalable Backends</a></li>
+<li><a href="code/1intro.R">Getting Started, Trellis Display, VDBs</a></li>
+<li><a href="code/2displays.R">Trelliscope Displays</a></li>
+<li><a href="code/4webnotebook.R">Web Notebooks</a></li>
+<li><a href="code/5misc.R">Scalable Backends</a></li>
 </ul>
 
 </div>
 
-   
    
    <ul class="pager">
       <li><a href="#" id="previous">&larr; Previous</a></li> 
@@ -1813,13 +1657,13 @@ makeDisplay(byLatLonHDFS,
 <hr>
 
 <div class="footer">
-   <p>&copy; Ryan Hafen, 2013</p>
+   <p>&copy; Ryan Hafen, 2014</p>
 </div>
 </div> <!-- /container -->
 
-<script src="js/jquery.js"></script>
-<script src="bootstrap/js/bootstrap.js"></script>
-<script src="js/jquery.ba-hashchange.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/bootstrap/js/bootstrap.js"></script>
+<script src="assets/js/jquery.ba-hashchange.min.js"></script>
 <script>
 function manageNextPrev() {
    $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);

@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>trelliscope R Function Reference</title>
+    <title>trelliscope  R function reference</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="css/pygment.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/pygment.css" rel="stylesheet">
     <link href='css/highlight.css' rel='stylesheet'>
     <style type="text/css">
       body {
@@ -59,7 +59,7 @@
 */
     </style>
     
-    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -80,11 +80,9 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class=""><a href="index.html">Docs</a></li>
-          <li class="active"><a href="functionref.html">Function Ref</a></li>
-          <li><a href="https://www.github.com/hafen/trelliscope">Github</a></li>
+           <li class=''><a href='index.html'>Docs</a></li><li class='active'><a href='functionref.html'>Function Ref</a></li><li><a href='https://github.com/hafen/trelliscope'>Github</a></li>
         </ul>
-        <p class="myHeader">trelliscope: R Function Reference</p>
+        <p class="myHeader">trelliscope  R function reference</p>
       </div>
 
       <hr>
@@ -216,8 +214,8 @@
 <h3>Trelliscope</h3>
 
 <p><strong>Author:</strong> Ryan Hafen</p>
-<p><strong>Version:</strong> 0.7-1</p>
-<p><strong>Date:</strong> 2013-10-10</p>
+<p><strong>Version:</strong> 0.7.3</p>
+<p><strong>Date:</strong> 2014-03-15</p>
 <p><strong>License:</strong> BSD</p>
 
 <h4>Description</h4>
@@ -852,7 +850,7 @@ getCurCogDat(x, ...)</pre>
   <dt>control</dt>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
-  <code>rhwatch</code> in RHIPE) - see
+  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> in RHIPE) - see
   <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
@@ -1333,7 +1331,7 @@ cogFinal(obj, ...)</pre>
   <dt>control</dt>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
-  <code>rhwatch</code> in RHIPE) - see
+  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> in RHIPE) - see
   <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
@@ -1957,7 +1955,6 @@ cogFinal(obj, ...)</pre>
 
 
    
-   
    <ul class="pager">
       <li><a href="#" id="previous">&larr; Previous</a></li> 
       <li><a href="#" id="next">Next &rarr;</a></li> 
@@ -1971,13 +1968,13 @@ cogFinal(obj, ...)</pre>
 <hr>
 
 <div class="footer">
-   <p>&copy; Ryan Hafen, 2013</p>
+   <p>&copy; Ryan Hafen, 2014</p>
 </div>
 </div> <!-- /container -->
 
-<script src="js/jquery.js"></script>
-<script src="bootstrap/js/bootstrap.js"></script>
-<script src="js/jquery.ba-hashchange.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/bootstrap/js/bootstrap.js"></script>
+<script src="assets/js/jquery.ba-hashchange.min.js"></script>
 <script>
 function manageNextPrev() {
    $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);

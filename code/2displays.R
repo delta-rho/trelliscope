@@ -203,7 +203,6 @@ latLonPanelFn <- function(a) {
 
 # test the panel function on a subset
 kvApply(latLonPanelFn, byLatLon[[2]])
-
 # create the display
 makeDisplay(
    data = byLatLon,

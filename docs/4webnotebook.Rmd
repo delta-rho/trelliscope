@@ -1,3 +1,5 @@
+```
+
 ## Lab Notebooks ##
 
 ### Creating a Notebook ###
@@ -69,7 +71,7 @@ There is some simple support for this in Trelliscope.  You can initialize a web 
 
 ```{r web_conn}
 # set up a web connection
-wc <- webConn(user="rhafen", ip="glimmer.rstudio.com", appDir="~/ShinyApps", name="vdbexample2")
+wc <- webConn(user="rhafen", ip="glimmer.rstudio.com", appDir="~/ShinyApps", name="vdbexample")
 ```
 
 Now we can sync our VDB with the web:
