@@ -7,64 +7,25 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
     <link href="assets/css/pygment.css" rel="stylesheet">
-    <link href='css/highlight.css' rel='stylesheet'>
-    <style type="text/css">
-      body {
-        padding-top: 20px;
-        padding-bottom: 40px;
-      }
+    <!-- font-awesome -->
+    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-      /* Custom container */
-      .container-narrow {
-        margin: 0 auto;
-        max-width: 900px;
-      }
-      .container-narrow > hr {
-        margin: 15px 0 20px 0;
-      }
-      
-      #next {
-         font-size: 14px;
-      }
+    <link href='assets/css/highlight.css' rel='stylesheet'>
 
-      #previous {
-         font-size: 14px;
-      }
-
-      .fref_title {
-         border-bottom:1px solid #EEE;
-      }
-
-      .myHeader {
-         font-family: 'Chivo', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 400;
-         letter-spacing: -1px;
-         font-size: 28px;
-         line-height: 40px;
-         color: #d14;
-         text-shadow: 8px 2px 6 rgba(55, 55, 55, 0.5);
-      }
-
-      .unselectable {
-         -moz-user-select: none;
-         -webkit-user-select: none;
-         -ms-user-select: none;
-      }
-
-/*      #main-content {
-         margin-top: -15px;
-      }
-*/
-    </style>
     
-    <link href="assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
     <![endif]-->
+    
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lustria' rel='stylesheet' type='text/css'> -->
+    <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+    
 
     <!-- Fav and touch icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
@@ -80,7 +41,7 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-           <li class=''><a href='index.html'>Docs</a></li><li class='active'><a href='functionref.html'>Function Ref</a></li><li><a href='https://github.com/hafen/trelliscope'>Github</a></li>
+           <li class=''><a href='index.html'>Docs</a></li><li class='active'><a href='functionref.html'>Function Ref</a></li><li><a href='https://github.com/hafen/trelliscope'>Github <i class='fa fa-github'></i></a></li>
         </ul>
         <p class="myHeader">trelliscope  R function reference</p>
       </div>
@@ -90,7 +51,7 @@
 <div class="container-fluid">
    <div class="row-fluid">
    
-   <div class="span3 well">
+   <div class="col-md-3 well">
    <ul class = "nav nav-list" id="toc">
    <li class='nav-header'>Contents</li> <li class="active">
    <a target="_self" class="nav-not-header" href="#packagemain">Package Info</a>
@@ -206,7 +167,7 @@
    </ul>
    </div>
 
-<div class="span9 tab-content" id="main-content">
+<div class="col-md-9 tab-content" id="main-content">
 
 <!-- packagemain -->   
 <div class="tab-pane active" id="packagemain">
@@ -258,11 +219,11 @@ scagnostics</p>
 
 <h3 class="fref_title">Add a Display to a VDB</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>addDisplay(p, name, group = "common", desc = "", dim = list(height = NULL, width = NULL, 
   aspect = NULL, res = NULL), conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>p</dt>
   <dd>an R plot object (lattice or ggplot) or an
@@ -288,7 +249,7 @@ scagnostics</p>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Add an R display (lattice, ggplot, base R) to a
   visualization database (VDB)</p>
@@ -296,7 +257,7 @@ scagnostics</p>
 
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -308,10 +269,10 @@ scagnostics</p>
 
 <h3 class="fref_title">Apply Cognostics Function to a Key-Value Pair</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>applyCogFn(cogFn, kvSubset)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>cogFn</dt>
   <dd>cognostics function</dd>
@@ -319,19 +280,19 @@ scagnostics</p>
   <dd>key-value pair</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Apply cognostics function to a key-value pair</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#cog'>cog</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -343,10 +304,10 @@ scagnostics</p>
 
 <h3 class="fref_title">Set Up Web Notebook Using Bootstrap</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>bsSetup(pageTitle = "test", title = "test", author = "author name", toc = TRUE, css = NULL)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>pageTitle</dt>
   <dd>the text to display on the title bar of
@@ -362,7 +323,7 @@ scagnostics</p>
   <dd>path to additional style sheets, if desired</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Set up a Twitter Boostrap template for a notebook to be
   typeset with knitr.  This function should be called at
@@ -371,19 +332,19 @@ scagnostics</p>
   file, this will already be there.</p>
 
 
-  <h5>References</h5>
+  <h4>References</h4>
 
   <p>http://twitter.github.com/bootstrap/</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#newnotebook'>newNotebook</a></code>, <code><a href='#typeset'>typeset</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -395,10 +356,10 @@ scagnostics</p>
 
 <h3 class="fref_title">Create a Cognostics Object</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cog(val = NULL, desc = "", type = NULL)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>val</dt>
   <dd>a scalar value (numeric, characer, date,
@@ -410,12 +371,12 @@ scagnostics</p>
   compute (see details)</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>object of class "cog"</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Create a cognostics object.  To be used inside of the
   function passed to the <code>cogFn</code> argument of
@@ -423,7 +384,7 @@ scagnostics</p>
   computed for each subset.</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>Different types of cognostics can be specified through
   the <code>type</code> argument that will effect how the user is
@@ -439,14 +400,14 @@ scagnostics</p>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>, <code><a href='#cogrange'>cogRange</a></code>,
   <code><a href='#cogmean'>cogMean</a></code>, <code><a href='#cogscagnostics'>cogScagnostics</a></code>,
   <code><a href='#cogloessrmse'>cogLoessRMSE</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -458,7 +419,7 @@ scagnostics</p>
 
 <h3 class="fref_title">Methods for Cognostics Connections</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogNcol(x, ...)
 
 cogNrow(x, ...)
@@ -469,18 +430,18 @@ getCogData(x, ...)
 
 getCurCogDat(x, ...)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>x</dt>
   <dd>object</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Methods for Cognostics Connections</p>
 
 
-  <h5>Note</h5>
+  <h4>Note</h4>
 
   <p>These methods are used mainly by the trelliscope viewer
   and therefore must be exported.  They should never need
@@ -496,10 +457,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Compute RMSE of Loess Fit Cognostic</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogLoessRMSE(..., desc = "RMSE of residuals from loess fit")</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>...</dt>
   <dd>arguments to be passed to
@@ -509,7 +470,7 @@ getCurCogDat(x, ...)</pre>
   <dd>description of cognostic</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Compute RMSE of loess fit as a cognostic to be used as
   cognostics in a trelliscope display.</p>
@@ -517,12 +478,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#cog'>cog</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -534,10 +495,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Compute Mean Cognostic</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogMean(x, desc = "mean")</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>x</dt>
   <dd>numeric vector from which to compute the mean</dd>
@@ -545,7 +506,7 @@ getCurCogDat(x, ...)</pre>
   <dd>description of cognostic</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Compute mean to be used as cognostics in a trelliscope
   display.</p>
@@ -553,12 +514,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#cog'>cog</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -570,10 +531,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Compute Range Cognostic</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogRange(x, desc = "range (max - min)")</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>x</dt>
   <dd>numeric vector from which to compute the range</dd>
@@ -581,7 +542,7 @@ getCurCogDat(x, ...)</pre>
   <dd>description of cognostic</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Compute range to be used as cognostics in a trelliscope
   display.</p>
@@ -589,12 +550,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#cog'>cog</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -606,10 +567,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Compute Scagnostics</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogScagnostics(x, y)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>x,y</dt>
   <dd></dd>
@@ -617,7 +578,7 @@ getCurCogDat(x, ...)</pre>
   <dd>description of cognostic</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Compute list of scagnostics (see
   <code><cite>scagnostics</cite></code>) to be used as cognostics in a
@@ -626,12 +587,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#cog'>cog</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -643,20 +604,20 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Initiate Data Frame Cognostics Connection</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>dfCogConn()</pre>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>"cogConn" object of class "dfCogConn"</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Initiate data frame cognostics connection</p>
 
 
-  <h5>Note</h5>
+  <h4>Note</h4>
 
   <p>This should never need to be called explicitly.  It is
   the default mechanism for storing cognostics in
@@ -665,12 +626,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -682,10 +643,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">base64 Encoding of a .png File</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>encodePNG(plotLoc)</pre>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>base64 Encoding of a .png File</p>
 
@@ -699,10 +660,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Retrieve Display Object from VDB</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>getDisplay(name, group = NULL, conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>the name of the display</dd>
@@ -715,12 +676,12 @@ getCurCogDat(x, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Retrieve a display object from a VDB.</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>If a display is uniquely determined by its name, then
   group is not required.</p>
@@ -728,12 +689,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>, <code><a href='#removedisplay'>removeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -745,10 +706,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">List Displays in a VDB</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>listDisplays(conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>conn</dt>
   <dd>VDB connection info, typically stored in
@@ -757,20 +718,20 @@ getCurCogDat(x, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>List displays in a VDB.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>, <code><a href='#adddisplay'>addDisplay</a></code>,
   <code><a href='#removedisplay'>removeDisplay</a></code>, <code><a href='#view'>view</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -782,13 +743,13 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Create a Trelliscope Display</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>makeDisplay(data, name, group = "common", desc = "", panelDim = list(height = NULL, 
   width = NULL, aspect = NULL, res = NULL), panelFn = NULL, lims = list(x = "free", 
   y = "free", prepanelFn = NULL), cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(), 
   output = NULL, conn = getOption("vdbConn"), verbose = TRUE, control = NULL)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>data</dt>
   <dd>data of class "ddo" or "ddf" (see
@@ -850,18 +811,18 @@ getCurCogDat(x, ...)</pre>
   <dt>control</dt>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
-  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> in RHIPE) - see
+  <code>rhwatch</code> in RHIPE) - see
   <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Create a trelliscope display and add it to a
   visualization database (VDB)</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>Many of the parameters are optional or have defaults.
   For several examples, see the documentation on github:
@@ -882,13 +843,13 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#prepanel'>prepanel</a></code>, <code><a href='#setlims'>setLims</a></code>,
   <code>inputVars</code>, <code>divide</code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -900,10 +861,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Make a png for a Subset</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>makePNG(dat, panelFn = NULL, file, width, height, res, lims = NULL)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>dat</dt>
   <dd>a key-value pair</dd>
@@ -917,7 +878,7 @@ getCurCogDat(x, ...)</pre>
   <dd>axis limits</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Make a png for a subset of an object of class "ddo" or
   "ddf".  The user should never need to call this directly,
@@ -927,12 +888,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -944,10 +905,10 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Create Data Plottable by splod</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>makeSplodData(data, id.vars = NULL, ...)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>data</dt>
   <dd>a data.frame</dd>
@@ -956,31 +917,31 @@ getCurCogDat(x, ...)</pre>
   pairs of variables</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>an object of class 'localDiv' and 'splodDat' that can be
   passed to <code><a href='#splod'>splod</a></code></p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Create pairwise scatterplot data plottable by splod</p>
 
 
-  <h5>References</h5>
+  <h4>References</h4>
 
   <p>Wilkinson's scagnostics paper.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#splod'>splod</a></code>, <code>trsCogFn</code>,
   <code><a href='#splodpanelfn'>splodPanelFn</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -992,22 +953,22 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Initiate a MongoDB Cognostics Connection</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>mongoCogConn(host = "127.0.0.1", user = "", pass = "", name = "", db = "")</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>host,user,pass,name,db</dt>
   <dd>parameters used to initiate
   MongoDB connection (see <code>mongo.create</code>)</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>a "cogConn" object of class "cogMongoConn"</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Initiate a MongoDB cognostics connection, to be passed as
   the <code>cogConn</code> argument to <code><a href='#makedisplay'>makeDisplay</a></code>.</p>
@@ -1015,12 +976,12 @@ getCurCogDat(x, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1032,7 +993,7 @@ getCurCogDat(x, ...)</pre>
 
 <h3 class="fref_title">Methods Used in MapReduce for makeDisplay</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>cogPre(obj, ...)
 
 cogEmit(obj, ...)
@@ -1041,7 +1002,7 @@ cogCollect(obj, ...)
 
 cogFinal(obj, ...)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>obj</dt>
   <dd>object</dd>
@@ -1053,7 +1014,7 @@ cogFinal(obj, ...)</pre>
   <dd>object</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Methods Used in MapReduce for makeDisplay</p>
 
@@ -1073,10 +1034,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Make Single Display in a Notebook</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>nbDisplay(name, group = NULL, conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>a vector of display names to be in the list</dd>
@@ -1089,7 +1050,7 @@ cogFinal(obj, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Make html code to show a large plot of a single display
   in a web notebook.  To be used inside of a notebook .Rmd
@@ -1098,12 +1059,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#typeset'>typeset</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1115,10 +1076,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Make a List of Displays in a Notebook</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>nbDisplayList(name, group = NULL, conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>a vector of display names to be in the list</dd>
@@ -1131,7 +1092,7 @@ cogFinal(obj, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Make html code to display a list of displays in a web
   notebook.  To be used inside of a notebook .Rmd file.</p>
@@ -1139,12 +1100,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#typeset'>typeset</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1156,12 +1117,12 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Create a New Notebook File</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>newNotebook(name = "index", blank = FALSE, title = "My Test Page", pageTitle = title, 
   author = "Author Name", toc = TRUE, css = NULL, conn = getOption("vdbConn"), 
   overwrite = FALSE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>name of the .Rmd file to be created</dd>
@@ -1184,26 +1145,26 @@ cogFinal(obj, ...)</pre>
   overwritten?</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>creates a new .Rmd file that will go in the "notebook"
   directory of the vdb directory</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Create a new notebook file skeleton.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#typeset'>typeset</a></code>, <code><a href='#viewnotebook'>viewNotebook</a></code>,
   <code><a href='#bssetup'>bsSetup</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1215,10 +1176,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Remove Margins from Trellis/Lattice Plot</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>noMargins(..., topkey = FALSE, rightkey = FALSE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>...</dt>
   <dd>a list of other parameters to be passed to
@@ -1230,7 +1191,7 @@ cogFinal(obj, ...)</pre>
   key?</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Removes whitespace surrounding a trellis plot.  Ideal for
   <code><a href='#makedisplay'>makeDisplay</a></code> because when tiling multiple
@@ -1239,12 +1200,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='http://www.inside-r.org/r-doc/lattice/xyplot'>xyplot</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1256,11 +1217,11 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Plot results form prepanel</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>plot(lims, layout = c(2, 2), as.table = TRUE, strip = FALSE, strip.left = TRUE, between = list(y = 0.25), 
   xlab = "Rank", ylab = "Panel Limits", ...)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>lims</dt>
   <dd>object of class "trsPre" created by
@@ -1272,17 +1233,17 @@ cogFinal(obj, ...)</pre>
   want fine control)</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>object of class "trellis" (plotted by default)</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Plot results form prepanel</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>This function plots the sorted axis ranges for the x and
   y axis for the case of "same" (all axis limits share the
@@ -1293,12 +1254,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#prepanel'>prepanel</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1310,10 +1271,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Prepanel Function for Trelliscope Displays</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>prepanel(data, prepanelFn = NULL, control = NULL, verbose = TRUE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>dat</dt>
   <dd>an object of class "localDiv" or "rhData"</dd>
@@ -1331,12 +1292,12 @@ cogFinal(obj, ...)</pre>
   <dt>control</dt>
   <dd>parameters specifying how the backend
   should handle things (most-likely parameters to
-  <code><a href='http://www.inside-r.org/r-doc/Rhipe/rhwatch'>rhwatch</a></code> in RHIPE) - see
+  <code>rhwatch</code> in RHIPE) - see
   <code>rhipeControl</code> and
   <code>localDiskControl</code></dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>object of class "trsPre".  This is a list of the x and y
   axis ranges for each split, along with the aspect ratio
@@ -1345,7 +1306,7 @@ cogFinal(obj, ...)</pre>
   <code><a href='#plottrspre'>plot.trsPre</a></code> and <code><a href='#setlims'>setLims</a></code>.</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Apply a prepanel function to objects of class "ddo" or
   "ddf" to determine ranges of x and y axis limits prior to
@@ -1354,7 +1315,7 @@ cogFinal(obj, ...)</pre>
   <code><a href='#setlims'>setLims</a></code>.</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>The plot method plots the sorted axis ranges for the x
   and y axis for the case of "same" (all axis limits share
@@ -1384,13 +1345,13 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='http://www.inside-r.org/r-doc/ggplot2/aes_position'>x</a></code> <code><a href='#plottrspre'>plot.trsPre</a></code>,
   <code><a href='#setlims'>setLims</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1402,10 +1363,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">S3method print displayObj</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>print.displayObj(x, ...)</pre>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>S3method print displayObj</p>
 
@@ -1419,10 +1380,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Remove a Display from a VDB</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>removeDisplay(name = NULL, group = NULL, conn = getOption("vdbConn"), verbose = TRUE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>the name of the display</dd>
@@ -1438,12 +1399,12 @@ cogFinal(obj, ...)</pre>
   being done</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Remove a display from a VDB.</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>If a display is uniquely determined by its name, then
   group is not required.</p>
@@ -1451,12 +1412,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>, <code><a href='#removedisplay'>removeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1468,11 +1429,11 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Specify Rules for x and y Limits for a Display</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>setLims(lims, x = "same", y = "same", xQuant = c(0, 1), yQuant = c(0, 1), xRangeQuant = 1, 
   yRangeQuant = 1, prop = 0.07)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>lims</dt>
   <dd>object of class "trsPre"</dd>
@@ -1497,13 +1458,13 @@ cogFinal(obj, ...)</pre>
   <dd>same as xQuantRange but for y-axis</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>object of class "trsLims", which can be used in a call to
   <code><a href='#makedisplay'>makeDisplay</a></code></p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Based on results from <code><a href='#prepanel'>prepanel</a></code>, specify
   rules that will determine x and y axis limits to be
@@ -1511,7 +1472,7 @@ cogFinal(obj, ...)</pre>
   <code><a href='#makedisplay'>makeDisplay</a></code>.</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>This function reduces the list of axis limits computed
   for each split of a data set to an overall axis limit
@@ -1532,12 +1493,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#prepanel'>prepanel</a></code>, <code><a href='#makedisplay'>makeDisplay</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1549,11 +1510,11 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Create a Scatterplot Display</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>splod(data, id.vars = NULL, name = NULL, desc = NULL, cogFn = splodCogFn, panelFn = splodPanelFn, 
   verbose = TRUE, ...)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>data</dt>
   <dd>a data.frame or an object of class
@@ -1566,31 +1527,31 @@ cogFinal(obj, ...)</pre>
   parameters passed to <code><a href='#makedisplay'>makeDisplay</a></code></dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>an object of class 'localDiv' that can be passed to
   <code><a href='#splod'>splod</a></code></p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Create a scatterplot display (splod)</p>
 
 
-  <h5>References</h5>
+  <h4>References</h4>
 
   <p>Wilkinson's scagnostics paper.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#makedisplay'>makeDisplay</a></code>, <code>makeSplodDat</code>,
   <code>trsCogFn</code>, <code><a href='#splodpanelfn'>splodPanelFn</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1602,40 +1563,40 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Default Cognostics Function for splod</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>splodCogFn(df)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>df</dt>
   <dd>a subset of data created by
   <code><a href='#makesploddata'>makeSplodData</a></code></dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>a data.frame of scagnostics for the given subset</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Default cognostics function for splod</p>
 
 
-  <h5>References</h5>
+  <h4>References</h4>
 
   <p>Wilkinson's scagnostics paper.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#splodpanelfn'>splodPanelFn</a></code>, <code><a href='#splod'>splod</a></code>,
   <code><a href='#makesploddata'>makeSplodData</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1647,41 +1608,41 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Default Plot Function for splod</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>splodPanelFn(df)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>df</dt>
   <dd>a subset of data created by
   <code><a href='#makesploddata'>makeSplodData</a></code></dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>a trellis plot object of a scatterplot for the given
   subset</p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Default plot function for splod</p>
 
 
-  <h5>References</h5>
+  <h4>References</h4>
 
   <p>Wilkinson's scagnostics paper.</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#splodcogfn'>splodCogFn</a></code>, <code><a href='#splod'>splod</a></code>,
   <code><a href='#makesploddata'>makeSplodData</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1693,10 +1654,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Typeset a notebook (.Rmd) File</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>typeset(name = "index", conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>file</dt>
   <dd>file name (extension of .Rmd is not
@@ -1708,14 +1669,14 @@ cogFinal(obj, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Value</h5>
+  <h4>Value</h4>
 
   <p>output .html file goes in the "notebook" directory of the
   vdb directory, to be viewed with
   <code><a href='#viewnotebook'>viewNotebook</a></code></p>
 
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Processes a .Rmd file created with
   <code><a href='#newnotebook'>newNotebook</a></code>.  Basically a wrapper around
@@ -1725,12 +1686,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#viewnotebook'>viewNotebook</a></code>, <code><a href='#newnotebook'>newNotebook</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1742,10 +1703,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Connect to a VDB</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>vdbConn(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose = TRUE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>path</dt>
   <dd>The path on the local file system where the
@@ -1765,19 +1726,19 @@ cogFinal(obj, ...)</pre>
   being done</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Connect to a visualization catabase</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code>updateViewer</code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1789,10 +1750,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">View a Display or Run Shiny Display Viewer</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>view(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption("vdbConn"))</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name,</dt>
   <dd>group optional parameters to load the viewer
@@ -1809,14 +1770,14 @@ cogFinal(obj, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>View a display or run Shiny display viewer</p>
 
 
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1828,10 +1789,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">View a Notebook File</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>viewNotebook(name = "index", conn = getOption("vdbConn"), local = TRUE)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>name</dt>
   <dd>name of the notebook file (.html extension
@@ -1843,7 +1804,7 @@ cogFinal(obj, ...)</pre>
   exists</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Use <code><a href='http://www.inside-r.org/r-doc/utils/browseURL'>browseURL</a></code> to open a notebook .html file
   that is in the "notebook" directory of the vdb directory
@@ -1854,12 +1815,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#newnotebook'>newNotebook</a></code>, <code><a href='#typeset'>typeset</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1871,10 +1832,10 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Initialize a Web Connection</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>webConn(user = NULL, ip, appDir, name)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>user</dt>
   <dd>the username to log on to the web server</dd>
@@ -1888,19 +1849,19 @@ cogFinal(obj, ...)</pre>
   application</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Initialize a connection to a web server</p>
 
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#websync'>websync</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1912,11 +1873,11 @@ cogFinal(obj, ...)</pre>
 
 <h3 class="fref_title">Sync VDB and notebook Files to a Web Server</h3>
 
-<h5>Usage</h5>
+<h4>Usage</h4>
 <pre>websync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"), verbose = FALSE, 
   rsync = NULL)</pre>
 
-<h5>Arguments</h5>
+<h4>Arguments</h4>
 <dl>
   <dt>vdbConn</dt>
   <dd>VDB connection settings</dd>
@@ -1928,12 +1889,12 @@ cogFinal(obj, ...)</pre>
   <dd>location of rsync binary</dd>
 </dl>
 
-  <h5>Description</h5>
+  <h4>Description</h4>
 
   <p>Sync VDB and notebook files to a web server</p>
 
 
-  <h5>Details</h5>
+  <h4>Details</h4>
 
   <p>If you are syncing via ssh, this only works if public key
   authentication is enabled between your local machine and
@@ -1942,12 +1903,12 @@ cogFinal(obj, ...)</pre>
 
 
 
-<h5>See also</h5>
+<h4>See also</h4>
 
   <code><a href='#typeset'>typeset</a></code>, <code><a href='#webconn'>webConn</a></code>
 
 
-<h5>Author</h5>
+<h4>Author</h4>
 
   Ryan Hafen
 
@@ -1975,43 +1936,7 @@ cogFinal(obj, ...)</pre>
 <script src="assets/js/jquery.js"></script>
 <script src="assets/bootstrap/js/bootstrap.js"></script>
 <script src="assets/js/jquery.ba-hashchange.min.js"></script>
-<script>
-function manageNextPrev() {
-   $('a#next').parent().toggleClass('disabled', $('#toc.nav li.active').nextAll('li:not(.nav-header)').size() == 0);
-   $('a#previous').parent().toggleClass('disabled', $('#toc.nav li.active').prevAll('li:not(.nav-header)').size() == 0);
-   $("html, body").animate({ scrollTop: 0 }, "fast");
-}
-manageNextPrev();
+<script src="assets/js/nav.js"></script>
 
-$('a#next').click(function(e) {
-   e.preventDefault();
-   location.href = $('#toc.nav li.active').nextAll('li:not(.nav-header)').first().find('a').attr('href');
-   manageNextPrev();
-});
-$('a#previous').click(function(e) {
-   e.preventDefault();
-   location.href = $('#toc.nav li.active').prevAll('li:not(.nav-header)').first().find('a').attr('href');
-   manageNextPrev();
-});
-
-$(window).hashchange(function() {
-  $('.tab-pane').hide();
-  var tab = location.hash || '#packagemain';
-  $(tab + '.tab-pane').show();
-
-  $('#toc.nav li.active').removeClass('active');
-  $('#toc.nav li a[href="' + tab + '"]').parent().addClass('active');
-  manageNextPrev();
-});
-$(window).hashchange();
-
-$('li.nav-header').dblclick(function(e) {
-   var url = $(this).data('edit-href');
-   if(url!="")
-      window.open(url, '', '');
-   return false;
-});
-
-</script>
 </body>
 </html>

@@ -25,7 +25,7 @@ References:
 [rhipe]: http://github.com/saptarshiguha/RHIPE
 [datadr]: http://github.com/hafen/datadr
 [datadr.org]: http://datadr.org
-[trspaper]: http://datadr.org/documents/trelliscope.pdf
+[trspaper]: http://ml.stat.purdue.edu/gaby/trelliscope.ldav.2013.pdf
 [drpaper]: http://onlinelibrary.wiley.com/doi/10.1002/sta4.7/full
 [vdbpaper]: http://jmlr.csail.mit.edu/proceedings/papers/v5/guha09a/guha09a.pdf
 [trellis]: http://www.cs.ubc.ca/~tmm/courses/infovis/readings/trellis.jstor.pdf

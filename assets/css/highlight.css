@@ -1,17 +1,9 @@
 /* Syntax highlighting ---------------------------------------------------- */
 
-/*pre .input {
-  border-left: 3px solid #ccc;
-  padding-left: 0.5em;
-}
-pre .output {
-  background-color: #eee;
-}*/
-
 .number { color: #FF6600; }
 .functioncall {color:#264D66 ;}
 .string { color: #CC3300; }
-.keyword {  color: #006699; font-weight: bold; }
+.keyword {  color: #006699; font-weight: normal; }
 .argument {color:#264D66 ;}
 .comment {  color: #0099FF; font-style: italic; }
 .formalargs {color: #264D66;}
@@ -20,9 +12,3 @@ pre .output {
 .symbol {color:black ;}
 .prompt {color:black ;}
 
-pre img { 
-  background-color: #fff;
-  border: 1px solid #ccc;
-  display: block;
-  margin: 0.5em auto 0.5em auto;
-}

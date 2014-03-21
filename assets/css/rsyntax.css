@@ -1,0 +1,19 @@
+pre .operator,
+pre .paren { color: #555555 }
+
+pre .literal {
+   color: rgb(88, 72, 246); font-weight: bold;
+}
+/*       pre .literal { color: #006699; font-weight: bold } */
+
+pre .number { color: #FF6600 }
+/*       pre .comment { color: #0099FF; font-style: italic }*/
+pre .comment { color: #999; font-style: italic }
+pre .keyword { color: #006699; font-weight: bold }
+
+pre .identifier {
+   color: rgb(0, 0, 0);
+}
+
+pre .string { color: #CC3300 }
+
