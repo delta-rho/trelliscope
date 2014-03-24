@@ -2,8 +2,7 @@
 \alias{nbDisplayList}
 \title{Make a List of Displays in a Notebook}
 \usage{
-  nbDisplayList(name, group = NULL,
-    conn = getOption("vdbConn"))
+nbDisplayList(name, group = NULL, conn = getOption("vdbConn"))
 }
 \arguments{
   \item{name}{a vector of display names to be in the list}
@@ -16,13 +15,13 @@
   exists}
 }
 \description{
-  Make html code to display a list of displays in a web
-  notebook.  To be used inside of a notebook .Rmd file.
+Make html code to display a list of displays in a web
+notebook.  To be used inside of a notebook .Rmd file.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{typeset}}, \code{\link{newNotebook}}
+\code{\link{typeset}}, \code{\link{newNotebook}}
 }
 

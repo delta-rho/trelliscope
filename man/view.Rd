@@ -2,8 +2,8 @@
 \alias{view}
 \title{View a Display or Run Shiny Display Viewer}
 \usage{
-  view(name = NULL, group = NULL, openBrowser = TRUE,
-    conn = getOption("vdbConn"))
+view(name = NULL, group = NULL, openBrowser = TRUE,
+  conn = getOption("vdbConn"))
 }
 \arguments{
   \item{name,}{group optional parameters to load the viewer
@@ -20,9 +20,9 @@
   exists}
 }
 \description{
-  View a display or run Shiny display viewer
+View a display or run Shiny display viewer
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 

@@ -5,13 +5,13 @@
 \alias{cogPre}
 \title{Methods Used in MapReduce for makeDisplay}
 \usage{
-  cogPre(obj, ...)
+cogPre(obj, ...)
 
-  cogEmit(obj, ...)
+cogEmit(obj, ...)
 
-  cogCollect(obj, ...)
+cogCollect(obj, ...)
 
-  cogFinal(obj, ...)
+cogFinal(obj, ...)
 }
 \arguments{
   \item{obj}{object}
@@ -23,12 +23,12 @@
   \item{obj}{object}
 }
 \description{
-  Methods Used in MapReduce for makeDisplay
+Methods Used in MapReduce for makeDisplay
 
-  Methods Used in MapReduce for makeDisplay
+Methods Used in MapReduce for makeDisplay
 
-  Methods Used in MapReduce for makeDisplay
+Methods Used in MapReduce for makeDisplay
 
-  Methods Used in MapReduce for makeDisplay
+Methods Used in MapReduce for makeDisplay
 }
 

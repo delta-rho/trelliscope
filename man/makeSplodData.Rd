@@ -2,7 +2,7 @@
 \alias{makeSplodData}
 \title{Create Data Plottable by splod}
 \usage{
-  makeSplodData(data, id.vars = NULL, ...)
+makeSplodData(data, id.vars = NULL, ...)
 }
 \arguments{
   \item{data}{a data.frame}
@@ -11,20 +11,20 @@
   pairs of variables}
 }
 \value{
-  an object of class 'localDiv' and 'splodDat' that can be
-  passed to \code{\link{splod}}
+an object of class 'localDiv' and 'splodDat' that can be
+passed to \code{\link{splod}}
 }
 \description{
-  Create pairwise scatterplot data plottable by splod
+Create pairwise scatterplot data plottable by splod
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \references{
-  Wilkinson's scagnostics paper.
+Wilkinson's scagnostics paper.
 }
 \seealso{
-  \code{\link{splod}}, \code{\link{trsCogFn}},
-  \code{\link{splodPanelFn}}
+\code{\link{splod}}, \code{\link{trsCogFn}},
+\code{\link{splodPanelFn}}
 }
 

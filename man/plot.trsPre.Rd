@@ -2,10 +2,9 @@
 \alias{plot.trsPre}
 \title{Plot results form prepanel}
 \usage{
-  \method{plot}{trsPre} (lims, layout = c(2, 2),
-    as.table = TRUE, strip = FALSE, strip.left = TRUE,
-    between = list(y = 0.25), xlab = "Rank",
-    ylab = "Panel Limits", ...)
+\method{plot}{trsPre}(lims, layout = c(2, 2), as.table = TRUE,
+  strip = FALSE, strip.left = TRUE, between = list(y = 0.25),
+  xlab = "Rank", ylab = "Panel Limits", ...)
 }
 \arguments{
   \item{lims}{object of class "trsPre" created by
@@ -17,17 +16,17 @@
   want fine control)}
 }
 \value{
-  object of class "trellis" (plotted by default)
+object of class "trellis" (plotted by default)
 }
 \description{
-  Plot results form prepanel
+Plot results form prepanel
 }
 \details{
-  This function plots the sorted axis ranges for the x and
-  y axis for the case of "same" (all axis limits share the
-  same range) and "sliced" (all axis limits share the) and
-  can be useful in helping determine how to ultimately set
-  the limits.
+This function plots the sorted axis ranges for the x and y
+axis for the case of "same" (all axis limits share the same
+range) and "sliced" (all axis limits share the) and can be
+useful in helping determine how to ultimately set the
+limits.
 }
 \examples{
 \dontrun{
@@ -43,9 +42,9 @@ plot(irisPre)
 }
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{prepanel}}, \code{\link{makeDisplay}}
+\code{\link{prepanel}}, \code{\link{makeDisplay}}
 }
 

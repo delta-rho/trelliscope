@@ -2,8 +2,7 @@
 \alias{viewNotebook}
 \title{View a Notebook File}
 \usage{
-  viewNotebook(name = "index", conn = getOption("vdbConn"),
-    local = TRUE)
+viewNotebook(name = "index", conn = getOption("vdbConn"), local = TRUE)
 }
 \arguments{
   \item{name}{name of the notebook file (.html extension
@@ -15,16 +14,16 @@
   exists}
 }
 \description{
-  Use \code{\link{browseURL}} to open a notebook .html file
-  that is in the "notebook" directory of the vdb directory
-  and that has typically been created with
-  \code{\link{newNotebook}} and typeset with
-  \code{\link{typeset}}.
+Use \code{\link{browseURL}} to open a notebook .html file
+that is in the "notebook" directory of the vdb directory
+and that has typically been created with
+\code{\link{newNotebook}} and typeset with
+\code{\link{typeset}}.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{newNotebook}}, \code{\link{typeset}}
+\code{\link{newNotebook}}, \code{\link{typeset}}
 }
 

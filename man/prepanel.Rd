@@ -2,8 +2,7 @@
 \alias{prepanel}
 \title{Prepanel Function for Trelliscope Displays}
 \usage{
-  prepanel(data, prepanelFn = NULL, control = NULL,
-    verbose = TRUE)
+prepanel(data, prepanelFn = NULL, control = NULL, verbose = TRUE)
 }
 \arguments{
   \item{dat}{an object of class "localDiv" or "rhData"}
@@ -26,44 +25,42 @@
   \code{\link{localDiskControl}}}
 }
 \value{
-  object of class "trsPre".  This is a list of the x and y
-  axis ranges for each split, along with the aspect ratio
-  banking value if \code{dx} and \code{dy} are supplied in
-  \code{prepanelFn}.  Can be used with
-  \code{\link{plot.trsPre}} and \code{\link{setLims}}.
+object of class "trsPre".  This is a list of the x and y
+axis ranges for each split, along with the aspect ratio
+banking value if \code{dx} and \code{dy} are supplied in
+\code{prepanelFn}.  Can be used with
+\code{\link{plot.trsPre}} and \code{\link{setLims}}.
 }
 \description{
-  Apply a prepanel function to objects of class "ddo" or
-  "ddf" to determine ranges of x and y axis limits prior to
-  creating a trelliscope display
-  (\code{\link{makeDisplay}}).  Useful in conjunction with
-  \code{\link{setLims}}.
+Apply a prepanel function to objects of class "ddo" or
+"ddf" to determine ranges of x and y axis limits prior to
+creating a trelliscope display (\code{\link{makeDisplay}}).
+Useful in conjunction with \code{\link{setLims}}.
 }
 \details{
-  The plot method plots the sorted axis ranges for the x
-  and y axis for the case of "same" (all axis limits share
-  the same range) and "sliced" (all axis limits share the)
-  and can be useful in helping determine how to ultimately
-  set the limits.
+The plot method plots the sorted axis ranges for the x and
+y axis for the case of "same" (all axis limits share the
+same range) and "sliced" (all axis limits share the) and
+can be useful in helping determine how to ultimately set
+the limits.
 
-  You do not need to use \code{prepanel()} to ultimately
-  create a display with \code{\link{makeDisplay()}}, but if
-  you bypass, you will either need to specify your own
-  limits in your plot command, or do nothing, in which case
-  each individual plot will have limits based on the data
-  in the split being plotted (the axes will be "free").
+You do not need to use \code{prepanel()} to ultimately
+create a display with \code{\link{makeDisplay()}}, but if
+you bypass, you will either need to specify your own limits
+in your plot command, or do nothing, in which case each
+individual plot will have limits based on the data in the
+split being plotted (the axes will be "free").
 
-  Axis limits are very important.  What makes viewing
-  groups of plots of subsets of data ("small multiples") so
-  powerful is being able to make meaningful visual
-  comparisons across plots.  This is much easier to do if
-  scales for each plot are commensurate.
+Axis limits are very important.  What makes viewing groups
+of plots of subsets of data ("small multiples") so powerful
+is being able to make meaningful visual comparisons across
+plots.  This is much easier to do if scales for each plot
+are commensurate.
 
-  This function is also useful for identifying subsets with
-  very large outlying values, and in conjunction with
-  \code{\link{setLims}}, allows you to account for that
-  prior to the expensive process of creating all of the
-  plots.
+This function is also useful for identifying subsets with
+very large outlying values, and in conjunction with
+\code{\link{setLims}}, allows you to account for that prior
+to the expensive process of creating all of the plots.
 }
 \examples{
 \dontrun{
@@ -78,10 +75,10 @@ irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 plot(irisPre)#' }
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{x}} \code{\link{plot.trsPre}},
-  \code{\link{setLims}}, \code{\link{makeDisplay}}
+\code{\link{x}} \code{\link{plot.trsPre}},
+\code{\link{setLims}}, \code{\link{makeDisplay}}
 }
 

@@ -2,9 +2,8 @@
 \alias{addDisplay}
 \title{Add a Display to a VDB}
 \usage{
-  addDisplay(p, name, group = "common", desc = "",
-    dim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
-    conn = getOption("vdbConn"))
+addDisplay(p, name, group = "common", desc = "", dim = list(height = NULL,
+  width = NULL, aspect = NULL, res = NULL), conn = getOption("vdbConn"))
 }
 \arguments{
   \item{p}{an R plot object (lattice or ggplot) or an
@@ -30,13 +29,13 @@
   exists}
 }
 \description{
-  Add an R display (lattice, ggplot, base R) to a
-  visualization database (VDB)
+Add an R display (lattice, ggplot, base R) to a
+visualization database (VDB)
 }
 \examples{
 # see docs
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 

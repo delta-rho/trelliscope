@@ -2,7 +2,7 @@
 \alias{cogMean}
 \title{Compute Mean Cognostic}
 \usage{
-  cogMean(x, desc = "mean")
+cogMean(x, desc = "mean")
 }
 \arguments{
   \item{x}{numeric vector from which to compute the mean}
@@ -10,16 +10,16 @@
   \item{desc}{description of cognostic}
 }
 \description{
-  Compute mean to be used as cognostics in a trelliscope
-  display.
+Compute mean to be used as cognostics in a trelliscope
+display.
 }
 \examples{
 cogMean(rnorm(100))
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{cog}}
+\code{\link{cog}}
 }
 

@@ -18,10 +18,11 @@ print.displayObj <- function(x, ...) {
 #' 
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 #' @export
-getDisplay <- function(name, group=NULL, conn = getOption("vdbConn")) {
+getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
+
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
    
-   displayInfo <- findDisplay(name=name, group=group, conn=conn)
+   displayInfo <- findDisplay(name = name, group = group, conn = conn)
    vdbPrefix <- conn$path
    
    load(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "displayObj.Rdata"))
@@ -31,12 +32,12 @@ getDisplay <- function(name, group=NULL, conn = getOption("vdbConn")) {
    if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
       cn <- getAttribute(displayObj$panelDataSource, "conn")
       if(!file.exists(cn$loc)) {
-         tmp <- file.path(conn$path, "displays", displayObj$group, displayObj$name, "panels")
+         tmp <- file.path(conn$path, "data", basename(cn$loc))
          if(file.exists(tmp)) {
             if(inherits(displayObj$panelDataSource, "ddf")) {
-               displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset=TRUE, verbose=FALSE), verbose=FALSE)
+               displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
             } else {
-               displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset=TRUE, verbose=FALSE), verbose=FALSE)
+               displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
             }
          }
       }
@@ -60,13 +61,13 @@ getDisplay <- function(name, group=NULL, conn = getOption("vdbConn")) {
 #' 
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 #' @export
-removeDisplay <- function(name=NULL, group=NULL, conn=getOption("vdbConn"), verbose=TRUE) {
+removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), verbose = TRUE) {
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
    
    displayInfo <- findDisplay(name, group, conn)
    vdbPrefix <- conn$path
    
-   displayList[paste(displayInfo$group, displayInfo$name, sep="_")] <- NULL
+   displayList[paste(displayInfo$group, displayInfo$name, sep = "_")] <- NULL
    
    ind <- which(
       displayListDF$name == displayInfo$name 
@@ -74,9 +75,9 @@ removeDisplay <- function(name=NULL, group=NULL, conn=getOption("vdbConn"), verb
    
    displayListDF <- displayListDF[-ind,]
    
-   unlink(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name), recursive=TRUE)
+   unlink(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name), recursive = TRUE)
 
-   save(displayList, displayListDF, displayListNames, file=file.path(conn$path, "displays", "_displayList.Rdata"))
+   save(displayList, displayListDF, displayListNames, file = file.path(conn$path, "displays", "_displayList.Rdata"))
    
    if(verbose)
       message("* Display removed successfully")
@@ -92,18 +93,18 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
    
    errStr <- ""
    if(is.null(group)) {
-      curDisplay <- which(displayListDF$name==name)
+      curDisplay <- which(displayListDF$name == name)
    } else {
-      curDisplay <- which(displayListDF$name==name & displayListDF$group==group)
-      errStr <- paste(" from group \"", group, "\"", sep="")
+      curDisplay <- which(displayListDF$name == name & displayListDF$group == group)
+      errStr <- paste(" from group \"", group, "\"", sep = "")
    }
 
    if(length(curDisplay) == 0) {
-      stop(paste("The display \"", name, "\"", errStr, " wasn't found.", sep=""))
+      stop(paste("The display \"", name, "\"", errStr, " wasn't found.", sep = ""))
       return(NA)
    } else if (length(curDisplay) > 1) {
       if(is.null(group)) {
-         stop(paste("There is more than one display of name \"", name, "\".  Try specifying a group as well.", sep=""))
+         stop(paste("There is more than one display of name \"", name, "\".  Try specifying a group as well.", sep = ""))
          return(NA)
       } else {
          stop(paste("There is more than one display of name \"", name, "\" from group \"", group, "\".  This should not be possible"))
@@ -111,7 +112,7 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
       }
    } else {
       curDisplay <- displayListDF[curDisplay,]
-      return(list(name=curDisplay$name, group=curDisplay$group))
+      return(list(name = curDisplay$name, group = curDisplay$group))
    }
 }
 
@@ -132,7 +133,7 @@ listDisplays <- function(conn = getOption("vdbConn")) {
    rownames(tmp) <- NULL
    # tmp[,"updated"] <- substr(tmp[,"updated"], 1, 16)
    tmp[is.na(tmp[,"dataClass"]),"dataClass"] <- "none (R plot)"
-   tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),,drop=FALSE]
+   tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),,drop = FALSE]
    
    nc <- ncol(tmp)
    sepWidth <- (nc - 1) * 3
@@ -152,7 +153,7 @@ listDisplays <- function(conn = getOption("vdbConn")) {
          tmp <- tmp[,which(colnames(tmp) != "desc")]
       } else {
          ell <- ifelse(tmp[,"desc"] == "", "", "...")
-         tmp[,"desc"] <- paste(substr(tmp[,"desc"], 1, descCut - 3), ell, sep="")
+         tmp[,"desc"] <- paste(substr(tmp[,"desc"], 1, descCut - 3), ell, sep = "")
       }
    }
    headers <- colnames(tmp)
@@ -160,14 +161,14 @@ listDisplays <- function(conn = getOption("vdbConn")) {
    colWidths <- pmax(colWidths, nchar(headers))
    nc <- length(headers)
    
-   fmtStr <- paste(paste("%", colWidths, "s", sep=""), collapse=" | ")
+   fmtStr <- paste(paste("%", colWidths, "s", sep = ""), collapse = " | ")
    
    cat(paste(c(
-      do.call(sprintf, c(list(fmt=fmtStr), as.list(headers))),
-      paste(sapply(colWidths, function(x) paste(rep("-", x), collapse="")), collapse="-+-"),
+      do.call(sprintf, c(list(fmt = fmtStr), as.list(headers))),
+      paste(sapply(colWidths, function(x) paste(rep("-", x), collapse = "")), collapse = "-+-"),
       apply(tmp, 1, function(x) {
-      do.call(sprintf, c(list(fmt=fmtStr), as.list(x)))
-   })), collapse="\n"))
+      do.call(sprintf, c(list(fmt = fmtStr), as.list(x)))
+   })), collapse = "\n"))
 
 }
 

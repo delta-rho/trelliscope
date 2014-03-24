@@ -2,9 +2,8 @@
 \alias{setLims}
 \title{Specify Rules for x and y Limits for a Display}
 \usage{
-  setLims(lims, x = "same", y = "same", xQuant = c(0, 1),
-    yQuant = c(0, 1), xRangeQuant = 1, yRangeQuant = 1,
-    prop = 0.07)
+setLims(lims, x = "same", y = "same", xQuant = c(0, 1), yQuant = c(0,
+  1), xRangeQuant = 1, yRangeQuant = 1, prop = 0.07)
 }
 \arguments{
   \item{lims}{object of class "trsPre"}
@@ -29,31 +28,31 @@
   \item{yQuantRange}{same as xQuantRange but for y-axis}
 }
 \value{
-  object of class "trsLims", which can be used in a call to
-  \code{\link{makeDisplay}}
+object of class "trsLims", which can be used in a call to
+\code{\link{makeDisplay}}
 }
 \description{
-  Based on results from \code{\link{prepanel}}, specify
-  rules that will determine x and y axis limits to be
-  passed as the \code{lims} argument when calling
-  \code{\link{makeDisplay}}.
+Based on results from \code{\link{prepanel}}, specify rules
+that will determine x and y axis limits to be passed as the
+\code{lims} argument when calling
+\code{\link{makeDisplay}}.
 }
 \details{
-  This function reduces the list of axis limits computed
-  for each split of a data set to an overall axis limit
-  rule for the plot.
+This function reduces the list of axis limits computed for
+each split of a data set to an overall axis limit rule for
+the plot.
 
-  About "x" and "y" parameters: This is the same as in
-  lattice.  From lattice documentation: A character string
-  that determines how axis limits are calculated for each
-  panel. Possible values are "same" (default), "free" and
-  "sliced". For relation="same", the same limits, usually
-  large enough to encompass all the data, are used for all
-  the panels. For relation="free", limits for each panel is
-  determined by just the points in that panel. Behavior for
-  relation="sliced" is similar, except that the length (max
-  - min) of the scales are constrained to remain the same
-  across panels.
+About "x" and "y" parameters: This is the same as in
+lattice.  From lattice documentation: A character string
+that determines how axis limits are calculated for each
+panel. Possible values are "same" (default), "free" and
+"sliced". For relation="same", the same limits, usually
+large enough to encompass all the data, are used for all
+the panels. For relation="free", limits for each panel is
+determined by just the points in that panel. Behavior for
+relation="sliced" is similar, except that the length (max -
+min) of the scales are constrained to remain the same
+across panels.
 }
 \examples{
 irisSplit <- divide(iris, "Species")
@@ -67,9 +66,9 @@ irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 irisLims <- setLims(irisPre, x="same", y="sliced")
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{prepanel}}, \code{\link{makeDisplay}}
+\code{\link{prepanel}}, \code{\link{makeDisplay}}
 }
 

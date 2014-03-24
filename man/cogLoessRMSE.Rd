@@ -2,8 +2,7 @@
 \alias{cogLoessRMSE}
 \title{Compute RMSE of Loess Fit Cognostic}
 \usage{
-  cogLoessRMSE(...,
-    desc = "RMSE of residuals from loess fit")
+cogLoessRMSE(..., desc = "RMSE of residuals from loess fit")
 }
 \arguments{
   \item{\ldots}{arguments to be passed to
@@ -13,16 +12,16 @@
   \item{desc}{description of cognostic}
 }
 \description{
-  Compute RMSE of loess fit as a cognostic to be used as
-  cognostics in a trelliscope display.
+Compute RMSE of loess fit as a cognostic to be used as
+cognostics in a trelliscope display.
 }
 \examples{
 cogLoessRMSE(dist ~ speed, span=0.5, data=cars)
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{cog}}
+\code{\link{cog}}
 }
 

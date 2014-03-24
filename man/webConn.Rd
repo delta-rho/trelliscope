@@ -2,7 +2,7 @@
 \alias{webConn}
 \title{Initialize a Web Connection}
 \usage{
-  webConn(user = NULL, ip, appDir, name)
+webConn(user = NULL, ip, appDir, name)
 }
 \arguments{
   \item{user}{the username to log on to the web server}
@@ -16,12 +16,12 @@
   application}
 }
 \description{
-  Initialize a connection to a web server
+Initialize a connection to a web server
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{websync}}
+\code{\link{websync}}
 }
 

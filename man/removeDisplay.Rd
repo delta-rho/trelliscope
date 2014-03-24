@@ -2,8 +2,7 @@
 \alias{removeDisplay}
 \title{Remove a Display from a VDB}
 \usage{
-  removeDisplay(name = NULL, group = NULL,
-    conn = getOption("vdbConn"), verbose = TRUE)
+removeDisplay(name, group, conn = getOption("vdbConn"))
 }
 \arguments{
   \item{name}{the name of the display}
@@ -19,16 +18,16 @@
   being done}
 }
 \description{
-  Remove a display from a VDB.
+Remove a display from a VDB.
 }
 \details{
-  If a display is uniquely determined by its name, then
-  group is not required.
+If a display is uniquely determined by its name, then group
+is not required.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
+\code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 }
 

@@ -2,7 +2,7 @@
 \alias{noMargins}
 \title{Remove Margins from Trellis/Lattice Plot}
 \usage{
-  noMargins(..., topkey = FALSE, rightkey = FALSE)
+noMargins(..., topkey = FALSE, rightkey = FALSE)
 }
 \arguments{
   \item{\ldots}{a list of other parameters to be passed to
@@ -14,9 +14,9 @@
   key?}
 }
 \description{
-  Removes whitespace surrounding a trellis plot.  Ideal for
-  \code{\link{makeDisplay}} because when tiling multiple
-  panels, a lot of space is wasted with the margins.
+Removes whitespace surrounding a trellis plot.  Ideal for
+\code{\link{makeDisplay}} because when tiling multiple
+panels, a lot of space is wasted with the margins.
 }
 \examples{
 \dontrun{
@@ -33,9 +33,9 @@ xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
 }
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{xyplot}}, \code{\link{makeDisplay}}
+\code{\link{xyplot}}, \code{\link{makeDisplay}}
 }
 

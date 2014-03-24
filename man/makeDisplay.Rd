@@ -2,13 +2,12 @@
 \alias{makeDisplay}
 \title{Create a Trelliscope Display}
 \usage{
-  makeDisplay(data, name, group = "common", desc = "",
-    panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
-    panelFn = NULL,
-    lims = list(x = "free", y = "free", prepanelFn = NULL),
-    cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(),
-    output = NULL, conn = getOption("vdbConn"),
-    verbose = TRUE, control = NULL)
+makeDisplay(data, name, group = "common", desc = "",
+  panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
+  panelFn = NULL, lims = list(x = "free", y = "free", prepanelFn = NULL),
+  cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(), output = NULL,
+  conn = getOption("vdbConn"), verbose = TRUE, params = NULL,
+  control = NULL)
 }
 \arguments{
   \item{data}{data of class "ddo" or "ddf" (see
@@ -68,6 +67,11 @@
 
   \item{verbose}{print status messages?}
 
+  \item{params}{a named list of parameters external to the
+  input data that are needed in the distributed computing
+  (most should be taken care of automatically such that
+  this is rarely necessary to specify)}
+
   \item{control}{parameters specifying how the backend
   should handle things (most-likely parameters to
   \code{\link{rhwatch}} in RHIPE) - see
@@ -75,34 +79,34 @@
   \code{\link{localDiskControl}}}
 }
 \description{
-  Create a trelliscope display and add it to a
-  visualization database (VDB)
+Create a trelliscope display and add it to a visualization
+database (VDB)
 }
 \details{
-  Many of the parameters are optional or have defaults.
-  For several examples, see the documentation on github:
-  \url{http://hafen.github.io/trelliscope}
+Many of the parameters are optional or have defaults.  For
+several examples, see the documentation on github:
+\url{http://hafen.github.io/trelliscope}
 
-  Panels by default are not pre-rendered.  Instead, this
-  function creates a display object and computes and stores
-  the cognostics.  Then panels are rendered on the fly.  If
-  a user would like to pre-render the images, then by
-  default these will be stored to a local disk connection
-  (see \code{\link{localDiskConn}}) inside the VDB
-  directory, organized in subdirectories by group and name
-  of the display.  Optionally, the user can specify the
-  \code{output} parameter to be any valid "kvConnection"
-  object, as long as it is one that persists on disk (e.g.
-  \code{\link{hdfsConn}}).
+Panels by default are not pre-rendered.  Instead, this
+function creates a display object and computes and stores
+the cognostics.  Then panels are rendered on the fly.  If a
+user would like to pre-render the images, then by default
+these will be stored to a local disk connection (see
+\code{\link{localDiskConn}}) inside the VDB directory,
+organized in subdirectories by group and name of the
+display.  Optionally, the user can specify the
+\code{output} parameter to be any valid "kvConnection"
+object, as long as it is one that persists on disk (e.g.
+\code{\link{hdfsConn}}).
 }
 \examples{
 # see docs
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{prepanel}}, \code{\link{setLims}},
-  \code{\link{inputVars}}, \code{\link{divide}}
+\code{\link{prepanel}}, \code{\link{setLims}},
+\code{\link{inputVars}}, \code{\link{divide}}
 }
 

@@ -2,8 +2,8 @@
 \alias{vdbConn}
 \title{Connect to a VDB}
 \usage{
-  vdbConn(path, name = NULL, autoYes = FALSE,
-    reset = FALSE, verbose = TRUE)
+vdbConn(path, name = NULL, autoYes = FALSE, reset = FALSE,
+  verbose = TRUE)
 }
 \arguments{
   \item{path}{The path on the local file system where the
@@ -23,12 +23,12 @@
   being done}
 }
 \description{
-  Connect to a visualization catabase
+Connect to a visualization catabase
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{updateViewer}}
+\code{\link{updateViewer}}
 }
 

@@ -2,8 +2,7 @@
 \alias{getDisplay}
 \title{Retrieve Display Object from VDB}
 \usage{
-  getDisplay(name, group = NULL,
-    conn = getOption("vdbConn"))
+getDisplay(name, group = NULL, conn = getOption("vdbConn"))
 }
 \arguments{
   \item{name}{the name of the display}
@@ -16,16 +15,16 @@
   exists}
 }
 \description{
-  Retrieve a display object from a VDB.
+Retrieve a display object from a VDB.
 }
 \details{
-  If a display is uniquely determined by its name, then
-  group is not required.
+If a display is uniquely determined by its name, then group
+is not required.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
+\code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 }
 

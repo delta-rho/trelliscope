@@ -2,9 +2,9 @@
 \alias{print.displayObj}
 \title{S3method print displayObj}
 \usage{
-  print.displayObj(x, ...)
+\method{print}{displayObj}(x, ...)
 }
 \description{
-  S3method print displayObj
+S3method print displayObj
 }
 

@@ -2,7 +2,7 @@
 \alias{listDisplays}
 \title{List Displays in a VDB}
 \usage{
-  listDisplays(conn = getOption("vdbConn"))
+listDisplays(conn = getOption("vdbConn"))
 }
 \arguments{
   \item{conn}{VDB connection info, typically stored in
@@ -11,13 +11,13 @@
   exists}
 }
 \description{
-  List displays in a VDB.
+List displays in a VDB.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{makeDisplay}}, \code{\link{addDisplay}},
-  \code{\link{removeDisplay}}, \code{\link{view}}
+\code{\link{makeDisplay}}, \code{\link{addDisplay}},
+\code{\link{removeDisplay}}, \code{\link{view}}
 }
 

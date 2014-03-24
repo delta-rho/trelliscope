@@ -2,8 +2,8 @@
 \alias{bsSetup}
 \title{Set Up Web Notebook Using Bootstrap}
 \usage{
-  bsSetup(pageTitle = "test", title = "test",
-    author = "author name", toc = TRUE, css = NULL)
+bsSetup(pageTitle = "test", title = "test", author = "author name",
+  toc = TRUE, css = NULL)
 }
 \arguments{
   \item{pageTitle}{the text to display on the title bar of
@@ -19,19 +19,19 @@
   \item{css}{path to additional style sheets, if desired}
 }
 \description{
-  Set up a Twitter Boostrap template for a notebook to be
-  typeset with knitr.  This function should be called at
-  the beginning of a .Rmd file.  If you use
-  \code{\link{newNotebook}} to initialize a notebook .Rmd
-  file, this will already be there.
+Set up a Twitter Boostrap template for a notebook to be
+typeset with knitr.  This function should be called at the
+beginning of a .Rmd file.  If you use
+\code{\link{newNotebook}} to initialize a notebook .Rmd
+file, this will already be there.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \references{
-  http://twitter.github.com/bootstrap/
+http://twitter.github.com/bootstrap/
 }
 \seealso{
-  \code{\link{newNotebook}}, \code{\link{typeset}}
+\code{\link{newNotebook}}, \code{\link{typeset}}
 }
 

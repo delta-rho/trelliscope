@@ -2,7 +2,7 @@
 \alias{typeset}
 \title{Typeset a notebook (.Rmd) File}
 \usage{
-  typeset(name = "index", conn = getOption("vdbConn"))
+typeset(name = "index", conn = getOption("vdbConn"))
 }
 \arguments{
   \item{file}{file name (extension of .Rmd is not
@@ -14,20 +14,19 @@
   exists}
 }
 \value{
-  output .html file goes in the "notebook" directory of the
-  vdb directory, to be viewed with
-  \code{\link{viewNotebook}}
+output .html file goes in the "notebook" directory of the
+vdb directory, to be viewed with \code{\link{viewNotebook}}
 }
 \description{
-  Processes a .Rmd file created with
-  \code{\link{newNotebook}}.  Basically a wrapper around
-  knitr that additionally takes care of several layout
-  issues to get a Bootstrap notebook web page.
+Processes a .Rmd file created with
+\code{\link{newNotebook}}.  Basically a wrapper around
+knitr that additionally takes care of several layout issues
+to get a Bootstrap notebook web page.
 }
 \author{
-  Ryan Hafen
+Ryan Hafen
 }
 \seealso{
-  \code{\link{viewNotebook}}, \code{\link{newNotebook}}
+\code{\link{viewNotebook}}, \code{\link{newNotebook}}
 }
 
