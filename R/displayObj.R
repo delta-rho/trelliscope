@@ -45,20 +45,6 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
       }
    }
    
-   if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
-      cn <- getAttribute(displayObj$panelDataSource, "conn")
-      if(!file.exists(cn$loc)) {
-         tmp <- file.path(conn$path, "data", basename(cn$loc))
-         if(file.exists(tmp)) {
-            if(inherits(displayObj$panelDataSource, "ddf")) {
-               displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
-            } else {
-               displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
-            }
-         }
-      }
-   }
-   
    displayObj
 }
 
