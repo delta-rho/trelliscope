@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.7.3
-Date: 2014-03-15
+Version: 0.7.4
+Date: 2014-03-24
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
 Description: Trelliscope provides a way to create, organize, and view
@@ -36,26 +36,3 @@ Suggests:
     Rhipe,
     rmongodb,
     scagnostics
-Collate:
-    'aspect.R'
-    'curLim.R'
-    'makeDisplay.R'
-    'prepanel.R'
-    'cognostics.R'
-    'conn_cog_df.R'
-    'conn_cog_methods.R'
-    'conn_cog_mongo.R'
-    'conn_vdb.R'
-    'displayObj.R'
-    'makeDisplay_internals.R'
-    'makePNG.R'
-    'globals.R'
-    'bsSetup.R'
-    'noMargins.R'
-    'notebook.R'
-    'typeset.R'
-    'addDisplay.R'
-    'conn_web.R'
-    'splod.R'
-    'view.R'
-    'websync.R'
