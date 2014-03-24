@@ -19,7 +19,7 @@ print.displayObj <- function(x, ...) {
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 #' @export
 getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
-
+   
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
    
    displayInfo <- findDisplay(name = name, group = group, conn = conn)
@@ -29,6 +29,22 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
    
    # if it is a local disk connection, the location can change
    # this happens when we move things to a web server
+   if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
+      cn <- getAttribute(displayObj$panelDataSource, "conn")
+      if(!file.exists(cn$loc)) {
+         tmp <- file.path(conn$path, "displays", displayObj$group, displayObj$name, "panels")
+         if(!file.exists(tmp))
+            tmp <- file.path(conn$path, "data", basename(cn$loc))
+         if(file.exists(tmp)) {
+            if(inherits(displayObj$panelDataSource, "ddf")) {
+               displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
+            } else {
+               displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
+            }
+         }
+      }
+   }
+   
    if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
       cn <- getAttribute(displayObj$panelDataSource, "conn")
       if(!file.exists(cn$loc)) {

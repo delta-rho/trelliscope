@@ -89,12 +89,16 @@ syncLocalData <- function(vdbConn = getOption("vdbConn"), rsync = NULL) {
          tmp <- getDisplay(ldDisp$name[i], ldDisp$group[i])
          getAttribute(tmp$panelDataSource, "conn")$loc
       })
-      locs <- unique(locs)
-      if(any(duplicated(basename(locs))))
-         stop("Currently can't sync multiple localDisk data sets with same name but different paths.")
       
-      for(ll in locs) {
-         system(paste(rsync, "-avh", ll, newDatDir))
+      locs <- locs[!grepl(normalizePath(vdbConn$path), locs)]
+      if(length(locs) > 0) {
+         locs <- unique(locs)
+         if(any(duplicated(basename(locs))))
+            stop("Currently can't sync multiple localDisk data sets with same name but different paths.")
+         
+         for(ll in locs) {
+            system(paste(rsync, "-avh", ll, newDatDir))
+         }
       }
    }
 }
@@ -120,7 +124,7 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
          }
       }
    }
-  
+   
    if (verbose) cat("Using rsync at", rsync, "\n")
    
    rsync
