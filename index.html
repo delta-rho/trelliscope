@@ -8,20 +8,25 @@
     <meta name="author" content="">
 
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="assets/css/custom.css" rel="stylesheet">
-    <link href="assets/css/pygment.css" rel="stylesheet">
+    <link href="assets/custom/custom.css" rel="stylesheet">
     <!-- font-awesome -->
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href='assets/css/rsyntax.css' rel='stylesheet'><script type='text/javascript' src='assets/js/rsyntax.js'></script>
-
-    <script type="text/javascript" src="assets/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    <!-- prism -->
+    <link href="assets/prism/prism.css" rel="stylesheet">
+    <link href="assets/prism/prism.r.css" rel="stylesheet">
+    <script type='text/javascript' src='assets/prism/prism.js'></script>
+    <script type='text/javascript' src='assets/prism/prism.r.js'></script>
+    
+    
+    
+    <script type="text/javascript" src="assets/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
    MathJax.Hub.Config({    
      extensions: ["tex2jax.js"],    
      "HTML-CSS": { scale: 100}    
    });
    </script>
-
+    
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
@@ -215,11 +220,17 @@ install_github(&quot;trelliscope&quot;, &quot;hafen&quot;)
 <pre><code class="r">library(trelliscope)
 </code></pre>
 
-<pre><code>Loading required package: lattice
-Loading required package: base64enc
-Loading required package: shiny
+<pre><code>Loading required package: datadr
+Loading required package: parallel
+Loading required package: data.table
+data.table 1.9.2  For help type: help(&quot;data.table&quot;)
+Loading required package: codetools
 Loading required package: hexbin
 Loading required package: grid
+Loading required package: lattice
+Loading required package: testthat
+Loading required package: base64enc
+Loading required package: shiny
 Loading required package: ggplot2
 </code></pre>
 
@@ -1588,10 +1599,11 @@ makeDisplay(byLatLonHDFS,
 </div>
 </div> <!-- /container -->
 
-<script src="assets/js/jquery.js"></script>
+<script src="assets/jquery/jquery.js"></script>
+<script type='text/javascript' src='assets/custom/custom.js'></script>
 <script src="assets/bootstrap/js/bootstrap.js"></script>
-<script src="assets/js/jquery.ba-hashchange.min.js"></script>
-<script src="assets/js/nav.js"></script>
+<script src="assets/custom/jquery.ba-hashchange.min.js"></script>
+<script src="assets/custom/nav.js"></script>
 
 </body>
 </html>

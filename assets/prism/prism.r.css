@@ -1,0 +1,22 @@
+/* If you like, you can use the pre-defined CSS stylesheets from Prism.js and simply add styles for the following classes: */
+.token.function {
+  color: rgb(0, 119, 170);
+}
+.token.namespace {
+  color: blue;
+}
+.token.variable {
+  color: black;
+}
+.token {
+   background-color: rgba(0, 0, 0, 0) !important;
+}
+.token.comment {
+   color: rgb(119, 119, 119) !important;
+   font-style: italic;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f5f5 !important;
+}
