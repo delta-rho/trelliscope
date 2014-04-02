@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
       cogDF <- cdCogDF()
       if(is.null(cogDF))
          return(1)
-         
+      
       ceiling(cogNrow(cogDF) / (getPanelRows() * getPanelCols()))
    })
    

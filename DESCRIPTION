@@ -1,7 +1,7 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.7.4
+Version: 0.7.5
 Date: 2014-03-24
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
@@ -27,7 +27,7 @@ Depends:
     base64enc,
     knitr,
     markdown,
-    shiny (>= 0.7.0),
+    shiny (>= 0.9.1),
     digest,
     codetools,
     hexbin,

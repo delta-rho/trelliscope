@@ -39,8 +39,6 @@ d3histModal <- function() {
    )
 }
 
-
-
 d3bivarModal <- function() {
    div(id='d3bivarModal', class='modalFilter hide fade',
       HTML("

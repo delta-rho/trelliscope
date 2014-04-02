@@ -142,7 +142,7 @@ $(document).on("click", "#d3histSubmit", function(evt) {
       $(".columnFilterFrom,.columnFilterTo").each(function() { 
          $(this).val(""); $(this).trigger("change"); 
       })
-
+      
       // get the current column
       var el = $(evt.target);
       var column = el.attr("name");
