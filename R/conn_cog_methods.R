@@ -80,8 +80,12 @@ processFilterInput <- function(flt) {
    # see getColumFilterInputs in table.js
    
    n <- length(flt)
-   # get index for filters that are NULL
-   ind <- which(!sapply(flt[seq(3, n, by=3)], function(x) is.null(x) | x==""))
+   if(n == 0 || !((n %% 3) == 0)) {
+      ind <- NULL
+   } else {
+      # get index for filters that are NULL
+      ind <- which(!sapply(flt[seq(3, n, by = 3)], function(x) is.null(x) | x==""))
+   }
    # remove those ones
    if(length(ind) == 0) {
       flt <- NULL

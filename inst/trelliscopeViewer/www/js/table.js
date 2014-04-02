@@ -385,7 +385,7 @@ $(document).on("change", ".columnFilter", function(evt) {
 // }).get();
 
 
-getColumFilterInputs = function() {
+getColumnFilterInputs = function() {
    var cur = $(this);
    var filterType="";
    if(cur.hasClass("columnFilterFrom")) {
@@ -395,9 +395,12 @@ getColumFilterInputs = function() {
    } else if(cur.hasClass("columnFilterRegex")) {
       filterType = "regex"
    }
-   var filterVal = cur.attr("value");
+   var filterVal = cur.val();
    // if(filterType=="from" || filterType=="to")
    //    filterVal = parseFloat(filterVal);
+   
+   if(filterVal == undefined)
+      filterVal = "";
    
    // return { type:filterType, col:parseInt(cur.attr("name")), val:filterVal };
    return [[ filterType, parseInt(cur.attr("name")), filterVal ]];
@@ -417,9 +420,9 @@ $.extend(tableFilterBinding, {
    getValue: function(el) {
       // alert($(el).attr("class"));
       // return 1;
-      var ret = $(el).find("input").map(getColumFilterInputs).get();
-      // console.log(ret);
-
+      var ret = $(el).find("input").map(getColumnFilterInputs).get();
+      console.log(ret);
+      
       // need to redraw histogram for any that have filter values
       hasFilter = [];
       for (var i=0; i < ret.length; i++) {
@@ -456,7 +459,7 @@ $.extend(tableUniPlotBinding, {
       return $(scope).find(".columnUniPlot");
    },
    getValue: function(el) {
-      return $(el).find("input").map(getColumFilterInputs).get();
+      return $(el).find("input").map(getColumnFilterInputs).get();
    },
    subscribe: function(el, callback) {
       $(el).on("change.tableUniPlot", function(e) {
