@@ -200,6 +200,7 @@ makeDisplay <- function(
          cogCollect.dfCogConn = cogCollect.dfCogConn, 
          cogCollect.mongoCogConn = cogCollect.mongoCogConn,
          cog = cog,
+         cogScagnostics = cogScagnostics,
          as.cogGeo = as.cogGeo,
          as.cogRel = as.cogRel,
          as.cogHier = as.cogHier,

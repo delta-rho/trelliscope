@@ -213,7 +213,7 @@ shinyServer(function(input, output) {
       n <- cdCogLength()
       # n2 <- as.integer(input$cogTablePageLength)
       n2 <- 8
-
+      
       HTML(
          input$cogTablePagination, 
          "of", ceiling(n / n2)
