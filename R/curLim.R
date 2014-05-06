@@ -7,7 +7,7 @@ trsCurLim <- function(lim, which, dat, curlim) {
    # lim <- plasmaLims
    # which <- "y"
    # prop <- 0.07
-
+   
    if(!is.null(curlim)) {
       curRange <- curlim
    } else {

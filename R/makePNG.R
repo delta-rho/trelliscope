@@ -33,15 +33,20 @@ makePNG <- function(dat, panelFn=NULL, file, width, height, res, lims=NULL) {
          if(inherits(tmp, "trellis")) {
             # if there are multiple panels inside of one plot, we can't do this
             if(!(inherits(tmp$x.limits, "list") || inherits(tmp$y.limits, "list"))) {
-               plotXLim <- tmp$x.limits
-               plotYLim <- tmp$y.limits               
-               curXLim <- trsCurXLim(lims, dat, plotXLim)
-               curYLim <- trsCurYLim(lims, dat, plotYLim)         
                
-               if(lims$x$type != "free")
-                  tmp$x.limits <- curXLim
-               if(lims$y$type != "free")
-                  tmp$y.limits <- curYLim
+               plotXLim <- tmp$x.limits
+               if(is.numeric(plotXLim)) {
+                  curXLim <- trsCurXLim(lims, dat, plotXLim)
+                  if(lims$x$type != "free")
+                     tmp$x.limits <- curXLim
+               }
+               
+               plotYLim <- tmp$y.limits               
+               if(is.numeric(plotYLim)) {
+                  curYLim <- trsCurYLim(lims, dat, plotYLim)         
+                  if(lims$y$type != "free")
+                     tmp$y.limits <- curYLim
+               }
             }
          } else if(inherits(tmp, "ggplot")) {
             # this is ugly now - make more robust, etc.

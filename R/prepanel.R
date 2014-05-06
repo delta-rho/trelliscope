@@ -336,21 +336,25 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
    # xQuant=c(0,1); yQuant=c(0,1); xRangeQuant=1; yRangeQuant=1
    getLims <- function(var, type, quant, rangeQuant) {
       dat <- lims[[var]]
-      datclass <- class(dat$max)[1]
+      datClass <- class(dat$max)[1]
       if(!is.numeric(dat$max)) {
-         if(!alreadyWarned) {
-            message("At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.")
-            alreadyWarned <<- TRUE            
+         if(datClass != "character") {
+            if(!alreadyWarned) {
+               message("At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.")
+               alreadyWarned <<- TRUE            
+            }
+            dat$max <- as.numeric(dat$max)
+            dat$min <- as.numeric(dat$min)            
          }
-         dat$max <- as.numeric(dat$max)
-         dat$min <- as.numeric(dat$min)
       }
       
-      if(type == "sliced") {
+      # TODO: if character and not "free" then set limits
+      # to all levels of the variable, if known
+      if(type == "sliced" && datClass != "character") {
          tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant, na.rm=TRUE))
          tmp <- tmp + 2 * prop * tmp
          res <- list(type="sliced", lim=NULL, range=tmp)
-      } else if(type == "same") {
+      } else if(type == "same" && datClass != "character") {
          tmp <- as.numeric(c(quantile(dat$min, quant[1], na.rm=TRUE), quantile(dat$max, quant[2], na.rm=TRUE)))
          tmp <- tmp + c(-1, 1) * diff(tmp) * prop
          res <- list(type="same", lim=tmp, range=NULL)
@@ -358,22 +362,22 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
          res <- list(type="free", lim=NULL, range=NULL)
          return(res)
       }
-      if(datclass=="Date")
+      if(datClass=="Date")
          res$lim <- as.Date(res$lim, origin="1970-01-01")
-      if(datclass=="POSIXct")
+      if(datClass=="POSIXct")
          res$lim <- as.POSIXct(res$lim, origin="1970-01-01")
-      # TODO: need to make sure the origin is correct
+      # TODO: time zone checking
       res
    }
    
    res <- list(
-      x=getLims("x", x, xQuant, xRangeQuant),
-      y=getLims("y", y, yQuant, yRangeQuant),
+      x = getLims("x", x, xQuant, xRangeQuant),
+      y = getLims("y", y, yQuant, yRangeQuant),
       prepanelFnIsTrellis = lims$prepanelFnIsTrellis,
       prepanelFnIsGgplot = lims$prepanelFnIsGgplot,
       prepanelFn = lims$prepanelFn,
       prop = prop, 
-      n=nrow(lims$x)
+      n = nrow(lims$x)
    )
    class(res) <- c("trsLims", "list")
    res
