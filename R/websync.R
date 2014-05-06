@@ -4,6 +4,7 @@
 #' 
 #' @param vdbConn VDB connection settings
 #' @param webConn web connection settings
+#' @param fixPermissions should an attempt be made to fix permissions in the web directory?
 #' @param verbose show rsync output
 #' @param rsync location of rsync binary
 #' 
@@ -17,6 +18,7 @@
 webSync <- function(
    vdbConn = getOption("vdbConn"),
    webConn = getOption("vdbWebConn"),
+   fixPermissions = FALSE,
    verbose = FALSE,
    rsync = NULL
 ) {
@@ -55,6 +57,12 @@ webSync <- function(
       user, webConn$ip, ":", webConn$appDir, "/", webConn$name,
       sep = ""
    ), intern = verbose, ignore.stderr =! verbose, ignore.stdout =! verbose)
+   
+   # attempt to fix permissions
+   if(fixPermissions) {
+      message("* Syncing latest shiny viewer to web app directory...")
+      system(paste("ssh ", user, webConn$ip, " 'sudo /bin/chown -R shiny ", webConn$appDir, "'", sep = ""))
+   }
    
    NULL
 }

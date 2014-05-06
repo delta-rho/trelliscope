@@ -100,7 +100,7 @@ function updateD3hist(column) {
 function d3histBrushFn() {
    var curBrush = d3histBrush.empty() ? "" : d3histBrush.extent();
    // d3histX.domain()
-      
+   
    var prec = d3.format(".5r");
    
    if(curBrush == "") {
@@ -135,7 +135,7 @@ Shiny.outputBindings.register(histDatOutputBinding, 'shiny.histDatOutput');
 // if the update button is clicked, change the values of the lower and upper inputs and trigger a change
 $(document).on("click", "#d3histSubmit", function(evt) {
    var curRange = d3histBrush.empty() ? "" : d3histBrush.extent();
-
+   
    if(curRange != "") {
       // clear out all columns
       // (this currently doesn't operate as a marginal filter)
@@ -146,9 +146,9 @@ $(document).on("click", "#d3histSubmit", function(evt) {
       // get the current column
       var el = $(evt.target);
       var column = el.attr("name");
-
+      
       console.log("column" + column);
-
+      
       // trigger a change on the appropriate range
       $("#lower_column_" + column).val(curRange[0]);
       $("#upper_column_" + column).val(curRange[1]);
@@ -156,7 +156,7 @@ $(document).on("click", "#d3histSubmit", function(evt) {
       $("#upper_column_" + column).trigger("change");
       updated3footHist(column);
    }
-
+   
    $("#d3histModal").modal("hide");
    d3histBrush.clear()
 });
