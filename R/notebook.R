@@ -224,7 +224,7 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
          displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
          href <- makeHref(p$group, p$name, displayType)
          
-         curWidth <- thumbHeight * p$panelDim$width / p$panelDim$height
+         curWidth <- thumbHeight * p$width / p$height
          src <- paste("../displays/", p$group, "/", p$name, "/thumb.png", sep="")
          return(mediaListStr(href, src, p$name, p$group, p$desc, p$n, thumbHeight, curWidth))
       })

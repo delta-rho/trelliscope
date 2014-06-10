@@ -55,7 +55,7 @@ splodCogFn <- function(df) {
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{splod}}, \code{\link{trsCogFn}}, \code{\link{splodPanelFn}}
+#' @seealso \code{\link{splod}}, \code{\link{splodPanelFn}}
 #'
 #' @export
 makeSplodData <- function(data, id.vars=NULL, ...) {
@@ -102,7 +102,7 @@ makeSplodData <- function(data, id.vars=NULL, ...) {
 #'
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodDat}}, \code{\link{trsCogFn}}, \code{\link{splodPanelFn}}
+#' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodDat}}, \code{\link{splodPanelFn}}
 #'
 #' @export
 splod <- function(

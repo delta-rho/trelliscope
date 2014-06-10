@@ -1,0 +1,1244 @@
+{
+	"panels" : {
+		"panelLayoutOutput" : {
+			"panel_aspect" : [
+				1
+			],
+			"n_visible_cog" : [
+				2
+			],
+			"nrow" : [
+				1
+			],
+			"ncol" : [
+				1
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"panelFunctionOutput" : {
+			"code" : [
+				"panelFn <-\nfunction(x)\n   dotplot(variety ~ yield, data = x)"
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"visibleCogListOutput" : {
+			"cog" : [
+				{
+					"type" : "panelKey",
+					"name" : "panelKey",
+					"desc" : "panel key",
+					"dataType" : "panelKey",
+					"active" : ""
+				},
+				{
+					"type" : "splitVar",
+					"name" : "year",
+					"desc" : "conditioning variable",
+					"dataType" : "character",
+					"active" : "active"
+				},
+				{
+					"type" : "splitVar",
+					"name" : "site",
+					"desc" : "conditioning variable",
+					"dataType" : "character",
+					"active" : "active"
+				},
+				{
+					"type" : "cog",
+					"name" : "meanYield",
+					"desc" : "mean yield",
+					"dataType" : "numeric",
+					"active" : ""
+				},
+				{
+					"type" : "cog",
+					"name" : "range",
+					"desc" : "yield range",
+					"dataType" : "numeric",
+					"active" : ""
+				},
+				{
+					"type" : "cog",
+					"name" : "min",
+					"desc" : "min yield",
+					"dataType" : "numeric",
+					"active" : ""
+				},
+				{
+					"type" : "cog",
+					"name" : "max",
+					"desc" : "min yield",
+					"dataType" : "numeric",
+					"active" : ""
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"relatedDisplayListOutput" : {
+			"displays" : [
+				{
+					"group" : [
+						"common"
+					],
+					"name" : [
+						"variety_vs_yield2"
+					],
+					"desc" : [
+						"test display with barley data"
+					],
+					"n" : [
+						12
+					],
+					"preRender" : [
+						false
+					],
+					"dataClass" : [
+						"kvLocalDisk"
+					],
+					"cogClass" : [
+						"dfCogConn"
+					],
+					"panelDim" : {
+						"height" : [
+							1000
+						],
+						"width" : [
+							1000
+						],
+						"res" : [
+							150
+						],
+						"aspect" : [
+							1
+						]
+					},
+					"updated" : [
+						"2014-05-08 17:06:52"
+					],
+					"keySig" : [
+						"6d458a7c0217090c35c332f5ca6d0c14"
+					]
+				},
+				{
+					"group" : [
+						"common"
+					],
+					"name" : [
+						"variety_vs_yield3"
+					],
+					"desc" : [
+						"test display with barley data"
+					],
+					"n" : [
+						12
+					],
+					"preRender" : [
+						false
+					],
+					"dataClass" : [
+						"kvLocalDisk"
+					],
+					"cogClass" : [
+						"dfCogConn"
+					],
+					"panelDim" : {
+						"height" : [
+							1000
+						],
+						"width" : [
+							1000
+						],
+						"res" : [
+							150
+						],
+						"aspect" : [
+							1
+						]
+					},
+					"updated" : [
+						"2014-05-08 17:06:52"
+					],
+					"keySig" : [
+						"6d458a7c0217090c35c332f5ca6d0c14"
+					]
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"cogTableControlsOutput" : {
+			"names" : [
+				"panelKey",
+				"year",
+				"site",
+				"meanYield",
+				"range",
+				"min",
+				"max"
+			],
+			"data" : [
+				[
+					"118026a3ec97bd6720b68c45f463bde1",
+					"1932",
+					"University Farm",
+					"29.50667",
+					"12.43333",
+					"25.56667",
+					"38.00000"
+				],
+				[
+					"1dbba8b15cc3b179c984fa7d4548bfcc",
+					"1932",
+					"Morris",
+					"41.51333",
+					"12.80001",
+					"34.36666",
+					"47.16667"
+				],
+				[
+					"21e87eae082f35fb0d61a9ff100f877e",
+					"1931",
+					"Grand Rapids",
+					"29.05334",
+					"15.00000",
+					"19.70000",
+					"34.70000"
+				],
+				[
+					"2261a53d1d8a1222d4d7b19fabfb44ab",
+					"1932",
+					"Duluth",
+					"25.70000",
+					" 9.13334",
+					"22.23333",
+					"31.36667"
+				],
+				[
+					"26c05278f0e35395e03faf4159efe23a",
+					"1931",
+					"University Farm",
+					"35.82667",
+					"18.60000",
+					"24.66667",
+					"43.26667"
+				],
+				[
+					"2b984a90d34faf2a7f467b9c47c29763",
+					"1932",
+					"Grand Rapids",
+					"20.81000",
+					"17.80000",
+					"14.43333",
+					"32.23333"
+				],
+				[
+					"436d461abe0eb72046b83a64c789e37a",
+					"1932",
+					"Waseca",
+					"41.87000",
+					"24.70000",
+					"33.46667",
+					"58.16667"
+				],
+				[
+					"485be53fe78c9857cf34772749b9d806",
+					"1931",
+					"Crookston",
+					"43.66000",
+					"11.73334",
+					"38.13333",
+					"49.86667"
+				],
+				[
+					"48c542e60829136ce6ebd0bdeac5b794",
+					"1931",
+					"Waseca",
+					"54.34667",
+					"19.00003",
+					"46.76667",
+					"65.76670"
+				]
+			],
+			"filter" : [
+				{
+					"i" : [
+						1
+					],
+					"name" : [
+						"panelKey"
+					],
+					"levels" : [
+						""
+					]
+				},
+				{
+					"i" : [
+						2
+					],
+					"name" : [
+						"year"
+					],
+					"levels" : [
+						"1931",
+						"1932"
+					]
+				},
+				{
+					"i" : [
+						3
+					],
+					"name" : [
+						"site"
+					],
+					"levels" : [
+						"Crookston",
+						"Duluth",
+						"Grand Rapids",
+						"Morris",
+						"University Farm",
+						"Waseca"
+					]
+				},
+				{
+					"i" : [
+						4
+					],
+					"name" : [
+						"meanYield"
+					],
+					"numeric" : [
+						true
+					]
+				},
+				{
+					"i" : [
+						5
+					],
+					"name" : [
+						"range"
+					],
+					"numeric" : [
+						true
+					]
+				},
+				{
+					"i" : [
+						6
+					],
+					"name" : [
+						"min"
+					],
+					"numeric" : [
+						true
+					]
+				},
+				{
+					"i" : [
+						7
+					],
+					"name" : [
+						"max"
+					],
+					"numeric" : [
+						true
+					]
+				}
+			],
+			"plotDat" : [
+				{
+					"name" : [
+						"year"
+					],
+					"type" : [
+						"character"
+					],
+					"data" : [
+						{
+							"label" : "1931",
+							"ydat" : 6,
+							"xdat" : 1
+						},
+						{
+							"label" : "1932",
+							"ydat" : 6,
+							"xdat" : 2
+						},
+						{
+							"label" : "",
+							"ydat" : 0,
+							"xdat" : 3
+						}
+					],
+					"plotType" : {}
+				},
+				{
+					"name" : [
+						"site"
+					],
+					"type" : [
+						"character"
+					],
+					"data" : [
+						{
+							"label" : "Crookston",
+							"ydat" : 2,
+							"xdat" : 1
+						},
+						{
+							"label" : "Duluth",
+							"ydat" : 2,
+							"xdat" : 2
+						},
+						{
+							"label" : "Grand Rapids",
+							"ydat" : 2,
+							"xdat" : 3
+						},
+						{
+							"label" : "Morris",
+							"ydat" : 2,
+							"xdat" : 4
+						},
+						{
+							"label" : "University Farm",
+							"ydat" : 2,
+							"xdat" : 5
+						},
+						{
+							"label" : "Waseca",
+							"ydat" : 2,
+							"xdat" : 6
+						},
+						{
+							"label" : "",
+							"ydat" : 0,
+							"xdat" : 7
+						}
+					],
+					"plotType" : {}
+				},
+				{
+					"name" : [
+						"meanYield"
+					],
+					"type" : [
+						"numeric"
+					],
+					"data" : [
+						{
+							"xdat" : 20,
+							"ydat" : 1,
+							"label" : "(20,25]"
+						},
+						{
+							"xdat" : 25,
+							"ydat" : 4,
+							"label" : "(25,30]"
+						},
+						{
+							"xdat" : 30,
+							"ydat" : 2,
+							"label" : "(30,35]"
+						},
+						{
+							"xdat" : 35,
+							"ydat" : 1,
+							"label" : "(35,40]"
+						},
+						{
+							"xdat" : 40,
+							"ydat" : 3,
+							"label" : "(40,45]"
+						},
+						{
+							"xdat" : 45,
+							"ydat" : 0,
+							"label" : "(45,50]"
+						},
+						{
+							"xdat" : 50,
+							"ydat" : 1,
+							"label" : "(50,55]"
+						},
+						{
+							"xdat" : 55,
+							"ydat" : 0,
+							"label" : "(55,60]"
+						}
+					],
+					"plotType" : [
+						"hist"
+					]
+				},
+				{
+					"name" : [
+						"range"
+					],
+					"type" : [
+						"numeric"
+					],
+					"data" : [
+						{
+							"xdat" : 5,
+							"ydat" : 2,
+							"label" : "(5,10]"
+						},
+						{
+							"xdat" : 10,
+							"ydat" : 4,
+							"label" : "(10,15]"
+						},
+						{
+							"xdat" : 15,
+							"ydat" : 3,
+							"label" : "(15,20]"
+						},
+						{
+							"xdat" : 20,
+							"ydat" : 3,
+							"label" : "(20,25]"
+						},
+						{
+							"xdat" : 25,
+							"ydat" : 0,
+							"label" : "(25,30]"
+						}
+					],
+					"plotType" : [
+						"hist"
+					]
+				},
+				{
+					"name" : [
+						"min"
+					],
+					"type" : [
+						"numeric"
+					],
+					"data" : [
+						{
+							"xdat" : 10,
+							"ydat" : 1,
+							"label" : "(10,15]"
+						},
+						{
+							"xdat" : 15,
+							"ydat" : 1,
+							"label" : "(15,20]"
+						},
+						{
+							"xdat" : 20,
+							"ydat" : 4,
+							"label" : "(20,25]"
+						},
+						{
+							"xdat" : 25,
+							"ydat" : 2,
+							"label" : "(25,30]"
+						},
+						{
+							"xdat" : 30,
+							"ydat" : 2,
+							"label" : "(30,35]"
+						},
+						{
+							"xdat" : 35,
+							"ydat" : 1,
+							"label" : "(35,40]"
+						},
+						{
+							"xdat" : 40,
+							"ydat" : 0,
+							"label" : "(40,45]"
+						},
+						{
+							"xdat" : 45,
+							"ydat" : 1,
+							"label" : "(45,50]"
+						},
+						{
+							"xdat" : 50,
+							"ydat" : 0,
+							"label" : "(50,55]"
+						}
+					],
+					"plotType" : [
+						"hist"
+					]
+				},
+				{
+					"name" : [
+						"max"
+					],
+					"type" : [
+						"numeric"
+					],
+					"data" : [
+						{
+							"xdat" : 30,
+							"ydat" : 4,
+							"label" : "(30,35]"
+						},
+						{
+							"xdat" : 35,
+							"ydat" : 1,
+							"label" : "(35,40]"
+						},
+						{
+							"xdat" : 40,
+							"ydat" : 3,
+							"label" : "(40,45]"
+						},
+						{
+							"xdat" : 45,
+							"ydat" : 2,
+							"label" : "(45,50]"
+						},
+						{
+							"xdat" : 50,
+							"ydat" : 0,
+							"label" : "(50,55]"
+						},
+						{
+							"xdat" : 55,
+							"ydat" : 1,
+							"label" : "(55,60]"
+						},
+						{
+							"xdat" : 60,
+							"ydat" : 0,
+							"label" : "(60,65]"
+						},
+						{
+							"xdat" : 65,
+							"ydat" : 1,
+							"label" : "(65,70]"
+						},
+						{
+							"xdat" : 70,
+							"ydat" : 0,
+							"label" : "(70,75]"
+						}
+					],
+					"plotType" : [
+						"hist"
+					]
+				}
+			],
+			"cogNames" : [
+				{
+					"type" : "panelKey",
+					"name" : "panelKey",
+					"desc" : "panel key",
+					"dataType" : "panelKey",
+					"index" : 0,
+					"active" : ""
+				},
+				{
+					"type" : "splitVar",
+					"name" : "year",
+					"desc" : "conditioning variable",
+					"dataType" : "character",
+					"index" : 1,
+					"active" : "active"
+				},
+				{
+					"type" : "splitVar",
+					"name" : "site",
+					"desc" : "conditioning variable",
+					"dataType" : "character",
+					"index" : 2,
+					"active" : "active"
+				},
+				{
+					"type" : "cog",
+					"name" : "meanYield",
+					"desc" : "mean yield",
+					"dataType" : "numeric",
+					"index" : 3,
+					"active" : "active"
+				},
+				{
+					"type" : "cog",
+					"name" : "range",
+					"desc" : "yield range",
+					"dataType" : "numeric",
+					"index" : 4,
+					"active" : "active"
+				},
+				{
+					"type" : "cog",
+					"name" : "min",
+					"desc" : "min yield",
+					"dataType" : "numeric",
+					"index" : 5,
+					"active" : "active"
+				},
+				{
+					"type" : "cog",
+					"name" : "max",
+					"desc" : "min yield",
+					"dataType" : "numeric",
+					"index" : 6,
+					"active" : "active"
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"cogUniFilterControlsOutput" : {
+			"cogs" : [
+				{
+					"type" : "splitVar",
+					"name" : "year",
+					"desc" : "conditioning variable",
+					"dataType" : "character"
+				},
+				{
+					"type" : "splitVar",
+					"name" : "site",
+					"desc" : "conditioning variable",
+					"dataType" : "character"
+				},
+				{
+					"type" : "cog",
+					"name" : "meanYield",
+					"desc" : "mean yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "range",
+					"desc" : "yield range",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "min",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "max",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"cogBiFilterControlsOutput" : {
+			"cogs" : [
+				{
+					"type" : "cog",
+					"name" : "meanYield",
+					"desc" : "mean yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "range",
+					"desc" : "yield range",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "min",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "max",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"cogMultiFilterControlsOutput" : {
+			"cogs" : [
+				{
+					"type" : "cog",
+					"name" : "meanYield",
+					"desc" : "mean yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "range",
+					"desc" : "yield range",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "min",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				},
+				{
+					"type" : "cog",
+					"name" : "max",
+					"desc" : "min yield",
+					"dataType" : "numeric"
+				}
+			],
+			"cdName" : [
+				"variety_vs_yield"
+			],
+			"cdGroup" : [
+				"common"
+			]
+		},
+		"cogSampleControlsOutput" : []
+	},
+	"panelPageNavOutput" : {
+		"n" : [
+			12
+		],
+		"skips" : [
+			1,
+			2,
+			5
+		],
+		"cdName" : [
+			"variety_vs_yield"
+		],
+		"cdGroup" : [
+			"common"
+		]
+	},
+	"cogBreadcrumbOutput" : {
+		"buttons" : [
+			{
+				"var" : [
+					"var1"
+				],
+				"class" : [
+					"btn-primary"
+				],
+				"icon" : [
+					"icon-sort-numeric-asc"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var1\" ], \"action\" : [ \"sort\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var2"
+				],
+				"class" : [
+					"btn-primary"
+				],
+				"icon" : [
+					"icon-sort-numeric-desc"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var2\" ], \"action\" : [ \"sort\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var3"
+				],
+				"class" : [
+					"btn-primary"
+				],
+				"icon" : [
+					"icon-sort-alpha-desc"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var3\" ], \"action\" : [ \"sort\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var4"
+				],
+				"class" : [
+					"btn-primary"
+				],
+				"icon" : [
+					"icon-sort-alpha-asc"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var4\" ], \"action\" : [ \"sort\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var1"
+				],
+				"class" : [
+					"btn-success"
+				],
+				"icon" : [
+					"icon-filter"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var1\" ], \"action\" : [ \"filter\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var3"
+				],
+				"class" : [
+					"btn-success"
+				],
+				"icon" : [
+					"icon-filter"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var3\" ], \"action\" : [ \"filter\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var3"
+				],
+				"class" : [
+					"btn-success"
+				],
+				"icon" : [
+					"icon-filter"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var3\" ], \"action\" : [ \"filter\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var1,var2,var3"
+				],
+				"class" : [
+					"btn-warning"
+				],
+				"icon" : [
+					"icon-multivar"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var1\", \"var2\", \"var3\" ], \"action\" : [ \"multivar\" ] }"
+				]
+			},
+			{
+				"var" : [
+					"var2"
+				],
+				"class" : [
+					"btn-danger"
+				],
+				"icon" : [
+					"icon-sample"
+				],
+				"state" : [
+					"{ \"vars\" : [ \"var2\" ], \"action\" : [ \"sample\" ] }"
+				]
+			}
+		]
+	},
+	"displayListOutput" : [
+		{
+			"group" : [
+				"common"
+			],
+			"name" : [
+				"variety_vs_yield"
+			],
+			"desc" : [
+				"test display with barley data"
+			],
+			"n" : [
+				12
+			],
+			"preRender" : [
+				false
+			],
+			"dataClass" : [
+				"kvLocalDisk"
+			],
+			"cogClass" : [
+				"dfCogConn"
+			],
+			"panelDim" : {
+				"height" : [
+					1000
+				],
+				"width" : [
+					1000
+				],
+				"res" : [
+					150
+				],
+				"aspect" : [
+					1
+				]
+			},
+			"updated" : [
+				"2014-05-08 17:06:51"
+			],
+			"keySig" : [
+				"6d458a7c0217090c35c332f5ca6d0c14"
+			]
+		},
+		{
+			"group" : [
+				"common"
+			],
+			"name" : [
+				"variety_vs_yield2"
+			],
+			"desc" : [
+				"test display with barley data"
+			],
+			"n" : [
+				12
+			],
+			"preRender" : [
+				false
+			],
+			"dataClass" : [
+				"kvLocalDisk"
+			],
+			"cogClass" : [
+				"dfCogConn"
+			],
+			"panelDim" : {
+				"height" : [
+					1000
+				],
+				"width" : [
+					1000
+				],
+				"res" : [
+					150
+				],
+				"aspect" : [
+					1
+				]
+			},
+			"updated" : [
+				"2014-05-08 17:06:52"
+			],
+			"keySig" : [
+				"6d458a7c0217090c35c332f5ca6d0c14"
+			]
+		},
+		{
+			"group" : [
+				"common"
+			],
+			"name" : [
+				"variety_vs_yield3"
+			],
+			"desc" : [
+				"test display with barley data"
+			],
+			"n" : [
+				12
+			],
+			"preRender" : [
+				false
+			],
+			"dataClass" : [
+				"kvLocalDisk"
+			],
+			"cogClass" : [
+				"dfCogConn"
+			],
+			"panelDim" : {
+				"height" : [
+					1000
+				],
+				"width" : [
+					1000
+				],
+				"res" : [
+					150
+				],
+				"aspect" : [
+					1
+				]
+			},
+			"updated" : [
+				"2014-05-08 17:06:52"
+			],
+			"keySig" : [
+				"6d458a7c0217090c35c332f5ca6d0c14"
+			]
+		}
+	],
+	"panelTableContentOutput" : [
+		[
+			{
+				"i" : [
+					1
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			},
+			{
+				"i" : [
+					2
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			},
+			{
+				"i" : [
+					3
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			}
+		],
+		[
+			{
+				"i" : [
+					4
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			},
+			{
+				"i" : [
+					5
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			},
+			{
+				"i" : [
+					6
+				],
+				"panel_content" : [
+					"<div style=\"width:404px; height:242px; background-color: #ddd\"></div>"
+				],
+				"cogs" : [
+					{
+						"cog_name" : "cog1",
+						"cog_value" : "val1"
+					},
+					{
+						"cog_name" : "cog2",
+						"cog_value" : "val2"
+					},
+					{
+						"cog_name" : "cog3",
+						"cog_value" : "val3"
+					}
+				]
+			}
+		]
+	]
+}

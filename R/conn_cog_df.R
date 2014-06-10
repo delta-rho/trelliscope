@@ -14,7 +14,7 @@
 #' @seealso \code{\link{makeDisplay}}
 #' @export
 dfCogConn <- function() {
-   structure(list(), class=c("dfCogConn", "cogConn"))
+   structure(list(), class = c("dfCogConn", "cogConn"))
 }
 
 #' @S3method print dfCogConn
@@ -67,15 +67,15 @@ cogNames.data.frame <- function(x) {
 
 #' @S3method getCogData data.frame
 getCogData.data.frame <- function(x, rowIdx, colIdx) {
-   x[rowIdx, colIdx, drop=FALSE]
+   x[rowIdx, colIdx, drop = FALSE]
 }
 
-#' @S3method getCurCogDat data.frame
-getCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
+#' @S3method oldGetCurCogDat data.frame
+oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE) {
    filterIndex <- seq_len(cogNrow(cogDF))
    
    if(!is.null(flt)) {
-      logMsg("Updating cognostic filter index", verbose=verbose)
+      logMsg("Updating cognostic filter index", verbose = verbose)
       flt <- processFilterInput(flt)
       
       for(i in seq_along(flt)) {
@@ -95,8 +95,8 @@ getCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose=FALS
    }
    
    # before ordering, perform any filters
-   logMsg("Updating cognostic sort index", verbose=verbose)
-   cogDF <- cogDF[filterIndex,, drop=FALSE]
+   logMsg("Updating cognostic sort index", verbose = verbose)
+   cogDF <- cogDF[filterIndex,, drop = FALSE]
    orderIndex <- seq_len(cogNrow(cogDF))
    # browser()
    # need to know which columns are visible so we are sorting the right column
@@ -107,7 +107,7 @@ getCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose=FALS
          # TODO: use data.table here for faster sorting
          if(sum(abs(ordering)) == 1) {
             ind <- which(abs(ordering) == 1)
-            orderIndex <- order(cogDF[,colIndex[ind],drop=FALSE], decreasing=ifelse(ordering[ind] < 0, TRUE, FALSE))
+            orderIndex <- order(cogDF[,colIndex[ind],drop = FALSE], decreasing = ifelse(ordering[ind] < 0, TRUE, FALSE))
             # if(ordering[ind] < 0) {
             #    orderIndex <- rev(cogDFOrd[,ind])
             # } else {
@@ -120,9 +120,9 @@ getCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose=FALS
             orderSign <- sign(ordering)[orderCols]
             orderCols <- lapply(seq_along(orderCols), function(i) {
                if(orderSign[i] < 0) {
-                                          return(-xtfrm(cogDF[,colIndex[orderCols[i]], drop=FALSE]))
+                  return(-xtfrm(cogDF[,colIndex[orderCols[i]], drop = FALSE]))
                } else {
-                  return(cogDF[,colIndex[orderCols[i]], drop=FALSE])
+                  return(cogDF[,colIndex[orderCols[i]], drop = FALSE])
                }
             })
             orderIndex <- do.call(order, orderCols)               
@@ -130,8 +130,63 @@ getCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose=FALS
       }
    }
    # orderIndex <- filterIndex[orderIndex]
-   logMsg("Retrieving sorted and filtered cognostics data", verbose=verbose)
-   return(cogDF[orderIndex,,drop=FALSE])
+   logMsg("Retrieving sorted and filtered cognostics data", verbose = verbose)
+   return(cogDF[orderIndex,,drop = FALSE])
 }
 
+
+#' @S3method getCogQuantPlotData data.frame
+getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = NULL) {
+   # TODO: add logic about number of breaks
+   # TODO: make number of quantiles configurable
+   dat <- cogDF[[name]]
+   
+   res <- list()
+   
+   if("hist" %in% type) {
+      if(all(is.na(dat))) {
+         res[["hist"]] <- data.frame(xdat = c(0, 1), ydat = c(0, 0))
+      } else {
+         hst <- hist(dat, plot = FALSE)
+         res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))         
+      }
+   }
+   
+   if("quant" %in% type) {
+      n <- length(dat)
+      if(all(is.na(dat))) {
+         res[["quant"]] <- data.frame(f = c(0, 1), q = c(0, 0))
+      } else {
+         # get quantiles
+         if(length(n) <= 1000) {
+            qnt <- data.frame(f = seq(0, 1, length = n), q = sort(dat))
+         } else {
+            sq <- seq(0, 1, length = 1000)
+            qnt <- data.frame(f = sq, q = quantile(dat, sq))
+         }
+         res[["quant"]] <- qnt         
+      }
+   }
+   
+   if(length(type) == 1) {
+      res[[1]]
+   } else {
+      res
+   }
+}
+
+#' @S3method getCogCatPlotData data.frame
+getCogCatPlotData.data.frame <- function(cogDF, name, filter = NULL) {
+   # TODO: make number of levels configurable
+   dat <- as.character(cogDF[[name]])
+   dat[is.na(dat)] <- "--missing--"
+   n <- length(unique(dat))
+   freq <- NULL
+   if(n <= 5000) {
+      freq <- data.frame(xtabs(~ dat))
+      names(freq)[1] <- "label"
+      freq <- freq[order(freq$Freq, freq$label),]
+   }
+   list(n = n, freq = freq)
+}
 

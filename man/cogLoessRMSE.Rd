@@ -16,7 +16,7 @@ Compute RMSE of loess fit as a cognostic to be used as
 cognostics in a trelliscope display.
 }
 \examples{
-cogLoessRMSE(dist ~ speed, span=0.5, data=cars)
+cogLoessRMSE(dist ~ speed, span = 0.5, data = cars)
 }
 \author{
 Ryan Hafen

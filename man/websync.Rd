@@ -3,12 +3,15 @@
 \title{Sync VDB and notebook Files to a Web Server}
 \usage{
 webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
-  verbose = FALSE, rsync = NULL)
+  fixPermissions = FALSE, verbose = FALSE, rsync = NULL)
 }
 \arguments{
   \item{vdbConn}{VDB connection settings}
 
   \item{webConn}{web connection settings}
+
+  \item{fixPermissions}{should an attempt be made to fix
+  permissions in the web directory?}
 
   \item{verbose}{show rsync output}
 

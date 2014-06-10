@@ -2,8 +2,8 @@
 \alias{addDisplay}
 \title{Add a Display to a VDB}
 \usage{
-addDisplay(p, name, group = "common", desc = "", dim = list(height = NULL,
-  width = NULL, aspect = NULL, res = NULL), conn = getOption("vdbConn"))
+addDisplay(p, name, group = "common", desc = "", height = 800,
+  width = 800, conn = getOption("vdbConn"))
 }
 \arguments{
   \item{p}{an R plot object (lattice or ggplot) or an
@@ -17,11 +17,6 @@ addDisplay(p, name, group = "common", desc = "", dim = list(height = NULL,
 
   \item{desc}{a description of the display (used in the
   viewer and in notebooks)}
-
-  \item{dim}{a list defining aspects of the plot dimension,
-  including height, width, aspect, and res (resolution of
-  raster image).  defaults are 1000 (px), 1000 (px),
-  "fill", and 150, respectively}
 
   \item{conn}{VDB connection info, typically stored in
   options("vdbConn") at the beginning of a session, and not

@@ -68,8 +68,19 @@ getCogData <- function(x, ...)
 
 #' @export
 #' @rdname cogConn-methods
-getCurCogDat <- function(x, ...)
-   UseMethod("getCurCogDat")
+oldGetCurCogDat <- function(x, ...)
+   UseMethod("oldGetCurCogDat")
+
+### for cogInfo
+
+getCogQuantPlotData <- function(x, ...) {
+   UseMethod("getCogQuantPlotData", x)
+}
+
+getCogCatPlotData <- function(x, ...) {
+   UseMethod("getCogCatPlotData", x)
+}
+
 
 ############################################################################
 ### misc functions used inside cog conn methods

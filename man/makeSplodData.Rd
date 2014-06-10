@@ -24,7 +24,6 @@ Ryan Hafen
 Wilkinson's scagnostics paper.
 }
 \seealso{
-\code{\link{splod}}, \code{\link{trsCogFn}},
-\code{\link{splodPanelFn}}
+\code{\link{splod}}, \code{\link{splodPanelFn}}
 }
 

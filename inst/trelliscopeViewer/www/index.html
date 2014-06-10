@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    
+    <title>Trelliscope Viewer</title>
+        
+    <!-- Bootstrap core CSS -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="assets/bootstrap-select/bootstrap-select.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="assets/custom/custom.css" rel="stylesheet">
+  	<link href="assets/icons/style.css" rel="stylesheet">
+    
+    <title>Mustache.js External Method</title>
+    <script type="text/javascript" src="assets/jquery/jquery.js" ></script>
+    <script type="text/javascript" src="assets/mustache/mustache.js" ></script>
+    <script src="assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="assets/svgeezy/svgeezy.min.js"></script>
+    <script>
+        svgeezy.init(false, 'png');
+    </script>
+    <script src="assets/spin/spin.js"></script>
+    <script src="assets/bootstrap-select/bootstrap-select.js"></script>
+    
+    <script src="assets/d3/d3.min.js"></script>
+    
+    <script src="assets/custom/d3footPlot.js"></script>
+    <script src="assets/custom/d3uniFilter.js"></script>
+    <script src="assets/custom/d3biFilter.js"></script>
+    <script src="assets/custom/controls-cog-table.js"></script>
+    <script src="assets/custom/controls-univar-filter.js"></script>
+    <script src="assets/custom/controls-bivar-filter.js"></script>
+    <script src="assets/custom/controls-multivar-filter.js"></script>
+    <script src="assets/custom/controls-visible-cog.js"></script>
+    <script src="assets/custom/controls-panel-layout.js"></script>
+    <script src="assets/custom/main.js"></script>
+    
+    <!-- shiny -->
+    <script src="shared/shiny.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
+    <script src="assets/custom/shiny-trelliscope-io.js" type="text/javascript"></script>
+    
+  </head>
+  <body>
+    <!-- <div id="dummyDiv" class="shiny-text-output"></div> -->
+    <div id="control-panel-backdrop" class="bd-hidden"></div>
+    <div id="d3tooltip" class="hidden"></div>
+    <div id="resolution-alert" class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Warning! This application was not designed to be used at this window size / resolution.
+    </div>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Trelliscope Viewer</a>
+          <div class="left-icons">
+            <ul>
+              <a data-toggle="modal" data-target="#displayInfoModal" href="#"><li><i class="icon-file-info"></i></li></a>
+              <span id="headerDisplayNameOutput" class="shiny-text-output"></span>
+            </ul>
+          </div>
+          <div class="center-icons shiny-template-output" id="panelPageNavOutput" data-post-render="panelPageNavOutputPostRender">
+          </div>
+          <div class="right-icons">
+            <ul>
+              <a data-toggle="modal" data-target="#userModal" href="#"><li><i class="icon-user"></i></li></a>
+              <a data-toggle="modal" data-target="#openModal" href="#"><li><i class="icon-folder-open"></i></li></a>
+              <a data-toggle="modal" data-target="#aboutModal" href="#"><li><i class="icon-info-circle"></i></li></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Begin page content -->
+    <div class="container">
+      <div id="wrapper">
+        <div id="sidebar-wrapper">
+          <div id="logo">
+            <img src="assets/images/logo.svg">
+          </div>
+          <div class="list-group list-group-sidebar">
+            <a href="#" class="list-group-item active list-group-item-primary list-group-item-short">
+            <span class="list-group-header">View Options</span>
+            </a>
+            <a href="#" class="list-group-item" data-divlink="panel-layout">
+              <i class="icon-th"></i>
+              <span class="list-group-text">Panel Layout</span>
+            </a>
+            <a href="#" class="list-group-item" data-divlink="panel-function">
+              <i class="icon-panel-edit"></i>
+              <span class="list-group-text">Panel Function</span>
+            </a>
+            <a href="#" class="list-group-item" data-divlink="visible-cognostics">
+               <!-- data-action="visibleCogListSetFromExposedState"> -->
+              <i class="icon-cog-list"></i>
+              <span class="list-group-text">Visible Cognostics</span>
+            </a>
+            <a href="#" class="list-group-item last-item" data-divlink="add-related-display">
+              <i class="icon-plus-square-o"></i>
+              <span class="list-group-text">&nbsp;Add Related Display</span>
+            </a>
+            <a href="#" class="list-group-item active list-group-item-primary list-group-item-short">
+              <span class="list-group-header">Cognostics</span>
+            </a>
+            <a href="#" class="list-group-item" id="cog-table-sort-filter-nav-link" data-divlink="cog-table-sort-filter">
+               <!-- data-action="cogTableSetFromExposedState"> -->
+              <i class="icon-sort-filter"></i>
+              <span class="list-group-text">Table Sort / Filter</span>
+            </a>
+            <a href="#" class="list-group-item" id="univar-filter-nav-link" data-divlink="univar-filter">
+               <!-- data-action="univarFilterSetFromExposedState"> -->
+              <i class="icon-bars"></i>
+              <span class="list-group-text">Univariate Filter</span>
+            </a>
+            <a href="#" class="list-group-item" data-divlink="bivar-filter">
+               <!-- data-action="bivarFilterSetFromExposedState"> -->
+              <i class="icon-stats"></i>
+              <span class="list-group-text">Bivariate Filter</span>
+            </a>
+            <a href="#" class="list-group-item" data-divlink="multivar-filter">
+              <i class="icon-multivar"></i>
+              <span class="list-group-text">Multivariate Filter</span>
+            </a>
+            <a href="#" class="list-group-item last-item" data-divlink="sample-panels">
+              <i class="icon-sample"></i>
+              <span class="list-group-text">Sample</span>
+            </a>
+          </div>
+        </div>
+        <div id="panel-layout"          class="slide-panel panel panel-default"></div>
+        <div id="panel-function"        class="slide-panel panel panel-default"></div>
+        <div id="visible-cognostics"    class="slide-panel panel panel-default"></div>
+        <div id="add-related-display"   class="slide-panel panel panel-default"></div>
+        <div id="cog-table-sort-filter" class="slide-panel panel panel-default"></div>
+        <div id="univar-filter"         class="slide-panel panel panel-default"></div>
+        <div id="bivar-filter"          class="slide-panel panel panel-default"></div>
+        <div id="multivar-filter"       class="slide-panel panel panel-default"></div>
+        <div id="sample-panels"         class="slide-panel panel panel-default"></div>
+        
+        <div class="shiny-template-output" id="panelTableContentOutput" data-post-render="panelTableContentOutputPostRender">
+        </div>
+        
+        <div class="right-panel">
+          <div class="right-sticky">
+            <i class="icon-chevron-left" id="sticky-icon"></i>
+          </div>
+          <div class="right-panel-container">
+            <h4>CogMap</h4>
+            <div class="cogmap-selectors shiny-template-output" id="cogMapOutput" data-post-render="cogMapOutputPostRender">
+            </div>
+          </div>
+        </div><!-- end right panel -->
+      </div>
+    </div>
+    
+    <div id="footer">
+      <div id="filterStateInput" class="shiny-my-data-input"></div>
+      <div id="visibleCogStateInput" class="shiny-my-data-input"></div>
+      <div id="panelLayoutStateInput" class="shiny-my-data-input"></div>
+      <div id="sortStateInput" class="shiny-my-data-input"></div>
+      <div id="exposedStateDataOutput" data-callback="updateControlsExposedState" class="shiny-my-data-output"></div>
+      <div id="panelDimInput" class="shiny-my-data-input"></div>
+      <div class="container">
+         <div class="pull-left shiny-template-output" id="cogBreadcrumbOutput" data-post-render="cogBreadcrumbOutputPostRender">
+         </div>
+      </div>
+    </div>
+      
+  <!-- Modal -->
+  <div class="modal fade" id="displayInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
+          <h3 class="modal-title" id="myModalLabel">Information About Current Display</h4>
+        </div>
+        <div class="modal-body">
+          Coming soon...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Login</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
+          <h3 class="modal-title" id="myModalLabel">Login / Sign Up</h4>
+        </div>
+        <div class="modal-body">
+          Coming soon...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Login</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
+          <h3 class="modal-title" id="myModalLabel">Open a New Display</h4>
+        </div>
+        <div class="modal-body">
+          <div id="displayListOutput" class="shiny-template-output"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
+          <h3 class="modal-title" id="myModalLabel">About Trelliscope</h4>
+        </div>
+        <div class="modal-body">
+          <h4>Powered by <a href="http://www.rstudio.com/shiny/">Shiny</a> and several other open-source projects</h4>
+          <ul>
+            <li>
+              <a href="http://getbootstrap.com">Twitter bootstrap</a>
+            </li>
+            <li>
+              <a href="http://mustache.github.io">mustache</a>
+            </li>
+            <li>
+              <a href="http://jquery.com">jquery</a>
+            </li>
+            <li>
+              <a href="http://d3js.org">d3.js</a>
+            </li>
+            <li>
+              <a href="http://ace.c9.io">Ace editor</a>
+            </li>
+            <li>
+              <a href="http://icomoon.io">icomoon</a>
+            </li>
+            <li>
+              <a href="http://fgnass.github.io/spin.js/">spin.js</a>
+            </li>
+            <li>
+              <a href="http://benhowdle.im/svgeezy/">svgeezy</a>
+            </li>
+            <li>
+              <a href="http://silviomoreto.github.io/bootstrap-select/">bootstrap-select</a>
+            </li>
+          </ul>
+          <p>Designed and written by 
+            <a href="https://github.com/hafen">Ryan Hafen</a>, 
+          UX design consulting from Ira Blossom</p>
+          <p>Contribute, browse, report issues, request features on <a href="https://github.com/hafen/trelliscope">github</a></p>
+          <p>Click <a href="http://hafen.github.io/trelliscope/">here</a> for a tutorial</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+    
+<!-- master control template -->
+<script id="controls-master-template" type="text/html">
+  <div class="panel-heading">
+    <div class="panel-left">
+      <span class="slide-icon">
+        <i class="{{icon}}"></i>
+      </span>
+      <h1>{{panel_header}}</h1>
+      <p>{{{panel_description}}}</p>
+    </div>
+    <div class="panel-right">
+      <a href="#" class="btn-panel-close">
+        <span class="panel-close"><i class="icon-times"></i></span>
+      </a>
+    </div>
+  </div><!--end panel header-->
+  <div class="panel-body shiny-template-output" id="{{body_id}}" data-post-render="{{body_id}}PostRender">
+  </div>
+  <div class="panel-footer">
+    <div class="pull-right">
+      <button type="button" class="btn btn-default btn-panel-close" data-action="{{body_id}}CancelButton">Cancel</button>
+      <button type="button" class="btn btn-primary btn-panel-update" data-action="{{body_id}}ApplyButton">Apply</button>
+    </div>
+  </div>
+</script>
+
+<!-- panel layout template -->
+<script id="panelLayoutOutput-template" type="text/html">
+<div class="panel-body-wrapper" id="panel-layout-data" data-panel-aspect="{{panel_aspect}}">
+  <div class="panel-layout-controls">
+    <div class="well">
+      <div class="control-group">
+        <p class="control-label">Panels per screen</p>
+        <div class="controls">
+          <input id="pppInput" type="number" value="1" class="input-small" disabled>
+        </div>
+      </div>
+    </div>    
+    <div class="well">
+      <div class="control-group">
+        <p class="control-label">Rows</p>
+        <div class="controls">
+          <input id="panel-rows" type="number" value="1" class="input-small">
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="control-label">Columns</p>
+        <div class="controls">
+          <input id="panel-cols" type="number" value="1" class="input-small">
+        </div>
+      </div>
+    </div>
+    <div class="well">
+      <p class="control-label">Fixed Per Page</p>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" disabled>
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
+        </ul>
+      </div>
+      <p>
+      <p class="control-label">Varies Per Page</p>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" disabled>
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
+        </ul>
+      </div>
+      <p>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" disabled>
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
+        </ul>
+      </div>
+    </div>
+    </p>
+    </p>
+  </div>
+  <div class="panel-layout-preview">
+    <div id="panel-layout-preview-pane">preview of arrangement</div>
+  </div>
+  <div class="clear"></div>
+</div>
+</script>
+
+
+
+<!-- panel function template -->
+<script id="panelFunctionOutput-template" type="text/html">
+  <div class="panel-body-wrapper">
+    <div id="editor">{{code}}</div>
+  </div>
+</script>
+
+<!-- visible cognostics template -->
+<script id="visibleCogListOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="table-header-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table table-header">
+    <thead>
+      <tr>
+        <th>Cognostic</th>
+        <th class="select-column">Show</th>
+      </tr>
+    </thead>
+  </table>
+  </div>
+  <div id="visible-cognostics-selection" class="table-body-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table">
+    <tbody>
+    {{#cog}}
+      <tr>
+        <td><strong>{{name}}</strong>: {{desc}}</td>
+        <td class="select-column selectable visible-cog-select {{active}}" data-name="{{name}}" id="visible-cog-select-{{name}}"></td>
+      </tr>
+      {{/cog}}
+    </tbody>
+  </table>
+  </div>
+</div>
+</script>
+
+<!-- add related display template -->
+<script id="relatedDisplayListOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="table-header-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table table-header">
+    <thead>
+      <tr>
+        <th>Display</th>
+        <th class="thumb-column">Thumb</th>
+        <th class="select-column">Select</th>
+      </tr>
+    </thead>
+  </table>
+  </div>
+  <div id="add-related-display-selection" class="table-body-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table">
+    <tbody>
+    {{#displays}}
+      <tr>
+        <td>
+          <strong>
+            <span style="color: #39b3d7;">{{group}}</span> / 
+            <span style="color: #d9534f;">{{name}}</span>
+          </strong>: {{desc}}<br/>
+          <span style="color: #888;"><em>{{n}} panels, pre-rendered={{preRender}}, data storage={{dataClass}}, updated: {{updated}}</em></span>
+        </td>
+        <td class="thumb-column"><div style="width:80px; height:60px;">{{{thumb}}}</div></td>
+        <td class="select-column selectable"></td>
+      </tr>
+      {{/displays}}
+    </tbody>
+  </table>
+  </div>
+</div>
+</script>
+
+<!-- cog table sort filter template -->
+<script id="cogTableControlsOutput-template" type="text/html">
+<div id="cog-table-hideoverflow">
+<div id="cog-table-outer">
+<div id="cog-table-inner">
+<div id="cog-table-inner-inner">
+<div id="cog-table-table">
+<table cellpadding="0" cellspacing="0" border="0" class="table-condensed table-striped table-bordered nice-table cog-table nowrap" id="cogTable">
+  <thead>
+  <tr id="cogColumnSortInput" class="shiny-my-data-input">
+    {{#dfInfo}}
+    <th data-variable="{{name}}" data-type="{{type}}">{{name}} 
+      <span class="cog-table-sort-span">
+        <i id="cog-table-sort-icon-{{name}}" class="icon-unsorted"></i>
+      </span>
+    </th>
+    {{/dfInfo}}
+  </tr>
+  </thead>
+  <tbody id="cogTableContentOutput" class="shiny-template-output" data-post-render="cogTableContentOutputPostRender">
+  {{#data}}
+  <tr>
+    {{#.}}
+    <td>{{.}}</td>
+    {{/.}}
+  </tr>
+  {{/data}}
+  </tbody>
+  <tfoot>
+    <tr id="cogColumnFilterInput" class="shiny-my-data-input">
+      {{#filter}}
+        {{^numeric}}
+        <td class="filter-character" id="cog-filter-td-{{name}}" data-variable="{{name}}" data-type="character">
+        {{/numeric}}
+        {{#numeric}}
+        <td class="filter-numeric" id="cog-filter-td-{{name}}" data-variable="{{name}}" data-type="numeric">
+        {{/numeric}}
+          {{^numeric}}
+            <input id="text-column-{{name}}" type="text" placeholder="regex" class="form-control column-filter column-filter-regex" spellcheck="false" autocorrect="false"/>
+            <select id="text-select-{{name}}" class="selectpicker dropup column-filter column-filter-select" multiple data-selected-text-format="count>0" data-count-selected-text="{0} of {1}" title="select" data-dropup-auto="false" data-width="auto" data-size="10">
+              {{#levels}}
+              <option>{{.}}</option>
+              {{/levels}}
+            </select>
+          {{/numeric}}
+          {{#numeric}}
+            <input id="lower-column-{{name}}" type="text" placeholder="From" class="form-control column-filter column-filter-from numbers-only" spellcheck="false" autocorrect="false"/>
+            <input id="upper-column-{{name}}" type="text" placeholder="To" class="form-control column-filter column-filter-to numbers-only" spellcheck="false" autocorrect="false"/>
+          {{/numeric}}
+        </td>
+      {{/filter}}
+    </tr>
+    <tr>
+      {{#dfInfo}}
+      <td>
+        <div class="cog-table-univar" id="cog-table-univar-{{name}}"></div>
+      </td>
+      {{/dfInfo}}
+    </tr>
+  </tfoot>
+</table>
+</div>
+<div id="cog-table-under">
+  <div id="cogTableInfoOutput" class="pull-left shiny-text-output">{{cogTableInfo}}</div>
+  <div class="pull-right" id="cog-table-pagination">
+    <ul class="pagination shiny-my-data-input" id="cogTablePaginationInput">
+      <li>
+        <a href="#" id="cogTablePageStart">
+          <i class="icon-step-backward"></i>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="cogTablePagePrev">
+          <i class="icon-chevron-left"></i>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span id="cogTableCurPageOutput" class="shiny-text-output">
+            {{curPage}}
+          </span> 
+            of 
+          <span id="cogTableNpagesOutput" class="shiny-text-output">
+            {{nPages}}
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="cogTablePageNext">
+          <i class="icon-chevron-right"></i>
+        </a>
+      </li>
+      <li><a href="#" id="cogTablePageEnd"><i class="icon-step-forward"></i></a></li>
+    </ul>
+  </div>
+</div>
+</div>
+<div id="cog-table-var-select">
+  <p class="control-label">Columns to show</p>
+  <div class="cog-table-var-select-list">
+    <ul class="list-group filter-select" id="cog-table-vars">
+      {{#cogNames}}
+      <li id="cog-table-col-select-li-{{name}}" class="list-group-item selectable {{active}}" data-col-index="{{index}}">
+        <span>{{name}}</span>
+        <span class="right-icon">
+          <i class="icon-filter hidden"></i>
+          <i class="icon-sort-numeric-asc hidden"></i>
+          <i class="icon-sort-numeric-desc hidden"></i>
+          <i class="icon-sort-alpha-asc hidden"></i>
+          <i class="icon-sort-alpha-desc hidden"></i>
+        </span>
+      </li>
+      {{/cogNames}}
+    </ul>
+  </div>
+  <p>
+  <!--<button id="btn-cog-table-reset" type="button" class="btn btn-danger" disabled>Reset All</button>-->
+  </p>
+</div>
+</div>
+</div>
+</div>
+</script>
+
+<!-- cog table content template -->
+<script id="cogTableContentOutput-template" type="text/html">
+{{#.}}
+<tr>
+  {{#.}}
+  <td>{{.}}</td>
+  {{/.}}
+</tr>
+{{/.}}
+</script>
+
+<!-- univariate filter template -->
+<script id="cogUniFilterControlsOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="relative-wrapper">
+    <div class="vis-filter-controls">
+      <p class="control-label">Variable to plot</p>
+      <div class="vis-filter-univar" id="univarFilterState">
+        <ul class="list-group filter-select shiny-my-data-input" id="univarFilterSelect">
+          {{#cogs}}
+          <li class="list-group-item" data-name="{{name}}" data-type="{{dataType}}" data-desc="{{desc}}" id="univar-var-{{name}}">
+            <div class="uni-filter-var-name filter-list-name">{{name}}</div>
+            <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
+          {{/cogs}}
+        </ul>
+      </div>
+    </div>
+    <div class="vis-filter-plot empty-plot shiny-d3-output" id="univarFilterPlot" data-d3-fn="d3univar" data-callback="univarFilterLocalLoad" data-spinner="univarSpinner"></div>
+    <div id="univar-dist-toggle">
+      <div class="btn-group" id="univarDistType" data-action="updateUnivarPlot">
+        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
+        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+      </div>
+    </div>
+    <div id="univar-type-toggle">
+      <div class="btn-group" id="univarPlotType" data-action="updateUnivarPlot">
+        <button type="button" class="btn btn-default mc-toggle quantile-button" disabled>Quantile</button>
+        <button type="button" class="btn btn-default mc-toggle histogram-button" disabled>Histogram</button>
+        <button type="button" class="btn btn-default mc-toggle bar-button" disabled>Bar</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
+<!-- bivariate filter template -->
+<script id="cogBiFilterControlsOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="relative-wrapper">
+    <div class="vis-filter-controls shiny-my-data-input" id="bivarFilterSelect">
+      <div id="bivar-y-select">
+        <p class="control-label">y-axis variable</p>
+        <div class="vis-filter-bivar" id="bivarFilterState">
+          <ul class="list-group filter-select" id="bivar-y-filter-select">
+            {{#cogs}}
+            <li class="list-group-item" data-name="{{name}}" data-desc="{{desc}}" id="bivar-y-{{name}}">
+              <div class="bi-filter-y-name filter-list-name">{{name}}</div>
+              <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
+            </li>
+            {{/cogs}}
+          </ul>
+        </div>
+      </div>
+      <div id="bivar-x-select">
+        <p class="control-label">x-axis variable</p>
+        <div class="vis-filter-bivar">
+          <ul class="list-group filter-select" id="bivar-x-filter-select">
+            {{#cogs}}
+            <li class="list-group-item" data-desc="{{desc}}" id="bivar-x-{{name}}" data-name="{{name}}">
+              <div class="bi-filter-x-name filter-list-name">{{name}}</div>
+              <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
+            {{/cogs}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="vis-filter-plot empty-plot shiny-d3-output" id="bivarFilterPlot"  data-d3-fn="d3bivar" data-callback="bivarFilterLocalLoad" data-spinner="bivarSpinner"></div>
+    <div id="bivar-dist-toggle">
+      <div class="btn-group" id="bivarDistType" data-action="updateBivarPlot">
+        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
+        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+      </div>
+    </div>
+    <div id="bivar-type-toggle">
+      <div class="btn-group" id="bivarPlotType" data-action="updateBivarPlot">
+        <button type="button" class="btn btn-info mc-toggle active">Scatter</button>
+        <button type="button" class="btn btn-default mc-toggle">Hexbin</button>
+        <button type="button" class="btn btn-default mc-toggle" disabled>Map</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
+<!-- multivariate filter template -->
+<script id="cogMultiFilterControlsOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="relative-wrapper">
+    <div class="vis-filter-controls">
+      <p class="control-label">Variables to project</p>
+      <div class="vis-filter-multivar">
+        <ul class="list-group filter-select shiny-my-data-input" id="multivarFilterSelect">
+          {{#cogs}}
+          <li class="list-group-item selectable" data-desc="{{desc}}">{{name}}</li>
+          {{/cogs}}
+        </ul>
+      </div>
+      <p>
+      <button id="btn-multivar" type="button" class="btn btn-primary" disabled>Plot Projection</button>
+      </p>
+    </div>
+    <div class="vis-filter-plot empty-plot shiny-d3-output" id="multivarFilterPlot" data-d3-fn="d3bivar" data-callback="multivarFilterLocalLoad" data-spinner="multivarSpinner"></div>
+    <div id="multivar-dist-toggle">
+      <div class="btn-group" id="multivarDistType" data-action="updateMultivarPlot">
+        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
+        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+      </div>
+    </div>
+    <div id="multivar-type-toggle">
+      <div class="btn-group" id="multivarPlotType" data-action="updateMultivarPlot">
+        <button type="button" class="btn btn-info mc-toggle active">Scatter</button>
+        <button type="button" class="btn btn-default mc-toggle">Hexbin</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
+<!-- sample panels template -->
+<script id="cogSampleControlsOutput-template" type="text/html">
+  Coming soon...
+</script>
+
+<!-- cog state template -->
+<script id="cogBreadcrumbOutput-template" type="text/html">
+  <span class="breadcrumb-state-label">State: </span>
+  {{#buttons}}
+  <div class="btn-group btn-group-xs">
+    <button type="button" class="btn {{class}} cog-state-edit" data-name="{{name}}"><i class="{{icon}}"></i> {{name}}</button>
+    <button type="button" class="btn {{class}} cog-state-remove" data-name="{{name}}">×</button>
+  </div>
+  {{/buttons}}
+</script>
+
+<!-- open display template -->
+<script id="displayListOutput-template" type="text/html">
+<div class="panel-body-wrapper">
+  <div class="table-header-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table table-header">
+    <thead>
+      <tr>
+        <th>Display</th>
+        <th class="thumb-column">Thumb</th>
+      </tr>
+    </thead>
+  </table>
+  </div>
+  <div id="displayListOutput-selection" class="table-body-div">
+  <table class="table table-condensed table-bordered nice-table full-width-table tr-hover-table">
+    <tbody id="displaySelectInput" class="shiny-display-select-input">
+    {{#.}}
+      <tr data-group="{{group}}" data-name="{{name}}">
+        <td>
+          <strong>
+            <span style="color: #39b3d7;">{{group}}</span> / 
+            <span style="color: #d9534f;">{{name}}</span>
+          </strong>: {{desc}}<br/>
+          <span style="color: #888;"><em>{{n}} panels, pre-rendered={{preRender}}, data storage={{dataClass}}, updated: {{updated}}</em></span>
+        </td>
+        <td class="thumb-column"><div style="width:80px; height:60px;">{{{thumb}}}</div></td>
+      </tr>
+      {{/.}}
+    </tbody>
+  </table>
+  </div>
+</div>
+</script>
+
+<script id="panelPageNavOutput-template" type="text/html">
+<div class="input-group">
+  <input type="text" class="form-control ppp-input" id="curPanelPageInput" value="1">
+  <div class="input-group-btn">
+    <button type="button" class="btn btn-default">/ <span id="panelPageTotOutput" class="shiny-text-output">{{n}}</span></button>
+    <button type="button" class="btn btn-default" tabindex="-1" id="pageLeftButton">
+      <i class="icon-arrow-left"></i>
+    </button>
+    <button type="button" class="btn btn-default" tabindex="-1" id="pageRightButton">
+      <i class="icon-arrow-right"></i>
+    </button>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <span id="skip-button-value">1x</span> <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" id="skip-button-menu" role="menu" style="min-width:0px; right:0; left:auto;">
+    {{#skips}}
+      <li><a href="#">{{.}}x</a></li>
+    {{/skips}}      
+    </ul>
+  </div>
+</div>
+</script>
+
+<script id="cogMapOutput-template" type="text/html">
+<h5>x-axis</h5>
+<select class="form-control cogmap-select">
+  <option></option>
+  {{#.}}
+  <option>{{name}}</option>
+  {{/.}}
+</select>
+<h5>y-axis</h5>
+<select class="form-control cogmap-select">
+  <option></option>
+  {{#.}}
+  <option>{{name}}</option>
+  {{/.}}
+</select>
+<p>
+  <div class="btn-group">
+    <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
+    <button type="button" class="btn btn-default mc-toggle">Conditional</button>
+  </div><!--end button-->
+</p>
+<button id="cogmap-submit" class="btn btn-primary">Submit</button>
+<div class="cogmap"></div>
+</script>
+
+<!-- panel table content template -->
+<script id="panelTableContentOutput-template" type="text/html">
+<div id="panelTableSpinner"></div>
+<table class="panel-table-table" id="panel-table">
+  {{#.}}
+  <tr>
+    {{#.}}
+    <td>
+      <table class="panel-table-wrapper">
+        <tr>
+          <td class="display-panel-td" name="{{i}}">
+            <div class="panel-image-wrapper">
+              <div id="display-panel-table-{{i}}">
+                {{{panel_content}}}
+              </div>
+              <div class="panel-image-download">
+                <i class="icon-download"></i>
+                <i class="icon-external-link"></i></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-condensed table-striped panel-cog-table">
+              {{#cogs}}
+              <tr>
+                <td class = "cog-name-td">
+                  <strong>{{cog_name}}</strong>
+                </td>
+                <td>
+                  <div class="cog-value-td">{{cog_value}}</div>
+                </td>
+              </tr>
+              {{/cogs}}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+    {{/.}}
+  </tr>
+  {{/.}}
+</table>
+</script>
+
+<script id="panel-layout-preview-pane-template" type="text/html">
+<table class="panel-layout-preview-table" style="width:{{w}}px; height:{{h}}px">
+  {{#rows}}
+  <tr>
+    {{#.}}
+      <td></td>
+    {{/.}}
+  </tr>
+  {{/rows}}
+</table>
+</script>
+
+  </body>
+</html>

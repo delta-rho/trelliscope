@@ -2,7 +2,8 @@
 \alias{makePNG}
 \title{Make a png for a Subset}
 \usage{
-makePNG(dat, panelFn = NULL, file, width, height, res, lims = NULL)
+makePNG(dat, panelFn = NULL, file, width, height, origWidth = width,
+  res = 72, basePointSize = 12, lims = NULL, pixelratio = 2)
 }
 \arguments{
   \item{dat}{a key-value pair}

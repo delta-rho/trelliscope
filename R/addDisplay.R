@@ -7,7 +7,7 @@
 #' @param name the name of the display (no spaces or special characters)
 #' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
 #' @param desc a description of the display (used in the viewer and in notebooks)
-#' @param dim a list defining aspects of the plot dimension, including height, width, aspect, and res (resolution of raster image).  defaults are 1000 (px), 1000 (px), "fill", and 150, respectively
+
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @author Ryan Hafen
@@ -21,20 +21,20 @@ addDisplay <- function(
    name,
    group = "common",
    desc = "",
-   dim = list(height=NULL, width=NULL, aspect=NULL, res=NULL),
+   height = 800,
+   width = 800,
    conn = getOption("vdbConn")
 ) {
    validateConn(conn)
    vdbPrefix <- conn$path
-   dim <- validatepanelDim(dim)
-      
+   
    # get display prefix (and move old display to backup if it already exists)
    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
    checkDisplayPath(displayPrefix, verbose)
    
-   makePNG(dat=p, 
-      file=file.path(displayPrefix, "thumb.png"), width=dim$width, 
-      height=dim$height, res=dim$res)
+   makePNG(dat = p, 
+      file = file.path(displayPrefix, "thumb.png"), 
+      width = width, height = height)
    
    modTime <- Sys.time()
    
@@ -46,7 +46,8 @@ addDisplay <- function(
       preRender = NA, 
       dataClass = NA, 
       cogClass = NA, 
-      panelDim = dim, 
+      height = height,
+      width = width,
       updated = modTime, 
       keySig = NA
    ), conn)
@@ -64,12 +65,13 @@ addDisplay <- function(
       cogDesc = NA,
       updated = modTime,
       keySig = NA,
-      panelDim = dim, 
+      height = height,
+      width = width,
       lims = NA,
       relatedData = NA
    )
    class(displayObj) <- "displayObj"
    
-   save(displayObj, file=file.path(displayPrefix, "displayObj.Rdata"))
+   save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
    
 }

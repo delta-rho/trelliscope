@@ -31,7 +31,8 @@ Depends:
     digest,
     codetools,
     hexbin,
-    ggplot2
+    ggplot2,
+    jsonlite
 Suggests:
     Rhipe,
     rmongodb,

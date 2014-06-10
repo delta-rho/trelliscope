@@ -30,6 +30,6 @@ Wilkinson's scagnostics paper.
 }
 \seealso{
 \code{\link{makeDisplay}}, \code{\link{makeSplodDat}},
-\code{\link{trsCogFn}}, \code{\link{splodPanelFn}}
+\code{\link{splodPanelFn}}
 }
 

@@ -2,12 +2,11 @@
 \alias{makeDisplay}
 \title{Create a Trelliscope Display}
 \usage{
-makeDisplay(data, name, group = "common", desc = "",
-  panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
-  panelFn = NULL, lims = list(x = "free", y = "free", prepanelFn = NULL),
-  cogFn = NULL, preRender = FALSE, cogConn = dfCogConn(), output = NULL,
-  conn = getOption("vdbConn"), verbose = TRUE, params = NULL,
-  control = NULL)
+makeDisplay(data, name, group = "common", desc = "", height = 800,
+  width = 800, panelFn = NULL, lims = list(x = "free", y = "free",
+  prepanelFn = NULL), cogFn = NULL, preRender = FALSE,
+  cogConn = dfCogConn(), output = NULL, conn = getOption("vdbConn"),
+  verbose = TRUE, params = NULL, control = NULL)
 }
 \arguments{
   \item{data}{data of class "ddo" or "ddf" (see
@@ -22,10 +21,13 @@ makeDisplay(data, name, group = "common", desc = "",
   \item{desc}{a description of the display (used in the
   viewer and in notebooks)}
 
-  \item{panelDim}{a list defining aspects of dimensions for
-  each panel, including height, width, aspect, and res
-  (resolution of raster image).  defaults are 1000 (px),
-  1000 (px), "fill", and 150, respectively}
+  \item{height}{reference dimensions (in pixels) for each
+  panel (panels will be resized based on available space in
+  the viewer)}
+
+  \item{width}{reference dimensions (in pixels) for each
+  panel (panels will be resized based on available space in
+  the viewer)}
 
   \item{panelFn}{a function that produces a plot and takes
   one argument, which will be the current split of the data

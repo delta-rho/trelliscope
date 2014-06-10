@@ -1,0 +1,155 @@
+{
+	"panel-layout" : {
+		"icon" : [
+			"icon-th"
+		],
+		"panel_header" : [
+			"Panel Layout"
+		],
+		"panel_description" : [
+			"Specify the arrangement of the panels on each page by entering the number of rows and columns of panels per page.  Future functionality for fixing / varying levels of cognostics per page to come."
+		],
+		"body_id" : [
+			"panelLayoutOutput"
+		],
+		"update_button" : [
+			"panelLayoutUpdateButton"
+		]
+	},
+	"panel-function" : {
+		"icon" : [
+			"icon-panel-edit"
+		],
+		"panel_header" : [
+			"Panel Function Editor"
+		],
+		"panel_description" : [
+			"Edit the code that generates each panel."
+		],
+		"body_id" : [
+			"panelFunctionOutput"
+		],
+		"update_button" : [
+			"panelFunctionUpdateButton"
+		]
+	},
+	"visible-cognostics" : {
+		"icon" : [
+			"icon-cog-list"
+		],
+		"panel_header" : [
+			"Visible Cognostics"
+		],
+		"panel_description" : [
+			"Specify which cognostics to view underneath each panel. <br/>Select cognostics to view by clicking and/or dragging the 'Show' column."
+		],
+		"body_id" : [
+			"visibleCogListOutput"
+		],
+		"update_button" : [
+			"visibleCogListUpdateButton"
+		]
+	},
+	"add-related-display" : {
+		"icon" : [
+			"icon-plus-square-o"
+		],
+		"panel_header" : [
+			"Add Related Display"
+		],
+		"panel_description" : [
+			"Select additional displays (if any) that have been created on the same partitioning to view with the currently selected display.  If additional displays are selected, only one subset per page will be shown."
+		],
+		"body_id" : [
+			"relatedDisplayListOutput"
+		],
+		"update_button" : [
+			"relatedDisplayListUpdateButton"
+		]
+	},
+	"cog-table-sort-filter" : {
+		"icon" : [
+			"icon-sort-filter"
+		],
+		"panel_header" : [
+			"Cognostics View / Sort / Filter"
+		],
+		"panel_description" : [
+			"View cognostics in a table and specify sort order or filtering of panels.  <br/>Shift-click on the panel header sorting buttons for multi-column sorting."
+		],
+		"body_id" : [
+			"cogTableControlsOutput"
+		],
+		"update_button" : [
+			"cogTableControlsUpdateButton"
+		]
+	},
+	"univar-filter" : {
+		"icon" : [
+			"icon-bars"
+		],
+		"panel_header" : [
+			"Visual Univariate Filter"
+		],
+		"panel_description" : [
+			"Filter panels based on a single cognostic guided by a visual display of the distribution of the cognostic.  <br/>Select a variable to view and click and drag on the display to specify filtering."
+		],
+		"body_id" : [
+			"cogUniFilterControlsOutput"
+		],
+		"update_button" : [
+			"cogUniFilterControlsUpdateButton"
+		]
+	},
+	"bivar-filter" : {
+		"icon" : [
+			"icon-stats"
+		],
+		"panel_header" : [
+			"Visual Bivariate Filter"
+		],
+		"panel_description" : [
+			"Filter panels based on pairs of cognostics through an interactive scatterplot.  <br/>Currently only quantitative variables are supported."
+		],
+		"body_id" : [
+			"cogBiFilterControlsOutput"
+		],
+		"update_button" : [
+			"cogBiFilterControlsUpdateButton"
+		]
+	},
+	"multivar-filter" : {
+		"icon" : [
+			"icon-multivar"
+		],
+		"panel_header" : [
+			"Visual Multivariate Filter"
+		],
+		"panel_description" : [
+			"Filter panels based on a two-dimensional projection pursuit of multiple quantitative cognostics.  <br/>This can help uncover interesting regions of the cognostics space."
+		],
+		"body_id" : [
+			"cogMultiFilterControlsOutput"
+		],
+		"update_button" : [
+			"cogMultiFilterControlsUpdateButton"
+		]
+	},
+	"sample-panels" : {
+		"icon" : [
+			"icon-sample"
+		],
+		"panel_header" : [
+			"Sample Panels"
+		],
+		"panel_description" : [
+			"Specify how to sample from panels in their current sorted and filtered state (coming soon)."
+		],
+		"body_id" : [
+			"cogSampleControlsOutput"
+		],
+		"updateButton" : [
+			"cogSampleControlsUpdateButton"
+		]
+	}
+}

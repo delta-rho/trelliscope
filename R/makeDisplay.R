@@ -6,7 +6,8 @@
 #' @param name the name of the display (no spaces or special characters)
 #' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
 #' @param desc a description of the display (used in the viewer and in notebooks)
-#' @param panelDim a list defining aspects of dimensions for each panel, including height, width, aspect, and res (resolution of raster image).  defaults are 1000 (px), 1000 (px), "fill", and 150, respectively
+#' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
+#' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param panelFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with panelFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)
 #' @param lims either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
@@ -35,7 +36,8 @@ makeDisplay <- function(
    name,
    group = "common",
    desc = "",
-   panelDim = list(height = NULL, width = NULL, aspect = NULL, res = NULL),
+   height = 800,
+   width = 800,
    panelFn = NULL, # function to be applied to each split,
    lims = list(x = "free", y = "free", prepanelFn = NULL),
    cogFn = NULL,
@@ -61,7 +63,8 @@ makeDisplay <- function(
    # preRender <- TRUE
    # output <- NULL
    # verbose <- TRUE
-   # panelDim <- list(height = NULL, width = NULL, aspect = NULL, res = NULL)
+   # height <- 800
+   # width <- 800
    # conn <- vdbConn(file.path(tempdir(), "vdbtest"), autoYes = TRUE)
    # cogStorage <- "local"
    # control <- NULL
@@ -114,8 +117,6 @@ makeDisplay <- function(
    
    cogEx <- validateCogFn(data, cogFn, verbose)
    
-   panelDim <- validatepanelDim(panelDim, data, panelFn, verbose)
-   
    if(is.null(desc) || is.na(desc))
       desc <- "(no description)"
    
@@ -135,8 +136,8 @@ makeDisplay <- function(
          if(preRender) {
             ff <- tempfile()
             makePNG(dat = list(map.keys[[i]], map.values[[i]]), 
-               panelFn = panelFn, file = ff, width = panelDim$width, 
-               height = panelDim$height, res = panelDim$res, lims = lims)
+               panelFn = panelFn, file = ff, width = width, 
+               height = height, lims = lims)
             collect(map.keys[[i]], encodePNG(ff))
          }
          cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
@@ -177,7 +178,8 @@ makeDisplay <- function(
       cogFn       = cogFn,
       lims        = lims,
       conn        = conn,
-      panelDim    = panelDim
+      height      = height,
+      width       = width
    )
    
    # if the package isn't loaded, need to pass other functions as well
@@ -204,6 +206,7 @@ makeDisplay <- function(
          as.cogGeo = as.cogGeo,
          as.cogRel = as.cogRel,
          as.cogHier = as.cogHier,
+         as.cogHref = as.cogHref,
          cogMean = cogMean,
          cogRange = cogRange,
          cog2df = cog2df,
@@ -267,13 +270,17 @@ makeDisplay <- function(
       preRender = preRender, 
       dataClass = tail(class(data), 1), 
       cogClass = class(cogConn)[1], 
-      panelDim = panelDim, 
+      height = height,
+      width = width,
       updated = modTime, 
       keySig = keySig
    ), conn)
    
    if(verbose)
       message("* Storing display object...")
+   
+   cogDesc <- getCogDesc(cogEx)
+   cogInfo <- getCogInfo(cogDatConn, cogDesc)
    
    displayObj <- list(
       name = name,
@@ -285,10 +292,12 @@ makeDisplay <- function(
       cogFn = cogFn,
       n = getAttribute(data, "nDiv"), 
       cogDatConn = cogDatConn,
-      cogDesc = getCogDesc(cogEx),
+      cogDesc = cogDesc,
+      cogInfo = cogInfo,
       updated = modTime,
       keySig = keySig,
-      panelDim = panelDim, 
+      height = height,
+      width = width,
       lims = lims,
       relatedData = globalVarList
    )
@@ -298,7 +307,12 @@ makeDisplay <- function(
    
    # make thumbnail
    message("* Plotting thumbnail...")
-   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = panelDim$width, height = panelDim$height, res = panelDim$res, lims = lims))
+   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
+   # small thumbnail
+   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb_small.png"), width = width * (100 / height), height = 100, origWidth = width, lims = lims))
+   
+   # TODO: plot small thumbnail as well
+   # suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
    
    return(invisible(displayObj))
 }

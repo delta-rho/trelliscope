@@ -3,7 +3,7 @@
 \alias{cogNcol}
 \alias{cogNrow}
 \alias{getCogData}
-\alias{getCurCogDat}
+\alias{oldGetCurCogDat}
 \title{Methods for Cognostics Connections}
 \usage{
 cogNcol(x, ...)
@@ -14,7 +14,7 @@ cogNames(x, ...)
 
 getCogData(x, ...)
 
-getCurCogDat(x, ...)
+oldGetCurCogDat(x, ...)
 }
 \arguments{
   \item{x}{object}

@@ -9,13 +9,13 @@
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
-#' cogLoessRMSE(dist ~ speed, span=0.5, data=cars)
+#' cogLoessRMSE(dist ~ speed, span = 0.5, data = cars)
 #' @export
-cogLoessRMSE <- function(..., desc="RMSE of residuals from loess fit") {
-   suppressWarnings(tmp <- try(loess(...), silent=TRUE))
+cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit") {
+   suppressWarnings(tmp <- try(loess(...), silent = TRUE))
    if(inherits(tmp, "try-error"))
       return(NA)
-   cog(tmp$s, desc=desc, type="num")
+   cog(tmp$s, desc = desc, type = "num")
 }
 
 #' Compute Range Cognostic
@@ -30,11 +30,11 @@ cogLoessRMSE <- function(..., desc="RMSE of residuals from loess fit") {
 #' @examples
 #' cogRange(rnorm(100))
 #' @export
-cogRange <- function(x, desc="range (max - min)") {
-   res <- suppressWarnings(diff(range(x, na.rm=TRUE)))
+cogRange <- function(x, desc = "range (max - min)") {
+   res <- suppressWarnings(diff(range(x, na.rm = TRUE)))
    if(is.infinite(res))
       res <- NA
-   cog(res, desc=desc, type="num")
+   cog(res, desc = desc, type = "num")
 }
 
 #' Compute Mean Cognostic
@@ -49,11 +49,11 @@ cogRange <- function(x, desc="range (max - min)") {
 #' @examples
 #' cogMean(rnorm(100))
 #' @export
-cogMean <- function(x, desc="mean") {
-   res <- suppressWarnings(mean(x, na.rm=TRUE))
+cogMean <- function(x, desc = "mean") {
+   res <- suppressWarnings(mean(x, na.rm = TRUE))
    if(is.infinite(res))
       res <- NA
-   cog(res, desc=desc, type="num")
+   cog(res, desc = desc, type = "num")
 }
 
 #' Compute Scagnostics
@@ -82,24 +82,24 @@ cogScagnostics <- function(x, y) {
    }
    names(res)[9] <- "Monoton" # so it's not too wide in cog table
    list(
-      outly   = cog(res[1] , type="num",  
+      outly   = cog(res[1] , type = "num",  
          desc = "Proportion of the total edge length due to extremely long edges connected to points of single degree"),
-      skew    = cog(res[2] , type="num",  
-         desc = "Ratio of quantiles of edge lengths"),
-      clumpy  = cog(res[3] , type="num",  
-         desc = "A runt-based measure that emphasizes clusters with small intra-cluster distances relative to the length of their connecting edge"),
-      sparse  = cog(res[4] , type="num",  
-         desc = "Measures whether points in a 2D scatterplot are confined to a lattice or a small number of locations on the plane"),
-      striated= cog(res[5] , type="num",  
-         desc = "Measure of coherence"),
-      convex  = cog(res[6] , type="num",  
-         desc = "Ratio of the area of the alpha hull and the area of the convex hull"),
-      skinny  = cog(res[7] , type="num",  
-         desc = "Ratio of perimeter to area of a polygon -- roughly, how skinny it is. A circle yields a value of 0, a square yields 0.12 and a skinny polygon yields a value near one."),
-      stringy = cog(res[8] , type="num",  
-         desc = "A stringy shape is a skinny shape with no branches"),
-      monoton = cog(res[9] , type="num",  
-         desc = "Squared Spearman correlation coefficient")
+      skew     = cog(res[2] , type = "num",  
+         desc  = "Ratio of quantiles of edge lengths"),
+      clumpy   = cog(res[3] , type = "num",  
+         desc  = "A runt-based measure that emphasizes clusters with small intra-cluster distances relative to the length of their connecting edge"),
+      sparse   = cog(res[4] , type = "num",  
+         desc  = "Measures whether points in a 2D scatterplot are confined to a lattice or a small number of locations on the plane"),
+      striated = cog(res[5] , type = "num",  
+         desc  = "Measure of coherence"),
+      convex   = cog(res[6] , type = "num",  
+         desc  = "Ratio of the area of the alpha hull and the area of the convex hull"),
+      skinny   = cog(res[7] , type = "num",  
+         desc  = "Ratio of perimeter to area of a polygon -- roughly, how skinny it is. A circle yields a value of 0, a square yields 0.12 and a skinny polygon yields a value near one."),
+      stringy  = cog(res[8] , type = "num",  
+         desc  = "A stringy shape is a skinny shape with no branches"),
+      monoton  = cog(res[9] , type = "num",  
+         desc  = "Squared Spearman correlation coefficient")
    )
 }
 
@@ -122,7 +122,7 @@ cogScagnostics <- function(x, y) {
 #' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}} 
 #' 
 #' @export
-cog <- function(val=NULL, desc="", type=NULL) {
+cog <- function(val = NULL, desc = "", type = NULL) {
    cogTypes <- list(
       key  = as.character,
       int  = as.integer  ,
@@ -132,7 +132,8 @@ cog <- function(val=NULL, desc="", type=NULL) {
       time = as.POSIXct  ,
       geo  = as.cogGeo   ,
       rel  = as.cogRel   ,
-      hier = as.cogHier
+      hier = as.cogHier  ,
+      href = as.cogHref
    )
    
    types <- names(cogTypes)
@@ -140,14 +141,14 @@ cog <- function(val=NULL, desc="", type=NULL) {
    if(!is.null(type)) {
       if(!type %in% types)
          stop("Invalid cognostics type: ", type)
-         
+      
       val <- try(cogTypes[[type]](val))
       if(inherits(val, "try-error"))
          val <- NA
    } else { # try to infer type
       if(is.factor(val))
          val <- as.character(val)
-
+      
       if(!(is.character(val) || is.numeric(val) || inherits(val, "Date") || inherits(val, "POSIXct")))
          val <- NA
    }
@@ -181,7 +182,7 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
       panelKey <- digest(kvSubset[[1]])
    }
    res <- list(
-      panelKey = cog(panelKey, desc="panel key", type="key")
+      panelKey = cog(panelKey, desc = "panel key", type = "key")
    )
    splitVars <- getSplitVars(kvSubset)
    if(!is.null(splitVars)) {
@@ -201,21 +202,25 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
 
 ## some special cognostics, such as relations, need to be concatenated to a comma-separated string if we are storing them as a data.frame
 cog2df <- function(x) {
-   # TODO: when class(x[[i]])=="trsCogRel", first concatenate
+   # TODO: when class(x[[i]]) == "cogRel", first concatenate
    # TODO: make sure it is 1 row
-   data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors=FALSE)
+   data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors = FALSE)
 }
 
 as.cogGeo <- function(x) {
    x <- x[1:2]
    names(x) <- c("lat", "lon")
-   class(x) <- c("trsCogGeo", "list")
+   class(x) <- c("cogGeo", "list")
    x
 }
 
 as.cogRel <- function(x) {
-   class(x) <- c("trsCogRel")
+   class(x) <- c("cogRel")
    x
+}
+
+as.cogHref <- function(x) {
+   paste("<a href=\"", x$href, "\">", x$label, ">")
 }
 
 as.cogHier <- function(x) {
@@ -223,50 +228,83 @@ as.cogHier <- function(x) {
 }
 
 cogFlatten <- function(x) {
-   if(inherits(x, "trsCogRel"))
-      return(paste(x, collapse=","))
+   if(inherits(x, "cogRel"))
+      return(paste(x, collapse = ","))
    x
 }
 
-getCogDesc <- function(x, df=TRUE) {
+getCogDesc <- function(x, df = TRUE) {
    getDesc <- function(a) {
       tmp <- attr(a, "desc")
       ifelse(is.null(tmp), "", tmp)
    }
-
-   pk <- data.frame(type="panelKey", name="panelKey", desc="panel key")
+   getType <- function(a) {
+      lapply(a, function(x) setdiff(class(x), "cog"))
+   }
+   
+   pk <- data.frame(type = "panelKey", name = "panelKey", desc = "panel key", dataType = "panelKey", stringsAsFactors = FALSE)
    sv <- if(!is.null(x$splitVars)) {
       tmp <- lapply(x$splitVars, function(x) "conditioning variable")
-      data.frame(type="splitVar", name=names(tmp), desc=unlist(tmp))
+      data.frame(type = "splitVar", name = names(tmp), desc = unlist(tmp), dataType = "character", stringsAsFactors = FALSE)
    } else {
       NULL
    }
    bsvs <- if(!is.null(x$bsv)) {
-      tmp <- lapply(x$bsv, getDesc)
-      data.frame(type="bsv", name=names(tmp), desc=unlist(tmp))
+      descs <- lapply(x$bsv, getDesc)
+      types <- getType(x$bsv)
+      data.frame(type = "bsv", name = names(descs), desc = unlist(descs), dataType = unlist(types), stringsAsFactors = FALSE)
    } else {
       NULL
    }
    cogs <- if(!is.null(x$cog)) {
-      tmp <- lapply(x$cog, getDesc)
-      data.frame(type="cog", name=names(tmp), desc=unlist(tmp))
+      descs <- lapply(x$cog, getDesc)
+      types <- getType(x$cog)
+      data.frame(type = "cog", name = names(descs), desc = unlist(descs), dataType = unlist(types), stringsAsFactors = FALSE)
    } else {
       NULL
    }
-
+   
    res <- rbind(
       pk, sv, bsvs, cogs
    )
    rownames(res) <- NULL
+   class(res) <- c("cogDesc", "data.frame")
    res
 }
 
-getCognostics <- function(data, cogFn, splitKeys=NULL) {
+getCognostics <- function(data, cogFn, splitKeys = NULL) {
    if(is.null(splitKeys))
       splitKeys <- names(data)
       
-   isCondDiv <- data$divBy$type=="condDiv"
+   isCondDiv <- data$divBy$type == "condDiv"
    lapply(seq_along(data), function(ii) {
       getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])
    })
 }
+
+getCogInfo <- function(x, cogDesc) {
+   cogDesc <- subset(cogDesc, type != "panelKey")
+   res <- lapply(seq_len(nrow(cogDesc)), function(i) {
+      curRow <- cogDesc[i,]
+      
+      if(curRow$dataType %in% c("character", "factor")) {
+         res <- getCogCatPlotData(x, curRow$name)
+         return(list(
+            name = curRow$name,
+            type = "character",
+            n = res$n,
+            marginal = res$freq
+         ))
+      } else {
+         return(list(
+            name = curRow$name,
+            type = "numeric",
+            marginal = getCogQuantPlotData(x, curRow$name, type = c("hist", "quant"))
+         ))
+      }
+   })
+   names(res) <- sapply(res, function(x) x$name)
+   class(res) <- c("cogInfo", "list")
+   res
+}
+

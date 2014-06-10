@@ -155,8 +155,8 @@ as.data.frame(tmp, stringsAsFactors=FALSE)
    do.call(rbind, res)[, colIdx, drop=FALSE]
 }
 
-#' @S3method getCurCogDat mongoCogDatConn
-getCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
+#' @S3method oldGetCurCogDat mongoCogDatConn
+oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
    ex <- cogDF$ex
    exNames <- names(ex)[colIndex]
    

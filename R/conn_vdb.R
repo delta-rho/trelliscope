@@ -14,11 +14,12 @@
 #' @seealso \code{\link{updateViewer}}
 #' @export
 vdbConn <- function(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose=TRUE) {
-   path <- normalizePath(path)
    
    if(file.exists(file.path(path, "conn.Rdata")) && !reset) {
       load(file.path(path, "conn.Rdata"))
       # if the vdb has moved, keep the vdb name, but change the path
+      path <- normalizePath(path)
+      
       conn$path <- path
       save(conn, file = file.path(path, "conn.Rdata"))
       options(vdbConn = conn)
@@ -28,6 +29,8 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose=T
          message("* 'name' was not provided for vdb connection, using the parent directory name...")
          name <- basename(dirname(path))
       }
+      
+      path <- normalizePath(path)
       
       # if directory doesn't exist, create and initialize
       if(!file.exists(path)) {
