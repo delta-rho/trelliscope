@@ -32,7 +32,8 @@ Depends:
     codetools,
     hexbin,
     ggplot2,
-    jsonlite
+    jsonlite,
+    fastICA
 Suggests:
     Rhipe,
     rmongodb,
