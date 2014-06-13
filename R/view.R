@@ -28,7 +28,7 @@ view <- function(name=NULL, group=NULL, openBrowser=TRUE, conn=getOption("vdbCon
       # if it's a simple display, just view it in a web browser
       displayPrefix <- file.path(vdbPrefix, "displays", group, name)
       load(file.path(displayPrefix, "displayObj.Rdata"))
-      if(is.na(displayObj$panelDataSource))   {
+      if(is.null(attributes(displayObj$panelDataSource))) {
          browseURL(file.path(displayPrefix, "thumb.png"))
          return()
       }
