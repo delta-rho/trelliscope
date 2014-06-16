@@ -62,7 +62,7 @@ cogNrow.data.frame <- function(x) {
 
 #' @S3method cogNames data.frame
 cogNames.data.frame <- function(x) {
-   names(x)            
+   names(x)
 }
 
 #' @S3method getCogData data.frame
@@ -73,11 +73,11 @@ getCogData.data.frame <- function(x, rowIdx, colIdx) {
 #' @S3method oldGetCurCogDat data.frame
 oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE) {
    filterIndex <- seq_len(cogNrow(cogDF))
-   
+
    if(!is.null(flt)) {
       logMsg("Updating cognostic filter index", verbose = verbose)
       flt <- processFilterInput(flt)
-      
+
       for(i in seq_along(flt)) {
          cur <- flt[[i]]
          if(cur[1] == "from") {
@@ -93,7 +93,7 @@ oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose =
          filterIndex <- intersect(filterIndex, newIndex)
       }
    }
-   
+
    # before ordering, perform any filters
    logMsg("Updating cognostic sort index", verbose = verbose)
    cogDF <- cogDF[filterIndex,, drop = FALSE]
@@ -125,7 +125,7 @@ oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose =
                   return(cogDF[,colIndex[orderCols[i]], drop = FALSE])
                }
             })
-            orderIndex <- do.call(order, orderCols)               
+            orderIndex <- do.call(order, orderCols)
          }
       }
    }
@@ -140,18 +140,18 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
    # TODO: add logic about number of breaks
    # TODO: make number of quantiles configurable
    dat <- cogDF[[name]]
-   
+
    res <- list()
-   
+
    if("hist" %in% type) {
       if(all(is.na(dat))) {
          res[["hist"]] <- data.frame(xdat = c(0, 1), ydat = c(0, 0))
       } else {
          hst <- hist(dat, plot = FALSE)
-         res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))         
+         res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))
       }
    }
-   
+
    if("quant" %in% type) {
       n <- length(dat)
       if(all(is.na(dat))) {
@@ -164,10 +164,10 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
             sq <- seq(0, 1, length = 1000)
             qnt <- data.frame(f = sq, q = quantile(dat, sq))
          }
-         res[["quant"]] <- qnt         
+         res[["quant"]] <- qnt
       }
    }
-   
+
    if(length(type) == 1) {
       res[[1]]
    } else {

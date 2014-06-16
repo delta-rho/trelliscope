@@ -1,11 +1,11 @@
 
 #' Compute RMSE of Loess Fit Cognostic
-#' 
+#'
 #' Compute RMSE of loess fit as a cognostic to be used as cognostics in a trelliscope display.
-#' 
+#'
 #' @param \ldots arguments to be passed to \code{link{loess}}, such as the formula, data, smoothing parameters, etc.
 #' @param desc description of cognostic
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -19,12 +19,12 @@ cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit") {
 }
 
 #' Compute Range Cognostic
-#' 
+#'
 #' Compute range to be used as cognostics in a trelliscope display.
 #'
 #' @param x numeric vector from which to compute the range
 #' @param desc description of cognostic
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -38,12 +38,12 @@ cogRange <- function(x, desc = "range (max - min)") {
 }
 
 #' Compute Mean Cognostic
-#' 
+#'
 #' Compute mean to be used as cognostics in a trelliscope display.
-#' 
+#'
 #' @param x numeric vector from which to compute the mean
 #' @param desc description of cognostic
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -57,12 +57,12 @@ cogMean <- function(x, desc = "mean") {
 }
 
 #' Compute Scagnostics
-#' 
+#'
 #' Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
 #'
 #' @param x,y
 #' @param desc description of cognostic
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -82,23 +82,23 @@ cogScagnostics <- function(x, y) {
    }
    names(res)[9] <- "Monoton" # so it's not too wide in cog table
    list(
-      outly   = cog(res[1] , type = "num",  
+      outly   = cog(res[1] , type = "num",
          desc = "Proportion of the total edge length due to extremely long edges connected to points of single degree"),
-      skew     = cog(res[2] , type = "num",  
+      skew     = cog(res[2] , type = "num",
          desc  = "Ratio of quantiles of edge lengths"),
-      clumpy   = cog(res[3] , type = "num",  
+      clumpy   = cog(res[3] , type = "num",
          desc  = "A runt-based measure that emphasizes clusters with small intra-cluster distances relative to the length of their connecting edge"),
-      sparse   = cog(res[4] , type = "num",  
+      sparse   = cog(res[4] , type = "num",
          desc  = "Measures whether points in a 2D scatterplot are confined to a lattice or a small number of locations on the plane"),
-      striated = cog(res[5] , type = "num",  
+      striated = cog(res[5] , type = "num",
          desc  = "Measure of coherence"),
-      convex   = cog(res[6] , type = "num",  
+      convex   = cog(res[6] , type = "num",
          desc  = "Ratio of the area of the alpha hull and the area of the convex hull"),
-      skinny   = cog(res[7] , type = "num",  
+      skinny   = cog(res[7] , type = "num",
          desc  = "Ratio of perimeter to area of a polygon -- roughly, how skinny it is. A circle yields a value of 0, a square yields 0.12 and a skinny polygon yields a value near one."),
-      stringy  = cog(res[8] , type = "num",  
+      stringy  = cog(res[8] , type = "num",
          desc  = "A stringy shape is a skinny shape with no branches"),
-      monoton  = cog(res[9] , type = "num",  
+      monoton  = cog(res[9] , type = "num",
          desc  = "Squared Spearman correlation coefficient")
    )
 }
@@ -106,21 +106,21 @@ cogScagnostics <- function(x, y) {
 
 # TODO: document example
 #' Create a Cognostics Object
-#' 
+#'
 #' Create a cognostics object.  To be used inside of the function passed to the \code{cogFn} argument of \code{\link{makeDisplay}} for each cognostics value to be computed for each subset.
-#' 
+#'
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
 #' @param the desired type of cognostic you would like to compute (see details)
-#' 
+#'
 #' @return object of class "cog"
-#' 
+#'
 #' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "int", "num", "fac", "date", "time", "geo", "rel", "hier".
-#' 
+#'
 #' @author Ryan Hafen
-#' 
-#' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}} 
-#' 
+#'
+#' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}
+#'
 #' @export
 cog <- function(val = NULL, desc = "", type = NULL) {
    cogTypes <- list(
@@ -135,43 +135,43 @@ cog <- function(val = NULL, desc = "", type = NULL) {
       hier = as.cogHier  ,
       href = as.cogHref
    )
-   
+
    types <- names(cogTypes)
-   
+
    if(!is.null(type)) {
       if(!type %in% types)
          stop("Invalid cognostics type: ", type)
-      
+
       val <- try(cogTypes[[type]](val))
       if(inherits(val, "try-error"))
          val <- NA
    } else { # try to infer type
       if(is.factor(val))
          val <- as.character(val)
-      
+
       if(!(is.character(val) || is.numeric(val) || inherits(val, "Date") || inherits(val, "POSIXct")))
          val <- NA
    }
-   
+
    attr(val, "desc") <- desc
    class(val) <- c("cog", class(val))
    val
 }
 
 #' @S3method print cog
-print.cog <- function(x, ...) { 
-   attr(x, "desc") <- NULL 
+print.cog <- function(x, ...) {
+   attr(x, "desc") <- NULL
    class(x) <- setdiff(class(x), "cog")
    print(x)
 }
 
 #' Apply Cognostics Function to a Key-Value Pair
-#' 
+#'
 #' Apply cognostics function to a key-value pair
-#' 
+#'
 #' @param cogFn cognostics function
 #' @param kvSubset key-value pair
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
 #' @export
@@ -194,7 +194,7 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
    }
    if(!is.null(cogFn))
       res$cog <- kvApply(cogFn, kvSubset)
-   
+
    res
 }
 
@@ -241,7 +241,7 @@ getCogDesc <- function(x, df = TRUE) {
    getType <- function(a) {
       lapply(a, function(x) setdiff(class(x), "cog"))
    }
-   
+
    pk <- data.frame(type = "panelKey", name = "panelKey", desc = "panel key", dataType = "panelKey", stringsAsFactors = FALSE)
    sv <- if(!is.null(x$splitVars)) {
       tmp <- lapply(x$splitVars, function(x) "conditioning variable")
@@ -263,7 +263,7 @@ getCogDesc <- function(x, df = TRUE) {
    } else {
       NULL
    }
-   
+
    res <- rbind(
       pk, sv, bsvs, cogs
    )
@@ -275,7 +275,7 @@ getCogDesc <- function(x, df = TRUE) {
 getCognostics <- function(data, cogFn, splitKeys = NULL) {
    if(is.null(splitKeys))
       splitKeys <- names(data)
-      
+
    isCondDiv <- data$divBy$type == "condDiv"
    lapply(seq_along(data), function(ii) {
       getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])
@@ -286,7 +286,7 @@ getCogInfo <- function(x, cogDesc) {
    cogDesc <- subset(cogDesc, type != "panelKey")
    res <- lapply(seq_len(nrow(cogDesc)), function(i) {
       curRow <- cogDesc[i,]
-      
+
       if(curRow$dataType %in% c("character", "factor")) {
          res <- getCogCatPlotData(x, curRow$name)
          return(list(
