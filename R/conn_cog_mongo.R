@@ -3,18 +3,18 @@
 ############################################################################
 
 #' Initiate a MongoDB Cognostics Connection
-#' 
+#'
 #' Initiate a MongoDB cognostics connection, to be passed as the \code{cogConn} argument to \code{\link{makeDisplay}}.
-#' 
+#'
 #' @param host,user,pass,name,db parameters used to initiate MongoDB connection (see \code{\link{mongo.create}})
-#' 
+#'
 #' @return a "cogConn" object of class "cogMongoConn"
 #' @author Ryan Hafen
 #' @seealso \code{\link{makeDisplay}}
-#' 
+#'
 #' @export
 mongoCogConn <- function(host="127.0.0.1", user="", pass="", name="", db="") {
-   
+
    conn <- list(
       host = host,
       name = name,
@@ -22,21 +22,21 @@ mongoCogConn <- function(host="127.0.0.1", user="", pass="", name="", db="") {
       pass = pass,
       db   = db
    )
-   
+
    # test the connection
    mongoConn <- mongoConnect(list(conn=conn))
    stopifnot(mongo.get.err(mongoConn) == 0)
    mongo.disconnect(mongoConn)
-   
+
    structure(list(conn=conn), class=c("mongoCogConn", "cogConn"))
 }
 
-#' @S3method print mongoCogConn
+#' @export
 print.mongoCogConn <- function(x, ...) {
    cat(paste("mongoCogConn connection: host=", x$conn$host, "; db=", x$conn$db, sep=""))
 }
 
-#' @S3method cogPre mongoCogConn
+#' @export
 cogPre.mongoCogConn <- function(cogConn, vdbConn, group, name, ...) {
    # clear out previous cognostics collection for this display
    mongoConn <- mongoConnect(cogConn)
@@ -45,18 +45,18 @@ cogPre.mongoCogConn <- function(cogConn, vdbConn, group, name, ...) {
    mongo.disconnect(mongoConn)
 }
 
-#' @S3method cogEmit mongoCogConn
+#' @export
 cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name) {
    # add to mongo collection
    # 'flatten' the cog list
    data <- lapply(data, function(x) {
-      c(x[1], x$splitVars, x$bsv, x$cog)      
+      c(x[1], x$splitVars, x$bsv, x$cog)
    })
-   
+
    cogDatBson <- lapply(data, mongo.bson.from.list)
    mongoConn <- mongoConnect(cogConn)
    coll <- mongoCollName(vdbConn$name, group, name, "cog")
-   
+
    mongo.insert.batch(mongoConn, coll, cogDatBson)
    res <- mongo.get.err(mongoConn)
    mongo.disconnect(mongoConn)
@@ -64,20 +64,20 @@ cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name) {
 }
 
 # do nothing
-#' @S3method cogCollect mongoCogConn
+#' @export
 cogCollect.mongoCogConn <- function(cogConn, ...) {
-   NULL 
+   NULL
 }
 
 # add indexes and return mongoCogDatConn object
-#' @S3method cogFinal mongoCogConn
+#' @export
 cogFinal.mongoCogConn <- function(cogConn, jobRes, conn, group, name, cogEx, ...) {
-   
+
    mongoConn <- mongoConnect(cogConn)
    coll <- mongoCollName(conn$name, group, name, "cog")
-   
+
    cogNames <- names(cogEx)
-   
+
    for(i in seq_along(cogEx)) {
       if(cogNames[i] == "panelKey") {
          mongo.index.create(mongoConn, coll, cogNames[i], c(mongo.index.unique, mongo.index.background))
@@ -90,7 +90,7 @@ cogFinal.mongoCogConn <- function(cogConn, jobRes, conn, group, name, cogEx, ...
       }
    }
    mongo.disconnect(mongoConn)
-   
+
    mongoCogDatConn(cogConn, coll)
 }
 
@@ -103,7 +103,7 @@ mongoCogDatConn <- function(cogConn, coll, qry=NULL, srt=NULL) {
    mongoConn <- mongoConnect(cogConn)
    ex <- mongoCog2DF(mongo.bson.to.list(mongo.find.one(mongoConn, coll))[-1])
    ex <- data.frame(ex)
-   
+
    structure(list(
       conn=cogConn,
       coll=coll,
@@ -116,31 +116,31 @@ mongoCogDatConn <- function(cogConn, coll, qry=NULL, srt=NULL) {
    class = "mongoCogDatConn")
 }
 
-#' @S3method cogNcol mongoCogDatConn
+#' @export
 cogNcol.mongoCogDatConn <- function(x) {
    x$ncol
 }
 
-#' @S3method cogNrow mongoCogDatConn
+#' @export
 cogNrow.mongoCogDatConn <- function(x) {
    x$nrow
 }
 
-#' @S3method cogNames mongoCogDatConn
+#' @export
 cogNames.mongoCogDatConn <- function(x) {
    names(x$ex)
 }
 
-#' @S3method getCogData mongoCogDatConn
+#' @export
 getCogData.mongoCogDatConn <- function(x, rowIdx, colIdx) {
    if(is.null(x$qry))
       x$qry <- mongo.bson.empty()
-   
+
    if(is.null(x$srt))
       x$srt <- mongo.bson.empty()
-   
+
    mongoConn <- mongoConnect(x$conn)
-   
+
    crs <- mongo.find(mongoConn, x$coll, skip=as.integer(rowIdx[1] - 1), sort=x$srt, query=x$qry)
    res <- list()
    for(i in seq_along(rowIdx)) {
@@ -151,15 +151,15 @@ as.data.frame(tmp, stringsAsFactors=FALSE)
    }
 
    mongo.disconnect(mongoConn)
-   
+
    do.call(rbind, res)[, colIdx, drop=FALSE]
 }
 
-#' @S3method oldGetCurCogDat mongoCogDatConn
+#' @export
 oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
    ex <- cogDF$ex
    exNames <- names(ex)[colIndex]
-   
+
    # build ordering part of query
    srt <- mongo.bson.empty()
    if(!is.null(ordering)) {
@@ -173,7 +173,7 @@ oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verb
          }
       }
    }
-   
+
    # now build filtering part
    qry <- mongo.bson.empty()
 
@@ -210,12 +210,12 @@ oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verb
    # mongo.cursor.value(crs)
    cogDF$qry <- qry
    cogDF$srt <- srt
-   
+
    mongoConn <- mongoConnect(cogDF$conn)
    nr <- mongo.count(mongoConn, cogDF$coll, query=cogDF$qry)
    mongo.disconnect(mongoConn)
    cogDF$nrow <- nr
-   
+
    return(cogDF)
 }
 
