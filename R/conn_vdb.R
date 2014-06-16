@@ -30,12 +30,12 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose=T
          name <- basename(dirname(path))
       }
 
-      path <- normalizePath(path)
-
       # if directory doesn't exist, create and initialize
       if(!file.exists(path)) {
          stopifnot(vdbInit(path, autoYes, verbose))
       }
+      path <- normalizePath(path)
+
       ff <- list.files(path)
 
       # if there are no files in the directory, initialize
