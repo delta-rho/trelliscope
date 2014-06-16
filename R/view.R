@@ -1,7 +1,3 @@
-
-
-
-
 #' View a Display or Run Shiny Display Viewer
 #' 
 #' View a display or run Shiny display viewer
@@ -14,14 +10,16 @@
 #' @author Ryan Hafen
 #' 
 #' @export
-view <- function(name=NULL, group=NULL, openBrowser=TRUE, conn=getOption("vdbConn")) {
-   port <- 8100L
+view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = 8100L) {
+   
+   port <- as.integer(port)
+   
    validateConn(conn)
    vdbPrefix <- conn$path
-	packagePath <- system.file(package="trelliscope")
+	packagePath <- system.file(package = "trelliscope")
    
    if(!is.null(name)) {
-      displayObj <- getDisplay(name=name, group=group)
+      displayObj <- getDisplay(name = name, group = group)
       name <- displayObj$name
       group <- displayObj$group
       
@@ -42,10 +40,10 @@ view <- function(name=NULL, group=NULL, openBrowser=TRUE, conn=getOption("vdbCon
    if(!is.null(name)) {
       if(is.null(group))
          group <- "common"
-      hash <- paste("/#group=", group, "&name=", name, sep="")
+      hash <- paste("/#group=", group, "&name=", name, sep = "")
    }
    # make sure that the viewer has the prefix
-   options(vdbShinyPrefix=vdbPrefix)
+   options(vdbShinyPrefix = vdbPrefix)
    # if on dev machine, make the viewer path be the code source directory
    # (not the package path)
    if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
@@ -54,11 +52,11 @@ view <- function(name=NULL, group=NULL, openBrowser=TRUE, conn=getOption("vdbCon
       shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
    }
    
-   myRunApp(shinyAppPrefix, port=port, hash=hash, launch.browser=openBrowser)
+   myRunApp(shinyAppPrefix, port = port, hash = hash, launch.browser = openBrowser)
 }
 
 ## internal (from shiny's runApp() - need to be able to add hash string)
-myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption("shiny.launch.browser", interactive()), host = getOption("shiny.host", "127.0.0.1"), workerId = "", quiet = FALSE, display.mode = c("auto", "normal", "showcase"), hash="") {
+myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption("shiny.launch.browser", interactive()), host = getOption("shiny.host", "127.0.0.1"), workerId = "", quiet = FALSE, display.mode = c("auto", "normal", "showcase"), hash = "") {
    on.exit({
       shiny:::handlerManager$clear()
    }, add = TRUE)
