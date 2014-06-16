@@ -158,7 +158,7 @@ cog <- function(val = NULL, desc = "", type = NULL) {
    val
 }
 
-#' @S3method print cog
+#' @export
 print.cog <- function(x, ...) {
    attr(x, "desc") <- NULL
    class(x) <- setdiff(class(x), "cog")

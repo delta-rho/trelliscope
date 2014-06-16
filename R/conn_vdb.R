@@ -63,7 +63,7 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose=T
    }
 }
 
-#' @S3method print vdbConn
+#' @export
 print.vdbConn <- function(x, ...) {
    cat(paste("vdb connection object: name=", x$name, "; path=", x$path, sep = ""))
 }

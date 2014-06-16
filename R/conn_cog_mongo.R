@@ -31,12 +31,12 @@ mongoCogConn <- function(host="127.0.0.1", user="", pass="", name="", db="") {
    structure(list(conn=conn), class=c("mongoCogConn", "cogConn"))
 }
 
-#' @S3method print mongoCogConn
+#' @export
 print.mongoCogConn <- function(x, ...) {
    cat(paste("mongoCogConn connection: host=", x$conn$host, "; db=", x$conn$db, sep=""))
 }
 
-#' @S3method cogPre mongoCogConn
+#' @export
 cogPre.mongoCogConn <- function(cogConn, vdbConn, group, name, ...) {
    # clear out previous cognostics collection for this display
    mongoConn <- mongoConnect(cogConn)
@@ -45,7 +45,7 @@ cogPre.mongoCogConn <- function(cogConn, vdbConn, group, name, ...) {
    mongo.disconnect(mongoConn)
 }
 
-#' @S3method cogEmit mongoCogConn
+#' @export
 cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name) {
    # add to mongo collection
    # 'flatten' the cog list
@@ -64,13 +64,13 @@ cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name) {
 }
 
 # do nothing
-#' @S3method cogCollect mongoCogConn
+#' @export
 cogCollect.mongoCogConn <- function(cogConn, ...) {
    NULL
 }
 
 # add indexes and return mongoCogDatConn object
-#' @S3method cogFinal mongoCogConn
+#' @export
 cogFinal.mongoCogConn <- function(cogConn, jobRes, conn, group, name, cogEx, ...) {
 
    mongoConn <- mongoConnect(cogConn)
@@ -116,22 +116,22 @@ mongoCogDatConn <- function(cogConn, coll, qry=NULL, srt=NULL) {
    class = "mongoCogDatConn")
 }
 
-#' @S3method cogNcol mongoCogDatConn
+#' @export
 cogNcol.mongoCogDatConn <- function(x) {
    x$ncol
 }
 
-#' @S3method cogNrow mongoCogDatConn
+#' @export
 cogNrow.mongoCogDatConn <- function(x) {
    x$nrow
 }
 
-#' @S3method cogNames mongoCogDatConn
+#' @export
 cogNames.mongoCogDatConn <- function(x) {
    names(x$ex)
 }
 
-#' @S3method getCogData mongoCogDatConn
+#' @export
 getCogData.mongoCogDatConn <- function(x, rowIdx, colIdx) {
    if(is.null(x$qry))
       x$qry <- mongo.bson.empty()
@@ -155,7 +155,7 @@ as.data.frame(tmp, stringsAsFactors=FALSE)
    do.call(rbind, res)[, colIdx, drop=FALSE]
 }
 
-#' @S3method oldGetCurCogDat mongoCogDatConn
+#' @export
 oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
    ex <- cogDF$ex
    exNames <- names(ex)[colIndex]

@@ -17,30 +17,30 @@ dfCogConn <- function() {
    structure(list(), class = c("dfCogConn", "cogConn"))
 }
 
-#' @S3method print dfCogConn
+#' @export
 print.dfCogConn <- function(x, ...) {
    cat("dfCogConn object")
 }
 
-#' @S3method cogPre dfCogConn
+#' @export
 cogPre.dfCogConn <- function(cogConn, ...) {
    # do nothing
    NULL
 }
 
-#' @S3method cogEmit dfCogConn
+#' @export
 cogEmit.dfCogConn <- function(cogConn, data, ...) {
    # add to mongo collection
    collect("TRS___cog", do.call(rbind, lapply(data, cog2df)))
 }
 
-#' @S3method cogCollect dfCogConn
+#' @export
 cogCollect.dfCogConn <- function(cogConn, res, newValues, ...) {
    # rbind things
    rbind(res, data.frame(rbindlist(newValues)))
 }
 
-#' @S3method cogFinal dfCogConn
+#' @export
 cogFinal.dfCogConn <- function(cogConn, jobRes, ...) {
    # grab cognostics from mr job result
    jobRes[["TRS___cog"]][[2]]
@@ -50,27 +50,27 @@ cogFinal.dfCogConn <- function(cogConn, jobRes, ...) {
 ### dfCogDatConn (data.frame) constructor / methods
 ############################################################################
 
-#' @S3method cogNcol data.frame
+#' @export
 cogNcol.data.frame <- function(x) {
    ncol(x)
 }
 
-#' @S3method cogNrow data.frame
+#' @export
 cogNrow.data.frame <- function(x) {
    nrow(x)
 }
 
-#' @S3method cogNames data.frame
+#' @export
 cogNames.data.frame <- function(x) {
    names(x)
 }
 
-#' @S3method getCogData data.frame
+#' @export
 getCogData.data.frame <- function(x, rowIdx, colIdx) {
    x[rowIdx, colIdx, drop = FALSE]
 }
 
-#' @S3method oldGetCurCogDat data.frame
+#' @export
 oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE) {
    filterIndex <- seq_len(cogNrow(cogDF))
 
@@ -135,7 +135,7 @@ oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose =
 }
 
 
-#' @S3method getCogQuantPlotData data.frame
+#' @export
 getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = NULL) {
    # TODO: add logic about number of breaks
    # TODO: make number of quantiles configurable
@@ -175,7 +175,7 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
    }
 }
 
-#' @S3method getCogCatPlotData data.frame
+#' @export
 getCogCatPlotData.data.frame <- function(cogDF, name, filter = NULL) {
    # TODO: make number of levels configurable
    dat <- as.character(cogDF[[name]])
