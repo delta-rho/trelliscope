@@ -1,0 +1,10 @@
+.git
+.travis.yml
+.DS_Store
+node_modules/
+z_grunt_test/
+..Rcheck
+CONTRIBUTING.md
+Gruntfile.js
+LICENSE.md
+package.json
