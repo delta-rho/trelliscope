@@ -56,7 +56,7 @@ preTOC <- paste("<!DOCTYPE html>
       <script src='assets/js/highlight.pack.js'></script>
       <script>hljs.initHighlightingOnLoad();</script>
 
-      <script type=\"text/javascript\" src=\"assets/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
+      <script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/2.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
 
 	<script type='text/javascript'>
 
