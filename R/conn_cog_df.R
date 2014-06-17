@@ -23,7 +23,7 @@ print.dfCogConn <- function(x, ...) {
 }
 
 #' @export
-cogPre.dfCogConn <- function(cogConn, ...) {
+cogPre.dfCogConn <- function(cogConn, conn, group, name, ...) {
    # do nothing
    NULL
 }
@@ -51,27 +51,27 @@ cogFinal.dfCogConn <- function(cogConn, jobRes, ...) {
 ############################################################################
 
 #' @export
-cogNcol.data.frame <- function(x) {
+cogNcol.data.frame <- function(x, ...) {
    ncol(x)
 }
 
 #' @export
-cogNrow.data.frame <- function(x) {
+cogNrow.data.frame <- function(x, ...) {
    nrow(x)
 }
 
 #' @export
-cogNames.data.frame <- function(x) {
+cogNames.data.frame <- function(x, ...) {
    names(x)
 }
 
 #' @export
-getCogData.data.frame <- function(x, rowIdx, colIdx) {
+getCogData.data.frame <- function(x, rowIdx, colIdx, ...) {
    x[rowIdx, colIdx, drop = FALSE]
 }
 
 #' @export
-oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE) {
+oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE, ...) {
    filterIndex <- seq_len(cogNrow(cogDF))
 
    if(!is.null(flt)) {

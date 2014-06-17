@@ -6,22 +6,22 @@
 \alias{cogPre}
 \title{Methods Used in MapReduce for makeDisplay}
 \usage{
-cogPre(obj, ...)
+cogPre(cogConn, conn, group, name, ...)
 
-cogEmit(obj, ...)
+cogEmit(cogConn, ...)
 
-cogCollect(obj, ...)
+cogCollect(cogConn, ...)
 
-cogFinal(obj, ...)
+cogFinal(cogConn, ...)
 }
 \arguments{
-\item{obj}{object}
+\item{cogConn,}{conn, group, name TODO}
 
-\item{obj}{object}
+\item{cogConn}{TODO}
 
-\item{obj}{object}
+\item{cogConn}{TODO}
 
-\item{obj}{object}
+\item{cogConn}{TODO}
 }
 \description{
 Methods Used in MapReduce for makeDisplay

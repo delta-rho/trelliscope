@@ -37,16 +37,16 @@ print.mongoCogConn <- function(x, ...) {
 }
 
 #' @export
-cogPre.mongoCogConn <- function(cogConn, vdbConn, group, name, ...) {
+cogPre.mongoCogConn <- function(cogConn, conn, group, name, ...) {
    # clear out previous cognostics collection for this display
    mongoConn <- mongoConnect(cogConn)
-   coll <- mongoCollName(vdbConn$name, group, name, "cog")
+   coll <- mongoCollName(conn$name, group, name, "cog")
    mongo.drop(mongoConn, coll)
    mongo.disconnect(mongoConn)
 }
 
 #' @export
-cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name) {
+cogEmit.mongoCogConn <- function(cogConn, data, vdbConn, group, name, ...) {
    # add to mongo collection
    # 'flatten' the cog list
    data <- lapply(data, function(x) {
@@ -117,22 +117,22 @@ mongoCogDatConn <- function(cogConn, coll, qry=NULL, srt=NULL) {
 }
 
 #' @export
-cogNcol.mongoCogDatConn <- function(x) {
+cogNcol.mongoCogDatConn <- function(x, ...) {
    x$ncol
 }
 
 #' @export
-cogNrow.mongoCogDatConn <- function(x) {
+cogNrow.mongoCogDatConn <- function(x, ...) {
    x$nrow
 }
 
 #' @export
-cogNames.mongoCogDatConn <- function(x) {
+cogNames.mongoCogDatConn <- function(x, ...) {
    names(x$ex)
 }
 
 #' @export
-getCogData.mongoCogDatConn <- function(x, rowIdx, colIdx) {
+getCogData.mongoCogDatConn <- function(x, rowIdx, colIdx, ...) {
    if(is.null(x$qry))
       x$qry <- mongo.bson.empty()
 
@@ -156,7 +156,7 @@ as.data.frame(tmp, stringsAsFactors=FALSE)
 }
 
 #' @export
-oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE) {
+oldGetCurCogDat.mongoCogDatConn <- function(cogDF, flt, ordering, colIndex, verbose=FALSE, ...) {
    ex <- cogDF$ex
    exNames <- names(ex)[colIndex]
 

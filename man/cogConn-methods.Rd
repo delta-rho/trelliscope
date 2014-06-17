@@ -13,9 +13,9 @@ cogNrow(x, ...)
 
 cogNames(x, ...)
 
-getCogData(x, ...)
+getCogData(x, rowIdx, colIdx, ...)
 
-oldGetCurCogDat(x, ...)
+oldGetCurCogDat(cogDF, flt, ordering, colIndex, verbose, ...)
 }
 \arguments{
 \item{x}{object}

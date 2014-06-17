@@ -5,37 +5,37 @@
 # executed prior to mr job
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param obj object
+#' @param cogConn, conn, group, name TODO
 #' @export
 #' @rdname mr-methods
-cogPre <- function(obj, ...)
+cogPre <- function(cogConn, conn, group, name, ...)
    UseMethod("cogPre")
 
 # in the map, how to emit records
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param obj object
+#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
-cogEmit <- function(obj, ...)
+cogEmit <- function(cogConn, ...)
    UseMethod("cogEmit")
 
 # in the reduce, how to collate results
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param obj object
+#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
-cogCollect <- function(obj, ...)
+cogCollect <- function(cogConn, ...)
    UseMethod("cogCollect")
 
 # after mr job, final steps
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param obj object
+#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
-cogFinal <- function(obj, ...)
+cogFinal <- function(cogConn, ...)
    UseMethod("cogFinal")
 
 ############################################################################
@@ -43,7 +43,7 @@ cogFinal <- function(obj, ...)
 ############################################################################
 
 #' Methods for Cognostics Connections
-#' 
+#'
 #' @param x object
 #' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  They should never need to be used by an analyst.
 #' @export
@@ -63,12 +63,12 @@ cogNames <- function(x, ...)
 
 #' @export
 #' @rdname cogConn-methods
-getCogData <- function(x, ...)
+getCogData <- function(x, rowIdx, colIdx, ...)
    UseMethod("getCogData")
 
 #' @export
 #' @rdname cogConn-methods
-oldGetCurCogDat <- function(x, ...)
+oldGetCurCogDat <- function(cogDF, flt, ordering, colIndex, verbose, ...)
    UseMethod("oldGetCurCogDat")
 
 ### for cogInfo
@@ -89,7 +89,7 @@ getCogCatPlotData <- function(x, ...) {
 processFilterInput <- function(flt) {
    # flt is a vector of 3-tuples - (filter type, filter column, filter value)
    # see getColumFilterInputs in table.js
-   
+
    n <- length(flt)
    if(n == 0 || !((n %% 3) == 0)) {
       ind <- NULL

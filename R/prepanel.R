@@ -1,28 +1,28 @@
 #' Prepanel Function for Trelliscope Displays
-#' 
+#'
 #' Apply a prepanel function to objects of class "ddo" or "ddf" to determine ranges of x and y axis limits prior to creating a trelliscope display (\code{\link{makeDisplay}}).  Useful in conjunction with \code{\link{setLims}}.
-#' 
+#'
 #' @param dat an object of class "localDiv" or "rhData"
 #' @param prepanelFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param verbose print status messages?
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
-#' 
-#' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}. 
-#' 
+#'
+#' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}.
+#'
 #' @details
-#' The plot method plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.  
-#' 
+#' The plot method plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.
+#'
 #' You do not need to use \code{prepanel()} to ultimately create a display with \code{\link{makeDisplay()}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
-#' 
+#'
 #' Axis limits are very important.  What makes viewing groups of plots of subsets of data ("small multiples") so powerful is being able to make meaningful visual comparisons across plots.  This is much easier to do if scales for each plot are commensurate.
-#' 
+#'
 #' This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{setLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{x}}
 #' \code{\link{plot.trsPre}}, \code{\link{setLims}}, \code{\link{makeDisplay}}
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' irisSplit <- divide(iris, "Species")
@@ -34,11 +34,11 @@
 #' }
 #' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' plot(irisPre)#' }
-#' 
+#'
 #' @export
-prepanel <- function(data, 
+prepanel <- function(data,
    prepanelFn = NULL,
-   control = NULL, 
+   control = NULL,
    verbose = TRUE
 ) {
    banking <- function(dx, dy) {
@@ -53,7 +53,7 @@ prepanel <- function(data,
    prepanelFnIsTrellis <- FALSE
    prepanelFnIsGgplot <- FALSE
    doBanking <- TRUE
-   
+
    if(verbose)
       message("Testing 'prepanelFn' on a subset...")
    p <- kvApply(prepanelFn, kvExample(data))
@@ -76,13 +76,13 @@ prepanel <- function(data,
          doBanking <- FALSE
       }
    }
-   
+
    map <- expression({
       for(i in seq_along(map.keys)) {
          k <- map.keys[[i]]
          r <- map.values[[i]]
          bnk <- NA
-         
+
          if(prepanelFnIsTrellis) {
             # temporarily remove axis padding
             curOption <- lattice.getOption("axis.padding")$numeric
@@ -95,9 +95,9 @@ prepanel <- function(data,
                if(is.list(p$x.limits) || is.list(p$y.limits))
                   stop("Either x or y scales for lattice prepanel function is 'sliced' or 'fill' - currently can't compute limits when these are set")
                xr <- p$x.limits
-               yr <- p$y.limits               
+               yr <- p$y.limits
             }
-            
+
             lattice.options(axis.padding=list(numeric=curOption))
             # # TODO: for ggplot:
             # a <- print(p) # need to not make it actually plot
@@ -106,7 +106,7 @@ prepanel <- function(data,
          } else if(prepanelFnIsGgplot) {
             p <- kvApply(prepanelFn, list(k, r))
             gglims <- try(ggplot_build(p)$panel$ranges, silent=TRUE)
-            
+
             if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
                xr <- gglims[[1]]$x.range
                yr <- gglims[[1]]$y.range
@@ -118,23 +118,23 @@ prepanel <- function(data,
             pre <- kvApply(prepanelFn, list(k, r))
             xr <- pre$xlim
             yr <- pre$ylim
-            
+
             if(doBanking) {
                dx <- pre$dx
                dy <- pre$dy
                bnk <- banking(dx, dy)
             }
          }
-         
+
          collect("x", data.frame(
-            key=digest(k), 
+            key=digest(k),
             min=xr[1],
             max=xr[2],
             # med=median(x, na.rm=TRUE),
             bnk=bnk,
             stringsAsFactors=FALSE
          ))
-         
+
          collect("y", data.frame(
             key=digest(k),
             min=yr[1],
@@ -145,7 +145,7 @@ prepanel <- function(data,
          ))
       }
    })
-   
+
    # rbind the results
    reduce <- expression(
       pre = {
@@ -158,14 +158,14 @@ prepanel <- function(data,
          collect(reduce.key, res)
       }
    )
-   
+
    parList <- list(
       prepanelFn = prepanelFn,
       prepanelFnIsTrellis = prepanelFnIsTrellis,
       prepanelFnIsGgplot = prepanelFnIsGgplot,
       doBanking = doBanking
    )
-   
+
    if(! "package:trelliscope" %in% search()) {
       # parList <- c(parList, list(
       # ))
@@ -184,7 +184,7 @@ prepanel <- function(data,
          suppressMessages(require(datadr))
       })
    }
-   
+
    # suppressMessages(capture.output(
    jobRes <- mrExec(
       data,
@@ -210,17 +210,17 @@ prepanel <- function(data,
 #'
 #' Plot results form prepanel
 #'
-#' @param lims object of class "trsPre" created by \code{\link{prepanel}}
+#' @param x object of class "trsPre" created by \code{\link{prepanel}}
 #' @param layout, as.table, strip, strip.left, between, xlab, ylab, \ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)
 #'
 #' @return object of class "trellis" (plotted by default)
 #'
-#' @details This function plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.  
-#' 
+#' @details This function plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' irisSplit <- divide(iris, "Species")
@@ -233,12 +233,13 @@ prepanel <- function(data,
 #' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' plot(irisPre)
 #' }
-#' 
+#'
 #' @method plot trsPre
 #' @export
-plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
+plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
 ) {
    # TODO: what about dx and dy for aspect ratio?
+   lims <- x
 
    alreadyWarned <- FALSE
 
@@ -247,7 +248,7 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
       if(!is.numeric(dat$max)) {
          if(!alreadyWarned) {
             message("At least one of the variables is not numeric.  Casting as numeric for plotting purposes.")
-            alreadyWarned <<- TRUE            
+            alreadyWarned <<- TRUE
          }
          dat$max <- as.numeric(dat$max)
          dat$min <- as.numeric(dat$min)
@@ -283,21 +284,21 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
       scales=list(y=list(relation="free")),
       layout=layout,
       as.table=as.table,
-      strip=strip, 
+      strip=strip,
       strip.left=strip.left,
       between=between,
       xlab=xlab,
       ylab=ylab,
       ...
    )
-   
+
    p
 }
 
 #' Specify Rules for x and y Limits for a Display
-#' 
+#'
 #' Based on results from \code{\link{prepanel}}, specify rules that will determine x and y axis limits to be passed as the \code{lims} argument when calling \code{\link{makeDisplay}}.
-#' 
+#'
 #' @param lims object of class "trsPre"
 #' @param x x-axis limits rule (either "same", "sliced", or "free" - see details)
 #' @param y y-axis limits rule (either "same", "sliced", or "free" - see details)
@@ -305,12 +306,12 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' @param yQuant same as xQuant but for y-axis
 #' @param xQuantRange a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
 #' @param yQuantRange same as xQuantRange but for y-axis
-#' 
+#'
 #' @return object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}
-#' 
+#'
 #' @details
-#' This function reduces the list of axis limits computed for each split of a data set to an overall axis limit rule for the plot.  
-#' 
+#' This function reduces the list of axis limits computed for each split of a data set to an overall axis limit rule for the plot.
+#'
 #' About "x" and "y" parameters: This is the same as in lattice.  From lattice documentation:
 #' A character string that determines how axis limits are calculated for each panel. Possible values are "same" (default), "free" and "sliced". For relation="same", the same limits, usually large enough to encompass all the data, are used for all the panels. For relation="free", limits for each panel is determined by just the points in that panel. Behavior for relation="sliced" is similar, except that the length (max - min) of the scales are constrained to remain the same across panels.
 #'
@@ -328,10 +329,10 @@ plot.trsPre <- function(lims, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.
 #' }
 #' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' irisLims <- setLims(irisPre, x="same", y="sliced")
-#' 
+#'
 #' @export
 setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
-   
+
    alreadyWarned <- FALSE
    # xQuant=c(0,1); yQuant=c(0,1); xRangeQuant=1; yRangeQuant=1
    getLims <- function(var, type, quant, rangeQuant) {
@@ -341,13 +342,13 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
          if(datClass != "character") {
             if(!alreadyWarned) {
                message("At least one of the variables is not numeric.  Casting as numeric for quantile calculation purposes.")
-               alreadyWarned <<- TRUE            
+               alreadyWarned <<- TRUE
             }
             dat$max <- as.numeric(dat$max)
-            dat$min <- as.numeric(dat$min)            
+            dat$min <- as.numeric(dat$min)
          }
       }
-      
+
       # TODO: if character and not "free" then set limits
       # to all levels of the variable, if known
       if(type == "sliced" && datClass != "character") {
@@ -369,14 +370,14 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
       # TODO: time zone checking
       res
    }
-   
+
    res <- list(
       x = getLims("x", x, xQuant, xRangeQuant),
       y = getLims("y", y, yQuant, yRangeQuant),
       prepanelFnIsTrellis = lims$prepanelFnIsTrellis,
       prepanelFnIsGgplot = lims$prepanelFnIsGgplot,
       prepanelFn = lims$prepanelFn,
-      prop = prop, 
+      prop = prop,
       n = nrow(lims$x)
    )
    class(res) <- c("trsLims", "list")
