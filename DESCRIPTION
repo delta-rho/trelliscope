@@ -18,7 +18,6 @@ Description: Trelliscope provides a way to create, organize, and view
     to be presented.  This package also provides a way to meaningfully organize
     and present these displays in a "lab notebook".
 License: BSD
-LazyLoad: yes
 LazyData: yes
 Depends:
     R (>= 2.15.1),
