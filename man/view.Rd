@@ -4,7 +4,7 @@
 \title{View a Display or Run Shiny Display Viewer}
 \usage{
 view(name = NULL, group = NULL, openBrowser = TRUE,
-  conn = getOption("vdbConn"))
+  conn = getOption("vdbConn"), port = 8100L)
 }
 \arguments{
 \item{name,}{group optional parameters to load the viewer with a pre-specified display}
