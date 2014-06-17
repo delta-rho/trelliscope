@@ -17,7 +17,7 @@ Description: Trelliscope provides a way to create, organize, and view
     possible to view each panel, allowing only panels with interesting features
     to be presented.  This package also provides a way to meaningfully organize
     and present these displays in a "lab notebook".
-License: BSD
+License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
     R (>= 2.15.1),
