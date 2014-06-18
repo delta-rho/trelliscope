@@ -29,9 +29,9 @@ if(getRversion() >= "2.15.1") {
 #' Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Then panels are rendered on the fly.  If a user would like to pre-render the images, then by default these will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
 #' 
 #' @author Ryan Hafen
-#' 
-#' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{inputVars}}, \code{\link{divide}}
-#' 
+#'
+#' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
+#'
 #' @examples
 #' # see docs
 #' 
