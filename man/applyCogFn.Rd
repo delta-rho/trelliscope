@@ -9,6 +9,8 @@ applyCogFn(cogFn, kvSubset, conn)
 \item{cogFn}{cognostics function}
 
 \item{kvSubset}{key-value pair}
+
+\item{conn}{TODO}
 }
 \description{
 Apply cognostics function to a key-value pair

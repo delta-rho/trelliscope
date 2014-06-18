@@ -5,6 +5,11 @@
 \usage{
 \method{print}{displayObj}(x, ...)
 }
+\arguments{
+\item{x}{TODO}
+
+\item{...}{TODO}
+}
 \description{
 S3method print displayObj
 }

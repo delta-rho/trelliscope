@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{object of class "trsPre" created by \code{\link{prepanel}}}
 
-\item{layout,}{as.table, strip, strip.left, between, xlab, ylab, \ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)}
+\item{layout,as.table,strip,strip.left,between,xlab,ylab,\ldots}{parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)}
 }
 \value{
 object of class "trellis" (plotted by default)

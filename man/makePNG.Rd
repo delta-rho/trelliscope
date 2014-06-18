@@ -15,7 +15,13 @@ makePNG(dat, panelFn = NULL, file, width, height, origWidth = width,
 
 \item{width,height,res}{width, height, and resolution}
 
+\item{origWidth}{TODO}
+
+\item{basePointSize}{TODO}
+
 \item{lims}{axis limits}
+
+\item{pixelratio}{TODO}
 }
 \description{
 Make a png for a subset of an object of class "ddo" or "ddf".  The user should never need to call this directly, but the viewer needs it, so it is exported with this documentation.

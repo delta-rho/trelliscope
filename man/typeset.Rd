@@ -6,7 +6,7 @@
 typeset(name = "index", conn = getOption("vdbConn"))
 }
 \arguments{
-\item{file}{file name (extension of .Rmd is not required)}
+\item{name}{file name (extension of .Rmd is not required)}
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 }

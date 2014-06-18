@@ -21,6 +21,6 @@ Initialize a connection to a web server
 Ryan Hafen
 }
 \seealso{
-\code{\link{websync}}
+\code{\link{webSync}}
 }
 

@@ -19,6 +19,22 @@ oldGetCurCogDat(cogDF, flt, ordering, colIndex, verbose, ...)
 }
 \arguments{
 \item{x}{object}
+
+\item{...}{other objects passed onto generic methods}
+
+\item{rowIdx}{TODO}
+
+\item{colIdx}{TODO}
+
+\item{cogDF}{TODO}
+
+\item{flt}{TODO}
+
+\item{ordering}{TODO}
+
+\item{colIndex}{TODO}
+
+\item{verbose}{TODO}
 }
 \description{
 Methods for Cognostics Connections

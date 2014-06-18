@@ -6,13 +6,13 @@
 prepanel(data, prepanelFn = NULL, control = NULL, verbose = TRUE)
 }
 \arguments{
-\item{dat}{an object of class "localDiv" or "rhData"}
+\item{data}{an object of class "localDiv" or "rhData"}
 
 \item{prepanelFn}{a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.}
 
 \item{verbose}{print status messages?}
 
-\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
+\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
 }
 \value{
 object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}.
@@ -23,7 +23,7 @@ Apply a prepanel function to objects of class "ddo" or "ddf" to determine ranges
 \details{
 The plot method plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.
 
-You do not need to use \code{prepanel()} to ultimately create a display with \code{\link{makeDisplay()}}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
+You do not need to use \code{prepanel()} to ultimately create a display with \code{\link{makeDisplay}()}, but if you bypass, you will either need to specify your own limits in your plot command, or do nothing, in which case each individual plot will have limits based on the data in the split being plotted (the axes will be "free").
 
 Axis limits are very important.  What makes viewing groups of plots of subsets of data ("small multiples") so powerful is being able to make meaningful visual comparisons across plots.  This is much easier to do if scales for each plot are commensurate.
 

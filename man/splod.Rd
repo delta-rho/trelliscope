@@ -11,7 +11,7 @@ splod(data, id.vars = NULL, name = NULL, desc = NULL,
 
 \item{id.vars}{variables to ignore when computing all pairs of variables}
 
-\item{name,}{desc, cogFn, panelFn, verbose, \ldots parameters passed to \code{\link{makeDisplay}}}
+\item{name,desc,cogFn,panelFn,verbose,\ldots}{parameters passed to \code{\link{makeDisplay}}}
 }
 \value{
 an object of class 'localDiv' that can be passed to \code{\link{splod}}
@@ -26,6 +26,6 @@ Ryan Hafen
 Wilkinson's scagnostics paper.
 }
 \seealso{
-\code{\link{makeDisplay}}, \code{\link{makeSplodDat}}, \code{\link{splodPanelFn}}
+\code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}
 }
 

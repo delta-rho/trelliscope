@@ -15,13 +15,7 @@ cogCollect(cogConn, ...)
 cogFinal(cogConn, ...)
 }
 \arguments{
-\item{cogConn,}{conn, group, name TODO}
-
-\item{cogConn}{TODO}
-
-\item{cogConn}{TODO}
-
-\item{cogConn}{TODO}
+\item{cogConn,conn,group,name,\ldots}{TODO}
 }
 \description{
 Methods Used in MapReduce for makeDisplay

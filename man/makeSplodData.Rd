@@ -9,6 +9,8 @@ makeSplodData(data, id.vars = NULL, ...)
 \item{data}{a data.frame}
 
 \item{id.vars}{variables to ignore when computing all pairs of variables}
+
+\item{...}{TODO}
 }
 \value{
 an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}

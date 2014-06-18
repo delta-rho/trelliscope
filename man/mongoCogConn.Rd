@@ -7,7 +7,7 @@ mongoCogConn(host = "127.0.0.1", user = "", pass = "", name = "",
   db = "")
 }
 \arguments{
-\item{host,user,pass,name,db}{parameters used to initiate MongoDB connection (see \code{\link{mongo.create}})}
+\item{host,user,pass,name,db}{parameters used to initiate MongoDB connection (see \code{\link[rmongodb]{mongo.create}})}
 }
 \value{
 a "cogConn" object of class "cogMongoConn"
