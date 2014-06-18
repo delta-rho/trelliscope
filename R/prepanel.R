@@ -1,3 +1,8 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("collect"))
+}
+
+
 #' Prepanel Function for Trelliscope Displays
 #'
 #' Apply a prepanel function to objects of class "ddo" or "ddf" to determine ranges of x and y axis limits prior to creating a trelliscope display (\code{\link{makeDisplay}}).  Useful in conjunction with \code{\link{setLims}}.

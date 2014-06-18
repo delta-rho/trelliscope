@@ -1,3 +1,8 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("collect"))
+}
+
+
 #' Create a Trelliscope Display
 #' 
 #' Create a trelliscope display and add it to a visualization database (VDB)
