@@ -47,6 +47,7 @@ splodCogFn <- function(df) {
 #' 
 #' @param data a data.frame
 #' @param id.vars variables to ignore when computing all pairs of variables
+#' @param ... TODO
 #'
 #' @return an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}
 #'
