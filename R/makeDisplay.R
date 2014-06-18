@@ -4,9 +4,9 @@ if(getRversion() >= "2.15.1") {
 
 
 #' Create a Trelliscope Display
-#' 
+#'
 #' Create a trelliscope display and add it to a visualization database (VDB)
-#' 
+#'
 #' @param data data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})
 #' @param name the name of the display (no spaces or special characters)
 #' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
@@ -25,16 +25,16 @@ if(getRversion() >= "2.15.1") {
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #'
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
-#' 
+#'
 #' Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Then panels are rendered on the fly.  If a user would like to pre-render the images, then by default these will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
-#' 
+#'
 #' @author Ryan Hafen
 #'
 #' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
 #'
 #' @examples
 #' # see docs
-#' 
+#'
 #' @export
 makeDisplay <- function(
    data,
@@ -73,35 +73,35 @@ makeDisplay <- function(
    # conn <- vdbConn(file.path(tempdir(), "vdbtest"), autoYes = TRUE)
    # cogStorage <- "local"
    # control <- NULL
-   
+
    # isSinglePlot <- inherits(data, "trellis") || inherits(data, "ggplot") || inherits(data, "expression")
-   
+
    validateConn(conn)
-   
+
    if(!inherits(data, "ddo")) {
       stop("Input data must be an object of class 'ddo'")
    }
-   
+
    if(!preRender && !hasExtractableKV(data)) {
       if(!inherits(data, "kvLocalDisk"))
          stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender == FALSE.  Try calling makeExtractable() on the data.")
    }
-   
+
    vdbPrefix <- conn$path
-   
+
    # get display prefix (and move old display to backup if it already exists)
    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
    checkDisplayPath(displayPrefix, verbose)
-   
+
    dataConn <- getAttribute(data, "conn")
-   
+
    # if no cognostics connection was specified, use cogDatConn
    if(is.null(cogConn))
       cogConn <- dfCogConn()
-   
+
    if(!inherits(cogConn, "cogConn"))
       stop("Argument 'cogConn' not valid")
-   
+
    # if pre-rendering images and no output is specified
    # then store on disk in the VDB directory
    if(preRender) {
@@ -113,26 +113,26 @@ makeDisplay <- function(
    } else {
       if(inherits(data, "kvMemory"))
          data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE))
-      
+
       panelDataSource <- data
    }
-   
+
    if(verbose) message("* Validating 'panelFn'...")
    panelEx <- kvApply(panelFn, kvExample(data))
-   
+
    cogEx <- validateCogFn(data, cogFn, verbose)
-   
+
    if(is.null(desc) || is.na(desc))
       desc <- "(no description)"
-   
+
    lims <- validateLims(lims, data, panelFn, panelEx, verbose)
-   
+
    # map.keys <- kvExample(ldd)[1]
    # map.values <- kvExample(ldd)[2]
-   
+
    cogPre(cogConn, conn, group, name)
-   
-   ## set up a mr job -- this job simply applies the 
+
+   ## set up a mr job -- this job simply applies the
    ## cognostics (and panel if preRender = TRUE) to each subset
    map <- expression({
       cogRes <- list()
@@ -140,8 +140,8 @@ makeDisplay <- function(
          # make plot if you need to
          if(preRender) {
             ff <- tempfile()
-            makePNG(dat = list(map.keys[[i]], map.values[[i]]), 
-               panelFn = panelFn, file = ff, width = width, 
+            makePNG(dat = list(map.keys[[i]], map.values[[i]]),
+               panelFn = panelFn, file = ff, width = width,
                height = height, lims = lims)
             collect(map.keys[[i]], encodePNG(ff))
          }
@@ -150,7 +150,7 @@ makeDisplay <- function(
       }
       cogEmit(cogConn, cogRes, conn, group, name)
    })
-   
+
    # rbind the results
    reduce <- expression(
       pre = {
@@ -172,7 +172,7 @@ makeDisplay <- function(
          }
       }
    )
-   
+
    parList <- list(
       dataConn    = dataConn,
       group       = group,
@@ -186,7 +186,7 @@ makeDisplay <- function(
       height      = height,
       width       = width
    )
-   
+
    # if the package isn't loaded, need to pass other functions as well
    # (assuming that they are defined in the global environment instead)
    # (debugging and updating the package is a lot easier when just
@@ -200,11 +200,11 @@ makeDisplay <- function(
          getBsvs = getBsvs,
          makePNG = makePNG,
          encodePNG = encodePNG,
-         cogEmit = cogEmit, 
-         cogEmit.dfCogConn = cogEmit.dfCogConn, 
-         cogEmit.mongoCogConn = cogEmit.mongoCogConn, 
-         cogCollect = cogCollect, 
-         cogCollect.dfCogConn = cogCollect.dfCogConn, 
+         cogEmit = cogEmit,
+         cogEmit.dfCogConn = cogEmit.dfCogConn,
+         cogEmit.mongoCogConn = cogEmit.mongoCogConn,
+         cogCollect = cogCollect,
+         cogCollect.dfCogConn = cogCollect.dfCogConn,
          cogCollect.mongoCogConn = cogCollect.mongoCogConn,
          cog = cog,
          cogScagnostics = cogScagnostics,
@@ -219,7 +219,7 @@ makeDisplay <- function(
          trsCurXLim = trsCurXLim,
          trsCurYLim = trsCurYLim
       ))
-      
+
       setup <- expression({
          suppressMessages(require(lattice))
          suppressMessages(require(ggplot2))
@@ -233,17 +233,17 @@ makeDisplay <- function(
    #       suppressMessages(require(trelliscope))
    #    })
    # }
-   
+
    # if panelFn uses any data in the environment, pass that on too
    globalVars <- unique(c(findGlobals(panelFn), findGlobals(cogFn)))
    globalVarList <- getGlobalVarList(globalVars, parent.frame())
-   
+
    if(length(globalVarList) > 0)
       parList <- c(parList, globalVarList)
-   
+
    if(length(params) > 0)
       parList <- c(parList, params)
-   
+
    jobRes <- mrExec(data,
       setup   = setup,
       map     = map,
@@ -252,41 +252,41 @@ makeDisplay <- function(
       control = control,
       params  = parList
    )
-   
+
    if(preRender)
       panelDataSource <- jobRes
-   
+
    # read in cognostics
    cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
-   
+
    # get panelKey "signature"
    keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
-   
+
    if(verbose)
       message("* Updating displayList...")
-   
+
    modTime <- Sys.time()
-   
+
    updateDisplayList(list(
-      group = group, 
-      name = name, 
-      desc = desc, 
-      n = getAttribute(data, "nDiv"), 
-      preRender = preRender, 
-      dataClass = tail(class(data), 1), 
-      cogClass = class(cogConn)[1], 
+      group = group,
+      name = name,
+      desc = desc,
+      n = getAttribute(data, "nDiv"),
+      preRender = preRender,
+      dataClass = tail(class(data), 1),
+      cogClass = class(cogConn)[1],
       height = height,
       width = width,
-      updated = modTime, 
+      updated = modTime,
       keySig = keySig
    ), conn)
-   
+
    if(verbose)
       message("* Storing display object...")
-   
+
    cogDesc <- getCogDesc(cogEx)
    cogInfo <- getCogInfo(cogDatConn, cogDesc)
-   
+
    displayObj <- list(
       name = name,
       group = group,
@@ -295,7 +295,7 @@ makeDisplay <- function(
       panelFn = panelFn,
       panelDataSource = panelDataSource,
       cogFn = cogFn,
-      n = getAttribute(data, "nDiv"), 
+      n = getAttribute(data, "nDiv"),
       cogDatConn = cogDatConn,
       cogDesc = cogDesc,
       cogInfo = cogInfo,
@@ -307,24 +307,24 @@ makeDisplay <- function(
       relatedData = globalVarList
    )
    class(displayObj) <- "displayObj"
-   
+
    save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
-   
+
    # make thumbnail
    message("* Plotting thumbnail...")
    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
    # small thumbnail
    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb_small.png"), width = width * (100 / height), height = 100, origWidth = width, lims = lims))
-   
+
    # TODO: plot small thumbnail as well
    # suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
-   
+
    return(invisible(displayObj))
 }
 
 removeDisplay <- function(name, group, conn = getOption("vdbConn")) {
    validateConn(conn)
-   
+
    # load the object
    displayPrefix <- file.path(conn$path, "displays", group, name)
    displayPrefix2 <- paste(displayPrefix, "_bak", sep = "")

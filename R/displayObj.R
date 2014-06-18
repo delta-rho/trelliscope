@@ -7,28 +7,28 @@ print.displayObj <- function(x, ...) {
 }
 
 #' Retrieve Display Object from VDB
-#' 
+#'
 #' Retrieve a display object from a VDB.
-#' 
+#'
 #' @param name the name of the display
 #' @param group the group of the display
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' 
+#'
 #' @details If a display is uniquely determined by its name, then group is not required.
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 #' @export
 getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
-   
+
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
-   
+
    displayInfo <- findDisplay(name = name, group = group, conn = conn)
    vdbPrefix <- conn$path
-   
+
    load(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "displayObj.Rdata"))
-   
+
    # if it is a local disk connection, the location can change
    # this happens when we move things to a web server
    if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
@@ -46,43 +46,43 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
          }
       }
    }
-   
+
    displayObj
 }
 
 #' Remove a Display from a VDB
-#' 
+#'
 #' Remove a display from a VDB.
-#' 
+#'
 #' @param name the name of the display
 #' @param group the group of the display
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose logical - print messages about what is being done
-#' 
+#'
 #' @details If a display is uniquely determined by its name, then group is not required.
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
 #' @export
 removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), verbose = TRUE) {
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
-   
+
    displayInfo <- findDisplay(name, group, conn)
    vdbPrefix <- conn$path
-   
+
    displayList[paste(displayInfo$group, displayInfo$name, sep = "_")] <- NULL
-   
+
    ind <- which(
-      displayListDF$name == displayInfo$name 
+      displayListDF$name == displayInfo$name
          & displayListDF$group == displayInfo$group)
-   
+
    displayListDF <- displayListDF[-ind,]
-   
+
    unlink(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name), recursive = TRUE)
 
    save(displayList, displayListDF, displayListNames, file = file.path(conn$path, "displays", "_displayList.Rdata"))
-   
+
    if(verbose)
       message("* Display removed successfully")
 }
@@ -94,7 +94,7 @@ removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn")
 ## ensures that a display exists and returns its name and group
 findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
-   
+
    errStr <- ""
    if(is.null(group)) {
       curDisplay <- which(displayListDF$name == name)
@@ -121,13 +121,13 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 }
 
 #' List Displays in a VDB
-#' 
+#'
 #' List displays in a VDB.
-#' 
+#'
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{addDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
 #' @export
 listDisplays <- function(conn = getOption("vdbConn")) {
@@ -138,17 +138,17 @@ listDisplays <- function(conn = getOption("vdbConn")) {
    # tmp[,"updated"] <- substr(tmp[,"updated"], 1, 16)
    tmp[is.na(tmp[,"dataClass"]),"dataClass"] <- "none (R plot)"
    tmp <- tmp[order(tmp[,"group"], tmp[,"name"]),,drop = FALSE]
-   
+
    nc <- ncol(tmp)
    sepWidth <- (nc - 1) * 3
 
    headers <- colnames(tmp)
-   
+
    colWidths <- apply(tmp, 2, function(x) max(nchar(x)))
    colWidths <- pmax(colWidths, nchar(headers))
-   
+
    totWidth <- getOption("width")
-   
+
    excess <- (totWidth - sepWidth) - sum(colWidths)
    # (totWidth - sepWidth) - (sum(colWidths) - colWidths["desc"])
    if(excess < 0) {
@@ -164,9 +164,9 @@ listDisplays <- function(conn = getOption("vdbConn")) {
    colWidths <- apply(tmp, 2, function(x) max(nchar(x)))
    colWidths <- pmax(colWidths, nchar(headers))
    nc <- length(headers)
-   
+
    fmtStr <- paste(paste("%", colWidths, "s", sep = ""), collapse = " | ")
-   
+
    cat(paste(c(
       do.call(sprintf, c(list(fmt = fmtStr), as.list(headers))),
       paste(sapply(colWidths, function(x) paste(rep("-", x), collapse = "")), collapse = "-+-"),

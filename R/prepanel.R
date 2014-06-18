@@ -41,7 +41,8 @@ if(getRversion() >= "2.15.1") {
 #' plot(irisPre)#' }
 #'
 #' @export
-prepanel <- function(data,
+prepanel <- function(
+   data,
    prepanelFn = NULL,
    control = NULL,
    verbose = TRUE

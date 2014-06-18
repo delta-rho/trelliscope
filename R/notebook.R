@@ -1,46 +1,46 @@
 #' Create a New Notebook File
-#' 
+#'
 #' Create a new notebook file skeleton.
-#' 
+#'
 #' @param name name of the .Rmd file to be created
 #' @param blank do you just want a blank page, or do you want a template with several markdown examples filled out for reference?
 #' @param pageTitle,title,author,toc,css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param overwrite if the file exists, should it be overwritten?
-#' 
+#'
 #' @return creates a new .Rmd file that will go in the "notebook" directory of the vdb directory
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{typeset}}, \code{\link{viewNotebook}}, \code{\link{bsSetup}}
-#' 
+#'
 #' @export
 newNotebook <- function(name="index", blank=FALSE, title="My Test Page", pageTitle=title, author="Author Name", toc=TRUE, css=NULL, conn=getOption("vdbConn"), overwrite=FALSE) {
    if(is.null(name))
       stop("Must specify name for new notebook")
-      
+
    prefix <- conn$path
-   
+
    filePath <- file.path(prefix, "notebook", paste(name, ".Rmd", sep=""))
-   
+
    if(file.exists(filePath)) {
       if(overwrite) {
          ans <- readline(paste("The file '", name, ".Rmd' exists.  Are you sure you want to overwrite it? (y = yes)", sep=""))
       	if(!tolower(substr(ans, 1, 1)) == "y")
       	   stop("Backing out...")
       } else {
-         stop(paste("File ", filePath, " already exists"))         
+         stop(paste("File ", filePath, " already exists"))
       }
    }
-      
+
    pkgPath <- system.file(package="trelliscope")
    template <- file.path(pkgPath, "rmd_template.Rmd")
-   
+
    fileString <- ifelse(blank, "", paste(readLines(template), collapse="\n"))
    fileString <- paste(paste("```{r, echo=FALSE}
 # do not remove this block - set parameters accordingly
 bsSetup(
-   pageTitle = \"", pageTitle, "\", 
+   pageTitle = \"", pageTitle, "\",
    title     = \"", title, "\",
    author    = \"", author, "\",
    toc       = \"", toc, "\",
@@ -48,7 +48,7 @@ bsSetup(
 )
 ```
 ", sep=""), fileString, collapse="\n", sep="")
-   
+
    cat(fileString, file=filePath)
    message("New notebook available for editing at ", filePath)
 }
@@ -68,23 +68,23 @@ bsSetup(
 viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
    # TODO: look at this: http://jeffreyhorner.tumblr.com/post/33814488298/deploy-rook-apps-part-ii
    # (when in local mode, only works on safari)
-   
+
    if(is.null(name))
       stop("Must specify name for notebook")
-      
+
    if(local) {
       prefix <- conn$path
-      
+
       if(grepl("~", prefix))
          prefix <- path.expand(prefix)
-         
+
       if(!grepl("\\.html$", name))
          name <- paste(name, ".html", sep="")
-         
+
       filePath <- file.path(prefix, "notebook", name)
-      
+
       browseURL(filePath)
-      
+
       # launch shiny
       view(openBrowser=FALSE)
    } else {
@@ -97,7 +97,7 @@ viewNotebook <- function(name="index", conn=getOption("vdbConn"), local=TRUE) {
 
 # if desc is null, it pulls from the displayList
 
-# vdb_string <- function(x, path, showthumbs, thumb_max_width, png_viewer) 
+# vdb_string <- function(x, path, showthumbs, thumb_max_width, png_viewer)
 
 ## internal
 mediaListStr <- function(hrefs, src, name, group, desc, n, height, width) {
@@ -146,7 +146,7 @@ checkPlotExists <- function(displayList, name, group=NULL) {
       curPlot <- which(nms == name & gps == group)
       errStr <- paste(" from group \"", group, "\"", sep="")
    }
-   
+
    if(length(curPlot) == 0) {
       errMsg(paste("The plot \"", name, "\"", errStr, " wasn't found.", sep=""))
       return(NULL)
@@ -192,39 +192,39 @@ makeHref <- function(group, name, type, server=NULL) {
 }
 
 #' Make a List of Displays in a Notebook
-#' 
+#'
 #' Make html code to display a list of displays in a web notebook.  To be used inside of a notebook .Rmd file.
-#' 
+#'
 #' @param name a vector of display names to be in the list
 #' @param group (needs to be fixed...)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{typeset}}, \code{\link{newNotebook}}
-#' 
+#'
 #' @export
 nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- conn$path
-   
+
    thumbHeight <- conn$thumbHeight
    if(is.null(thumbHeight))
       thumbHeight <- 120
-   
+
    load(file.path(prefix, "displays", "_displayList.Rdata"))
-   
-   plotIdx <- sapply(seq_along(name), function(x) 
+
+   plotIdx <- sapply(seq_along(name), function(x)
       checkPlotExists(displayList, name[x], group))
    plotIdx <- plotIdx[!sapply(plotIdx, is.null)]
-   
+
    # TODO: if desc is given, use that
    if(length(plotIdx) > 0) {
       tabStr <- sapply(plotIdx, function(x) {
-         
+
          p <- displayList[[x]]
          displayType <- ifelse(grepl("^kv", p$dataClass), "shiny", "simple")
          href <- makeHref(p$group, p$name, displayType)
-         
+
          curWidth <- thumbHeight * p$width / p$height
          src <- paste("../displays/", p$group, "/", p$name, "/thumb.png", sep="")
          return(mediaListStr(href, src, p$name, p$group, p$desc, p$n, thumbHeight, curWidth))
@@ -234,29 +234,29 @@ nbDisplayList <- function(name, group=NULL, conn=getOption("vdbConn")) {
 }
 
 #' Make Single Display in a Notebook
-#' 
+#'
 #' Make html code to show a large plot of a single display in a web notebook.  To be used inside of a notebook .Rmd file.  Meant for single-panel displays.
-#' 
+#'
 #' @param name a vector of display names to be in the list
 #' @param group (needs to be fixed...)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{typeset}}, \code{\link{newNotebook}}
-#' 
+#'
 #' @export
 nbDisplay <- function(name, group=NULL, conn=getOption("vdbConn")) {
    prefix <- conn$path
-   
+
    maxHeight <- conn$maxHeight
    if(is.null(maxHeight))
       maxHeight <- 500
-   
+
    load(file.path(prefix, "displays", "_displayList.Rdata"))
-   
+
    plotIdx <- checkPlotExists(displayList, name, group)
-   
+
    if(length(plotIdx) > 0) {
       p <- displayList[[plotIdx]]
       curWidth <- maxHeight * p$width / p$height
