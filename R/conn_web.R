@@ -8,8 +8,8 @@
 #' @param name the name under which to store the application
 #' 
 #' @author Ryan Hafen
-#' 
-#' @seealso \code{\link{websync}}
+#'
+#' @seealso \code{\link{webSync}}
 #' @export
 webConn <- function(
    user = NULL, 

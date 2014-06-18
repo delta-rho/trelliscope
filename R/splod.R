@@ -101,8 +101,8 @@ makeSplodData <- function(data, id.vars=NULL, ...) {
 #' Wilkinson's scagnostics paper.
 #'
 #' @author Ryan Hafen
-#' 
-#' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodDat}}, \code{\link{splodPanelFn}}
+#'
+#' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}
 #'
 #' @export
 splod <- function(

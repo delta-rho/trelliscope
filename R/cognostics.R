@@ -58,7 +58,7 @@ cogMean <- function(x, desc = "mean") {
 
 #' Compute Scagnostics
 #'
-#' Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
+#' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 #'
 #' @param x,y
 #' @param desc description of cognostic

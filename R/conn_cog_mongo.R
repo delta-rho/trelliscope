@@ -6,7 +6,7 @@
 #'
 #' Initiate a MongoDB cognostics connection, to be passed as the \code{cogConn} argument to \code{\link{makeDisplay}}.
 #'
-#' @param host,user,pass,name,db parameters used to initiate MongoDB connection (see \code{\link{mongo.create}})
+#' @param host,user,pass,name,db parameters used to initiate MongoDB connection (see \code{\link[rmongodb]{mongo.create}})
 #'
 #' @return a "cogConn" object of class "cogMongoConn"
 #' @author Ryan Hafen

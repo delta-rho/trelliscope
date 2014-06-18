@@ -11,7 +11,6 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{updateViewer}}
 #' @export
 vdbConn <- function(path, name = NULL, autoYes = FALSE, reset = FALSE, verbose=TRUE) {
 
