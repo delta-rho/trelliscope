@@ -136,6 +136,9 @@ updateDisplayList <- function(argList, conn) {
 # }
 
 #' base64 Encoding of a .png File
+#'
+#' @param plotLoc TODO
+#'
 #' @export
 encodePNG <- function(plotLoc) {
    bytes <- file.info(plotLoc)$size

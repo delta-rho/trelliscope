@@ -7,7 +7,7 @@ if(getRversion() >= "2.15.1") {
 #'
 #' Apply a prepanel function to objects of class "ddo" or "ddf" to determine ranges of x and y axis limits prior to creating a trelliscope display (\code{\link{makeDisplay}}).  Useful in conjunction with \code{\link{setLims}}.
 #'
-#' @param dat an object of class "localDiv" or "rhData"
+#' @param data an object of class "localDiv" or "rhData"
 #' @param prepanelFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param verbose print status messages?
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
@@ -216,7 +216,7 @@ prepanel <- function(data,
 #' Plot results form prepanel
 #'
 #' @param x object of class "trsPre" created by \code{\link{prepanel}}
-#' @param layout, as.table, strip, strip.left, between, xlab, ylab, \ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)
+#' @param layout,as.table,strip,strip.left,between,xlab,ylab,\ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)
 #'
 #' @return object of class "trellis" (plotted by default)
 #'
@@ -309,8 +309,9 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #' @param y y-axis limits rule (either "same", "sliced", or "free" - see details)
 #' @param xQuant lower and upper quantiles at which to cut off x-axis limits, in the case of outliers.  Used when x="same".
 #' @param yQuant same as xQuant but for y-axis
-#' @param xQuantRange a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
-#' @param yQuantRange same as xQuantRange but for y-axis
+#' @param xRangeQuant a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
+#' @param yRangeQuant same as xRangeQuant but for y-axis
+#' @param prop TODO
 #'
 #' @return object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}
 #'

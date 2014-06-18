@@ -6,8 +6,11 @@
 #' @param panelFn panel function
 #' @param file file name for png
 #' @param width,height,res width, height, and resolution
+#' @param origWidth TODO
+#' @param basePointSize TODO
 #' @param lims axis limits
-#' 
+#' @param pixelratio TODO
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{makeDisplay}}
 #' @export

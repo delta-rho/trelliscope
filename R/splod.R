@@ -93,7 +93,7 @@ makeSplodData <- function(data, id.vars=NULL, ...) {
 #' 
 #' @param data a data.frame or an object of class "splodDat"
 #' @param id.vars variables to ignore when computing all pairs of variables
-#' @param name, desc, cogFn, panelFn, verbose, \ldots parameters passed to \code{\link{makeDisplay}}
+#' @param name,desc,cogFn,panelFn,verbose,\ldots parameters passed to \code{\link{makeDisplay}}
 #'
 #' @return an object of class 'localDiv' that can be passed to \code{\link{splod}}
 #'

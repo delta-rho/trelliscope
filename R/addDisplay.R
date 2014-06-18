@@ -7,7 +7,8 @@
 #' @param name the name of the display (no spaces or special characters)
 #' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
 #' @param desc a description of the display (used in the viewer and in notebooks)
-
+#' @param height TODO
+#' @param width TODO
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' 
 #' @author Ryan Hafen

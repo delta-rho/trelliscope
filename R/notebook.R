@@ -4,7 +4,7 @@
 #' 
 #' @param name name of the .Rmd file to be created
 #' @param blank do you just want a blank page, or do you want a template with several markdown examples filled out for reference?
-#' @param pageTitle, title, author, toc, css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself
+#' @param pageTitle,title,author,toc,css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param overwrite if the file exists, should it be overwritten?
 #' 
@@ -59,6 +59,7 @@ bsSetup(
 #'
 #' @param name name of the notebook file (.html extension not required)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param local TODO
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{newNotebook}}, \code{\link{typeset}}

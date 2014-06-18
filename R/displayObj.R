@@ -1,5 +1,7 @@
 
 #' S3method print displayObj
+#' @param x TODO
+#' @param ... TODO
 print.displayObj <- function(x, ...) {
    cat("display object...")
 }

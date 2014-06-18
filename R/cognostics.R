@@ -60,8 +60,8 @@ cogMean <- function(x, desc = "mean") {
 #'
 #' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 #'
-#' @param x,y
-#' @param desc description of cognostic
+#' @param x TODO
+#' @param y TODO
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
@@ -111,7 +111,7 @@ cogScagnostics <- function(x, y) {
 #'
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
-#' @param the desired type of cognostic you would like to compute (see details)
+#' @param type the desired type of cognostic you would like to compute (see details)
 #'
 #' @return object of class "cog"
 #'
@@ -171,6 +171,7 @@ print.cog <- function(x, ...) {
 #'
 #' @param cogFn cognostics function
 #' @param kvSubset key-value pair
+#' @param conn TODO
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}

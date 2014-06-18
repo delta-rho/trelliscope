@@ -5,7 +5,7 @@
 # executed prior to mr job
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param cogConn, conn, group, name TODO
+#' @param cogConn,conn,group,name,\ldots TODO
 #' @export
 #' @rdname mr-methods
 cogPre <- function(cogConn, conn, group, name, ...)
@@ -14,7 +14,6 @@ cogPre <- function(cogConn, conn, group, name, ...)
 # in the map, how to emit records
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
 cogEmit <- function(cogConn, ...)
@@ -23,7 +22,6 @@ cogEmit <- function(cogConn, ...)
 # in the reduce, how to collate results
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
 cogCollect <- function(cogConn, ...)
@@ -32,7 +30,6 @@ cogCollect <- function(cogConn, ...)
 # after mr job, final steps
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param cogConn TODO
 #' @export
 #' @rdname mr-methods
 cogFinal <- function(cogConn, ...)
@@ -45,6 +42,14 @@ cogFinal <- function(cogConn, ...)
 #' Methods for Cognostics Connections
 #'
 #' @param x object
+#' @param ... other objects passed onto generic methods
+#' @param rowIdx TODO
+#' @param colIdx TODO
+#' @param cogDF TODO
+#' @param flt TODO
+#' @param ordering TODO
+#' @param colIndex TODO
+#' @param verbose TODO
 #' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  They should never need to be used by an analyst.
 #' @export
 #' @rdname cogConn-methods
