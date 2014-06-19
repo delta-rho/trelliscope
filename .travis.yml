@@ -4,29 +4,39 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-# language: c
+language: c
 
-# before_install:
-#   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-#   - chmod 755 ./travis-tool.sh
-#   - ./travis-tool.sh bootstrap
-# install:
-#   - ./travis-tool.sh install_deps
-# script: ./travis-tool.sh run_tests
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+  - curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
+  - nvm install 0.10
 
-# after_failure:
-#   - ./travis-tool.sh dump_logs
-
-language: node_js
-node_js:
-  - "0.10"
-before_script:
+install:
+  - ./travis-tool.sh install_deps
   - npm install -g grunt-cli
+  - npm install ./
+
+script:
+  - ./travis-tool.sh run_tests
+  - npm test
+
+after_failure:
+  - ./travis-tool.sh dump_logs
+
+# language: node_js
+# node_js:
+#   - "0.10"
+# before_script:
+#   - npm install -g grunt-cli
+
 branches:
   only:
     - master
     - dev
     - browser_test
+
 notifications:
   email:
     on_success: change
