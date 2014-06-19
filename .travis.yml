@@ -30,15 +30,14 @@ install:
   - ## install protobuf
   - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
   - tar -xzf protobuf-2.4.1.tar.gz
-  - cd protobuf-2.4.1
-  - ./configure --prefix=...
-  - make
-  - make install
-  - cd ../
+  - cd protobuf-2.4.1 && ./configure --prefix=/usr && make && make install && cd ../
   - ## install rhipe
   - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
   -
   - ./travis-tool.sh install_deps
+  -
+  - ls *
+
 
 script:
   - ./travis-tool.sh run_tests
