@@ -8,8 +8,6 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  # - which nvm || curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
-  # - nvm install 0.10
 
 install:
   - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
@@ -27,8 +25,6 @@ install:
   # - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
   -
   - ./travis-tool.sh install_deps
-  # - npm install -g grunt-cli
-  # - npm install ./
   - ls *
 
 script:
