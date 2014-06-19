@@ -38,8 +38,8 @@ script:
 
 # after_failure:
 #   - ./travis-tool.sh dump_logs
-after_script:
-  - ./travis-tool.sh dump_logs
+# after_script:
+#   - ./travis-tool.sh dump_logs
 
 language: node_js
 node_js:
