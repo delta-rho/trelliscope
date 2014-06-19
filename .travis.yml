@@ -29,6 +29,7 @@ install:
   - ./travis-tool.sh install_deps
   # - npm install -g grunt-cli
   # - npm install ./
+  - ls *
 
 script:
   - ./travis-tool.sh run_tests
