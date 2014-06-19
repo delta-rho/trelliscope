@@ -31,7 +31,7 @@ addDisplay <- function(
 
    # get display prefix (and move old display to backup if it already exists)
    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
-   checkDisplayPath(displayPrefix, verbose)
+   checkDisplayPath(displayPrefix, verbose = FALSE)
 
    makePNG(dat = p,
       file = file.path(displayPrefix, "thumb.png"),
