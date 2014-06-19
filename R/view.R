@@ -1,3 +1,8 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c(".shinyServerMinVersion"))
+}
+
+
 #' View a Display or Run Shiny Display Viewer
 #'
 #' View a display or run Shiny display viewer
