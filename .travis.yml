@@ -14,7 +14,10 @@ before_install:
   # - nvm install 0.10
 
 install:
-  - ./travis-tool.sh r_binary_install datadr lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA Rhipe rmongodb scagnostics
+  - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
+  - ./travis-tool.sh r_install rmongodb
+  - ./travis-tool.sh install_github tesseradata/datadr
+  - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
   - ./travis-tool.sh install_deps
   # - npm install -g grunt-cli
   # - npm install ./
@@ -23,7 +26,9 @@ script:
   - ./travis-tool.sh run_tests
   - npm test
 
-after_failure:
+# after_failure:
+#   - ./travis-tool.sh dump_logs
+after_script:
   - ./travis-tool.sh dump_logs
 
 language: node_js
