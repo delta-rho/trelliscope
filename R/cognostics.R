@@ -273,15 +273,6 @@ getCogDesc <- function(x, df = TRUE) {
    res
 }
 
-getCognostics <- function(data, cogFn, splitKeys = NULL) {
-   if(is.null(splitKeys))
-      splitKeys <- names(data)
-
-   isCondDiv <- data$divBy$type == "condDiv"
-   lapply(seq_along(data), function(ii) {
-      getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])
-   })
-}
 
 getCogInfo <- function(x, cogDesc) {
    cogDesc <- subset(cogDesc, type != "panelKey")
