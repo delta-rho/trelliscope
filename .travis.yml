@@ -16,8 +16,17 @@ before_install:
 install:
   - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
   - ./travis-tool.sh r_install rmongodb
+  -
   - ./travis-tool.sh install_github tesseradata/datadr
+  - # install protobuf
+  - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
+  - tar -xzf protobuf-2.4.1.tar.gz
+  - cd protobuf-2.4.1
+  - ./configure # --prefix=...
+  - make
+  - make install
   - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
+  -
   - ./travis-tool.sh install_deps
   # - npm install -g grunt-cli
   # - npm install ./
