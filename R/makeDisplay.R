@@ -322,23 +322,6 @@ makeDisplay <- function(
    return(invisible(displayObj))
 }
 
-removeDisplay <- function(name, group, conn = getOption("vdbConn")) {
-   validateConn(conn)
-
-   # load the object
-   displayPrefix <- file.path(conn$path, "displays", group, name)
-   displayPrefix2 <- paste(displayPrefix, "_bak", sep = "")
-   if(file.exists(file.path(displayPrefix, "displayObj.Rdata"))) {
-      load(file.path(displayPrefix, "displayObj.Rdata"))
-      # TODO: remove cognostics (if stored elsewhere)
-   }
-   # remove the display directory (and _bak if exists)
-   unlink(displayPrefix, recursive = TRUE)
-   if(file.exists(displayPrefix2))
-      unlink(displayPrefix2, recursive = TRUE)
-   # remove from displayList
-   updateDisplayList(NULL, conn)
-}
 
 ## remove all _bak directories
 cleanupDisplays <- function(conn = getOption("vdbConn")) {

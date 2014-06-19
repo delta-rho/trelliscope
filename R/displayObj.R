@@ -63,7 +63,7 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
+#' @seealso \code{\link{makeDisplay}}
 #' @export
 removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), verbose = TRUE) {
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
