@@ -38,6 +38,9 @@ install:
   - make
   - make install
   - cd ../
+  - ls protobuf_install
+  - ls protobuf_install/*
+  - ls protobuf_install/*/*
   - ## install rhipe
   - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
   -
