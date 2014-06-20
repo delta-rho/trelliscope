@@ -30,8 +30,11 @@ install:
   - ## install protobuf
   - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
   - tar -xzf protobuf-2.4.1.tar.gz
+  - mkdir protobuf_install
+  - PROTODIR="`pwd`/protobuf_install"
+  - export PATH="$PATH:PROTODIR/bin"
   - cd protobuf-2.4.1
-  - ./configure --prefix=/usr
+  - ./configure --prefix="$PROTODIR"
   - make
   - make install
   - cd ../
