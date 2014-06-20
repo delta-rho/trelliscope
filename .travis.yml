@@ -32,8 +32,9 @@ install:
   - tar -xzf protobuf-2.4.1.tar.gz
   - mkdir protobuf_install
   - PROTODIR="`pwd`/protobuf_install"
-  - #export PATH="$PATH:PROTODIR/bin"
+  - PATH="$PATH:PROTODIR/bin"
   - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTODIR/lib/pkgconfig"
+  - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTODIR/lib"
   - cd protobuf-2.4.1
   - ./configure --prefix="$PROTODIR"
   - make
