@@ -36,6 +36,7 @@ Depends:
 Imports:
     httpuv,
 Suggests:
+    Cairo,
     Rhipe,
     rmongodb,
     scagnostics,

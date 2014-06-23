@@ -284,8 +284,8 @@ makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origW
 
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (nchar(system.file(package = "Cairo"))) {
-      pngfun <- Cairo::CairoPNG
+   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+      pngfun <- CairoPNG
    } else {
       pngfun <- png
    }

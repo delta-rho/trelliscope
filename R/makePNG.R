@@ -18,8 +18,8 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
 
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (nchar(system.file(package = "Cairo"))) {
-      pngfun <- Cairo::CairoPNG
+   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+      pngfun <- CairoPNG
    } else {
       pngfun <- png
    }
