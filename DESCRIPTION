@@ -21,6 +21,8 @@ License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
     R (>= 2.15.1),
+    data.table,
+    grid,
     datadr,
     lattice (>= 0.20-23),
     base64enc,
