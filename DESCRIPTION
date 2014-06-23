@@ -33,6 +33,8 @@ Depends:
     ggplot2,
     jsonlite,
     fastICA
+Imports:
+    httpuv,
 Suggests:
     Rhipe,
     rmongodb,

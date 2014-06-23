@@ -105,9 +105,9 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
          else {
             port <- shiny:::p_randomInt(3000, 8000)
          }
-         tmp <- try(httpuv:::startServer(host, port, list()), silent = TRUE)
+         tmp <- try(startServer(host, port, list()), silent = TRUE)
          if (!inherits(tmp, "try-error")) {
-            httpuv:::stopServer(tmp)
+            stopServer(tmp)
             .globals$lastPort <- port
             break
          }
@@ -120,7 +120,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
       on.exit(appParts$onEnd(), add = TRUE)
    server <- shiny:::startApp(appParts, port, host, quiet)
    on.exit({
-      httpuv:::stopServer(server)
+      stopServer(server)
    }, add = TRUE)
    if (!is.character(port)) {
       browseHost <- if (identical(host, "0.0.0.0"))
@@ -194,9 +194,9 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #          else {
 #             port <- round(runif(1, min = 3000, max = 8000))
 #          }
-#          tmp <- try(httpuv:::startServer(host, port, list()), silent = TRUE)
+#          tmp <- try(startServer(host, port, list()), silent = TRUE)
 #          if (!is(tmp, "try-error")) {
-#             httpuv:::stopServer(tmp)
+#             stopServer(tmp)
 #             .globals$lastPort <- port
 #             break
 #          }
@@ -211,7 +211,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #       server <- shiny:::startAppObj(appDir$ui, appDir$server, port = port, host = host, workerId = workerId, quiet = quiet)
 #    }
 #    on.exit({
-#       httpuv:::stopServer(server)
+#       stopServer(server)
 #    }, add = TRUE)
 #    if (!is.character(port)) {
 #       browseHost <- if (identical(host, "0.0.0.0"))
@@ -279,7 +279,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #     require(shiny)
 #     server <- shiny:::startApp(port = port)
 #     on.exit({
-#         httpuv:::stopServer(server)
+#         stopServer(server)
 #     }, add = TRUE)
 #     if (launch.browser) {
 #         appUrl <- paste("http://localhost:", port, hash, sep = "")
@@ -326,7 +326,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #    }
 #
 #    on.exit({
-#       httpuv:::stopServer(server)
+#       stopServer(server)
 #    }, add = TRUE)
 #
 #    if (launch.browser && !is.character(port)) {
