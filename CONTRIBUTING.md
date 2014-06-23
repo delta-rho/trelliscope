@@ -44,5 +44,5 @@ into self-contained and incremental pull requests, if need be, and reference dep
 request builds on request #92. Please review #92 first."
 * The first line of commit messages should be a short (<80 character) summary, followed by an empty line and then,
 optionally, any details that you want to share about the commit.
-* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org)
-to check every pull request and commit.  We use the [testthat](http://adv-r.had.co.nz/Testing.html) R package for running unit tests.  See code in the `inst/tests` for examples.
+* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org/tesseradata/trelliscope)
+to check every pull request and commit.  We use the [testthat](http://adv-r.had.co.nz/Testing.html) R package for running unit tests.  See code in the `tests/testthat` for examples.
