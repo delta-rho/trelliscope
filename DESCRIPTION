@@ -36,4 +36,5 @@ Depends:
 Suggests:
     Rhipe,
     rmongodb,
-    scagnostics
+    scagnostics,
+    testthat
