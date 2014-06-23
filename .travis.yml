@@ -4,55 +4,59 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
+# before_install:
+#   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+#   - chmod 755 ./travis-tool.sh
+#   - ./travis-tool.sh bootstrap
 
-install:
-  - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
-  - ./travis-tool.sh r_install rmongodb
-  -
-  - ./travis-tool.sh install_github tesseradata/datadr
-  -
-  - ls *
-  -
-  - # install RHIPE
-  # - ## install R
-  # - wget http://cran.r-project.org/src/base/R-2/R-2.15.1.tar.gz
-  # - tar -xzf R-2.15.1.tar.gz
-  # - cd R-2.15.1
-  # - # need to build shared library (--enable-R-shlib)
-  # - ./configure --enable-R-shlib --prefix=...
-  # - make
-  # - make install
-  # - cd ../
-  - ## install protobuf
-  - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
-  - tar -xzf protobuf-2.4.1.tar.gz
-  - mkdir protobuf_install
-  - PROTODIR="`pwd`/protobuf_install"
-  - PATH="$PATH:PROTODIR/bin"
-  - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTODIR/lib/pkgconfig"
-  - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTODIR/lib"
-  - cd protobuf-2.4.1
-  - ./configure --prefix="$PROTODIR"
-  - make
-  - make install
-  - cd ../
-  - ls protobuf_install
-  - ls protobuf_install/*
-  - ls protobuf_install/*/*
-  - ## install rhipe
-  - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
-  -
-  - ./travis-tool.sh install_deps
-  -
-  - ls *
+# install:
+#   - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
+#   - ./travis-tool.sh r_install rmongodb
+#   -
+#   - ./travis-tool.sh install_github tesseradata/datadr
+#   -
+#   - ls *
+#   -
+#   - # install RHIPE
+#   # - ## install R
+#   # - wget http://cran.r-project.org/src/base/R-2/R-2.15.1.tar.gz
+#   # - tar -xzf R-2.15.1.tar.gz
+#   # - cd R-2.15.1
+#   # - # need to build shared library (--enable-R-shlib)
+#   # - ./configure --enable-R-shlib --prefix=...
+#   # - make
+#   # - make install
+#   # - cd ../
+#   - ## install protobuf
+#   - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
+#   - tar -xzf protobuf-2.4.1.tar.gz
+#   - mkdir protobuf_install
+#   - PROTODIR="`pwd`/protobuf_install"
+#   - PATH="$PATH:PROTODIR/bin"
+#   - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTODIR/lib/pkgconfig"
+#   - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTODIR/lib"
+#   - cd protobuf-2.4.1
+#   - ./configure --prefix="$PROTODIR"
+#   - make
+#   - make install
+#   - cd ../
+#   - ls protobuf_install
+#   - ls protobuf_install/*
+#   - ls protobuf_install/*/*
+#   - ## install rhipe
+#   - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
+#   -
+#   - ./travis-tool.sh install_deps
+#   -
+#   - ls *
 
 
 script:
-  - ./travis-tool.sh run_tests
+  # - ./travis-tool.sh run_tests
+  - ls
+  - ls node_modules
+  - ls node_modules/grunt-cli
+  - ls node_modules/grunt-cli/bin
   - npm test
 
 # after_failure:
