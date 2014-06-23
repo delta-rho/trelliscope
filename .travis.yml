@@ -61,8 +61,8 @@ script:
   - ./travis-tool.sh run_tests
   - npm test
 
-# after_failure:
-#   - ./travis-tool.sh dump_logs
+after_failure:
+  - ./travis-tool.sh dump_logs
 # after_script:
 #   - ./travis-tool.sh dump_logs
 
