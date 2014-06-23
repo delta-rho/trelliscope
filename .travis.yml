@@ -58,11 +58,7 @@ install:
 
 
 script:
-  # - ./travis-tool.sh run_tests
-  - ls
-  - ls node_modules
-  - ls node_modules/grunt-cli
-  - ls node_modules/grunt-cli/bin
+  - ./travis-tool.sh run_tests
   - npm test
 
 # after_failure:
