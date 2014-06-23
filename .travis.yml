@@ -76,7 +76,7 @@ branches:
     - dev
     - browser_test
 
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+# notifications:
+#   email:
+#     on_success: change
+#     on_failure: change
