@@ -12,7 +12,7 @@ newNotebook(name = "index", blank = FALSE, title = "My Test Page",
 
 \item{blank}{do you just want a blank page, or do you want a template with several markdown examples filled out for reference?}
 
-\item{pageTitle,}{title, author, toc, css these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself}
+\item{pageTitle,title,author,toc,css}{these are parameters to be placed in the \code{\link{bsSetup}} call at the top of the .Rmd file, and can be ignored if you plan to change them later in the file itself}
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 

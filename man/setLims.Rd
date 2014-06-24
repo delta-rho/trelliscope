@@ -17,9 +17,11 @@ setLims(lims, x = "same", y = "same", xQuant = c(0, 1), yQuant = c(0,
 
 \item{yQuant}{same as xQuant but for y-axis}
 
-\item{xQuantRange}{a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded}
+\item{xRangeQuant}{a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded}
 
-\item{yQuantRange}{same as xQuantRange but for y-axis}
+\item{yRangeQuant}{same as xRangeQuant but for y-axis}
+
+\item{prop}{TODO}
 }
 \value{
 object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}

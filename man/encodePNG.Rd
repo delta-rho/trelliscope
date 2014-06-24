@@ -5,6 +5,9 @@
 \usage{
 encodePNG(plotLoc)
 }
+\arguments{
+\item{plotLoc}{TODO}
+}
 \description{
 base64 Encoding of a .png File
 }

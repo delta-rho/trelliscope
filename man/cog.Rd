@@ -10,7 +10,7 @@ cog(val = NULL, desc = "", type = NULL)
 
 \item{desc}{a description for this cognostic value}
 
-\item{the}{desired type of cognostic you would like to compute (see details)}
+\item{type}{the desired type of cognostic you would like to compute (see details)}
 }
 \value{
 object of class "cog"

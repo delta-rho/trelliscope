@@ -3,14 +3,14 @@
 \alias{plot.trsPre}
 \title{Plot results form prepanel}
 \usage{
-\method{plot}{trsPre}(lims, layout = c(2, 2), as.table = TRUE,
-  strip = FALSE, strip.left = TRUE, between = list(y = 0.25),
-  xlab = "Rank", ylab = "Panel Limits", ...)
+\method{plot}{trsPre}(x, layout = c(2, 2), as.table = TRUE, strip = FALSE,
+  strip.left = TRUE, between = list(y = 0.25), xlab = "Rank",
+  ylab = "Panel Limits", ...)
 }
 \arguments{
-\item{lims}{object of class "trsPre" created by \code{\link{prepanel}}}
+\item{x}{object of class "trsPre" created by \code{\link{prepanel}}}
 
-\item{layout,}{as.table, strip, strip.left, between, xlab, ylab, \ldots parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)}
+\item{layout,as.table,strip,strip.left,between,xlab,ylab,\ldots}{parameters for the lattice plot that is output (these are defaults - can ignore unless you want fine control)}
 }
 \value{
 object of class "trellis" (plotted by default)

@@ -1,3 +1,6 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("type"))
+}
 
 #' Compute RMSE of Loess Fit Cognostic
 #'
@@ -58,10 +61,10 @@ cogMean <- function(x, desc = "mean") {
 
 #' Compute Scagnostics
 #'
-#' Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
+#' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 #'
-#' @param x,y
-#' @param desc description of cognostic
+#' @param x TODO
+#' @param y TODO
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
@@ -111,7 +114,7 @@ cogScagnostics <- function(x, y) {
 #'
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
-#' @param the desired type of cognostic you would like to compute (see details)
+#' @param type the desired type of cognostic you would like to compute (see details)
 #'
 #' @return object of class "cog"
 #'
@@ -171,6 +174,7 @@ print.cog <- function(x, ...) {
 #'
 #' @param cogFn cognostics function
 #' @param kvSubset key-value pair
+#' @param conn TODO
 #'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
@@ -272,15 +276,6 @@ getCogDesc <- function(x, df = TRUE) {
    res
 }
 
-getCognostics <- function(data, cogFn, splitKeys = NULL) {
-   if(is.null(splitKeys))
-      splitKeys <- names(data)
-
-   isCondDiv <- data$divBy$type == "condDiv"
-   lapply(seq_along(data), function(ii) {
-      getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])
-   })
-}
 
 getCogInfo <- function(x, cogDesc) {
    cogDesc <- subset(cogDesc, type != "panelKey")

@@ -6,12 +6,12 @@
 cogScagnostics(x, y)
 }
 \arguments{
-\item{x,y}{}
+\item{x}{TODO}
 
-\item{desc}{description of cognostic}
+\item{y}{TODO}
 }
 \description{
-Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
+Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 }
 \examples{
 cogScagnostics(cars$dist, cars$speed)

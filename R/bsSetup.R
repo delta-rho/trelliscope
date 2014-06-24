@@ -56,7 +56,7 @@ preTOC <- paste("<!DOCTYPE html>
       <script src='assets/js/highlight.pack.js'></script>
       <script>hljs.initHighlightingOnLoad();</script>
 
-      <script type=\"text/javascript\" src=\"assets/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
+      <script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/2.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
 
 	<script type='text/javascript'>
 
@@ -72,13 +72,13 @@ preTOC <- paste("<!DOCTYPE html>
 	      $('#content').css('margin-left', '21px')
 	   }
 		", ifelse(toc, "", "tocOff()"), "
-		
+
 		if(document.URL.match('file:///') == null) {
          $('.sslShiny').hide();
       } else {
          $('.ssShiny').hide();
       }
-      
+
 	});
 	</script>
 
@@ -94,17 +94,17 @@ preTOC <- paste("<!DOCTYPE html>
 	       </a>
 	       <a class='brand' href='#'>", title, "</a>
           <div class='nav-collapse'>
-             <ul class='nav'>		  
+             <ul class='nav'>
              <li class='mynavheadertext'>
              <a href='#'><i class='icon-home'></i> Home</a>
              </li>
              <li class='dropdown mynavheadertext'>
              <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon-list'></i> Pages <b class='caret'></b></a>
-             <ul class='dropdown-menu'>					
+             <ul class='dropdown-menu'>
              ", pagesStr, "
              </ul>
-             </li>			
-             </ul>		
+             </li>
+             </ul>
           </div>
 	     </div>
 	   </div>

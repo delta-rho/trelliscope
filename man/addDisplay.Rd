@@ -15,6 +15,10 @@ addDisplay(p, name, group = "common", desc = "", height = 800,
 
 \item{desc}{a description of the display (used in the viewer and in notebooks)}
 
+\item{height}{TODO}
+
+\item{width}{TODO}
+
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 }
 \description{

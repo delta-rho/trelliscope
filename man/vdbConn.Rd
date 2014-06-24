@@ -23,7 +23,4 @@ Connect to a visualization catabase
 \author{
 Ryan Hafen
 }
-\seealso{
-\code{\link{updateViewer}}
-}
 

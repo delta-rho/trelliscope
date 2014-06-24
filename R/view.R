@@ -1,28 +1,33 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c(".shinyServerMinVersion"))
+}
+
+
 #' View a Display or Run Shiny Display Viewer
-#' 
+#'
 #' View a display or run Shiny display viewer
-#' 
-#' @param name, group optional parameters to load the viewer with a pre-specified display
-#' @param port what port to use for the viewer
+#'
+#' @param name,group optional parameters to load the viewer with a pre-specified display
 #' @param openBrowser should the browser be automatically launched?
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' 
+#' @param port what port to use for the viewer
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @export
 view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = 8100L) {
-   
+
    port <- as.integer(port)
-   
+
    validateConn(conn)
    vdbPrefix <- conn$path
 	packagePath <- system.file(package = "trelliscope")
-   
+
    if(!is.null(name)) {
       displayObj <- getDisplay(name = name, group = group)
       name <- displayObj$name
       group <- displayObj$group
-      
+
       # if it's a simple display, just view it in a web browser
       displayPrefix <- file.path(vdbPrefix, "displays", group, name)
       load(file.path(displayPrefix, "displayObj.Rdata"))
@@ -31,10 +36,10 @@ view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption
          return()
       }
    }
-   
+
    message("attempting to launch shiny vdb viewer...")
    message("press Ctrl+C or Esc to stop viewer")
-   
+
    require(shiny)
    hash <- ""
    if(!is.null(name)) {
@@ -51,7 +56,7 @@ view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption
    } else {
       shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
    }
-   
+
    myRunApp(shinyAppPrefix, port = port, hash = hash, launch.browser = openBrowser)
 }
 
@@ -60,7 +65,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
    on.exit({
       shiny:::handlerManager$clear()
    }, add = TRUE)
-   if (is.null(host) || is.na(host)) 
+   if (is.null(host) || is.na(host))
       host <- "0.0.0.0"
    ops <- options(warn = 1)
    on.exit(options(ops), add = TRUE)
@@ -85,9 +90,9 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
       }
    }
    display.mode <- match.arg(display.mode)
-   if (display.mode == "normal") 
+   if (display.mode == "normal")
       shiny:::setShowcaseDefault(0)
-   else if (display.mode == "showcase") 
+   else if (display.mode == "showcase")
       shiny:::setShowcaseDefault(1)
    require(shiny)
    .globals <- get(".globals", loadNamespace("shiny")) ##
@@ -109,22 +114,22 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
       }
    }
    appParts <- as.shiny.appobj(appDir)
-   if (!is.null(appParts$onStart)) 
+   if (!is.null(appParts$onStart))
       appParts$onStart()
-   if (!is.null(appParts$onEnd)) 
+   if (!is.null(appParts$onEnd))
       on.exit(appParts$onEnd(), add = TRUE)
    server <- shiny:::startApp(appParts, port, host, quiet)
    on.exit({
       httpuv:::stopServer(server)
    }, add = TRUE)
    if (!is.character(port)) {
-      browseHost <- if (identical(host, "0.0.0.0")) 
+      browseHost <- if (identical(host, "0.0.0.0"))
          "127.0.0.1"
       else host
       appUrl <- paste("http://", browseHost, ":", port, hash, sep = "")
-      if (is.function(launch.browser)) 
+      if (is.function(launch.browser))
          launch.browser(appUrl)
-      else if (launch.browser) 
+      else if (launch.browser)
          utils::browseURL(appUrl)
    }
    else {
@@ -146,14 +151,14 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 
 ## v0.9.1
 # myRunApp <- function(appDir = getwd(), port = NULL, launch.browser = getOption("shiny.launch.browser", interactive()), host = getOption("shiny.host", "127.0.0.1"), workerId = "", quiet = FALSE, display.mode = c("auto", "normal", "showcase"), hash="") {
-#    if (is.null(host) || is.na(host)) 
+#    if (is.null(host) || is.na(host))
 #       host <- "0.0.0.0"
 #    ops <- options(warn = 1)
 #    on.exit(options(ops))
 #    if (nzchar(Sys.getenv("SHINY_PORT"))) {
 #       ver <- Sys.getenv("SHINY_SERVER_VERSION")
 #       if (compareVersion(ver, .shinyServerMinVersion) < 0) {
-#          warning("Shiny Server v", .shinyServerMinVersion, 
+#          warning("Shiny Server v", .shinyServerMinVersion,
 #          " or later is required; please upgrade!")
 #       }
 #    }
@@ -171,15 +176,15 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #       }
 #    }
 #    display.mode <- match.arg(display.mode)
-#    if (display.mode == "normal") 
+#    if (display.mode == "normal")
 #       shiny:::setShowcaseDefault(0)
-#    else if (display.mode == "showcase") 
+#    else if (display.mode == "showcase")
 #       shiny:::setShowcaseDefault(1)
-#    
+#
 #    require(shiny)
-#    
+#
 #    .globals <- get(".globals", loadNamespace("shiny"))
-#    
+#
 #    if (is.null(port)) {
 #       for (i in 1:20) {
 #          if (!is.null(.globals$lastPort)) {
@@ -212,11 +217,11 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #       browseHost <- if (identical(host, "0.0.0.0"))
 #          "127.0.0.1"
 #       else host
-#       
+#
 #       appUrl <- paste("http://", browseHost, ":", port, hash, sep = "")
-#       if (is.function(launch.browser)) 
+#       if (is.function(launch.browser))
 #       launch.browser(appUrl)
-#       else if (launch.browser) 
+#       else if (launch.browser)
 #       utils::browseURL(appUrl)
 #    } else {
 #       appUrl <- NULL
@@ -264,7 +269,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #     if (nzchar(Sys.getenv("SHINY_PORT"))) {
 #         ver <- Sys.getenv("SHINY_SERVER_VERSION")
 #         if (compareVersion(ver, .shinyServerMinVersion) < 0) {
-#             warning("Shiny Server v", .shinyServerMinVersion, 
+#             warning("Shiny Server v", .shinyServerMinVersion,
 #                 " or later is required; please upgrade!")
 #         }
 #     }
@@ -290,13 +295,13 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 
 # for shiny version <= 0.8
 # myRunApp <- function(appDir=getwd(), port=8100L, launch.browser=getOption('shiny.launch.browser', interactive()), hash="") {
-#   
+#
 #    workerId <- ""
-# 
+#
 #    # Make warnings print immediately
 #    ops <- options(warn = 1)
 #    on.exit(options(ops))
-#    
+#
 #    if (nzchar(Sys.getenv('SHINY_PORT'))) {
 #       # If SHINY_PORT is set, we're running under Shiny Server. Check the version
 #       # to make sure it is compatible. Older versions of Shiny Server don't set
@@ -308,9 +313,9 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #             ' or later is required; please upgrade!')
 #       }
 #    }
-#   
+#
 #    require(shiny)
-#    
+#
 #    if (is.character(appDir)) {
 #       orig.wd <- getwd()
 #       setwd(appDir)
@@ -319,16 +324,16 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #    } else {
 #       server <- shiny:::startAppObj(appDir$ui, appDir$server, port=port, workerId)
 #    }
-#    
+#
 #    on.exit({
 #       httpuv:::stopServer(server)
 #    }, add = TRUE)
-#    
+#
 #    if (launch.browser && !is.character(port)) {
 #       appUrl <- paste("http://localhost:", port, hash, sep="")
 #       utils::browseURL(appUrl)
 #    }
-#    
+#
 #    env <- shiny:::.globals
 #    assign("retval", NULL, envir=env)
 #    assign("stopped", FALSE, envir=env)
@@ -341,7 +346,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
 #          shiny:::timerCallbacks$clear()
 #       }
 #    )
-#    
+#
 #    return(get("retval", envir=env))
 # }
 

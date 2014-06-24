@@ -4,16 +4,16 @@
 \title{View a Display or Run Shiny Display Viewer}
 \usage{
 view(name = NULL, group = NULL, openBrowser = TRUE,
-  conn = getOption("vdbConn"))
+  conn = getOption("vdbConn"), port = 8100L)
 }
 \arguments{
-\item{name,}{group optional parameters to load the viewer with a pre-specified display}
-
-\item{port}{what port to use for the viewer}
+\item{name,group}{optional parameters to load the viewer with a pre-specified display}
 
 \item{openBrowser}{should the browser be automatically launched?}
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
+
+\item{port}{what port to use for the viewer}
 }
 \description{
 View a display or run Shiny display viewer

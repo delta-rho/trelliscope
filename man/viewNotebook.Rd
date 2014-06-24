@@ -9,6 +9,8 @@ viewNotebook(name = "index", conn = getOption("vdbConn"), local = TRUE)
 \item{name}{name of the notebook file (.html extension not required)}
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
+
+\item{local}{TODO}
 }
 \description{
 Use \code{\link{browseURL}} to open a notebook .html file that is in the "notebook" directory of the vdb directory and that has typically been created with \code{\link{newNotebook}} and typeset with \code{\link{typeset}}.

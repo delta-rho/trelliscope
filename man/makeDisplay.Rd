@@ -30,7 +30,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
 
 \item{preRender}{should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly in the viewer (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.}
 
-\item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn()}}, but if there are many subsets (millions or more), \code{\link{mongoCogConn()}} is recommended (if MongoDB is an option).}
+\item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}, but if there are many subsets (millions or more), \code{\link{mongoCogConn}()} is recommended (if MongoDB is an option).}
 
 \item{output}{how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)}
 
@@ -40,7 +40,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
 
 \item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
 
-\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
+\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}}
 }
 \description{
 Create a trelliscope display and add it to a visualization database (VDB)
@@ -57,6 +57,6 @@ Panels by default are not pre-rendered.  Instead, this function creates a displa
 Ryan Hafen
 }
 \seealso{
-\code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{inputVars}}, \code{\link{divide}}
+\code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
 }
 
