@@ -65,7 +65,7 @@ script:
   - R --vanilla < z_grunt_test/grunt_server.R &
   - R_PID=$!
   - echo "$R_PID"
-  - sleep 5 # let server load
+  - sleep 30 # let server load
   -
   - npm test
   -
