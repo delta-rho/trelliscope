@@ -62,7 +62,15 @@ install:
 script:
   - ./travis-tool.sh run_tests
   -
+  - R --vanilla < z_grunt_test/grunt_server.r &
+  - R_PID=$!
+  - echo "$R_PID"
+  - sleep 5 # let server load
+  -
   - npm test
+  -
+  - kill "$R_PID"
+
 
 after_failure:
   - ./travis-tool.sh dump_logs
