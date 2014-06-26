@@ -51,6 +51,8 @@ install:
   - ./travis-tool.sh install_deps
   -
   - #INSTALL NODE TESTING
+  -
+
   - npm install
   -
   - ls *
@@ -59,6 +61,7 @@ install:
 
 script:
   - ./travis-tool.sh run_tests
+  -
   - npm test
 
 after_failure:
