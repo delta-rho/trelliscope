@@ -62,7 +62,7 @@ install:
 script:
   - ./travis-tool.sh run_tests
   -
-  - R --vanilla < z_grunt_test/grunt_server.r &
+  - R --vanilla < z_grunt_test/grunt_server.R &
   - R_PID=$!
   - echo "$R_PID"
   - sleep 5 # let server load
