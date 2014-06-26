@@ -1,5 +1,5 @@
 context("Simple display")
-library(trelliscope)
+require(trelliscope)
 
 vdbPath <- file.path(tempdir(), "vdb")
 
