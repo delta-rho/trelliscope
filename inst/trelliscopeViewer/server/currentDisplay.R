@@ -29,8 +29,8 @@ currentDisplay <- reactive({
          cdo$cogInfo <- trelliscope:::getCogInfo(cdo$cogDatConn)
       
       # default state values if not specified
-      if(is.null(cdo$state$visibleCogState))
-         cdo$state$visibleCog <- cdo$cogDesc$name[cdo$cogDesc$type == "splitVar"]
+      if(is.null(cdo$state$panelLabelState))
+         cdo$state$panelLabel <- cdo$cogDesc$name[cdo$cogDesc$type == "splitVar"]
       
       if(is.null(cdo$state$panelLayout))
          cdo$state$panelLayout <- list(nrow = 1, ncol = 1)
@@ -50,8 +50,8 @@ output$panelFunctionOutput <- renderDataLite({
    panelFunctionOutputData(currentDisplay())
 })
 
-output$visibleCogListOutput <- renderDataLite({
-   visibleCogListOutputData(currentDisplay())
+output$panelLabelListOutput <- renderDataLite({
+   panelLabelListOutputData(currentDisplay())
 })
 
 output$relatedDisplayListOutput <- renderDataLite({

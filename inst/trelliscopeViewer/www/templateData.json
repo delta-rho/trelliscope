@@ -33,21 +33,21 @@
 			"panelFunctionUpdateButton"
 		]
 	},
-	"visible-cognostics" : {
+	"panel-labels" : {
 		"icon" : [
 			"icon-cog-list"
 		],
 		"panel_header" : [
-			"Visible Cognostics"
+			"Panel Labels"
 		],
 		"panel_description" : [
 			"Specify which cognostics to view underneath each panel. <br/>Select cognostics to view by clicking and/or dragging the 'Show' column."
 		],
 		"body_id" : [
-			"visibleCogListOutput"
+			"panelLabelListOutput"
 		],
 		"update_button" : [
-			"visibleCogListUpdateButton"
+			"panelLabelListUpdateButton"
 		]
 	},
 	"add-related-display" : {

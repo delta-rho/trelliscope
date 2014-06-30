@@ -3,15 +3,17 @@
 function panelLayoutOutputApplyButton() {
    panelDims = $("#panel-layout-data").data("panelDims");
    
-   var panelLayout = {
-      "nrow" : parseInt($("#panel-rows").val()),
-      "ncol" : parseInt($("#panel-cols").val()),
-      "w"    : panelDims.w,
-      "h"    : panelDims.h
-   };
-   
-   $("#panelLayoutStateInput").data("myShinyData", panelLayout);
-   $("#panelLayoutStateInput").trigger("change");
+   if(panelDims != undefined) {
+      var panelLayout = {
+         "nrow" : parseInt($("#panel-rows").val()),
+         "ncol" : parseInt($("#panel-cols").val()),
+         "w"    : panelDims.w,
+         "h"    : panelDims.h
+      };
+      
+      $("#panelLayoutStateInput").data("myShinyData", panelLayout);
+      $("#panelLayoutStateInput").trigger("change");
+   }
 }
 
 function panelLayoutOutputCancelButton() {
@@ -40,16 +42,16 @@ function panelLayoutOutputPostRender(data) {
    $("#panel-cols").change(function() {
       panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
    });
+
+   $("#panel-rows").trigger("change");
+   // call panel layout apply button to take number of labels, etc.
+   // for some reason we have to do this to get width and height propogated...
+   panelLayoutOutputApplyButton();
    
    // $("#panel-rows").val(data.nrow[0]);
    // $("#panel-cols").val(data.ncol[0]);
    // 
    // panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
-   //    
-   // $("#panel-rows").trigger("change");
-   
-   // for some reason we have to do this to get width and height propogated...
-   // panelLayoutOutputApplyButton();
 }
 
 
@@ -61,7 +63,7 @@ function getPanelDims(nRow, nCol) {
    if(panelAspect) {
       var tPad = 3; // padding on either side of the panel
       var cogHeight = 30; // height of a row of cog output
-      var nCog = $(".visible-cog-select.active").length; // number of cogs to show
+      var nCog = $(".panel-labels-select.active").length; // number of cogs to show
       // extra padding beyond what is plotted
       // these remain fixed while width and height can change
       var wExtra = 2 + 2 * tPad; // 2 for border + tPad on either side

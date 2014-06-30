@@ -3,7 +3,7 @@
 # - sortStateInput (from cogColumnSortInput)
 # - filterStateInput (from cogColumnFilterInput, univarFilterState, or bivarFilterState)
 # - panelLayoutStateInput
-# - visibleCogStateInput
+# - panelLabelStateInput
 
 # When a user hits the "Apply" button, an associated *ApplyButton function is executed which sets input (e.g. filterStateInput) and triggers change on that input
 
@@ -23,9 +23,9 @@ cdoExposedCogState <- reactive({
    if(!is.null(sortState))
       cdo$state$sort <- sortState
    
-   visibleCogState <- input$visibleCogStateInput
-   if(!is.null(visibleCogState))
-      cdo$state$visibleCog <- visibleCogState
+   panelLabelState <- input$panelLabelStateInput
+   if(!is.null(panelLabelState))
+      cdo$state$panelLabel <- panelLabelState
    # browser()
    panelLayoutState <- input$panelLayoutStateInput
    if(!is.null(panelLayoutState))

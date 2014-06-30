@@ -24,7 +24,7 @@ panelLayoutOutputData <- function(x) {
          ncol <- 1
       
       list(panel_aspect = x$cdo$height / x$cdo$width, 
-         n_visible_cog = max(1, length(which(x$cdo$cogDesc$type == "splitVar"))),
+         n_panel_labels = max(1, length(which(x$cdo$cogDesc$type == "splitVar"))),
          nrow = nrow, ncol = ncol, cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }
@@ -37,7 +37,7 @@ panelFunctionOutputData <- function(x) {
    }
 }
 
-visibleCogListOutputData <- function(x) {
+panelLabelListOutputData <- function(x) {
    if(!is.null(x$cdo)) {
       cogDesc <- x$cdo$cogDesc
       cogDesc$active <- ""

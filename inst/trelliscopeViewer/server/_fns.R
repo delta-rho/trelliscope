@@ -237,8 +237,8 @@ dummyPanel <- function(w, h) {
    sprintf("<div style=\"width:%dpx; height:%dpx; background-color: #ddd\"></div>", w, h)
 }
 
-dummyCog <- function(cogVars) {
-   data.frame(cog_name = cogVars, cog_value = "")
+dummyCog <- function(labelVars) {
+   data.frame(cog_name = labelVars, cog_value = "")
 }
 
 getPanels <- function(cdo, curRows, pixelratio = 2) {

@@ -39,7 +39,7 @@
     <script src="assets/custom/controls-univar-filter.js"></script>
     <script src="assets/custom/controls-bivar-filter.js"></script>
     <script src="assets/custom/controls-multivar-filter.js"></script>
-    <script src="assets/custom/controls-visible-cog.js"></script>
+    <script src="assets/custom/controls-panel-labels.js"></script>
     <script src="assets/custom/controls-panel-layout.js"></script>
     <script src="assets/custom/main.js"></script>
     
@@ -100,10 +100,10 @@
               <i class="icon-panel-edit"></i>
               <span class="list-group-text">Panel Function</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="visible-cognostics">
-               <!-- data-action="visibleCogListSetFromExposedState"> -->
+            <a href="#" class="list-group-item" data-divlink="panel-labels">
+               <!-- data-action="panelLabelListSetFromExposedState"> -->
               <i class="icon-cog-list"></i>
-              <span class="list-group-text">Visible Cognostics</span>
+              <span class="list-group-text">Panel Labels</span>
             </a>
             <a href="#" class="list-group-item last-item" data-divlink="add-related-display">
               <i class="icon-plus-square-o"></i>
@@ -139,7 +139,7 @@
         </div>
         <div id="panel-layout"          class="slide-panel panel panel-default"></div>
         <div id="panel-function"        class="slide-panel panel panel-default"></div>
-        <div id="visible-cognostics"    class="slide-panel panel panel-default"></div>
+        <div id="panel-labels"    class="slide-panel panel panel-default"></div>
         <div id="add-related-display"   class="slide-panel panel panel-default"></div>
         <div id="cog-table-sort-filter" class="slide-panel panel panel-default"></div>
         <div id="univar-filter"         class="slide-panel panel panel-default"></div>
@@ -165,7 +165,7 @@
     
     <div id="footer">
       <div id="filterStateInput" class="shiny-my-data-input"></div>
-      <div id="visibleCogStateInput" class="shiny-my-data-input"></div>
+      <div id="panelLabelStateInput" class="shiny-my-data-input"></div>
       <div id="panelLayoutStateInput" class="shiny-my-data-input"></div>
       <div id="sortStateInput" class="shiny-my-data-input"></div>
       <div id="exposedStateDataOutput" data-callback="updateControlsExposedState" class="shiny-my-data-output"></div>
@@ -397,8 +397,8 @@
   </div>
 </script>
 
-<!-- visible cognostics template -->
-<script id="visibleCogListOutput-template" type="text/html">
+<!-- panel labels template -->
+<script id="panelLabelListOutput-template" type="text/html">
 <div class="panel-body-wrapper">
   <div class="table-header-div">
   <table class="table table-condensed table-bordered nice-table full-width-table table-header">
@@ -410,13 +410,13 @@
     </thead>
   </table>
   </div>
-  <div id="visible-cognostics-selection" class="table-body-div">
+  <div id="panel-labels-selection" class="table-body-div">
   <table class="table table-condensed table-bordered nice-table full-width-table">
     <tbody>
     {{#cog}}
       <tr>
         <td><strong>{{name}}</strong>: {{desc}}</td>
-        <td class="select-column selectable visible-cog-select {{active}}" data-name="{{name}}" id="visible-cog-select-{{name}}"></td>
+        <td class="select-column selectable panel-labels-select {{active}}" data-name="{{name}}" id="panel-labels-select-{{name}}"></td>
       </tr>
       {{/cog}}
     </tbody>

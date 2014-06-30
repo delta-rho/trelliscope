@@ -73,7 +73,7 @@ a <- list(
    panels = list(
       "panelLayoutOutput" = panelLayoutOutputData(currentDisplay),
       "panelFunctionOutput" = panelFunctionOutputData(currentDisplay),
-      "visibleCogListOutput" = visibleCogListOutputData(currentDisplay),
+      "panelLabelListOutput" = panelLabelListOutputData(currentDisplay),
       "relatedDisplayListOutput" = relatedDisplayListOutputData(currentDisplay),
       "cogTableControlsOutput" = cogTableControlsOutputData(currentDisplay),
       "cogUniFilterControlsOutput" = cogUniFilterControlsOutputData(currentDisplay),
@@ -117,12 +117,12 @@ a <- list(
       body_id = "panelFunctionOutput",
       update_button = "panelFunctionUpdateButton"
    ),
-   "visible-cognostics" = list(
+   "panel-labels" = list(
       icon = "icon-cog-list",
-      panel_header = "Visible Cognostics",
+      panel_header = "Panel Labels",
       panel_description = "Specify which cognostics to view underneath each panel. <br/>Select cognostics to view by clicking and/or dragging the 'Show' column.",
-      body_id = "visibleCogListOutput",
-      update_button = "visibleCogListUpdateButton"
+      body_id = "panelLabelListOutput",
+      update_button = "panelLabelListUpdateButton"
    ),
    "add-related-display" = list(
       icon = "icon-plus-square-o",

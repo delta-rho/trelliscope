@@ -4,7 +4,7 @@
 			"panel_aspect" : [
 				1
 			],
-			"n_visible_cog" : [
+			"n_panel_labels" : [
 				2
 			],
 			"nrow" : [
@@ -31,7 +31,7 @@
 				"common"
 			]
 		},
-		"visibleCogListOutput" : {
+		"panelLabelListOutput" : {
 			"cog" : [
 				{
 					"type" : "panelKey",

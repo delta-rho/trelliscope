@@ -27,7 +27,7 @@ output$panelTableContentOutput <- renderDataLite({
    if(!is.null(cdo) && !is.null(curPage)) {
       curPage <- as.integer(curPage)
       
-      cogVars <- cdo$cdo$state$visibleCog
+      labelVars <- cdo$cdo$state$panelLabel
       w <- cdo$cdo$state$panelLayout$w
       h <- cdo$cdo$state$panelLayout$h
       nr <- cdo$cdo$state$panelLayout$nrow
@@ -52,11 +52,11 @@ output$panelTableContentOutput <- renderDataLite({
          lapply(rw, function(i) {
             if(i + idxStart - 1 > idxEnd) {
                curPanelContent <- dummyPanel(w, h)
-               cogData <- dummyCog(cogVars)
+               cogData <- dummyCog(labelVars)
             } else {
                curPanelContent <- panelContent[i]
-               tmp <- cogDataString(curRows[i, cogVars, drop = FALSE])
-               cogData <- data.frame(cog_name = cogVars, cog_value = tmp[1,])
+               tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
+               cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
             }
             list(
                i = i,

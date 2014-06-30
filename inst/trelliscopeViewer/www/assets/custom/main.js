@@ -213,7 +213,7 @@ function updateControlsExposedState() {
    univarFilterSetFromExposedState();
    bivarFilterSetFromExposedState();
    cogTableSetFromExposedState();
-   visibleCogListSetFromExposedState();
+   panelLabelListSetFromExposedState();
    panelLayoutSetFromExposedState();
 }
 
@@ -316,9 +316,9 @@ function panelTableContentOutputPostRender() {
    // stop spinner
    var target = document.getElementById("panelTableSpinner");
    panelSpinner.stop(target);
-
+   
    // make with of cog name column uniform across
-   // TODO: compute this as part of visible cog up front and save it with exposed state
+   // TODO: compute this as part of panel labels up front and save it with exposed state
    var maxCogNameWidth = 0;
    var tmp;
    $(".panel-cog-table").first().find(".cog-name-td").each(function() {
@@ -344,6 +344,7 @@ $(document).ready(function() {
          document.getElementById(key).innerHTML = output;
       });
    })
+   
    .complete(function() {
       // register bindings for newly created elements
       masterControlPostRender();

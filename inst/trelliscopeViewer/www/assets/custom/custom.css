@@ -835,7 +835,7 @@ td.select-column.active {
   border: 1px solid #ed9c28;*/
 }
 
-#visible-cognostics-selection {
+#panel-labels-selection {
   max-height: 450px;
   overflow-y: auto;
 }
