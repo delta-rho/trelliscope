@@ -89,6 +89,8 @@ $.extend(myShinyDataInputBinding, {
       return $(scope).find(".shiny-my-data-input");
    },
    getValue: function(el) {
+      // console.log($(el).attr("id"));
+      // console.log($(el).data("myShinyData"));
       return $(el).data("myShinyData");
    },
    setValue: function(el, value) {

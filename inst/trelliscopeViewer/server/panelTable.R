@@ -56,7 +56,11 @@ output$panelTableContentOutput <- renderDataLite({
             } else {
                curPanelContent <- panelContent[i]
                tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
-               cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+               if(is.null(labelVars)) {
+                  cogData <- NULL
+               } else {
+                  cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+               }
             }
             list(
                i = i,

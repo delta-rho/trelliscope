@@ -86,7 +86,7 @@ cogTableFootHist <- function(data) {
 
 # creates data ready for univariate d3 plotting
 # either bar chart for character or hist / quantile for numeric (specify with plotType)
-getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist") {
+getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
    if(plotType == "histogram")
       plotType <- "hist"
    if(plotType == "quantile")
@@ -109,13 +109,15 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
          names(tmp)[1:2] <- c("x", "y")
          return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
       }
-   } else {
+   } else { # bar chart
       if(distType == "marginal") {
          tmp <- curInfo$marginal
       } else {
          # call trelliscope:::getCogCatPlotData...
          return(NULL)
       }
+      if(nrow(tmp) > maxLevels)
+         return(NULL)
       tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
       # browser()
       tmp$ind <- seq_len(nrow(tmp))

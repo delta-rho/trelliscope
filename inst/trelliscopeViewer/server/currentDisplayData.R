@@ -80,7 +80,7 @@ cogTableControlsOutputData <- function(x) {
       # cogDesc$active[cogDesc$name %in% names(curDF)] <- "active"
       cogDesc$active[-1] <- "active"
       plotDat <- lapply(names(x$cdo$cogInfo), function(nm) {
-         getUnivarPlotDat(x$cdo, name = nm)         
+         getUnivarPlotDat(x$cdo, name = nm, maxLevels = 100)
       })
       
       dfInfo <- data.frame(

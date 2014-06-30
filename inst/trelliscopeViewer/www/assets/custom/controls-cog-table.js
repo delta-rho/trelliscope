@@ -234,10 +234,10 @@ function cogTableControlsOutputPostRender(data) {
       updateCogTableColumnVisibility();
    });
    
-   // make histograms in footer
-   // console.log(data.plotDat);
+   // make histograms / bar charts in footer
    $.each(data.plotDat, function(index, value) {
-      d3footPlot(value);
+      if(value.data != undefined)
+         d3footPlot(value);
    });
    
    // handle clicks on column sort

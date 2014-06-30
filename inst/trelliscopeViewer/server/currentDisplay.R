@@ -29,8 +29,12 @@ currentDisplay <- reactive({
          cdo$cogInfo <- trelliscope:::getCogInfo(cdo$cogDatConn)
       
       # default state values if not specified
-      if(is.null(cdo$state$panelLabelState))
-         cdo$state$panelLabel <- cdo$cogDesc$name[cdo$cogDesc$type == "splitVar"]
+      if(is.null(cdo$state$panelLabelState)) {
+         defaultLabels <- cdo$cogDesc$name[cdo$cogDesc$type == "splitVar"]
+         if(length(defaultLabels) == 0)
+            defaultLabels <- NULL
+         cdo$state$panelLabel <- defaultLabels
+      }
       
       if(is.null(cdo$state$panelLayout))
          cdo$state$panelLayout <- list(nrow = 1, ncol = 1)
