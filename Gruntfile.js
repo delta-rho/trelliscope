@@ -9,7 +9,7 @@ module.exports = function (grunt) {
         options: {
           timeout: 20 * 60 * 1000,
           urls: [
-            'http://localhost:8100/?test=1'
+            'http://localhost:8100?test=1'
           ]
         }
       }
