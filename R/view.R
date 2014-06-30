@@ -51,12 +51,10 @@ view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption
    options(vdbShinyPrefix = vdbPrefix)
    # if on dev machine, make the viewer path be the code source directory
    # (not the package path)
-   if(Sys.getenv("MYDEVMACHINE") == "TRUE") {
-      shinyAppPrefix <- "~/Documents/Code/Tessera/trelliscope/inst/trelliscopeViewer/"
-   } else {
+   shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
+   if(shinyAppPrefix == "")
       shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
-   }
-
+   
    myRunApp(shinyAppPrefix, port = port, hash = hash, launch.browser = openBrowser)
 }
 
