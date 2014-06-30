@@ -370,9 +370,13 @@ $(document).ready(function() {
          });
       } else {
          console.log("Running in shiny mode...")
-         Shiny.unbindAll();
-         Shiny.bindAll()
-         
+         try {
+           Shiny.unbindAll();
+           Shiny.bindAll()
+         } catch (e) {
+          // do nothing
+         }
+
          if(appHash == "") {
             $("#openModal").modal('show');
          } else {
