@@ -25,6 +25,9 @@ $.extend({
   }
 });
 
+
+(function( window ) {
+
 window.shouldTest = $.getUrlVar('test');
 console.log("Should Test: ", window.shouldTest);
 
@@ -32,7 +35,6 @@ if (window.shouldTest != 1) {
 	return
 }
 
-(function( window ) {
 
 var QUnit,
 	assert,
