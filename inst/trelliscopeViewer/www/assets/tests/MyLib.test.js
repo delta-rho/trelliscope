@@ -1,6 +1,6 @@
 
 
-(function(){
+run_qunit_tests = function(){
 
   if (window.shouldTest != 1) {
     return
@@ -136,4 +136,8 @@
   });
 
 
-})();
+}
+
+
+$(run_qunit_tests);
+
