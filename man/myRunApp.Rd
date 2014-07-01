@@ -13,7 +13,7 @@ myRunApp(appDir = getwd(), port = NULL,
 \item{appDir,port,launch.browser,host,workerId,quiet,display.mode,hash}{TODO}
 }
 \description{
-View a display or run Shiny display viewer
+internal runApp (from shiny's runApp() - need to be able to add hash string)
 }
 \author{
 Ryan Hafen
