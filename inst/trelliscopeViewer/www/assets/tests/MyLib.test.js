@@ -131,7 +131,7 @@ run_qunit_tests = function(){
       }
       setTimeout(fn, 1000)
 
-    }, 1000)
+    }, 2000) // takes longer to load :-(
 
   })
 
