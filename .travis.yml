@@ -85,7 +85,6 @@ branches:
   only:
     - master
     - dev
-    - r_test
 
 notifications:
   email:
