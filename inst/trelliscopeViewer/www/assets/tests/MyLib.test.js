@@ -2,7 +2,7 @@
 
 run_qunit_tests = function(){
 
-  if (window.shouldTest != 1) {
+  if (! window.shouldTest) {
     return
   }
 
