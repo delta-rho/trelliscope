@@ -53,7 +53,8 @@ var QUnit,
 			try {
 				sessionStorage.setItem( x, x );
 				sessionStorage.removeItem( x );
-				return true;
+				// return true;
+				return false; // do not want session storage!!! - Barret
 			} catch( e ) {
 				return false;
 			}
