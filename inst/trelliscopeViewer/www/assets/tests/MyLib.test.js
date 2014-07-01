@@ -6,6 +6,12 @@ run_qunit_tests = function(){
     return
   }
 
+  $("body").append("<div id=\"qunit\" style=\"width: 500px; height: 500px; overflow: auto; position: absolute; top: 50px; right: 0px; \"></div><div id=\"qunit-fixture\"></div>");
+  $(".right-panel-container").css("z-index", "99");
+  // $("body").append();
+  console.log("appended to body")
+
+
 
   // http://api.qunitjs.com/category/callbacks/
   QUnit.testStart(function( details ) {
