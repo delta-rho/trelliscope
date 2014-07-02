@@ -42,4 +42,5 @@ Suggests:
     Rhipe,
     rmongodb,
     scagnostics,
-    testthat
+    testthat (>= 0.8.1),
+    roxygen2 (>= 4.0.0)
