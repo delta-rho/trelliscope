@@ -55,6 +55,18 @@ function debounce(fn, delay) {
    };
 }
 
+if (typeof console  != "undefined") 
+    if (typeof console.log != 'undefined')
+        console.olog = console.log;
+    else
+        console.olog = function() {};
+
+console.log = function(message) {
+    console.olog(message);
+    $('#error-log').append('<p>' + message + '</p>');
+};
+console.error = console.debug = console.info =  console.log;
+
 // let a user resize for 250ms before triggering actions
 $(window).resize(function() {
    if(this.resizeTO) clearTimeout(this.resizeTO);
@@ -107,25 +119,6 @@ function pageBeg() {
    $("#curPanelPageInput").trigger("change");
 }
 
-
-
-function hideColumn(columnIndex) {
-   $("#cogTable td:nth-child(" + (columnIndex+1) + "), #cogTable th:nth-child(" + (columnIndex + 1) + ")").hide();
-}
-
-function showColumn(columnIndex) {
-   $("#cogTable td:nth-child(" + (columnIndex+1) + "), #cogTable th:nth-child(" + (columnIndex + 1) + ")").show();
-}
-
-function updateCogTableColumnVisibility() {
-   $("#cog-table-vars li").each(function() {
-      if($(this).hasClass("active")) {
-         showColumn(parseInt($(this).data("col-index")));
-      } else {
-         hideColumn(parseInt($(this).data("col-index")));
-      }
-   });
-}
 
 function masterControlPostRender() {
    // if any .slide-left divs are open, hide the backdrop, else show
@@ -334,6 +327,11 @@ function panelTableContentOutputPostRender() {
 
 
 $(document).ready(function() {
+   
+   $("#infoTab a").click(function (e) {
+      e.preventDefault()
+      $(this).tab("show")
+   });
    
    // render outer templates
    var outerRender = $.getJSON("templateData.json", function(json) {

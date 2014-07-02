@@ -37,49 +37,49 @@
 					"type" : "panelKey",
 					"name" : "panelKey",
 					"desc" : "panel key",
-					"dataType" : "panelKey",
+					"type" : "panelKey",
 					"active" : ""
 				},
 				{
 					"type" : "splitVar",
 					"name" : "year",
 					"desc" : "conditioning variable",
-					"dataType" : "character",
+					"type" : "factor",
 					"active" : "active"
 				},
 				{
 					"type" : "splitVar",
 					"name" : "site",
 					"desc" : "conditioning variable",
-					"dataType" : "character",
+					"type" : "factor",
 					"active" : "active"
 				},
 				{
 					"type" : "cog",
 					"name" : "meanYield",
 					"desc" : "mean yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"active" : ""
 				},
 				{
 					"type" : "cog",
 					"name" : "range",
 					"desc" : "yield range",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"active" : ""
 				},
 				{
 					"type" : "cog",
 					"name" : "min",
 					"desc" : "min yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"active" : ""
 				},
 				{
 					"type" : "cog",
 					"name" : "max",
 					"desc" : "min yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"active" : ""
 				}
 			],
@@ -370,7 +370,7 @@
 						"year"
 					],
 					"type" : [
-						"character"
+						"factor"
 					],
 					"data" : [
 						{
@@ -396,7 +396,7 @@
 						"site"
 					],
 					"type" : [
-						"character"
+						"factor"
 					],
 					"data" : [
 						{
@@ -650,7 +650,7 @@
 					"type" : "panelKey",
 					"name" : "panelKey",
 					"desc" : "panel key",
-					"dataType" : "panelKey",
+					"type" : "panelKey",
 					"index" : 0,
 					"active" : ""
 				},
@@ -658,7 +658,7 @@
 					"type" : "splitVar",
 					"name" : "year",
 					"desc" : "conditioning variable",
-					"dataType" : "character",
+					"type" : "factor",
 					"index" : 1,
 					"active" : "active"
 				},
@@ -666,7 +666,7 @@
 					"type" : "splitVar",
 					"name" : "site",
 					"desc" : "conditioning variable",
-					"dataType" : "character",
+					"type" : "factor",
 					"index" : 2,
 					"active" : "active"
 				},
@@ -674,7 +674,7 @@
 					"type" : "cog",
 					"name" : "meanYield",
 					"desc" : "mean yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"index" : 3,
 					"active" : "active"
 				},
@@ -682,7 +682,7 @@
 					"type" : "cog",
 					"name" : "range",
 					"desc" : "yield range",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"index" : 4,
 					"active" : "active"
 				},
@@ -690,7 +690,7 @@
 					"type" : "cog",
 					"name" : "min",
 					"desc" : "min yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"index" : 5,
 					"active" : "active"
 				},
@@ -698,7 +698,7 @@
 					"type" : "cog",
 					"name" : "max",
 					"desc" : "min yield",
-					"dataType" : "numeric",
+					"type" : "numeric",
 					"index" : 6,
 					"active" : "active"
 				}
@@ -716,37 +716,37 @@
 					"type" : "splitVar",
 					"name" : "year",
 					"desc" : "conditioning variable",
-					"dataType" : "character"
+					"type" : "factor"
 				},
 				{
 					"type" : "splitVar",
 					"name" : "site",
 					"desc" : "conditioning variable",
-					"dataType" : "character"
+					"type" : "factor"
 				},
 				{
 					"type" : "cog",
 					"name" : "meanYield",
 					"desc" : "mean yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "range",
 					"desc" : "yield range",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "min",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "max",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				}
 			],
 			"cdName" : [
@@ -762,25 +762,25 @@
 					"type" : "cog",
 					"name" : "meanYield",
 					"desc" : "mean yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "range",
 					"desc" : "yield range",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "min",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "max",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				}
 			],
 			"cdName" : [
@@ -796,25 +796,25 @@
 					"type" : "cog",
 					"name" : "meanYield",
 					"desc" : "mean yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "range",
 					"desc" : "yield range",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "min",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				},
 				{
 					"type" : "cog",
 					"name" : "max",
 					"desc" : "min yield",
-					"dataType" : "numeric"
+					"type" : "numeric"
 				}
 			],
 			"cdName" : [

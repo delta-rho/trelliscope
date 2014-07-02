@@ -46,7 +46,7 @@ cogTableBodyData <- function(data, nr = 10) {
    } else if(nrow(data) == 0) {
       tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")   
    } else {
-      data <- data[1:min(nr, nrow(data)),]
+      data <- data[1:min(nr, nrow(data)),, drop = FALSE]
       tDataString <- cogDataString(data)
       # if fewer then the number of rows, fill with blank <td>s
       # (so that the height is always fixed)
@@ -92,37 +92,39 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
    if(plotType == "quantile")
       plotType <- "quant"
    
-   curInfo <- cdo$cogInfo[[name]]
-   
-   if(curInfo$type == "numeric") {
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal[[plotType]]
-      } else {
-         # call trelliscope:::getCogQuantPlotData...
-         return(NULL)
-      }
-      if(plotType == "hist") {
-         delta <- diff(tmp$xdat[1:2])
-         tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      } else {
-         names(tmp)[1:2] <- c("x", "y")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      }
-   } else { # bar chart
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal
-      } else {
-         # call trelliscope:::getCogCatPlotData...
-         return(NULL)
-      }
-      if(nrow(tmp) > maxLevels)
-         return(NULL)
-      tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-      # browser()
-      tmp$ind <- seq_len(nrow(tmp))
-      return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
+   curInfo <- cdo$cogDistns[[name]]
+   if(!is.na(curInfo$type)) {
+      if(curInfo$type == "numeric") {
+         if(distType == "marginal") {
+            tmp <- curInfo$marginal[[plotType]]
+         } else {
+            # call trelliscope:::getCogQuantPlotData...
+            return(list(name = name))
+         }
+         if(plotType == "hist") {
+            delta <- diff(tmp$xdat[1:2])
+            tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+         } else {
+            names(tmp)[1:2] <- c("x", "y")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+         }
+      } else { # bar chart
+         if(distType == "marginal") {
+            tmp <- curInfo$marginal
+         } else {
+            # call trelliscope:::getCogCatPlotData...
+            return(list(name = name))
+         }
+         if(nrow(tmp) > maxLevels)
+            return(list(name = name))
+         tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
+         # browser()
+         tmp$ind <- seq_len(nrow(tmp))
+         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
+      }      
    }
+   return(list(name = name))
 }
 
 getCogScatterPlotData <- function(x, ...)
@@ -258,7 +260,7 @@ getPanels <- function(cdo, curRows, pixelratio = 2) {
       
       curDat <- cdo$cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
-         warning("data for key ", curRows, " could not be found.")
+         warning("data for key ", curRows$panelKey, " could not be found.")
       
       pngs <- sapply(curDat, function(x) {
          res <- try({

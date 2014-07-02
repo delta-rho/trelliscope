@@ -43,10 +43,12 @@ output$panelTableContentOutput <- renderDataLite({
       idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = TRUE)
       idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
       
+      logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
+            
       panelContent <- paste("<img src=\"", 
          getPanels(cdo, curRows, 
             pixelratio = session$clientData$pixelratio), 
-         "\" width=\"", w, "\" height=\"", h, "\">", sep = "")      
+         "\" width=\"", w, "\" height=\"", h, "\">", sep = "")
       
       lapply(idxList, function(rw) {
          lapply(rw, function(i) {
@@ -55,6 +57,7 @@ output$panelTableContentOutput <- renderDataLite({
                cogData <- dummyCog(labelVars)
             } else {
                curPanelContent <- panelContent[i]
+               # browser()
                tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
                if(is.null(labelVars)) {
                   cogData <- NULL

@@ -16,20 +16,36 @@
 cdoExposedCogState <- reactive({
    cdo <- currentDisplay()$cdo
    filterState <- input$filterStateInput
-   if(!is.null(filterState))
-      cdo$state$filter <- filterState
+   if(!is.null(filterState)) {
+      logMsg("- filter state changed")
+      cdo$state$filter <- filterState      
+   }
    
    sortState <- input$sortStateInput
-   if(!is.null(sortState))
-      cdo$state$sort <- sortState
+   if(!is.null(sortState)) {
+      logMsg("- panel sort state changed")
+      cdo$state$sort <- sortState      
+   }
    
    panelLabelState <- input$panelLabelStateInput
-   if(!is.null(panelLabelState))
-      cdo$state$panelLabel <- panelLabelState
-   # browser()
-   panelLayoutState <- input$panelLayoutStateInput
-   if(!is.null(panelLayoutState))
-      cdo$state$panelLayout <- panelLayoutState
+   if(!is.null(panelLabelState)) {
+      logMsg("- panel label state changed: ", paste(panelLabelState, collapse=","))
+      if(panelLabelState == "__none__")
+         panelLabelState <- NULL
+      cdo$state$panelLabel <- panelLabelState      
+   }
+   
+   pls <- input$panelLayoutStateInput
+   if(!is.null(pls)) {
+      logMsg("- panel layout state changed: nrow: ", pls$nrow, ", ncol: ", pls$ncol, ", w: ", pls$w, " h: ", pls$h)
+      cdo$state$panelLayout <- pls
+   }
+   
+   activeCogState <- input$activeCogStateInput
+   if(!is.null(activeCogState)) {
+      logMsg("- active cog state changed: ", paste(activeCogState, collapse=","))
+      cdo$state$activeCog <- activeCogState
+   }
    
    # cdo$state$sample <- 
    # cdo$state$multivar <- 
@@ -37,6 +53,8 @@ cdoExposedCogState <- reactive({
    cdo
 })
 
+# is this really necessary? could just set it in the browser
+# before triggering each state input
 output$exposedStateDataOutput <- renderData({
    cdo <- cdoExposedCogState()
    # if(!is.null(cdo$state))
@@ -53,13 +71,13 @@ output$cogBreadcrumbOutput <- renderDataLite({
       
       filterNm <- names(state$filter)
       filters <- lapply(filterNm, function(nm) {
-         list(name = nm, class = "btn-success filter-breadcrumb", icon = "icon-filter")
+         list(name = nm, class = "btn-success filter-breadcrumb", icon = "icon-filter", type = "filter")
       })
       
       sortNm <- names(state$sort)
       sorts <- lapply(sortNm, function(nm) {
          cur <- state$sort[[nm]]
-         list(name = nm, class = "btn-primary sort-breadcrumb", icon = cur$bcIcon, order = cur$order)
+         list(name = nm, class = "btn-primary sort-breadcrumb", icon = cur$bcIcon, order = cur$order, type = "sort")
       })
       
       if(length(sorts) > 0) {

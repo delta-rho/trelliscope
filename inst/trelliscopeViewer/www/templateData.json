@@ -31,6 +31,9 @@
 		],
 		"update_button" : [
 			"panelFunctionUpdateButton"
+		],
+		"footer" : [
+			"Note: this feature is currently disabled - panels will not update when you click 'Apply'..."
 		]
 	},
 	"panel-labels" : {
@@ -65,6 +68,23 @@
 		],
 		"update_button" : [
 			"relatedDisplayListUpdateButton"
+		]
+	},
+	"active-cog" : {
+		"icon" : [
+			"icon-active-cog"
+		],
+		"panel_header" : [
+			"Active Cognostics"
+		],
+		"panel_description" : [
+			"Specify which cognostics are available for sorting, filtering, and sampling."
+		],
+		"body_id" : [
+			"activeCogListOutput"
+		],
+		"update_button" : [
+			"activeCogListUpdateButton"
 		]
 	},
 	"cog-table-sort-filter" : {
@@ -133,6 +153,9 @@
 		],
 		"update_button" : [
 			"cogMultiFilterControlsUpdateButton"
+		],
+		"footer" : [
+			"Note: this interactive filter is not yet bound to the back-end - panels will not update when you click 'Apply'..."
 		]
 	},
 	"sample-panels" : {

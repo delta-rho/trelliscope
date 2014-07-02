@@ -284,8 +284,8 @@ makeDisplay <- function(
    if(verbose)
       message("* Storing display object...")
 
-   cogDesc <- getCogDesc(cogEx)
-   cogInfo <- getCogInfo(cogDatConn, cogDesc)
+   cogInfo <- getCogInfo(cogEx)
+   cogDistns <- getCogDistns(cogDatConn, cogInfo)
 
    displayObj <- list(
       name = name,
@@ -297,8 +297,8 @@ makeDisplay <- function(
       cogFn = cogFn,
       n = getAttribute(data, "nDiv"),
       cogDatConn = cogDatConn,
-      cogDesc = cogDesc,
       cogInfo = cogInfo,
+      cogDistns = cogDistns,
       updated = modTime,
       keySig = keySig,
       height = height,

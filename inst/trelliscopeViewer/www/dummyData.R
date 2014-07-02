@@ -115,7 +115,8 @@ a <- list(
       panel_header = "Panel Function Editor",
       panel_description = "Edit the code that generates each panel.",
       body_id = "panelFunctionOutput",
-      update_button = "panelFunctionUpdateButton"
+      update_button = "panelFunctionUpdateButton",
+      footer = "Note: this feature is currently disabled - panels will not update when you click 'Apply'..."
    ),
    "panel-labels" = list(
       icon = "icon-cog-list",
@@ -130,6 +131,13 @@ a <- list(
       panel_description = "Select additional displays (if any) that have been created on the same partitioning to view with the currently selected display.  If additional displays are selected, only one subset per page will be shown.",
       body_id = "relatedDisplayListOutput",
       update_button = "relatedDisplayListUpdateButton"
+   ),
+   "active-cog" = list(
+      icon = "icon-active-cog",
+      panel_header = "Active Cognostics",
+      panel_description = "Specify which cognostics are available for sorting, filtering, and sampling.",
+      body_id = "activeCogListOutput",
+      update_button = "activeCogListUpdateButton"
    ),
    "cog-table-sort-filter" = list(
       icon = "icon-sort-filter",
@@ -157,7 +165,8 @@ a <- list(
       panel_header = "Visual Multivariate Filter",
       panel_description = "Filter panels based on a two-dimensional projection pursuit of multiple quantitative cognostics.  <br/>This can help uncover interesting regions of the cognostics space.",
       body_id = "cogMultiFilterControlsOutput",
-      update_button = "cogMultiFilterControlsUpdateButton"
+      update_button = "cogMultiFilterControlsUpdateButton",
+      footer = "Note: this interactive filter is not yet bound to the back-end - panels will not update when you click 'Apply'..."
    ),
    "sample-panels" = list(
       icon = "icon-sample",
