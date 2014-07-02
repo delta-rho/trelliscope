@@ -9,7 +9,7 @@ renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NU
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(jsonlite:::toJSON(res))
+         return(jsonlite::toJSON(res))
    }
 }
 
@@ -24,7 +24,7 @@ renderData <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) 
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(RJSONIO:::toJSON(res))
+         return(RJSONIO::toJSON(res))
    }
 }
 
