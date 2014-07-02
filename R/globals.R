@@ -5,13 +5,18 @@
 # globalVarList <- getGlobalVarList(globalVars, parent.frame())
 
 ## internal
+#' Find Globals
+#'
+#' @param f TODO
+#' @import codetools
+#' @keywords internal
 findGlobals <- function(f) {
-   if(!is.function(f)) 
+   if(!is.function(f))
       return(character(0))
 
    tildeHandler <- codetools:::collectUsageHandlers[["~"]]
    remove("~", envir=codetools:::collectUsageHandlers)
-   res <- codetools:::findGlobals(f, merge=FALSE)$variables
+   res <- codetools::findGlobals(f, merge=FALSE)$variables
    assign("~", tildeHandler, envir=codetools:::collectUsageHandlers)
    res
 }
