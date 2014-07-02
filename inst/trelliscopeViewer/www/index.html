@@ -672,7 +672,7 @@
       <div class="vis-filter-univar" id="univarFilterState">
         <ul class="list-group filter-select shiny-my-data-input" id="univarFilterSelect">
           {{#cogs}}
-          <li class="list-group-item" data-name="{{name}}" data-type="{{type}}" data-desc="{{desc}}" id="univar-var-{{name}}">
+          <li class="list-group-item" data-name="{{name}}" data-type="{{type}}" title="{{desc}}" id="univar-var-{{name}}">
             <div class="uni-filter-var-name filter-list-name">{{name}}</div>
             <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
           {{/cogs}}
@@ -707,7 +707,7 @@
         <div class="vis-filter-bivar" id="bivarFilterState">
           <ul class="list-group filter-select" id="bivar-y-filter-select">
             {{#cogs}}
-            <li class="list-group-item" data-name="{{name}}" data-desc="{{desc}}" id="bivar-y-{{name}}">
+            <li class="list-group-item" data-name="{{name}}" title="{{desc}}" id="bivar-y-{{name}}">
               <div class="bi-filter-y-name filter-list-name">{{name}}</div>
               <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
             </li>
@@ -720,7 +720,7 @@
         <div class="vis-filter-bivar">
           <ul class="list-group filter-select" id="bivar-x-filter-select">
             {{#cogs}}
-            <li class="list-group-item" data-desc="{{desc}}" id="bivar-x-{{name}}" data-name="{{name}}">
+            <li class="list-group-item" title="{{desc}}" id="bivar-x-{{name}}" data-name="{{name}}">
               <div class="bi-filter-x-name filter-list-name">{{name}}</div>
               <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
             {{/cogs}}
