@@ -20,7 +20,9 @@ Description: Trelliscope provides a way to create, organize, and view
 License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
-    R (>= 2.15.1),
+    R (>= 2.15.1)
+Imports:
+    httpuv,
     data.table,
     grid,
     datadr,
@@ -35,8 +37,6 @@ Depends:
     ggplot2,
     jsonlite,
     fastICA
-Imports:
-    httpuv,
 Suggests:
     Cairo,
     Rhipe,
