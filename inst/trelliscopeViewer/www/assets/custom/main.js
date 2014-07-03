@@ -87,8 +87,10 @@ $(window).bind('resizeEnd', function() {
 $(document).keydown(function(e) {
    // only want right and left to work when no panels are open
    var slidePanel = $(".slide-panel.slide-left");
+   var modals = $(".modal:visible");
+   
    if($(document.activeElement).attr("id") != "curPanelPageInput" 
-      && slidePanel.length == 0) {
+      && slidePanel.length == 0 && modals.length == 0) {
       switch(e.keyCode) {
          case 37: // left
             pageBack();
@@ -128,15 +130,17 @@ $(document).keydown(function(e) {
          case 83: // l
             $("#sample-panels-nav-link").click();
             break;
+         case 79: // o
+            $("#openModal").modal("show");
+            break;
+         case 73: // i
+            $("#aboutModal").modal("show");
+            break;
       }
    } else if(slidePanel.length == 1) {
-      if(e.keyCode == 27) { // escape
+      if(e.keyCode == 27) // escape
          slidePanel.find("button.btn-panel-close").click();
-      }
    }
-   
-   
-   
    
 });
 

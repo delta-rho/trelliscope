@@ -353,7 +353,7 @@
       <div class="control-group">
         <p class="control-label">Panels per screen</p>
         <div class="controls">
-          <input id="pppInput" type="number" value="1" class="input-small" disabled>
+          <input id="pppInput" type="number" value="3" class="input-small" disabled>
         </div>
       </div>
     </div>    
@@ -832,7 +832,7 @@
 
 <script id="panelPageNavOutput-template" type="text/html">
 <div class="input-group">
-  <input type="text" class="form-control ppp-input" id="curPanelPageInput" value="1">
+  <input type="text" class="form-control ppp-input" id="curPanelPageInput" type="number" value="1" min="1">
   <div class="input-group-btn">
     <button type="button" class="btn btn-default">/ <span id="panelPageTotOutput" class="shiny-text-output">{{n}}</span></button>
     <button type="button" class="btn btn-default" tabindex="-1" id="pageLeftButton">

@@ -14,7 +14,6 @@ displayListOutputData <- function(dl) {
 ## populate the data that initially fills out each control
 ## panel
 
-
 # cdName and cdGroup are added to all outputs
 # to make outputs unique when a display is changed
 # (we want to trigger everything to change when a display is changed)

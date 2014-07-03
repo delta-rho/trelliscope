@@ -23,9 +23,15 @@ output$panelPageTotOutput <- renderText({
 
 output$panelTableContentOutput <- renderDataLite({
    cdo <- exposedCogDF()
-   curPage <- input$curPanelPageInput
+   curPage <- suppressWarnings(as.integer(input$curPanelPageInput))
+   if(length(curPage) == 0)
+      curPage <- NULL
+   if(!is.null(curPage)) {
+      if(is.na(curPage))
+         curPage <- NULL
+   }
+   
    if(!is.null(cdo) && !is.null(curPage)) {
-      curPage <- as.integer(curPage)
       
       labelVars <- cdo$cdo$state$panelLabel
       w <- cdo$cdo$state$panelLayout$w
@@ -35,6 +41,8 @@ output$panelTableContentOutput <- renderDataLite({
       ppp <- nr * nc
       
       idxStart <- (curPage - 1) * ppp + 1
+      if(idxStart > cogNrow(cdo$curCogDF))
+         return(NULL)
       idxEnd <- min(cogNrow(cdo$curCogDF), curPage * ppp)
       
       curRows <- cdo$curCogDF[idxStart:idxEnd, , drop = FALSE]
