@@ -85,12 +85,59 @@ $(window).bind('resizeEnd', function() {
 
 // bind left and right keys for paging through panels
 $(document).keydown(function(e) {
-   if(e.keyCode == 37) { // left
-      pageBack();
+   // only want right and left to work when no panels are open
+   var slidePanel = $(".slide-panel.slide-left");
+   if($(document.activeElement).attr("id") != "curPanelPageInput" 
+      && slidePanel.length == 0) {
+      switch(e.keyCode) {
+         case 37: // left
+            pageBack();
+            return false;
+            break;
+         case 39: // right
+            pageForward();
+            return false;
+            break;
+         case 76: // l
+            $("#panel-layout-nav-link").click();
+            break;
+         case 70: // f
+            $("#panel-function-nav-link").click();
+            break;
+         case 69: // e
+            $("#panel-labels-nav-link").click();
+            break;
+         case 82: // r
+            $("#add-related-display-nav-link").click();
+            break;
+         case 65: // a
+            $("#active-cog-nav-link").click();
+            break;
+         case 84: // t
+            $("#cog-table-sort-filter-nav-link").click();
+            break;
+         case 85: // u
+            $("#univar-filter-nav-link").click();
+            break;
+         case 66: // b
+            $("#bivar-filter-nav-link").click();
+            break;
+         case 77: // m
+            $("#multivar-filter-nav-link").click();
+            break;
+         case 83: // l
+            $("#sample-panels-nav-link").click();
+            break;
+      }
+   } else if(slidePanel.length == 1) {
+      if(e.keyCode == 27) { // escape
+         slidePanel.find("button.btn-panel-close").click();
+      }
    }
-   if(e.keyCode == 39) { // right
-      pageForward();
-   }
+   
+   
+   
+   
 });
 
 function pageForward() {
@@ -296,6 +343,13 @@ function panelPageNavOutputPostRender() {
       // setTimeout(function(){ panelSpinner.spin(target); }, 500);
       panelSpinner.spin(target);
    });
+   
+   // $("#curPanelPageInput").bind("keydown", function(e) {
+   //    console.log(e.keyCode);
+   //    if(e.keyCode == 37 || e.keyCode == 39) {
+   //       e.preventDefault();
+   //    }
+   // });
 }
 
 function cogMapOutputPostRender() {
