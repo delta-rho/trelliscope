@@ -3,7 +3,8 @@
 #' @name trelliscope
 #' @docType package
 # ' @import plyr digest scales grid reshape2 proto gtable
-#' @import base64enc data.table datadr digest fastICA ggplot2 grid hexbin jsonlite knitr markdown
+#' @import data.table datadr digest fastICA ggplot2 grid hexbin knitr markdown
+#' @importFrom jsonlite toJSON
 
 NULL
 

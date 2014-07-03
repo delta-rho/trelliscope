@@ -66,6 +66,7 @@ view <- function(name = NULL, group = NULL, openBrowser = TRUE, conn = getOption
 #' @importFrom httpuv startServer stopServer
 #'
 #' @author Ryan Hafen
+#' @import shiny
 myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption("shiny.launch.browser", interactive()), host = getOption("shiny.host", "127.0.0.1"), workerId = "", quiet = FALSE, display.mode = c("auto", "normal", "showcase"), hash = "") {
    on.exit({
       shiny:::handlerManager$clear()
