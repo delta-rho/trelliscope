@@ -3,6 +3,8 @@
 require(devtools)
 load_all("./")
 
+library(datadr)
+
 vdbPath <- file.path(tempdir(), "vdb")
 
 # divide the ddf by the variable "site"
