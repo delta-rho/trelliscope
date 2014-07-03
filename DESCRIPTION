@@ -32,7 +32,8 @@ Depends:
     hexbin,
     ggplot2,
     jsonlite,
-    fastICA
+    fastICA,
+    png
 Suggests:
     Rhipe,
     rmongodb,

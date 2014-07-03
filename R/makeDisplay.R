@@ -286,7 +286,7 @@ makeDisplay <- function(
 
    cogInfo <- getCogInfo(cogEx)
    cogDistns <- getCogDistns(cogDatConn, cogInfo)
-
+   
    displayObj <- list(
       name = name,
       group = group,
@@ -307,18 +307,15 @@ makeDisplay <- function(
       relatedData = globalVarList
    )
    class(displayObj) <- "displayObj"
-
+   
    save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
 
    # make thumbnail
    message("* Plotting thumbnail...")
    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
    # small thumbnail
-   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb_small.png"), width = width * (100 / height), height = 100, origWidth = width, lims = lims))
-
-   # TODO: plot small thumbnail as well
-   # suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
-
+   makeThumb(file.path(displayPrefix, "thumb.png"), file.path(displayPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
+      
    return(invisible(displayObj))
 }
 
