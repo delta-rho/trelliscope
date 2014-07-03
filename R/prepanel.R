@@ -327,6 +327,7 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #'
 #' @examples
+#' \dontrun{
 #' irisSplit <- divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'    list(
@@ -336,6 +337,7 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #' }
 #' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' irisLims <- setLims(irisPre, x="same", y="sliced")
+#' }
 #'
 #' @export
 setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
