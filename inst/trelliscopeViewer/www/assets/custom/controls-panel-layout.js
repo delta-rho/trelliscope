@@ -1,14 +1,17 @@
 
 
 function panelLayoutOutputApplyButton() {
-   panelDims = $("#panel-layout-data").data("panelDims");
+   var panelDims = $("#panel-layout-data").data("panelDims");
+   
+   var arrangement = $("#panelArrangement").find("button.active").data("val");
    
    if(panelDims != undefined) {
       var panelLayout = {
-         "nrow" : parseInt($("#panel-rows").val()),
-         "ncol" : parseInt($("#panel-cols").val()),
-         "w"    : panelDims.w,
-         "h"    : panelDims.h
+         "nrow"    : parseInt($("#panel-rows").val()),
+         "ncol"    : parseInt($("#panel-cols").val()),
+         "w"       : panelDims.w,
+         "h"       : panelDims.h,
+         "arrange" : arrangement
       };
       
       $("#panelLayoutStateInput").data("myShinyData", panelLayout);
@@ -29,11 +32,29 @@ function panelLayoutSetFromExposedState() {
          $("#panel-rows").val(state.panelLayout.nrow);
          $("#panel-cols").val(state.panelLayout.ncol);
          $("#panel-rows").trigger("change");
+         $("#pl-" + state.panelLayout.arrange).click();
       }
    }
 }
 
 function panelLayoutOutputPostRender(data) {
+   
+   // handle by-row / by-column toggle
+   $(".pl-toggle").click(function() {
+      // if this button is not the one currently selected
+      if($(this).hasClass("btn-default")) {
+         // make it active
+         $(this).removeClass("btn-default");
+         $(this).addClass("btn-info");
+         $(this).addClass("active");
+         // make all others in the group inactive
+         var sib = $(this).siblings();
+         sib.removeClass("btn-info");
+         sib.removeClass("active");
+         sib.addClass("btn-default");
+      }
+   });
+   
    // actions for changing nrow and ncol
    $("#panel-rows").change(function() {
       panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
@@ -42,7 +63,7 @@ function panelLayoutOutputPostRender(data) {
    $("#panel-cols").change(function() {
       panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
    });
-
+   
    $("#panel-rows").trigger("change");
    // call panel layout apply button to take number of labels, etc.
    // for some reason we have to do this to get width and height propogated...
@@ -74,7 +95,7 @@ function getPanelDims(nRow, nCol) {
          (51 + 7) - // header height + padding
          (32 + 7); // footer height + padding
       var pageAspect = pageHeight / pageWidth;
-            
+      
       // first try stretching panels across full width:
       var newW = Math.round((pageWidth - (wExtra * nCol)) / nCol, 0);
       // given this, compute panel height
@@ -156,7 +177,7 @@ function panelLayoutPreview(nRow, nCol) {
    }
    
    // change the value of pppInput accordingly
-   $("#pppInput").val(nRow * nCol);
+   // $("#pppInput").val(nRow * nCol);
    
    // set panel dimensions
    $("#panel-layout-data").data("panelDims", pd);

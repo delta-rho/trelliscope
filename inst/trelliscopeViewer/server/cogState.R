@@ -37,7 +37,7 @@ cdoExposedCogState <- reactive({
    
    pls <- input$panelLayoutStateInput
    if(!is.null(pls)) {
-      logMsg("- panel layout state changed: nrow: ", pls$nrow, ", ncol: ", pls$ncol, ", w: ", pls$w, " h: ", pls$h)
+      logMsg("- panel layout state changed: nrow: ", pls$nrow, ", ncol: ", pls$ncol, ", w: ", pls$w, " h: ", pls$h, " arrange: ", pls$arrange)
       cdo$state$panelLayout <- pls
    }
    
@@ -45,6 +45,25 @@ cdoExposedCogState <- reactive({
    if(!is.null(activeCogState)) {
       logMsg("- active cog state changed: ", paste(activeCogState, collapse=","))
       cdo$state$activeCog <- activeCogState
+   }
+   
+   relatedDisplayState <- input$relatedDisplayStateInput
+   if(length(relatedDisplayState) > 0) {
+      # load the additional displays
+      logMsg("- related display state changed")
+      for(i in seq_along(relatedDisplayState)) {
+         curName <- relatedDisplayState[[i]]$name
+         curGroup <- relatedDisplayState[[i]]$group
+         relatedDisplayObjects <- list()
+         dispKey <- paste(curGroup, curName, sep = "___")
+         if(curName == cdo$name && curGroup == cdo$group) {
+            relatedDisplayObjects[[dispKey]] <- NULL
+         } else {
+            relatedDisplayObjects[[dispKey]] <- getDisplay(name = curName, group = curGroup)
+         }
+      }
+      cdo$relatedDisplayObjects <- relatedDisplayObjects
+      cdo$state$relatedDisplays <- relatedDisplayState
    }
    
    # cdo$state$sample <- 

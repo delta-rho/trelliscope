@@ -12,8 +12,8 @@
 		"body_id" : [
 			"panelLayoutOutput"
 		],
-		"update_button" : [
-			"panelLayoutUpdateButton"
+		"apply_button" : [
+			"panelLayoutApplyButton"
 		]
 	},
 	"panel-function" : {
@@ -29,8 +29,8 @@
 		"body_id" : [
 			"panelFunctionOutput"
 		],
-		"update_button" : [
-			"panelFunctionUpdateButton"
+		"apply_button" : [
+			"panelFunctionApplyButton"
 		],
 		"footer" : [
 			"Note: this feature is currently disabled - panels will not update when you click 'Apply'..."
@@ -49,8 +49,8 @@
 		"body_id" : [
 			"panelLabelListOutput"
 		],
-		"update_button" : [
-			"panelLabelListUpdateButton"
+		"apply_button" : [
+			"panelLabelListApplyButton"
 		]
 	},
 	"add-related-display" : {
@@ -58,7 +58,7 @@
 			"icon-plus-square-o"
 		],
 		"panel_header" : [
-			"Add Related Display"
+			"Related Displays"
 		],
 		"panel_description" : [
 			"Select additional displays (if any) that have been created on the same partitioning to view with the currently selected display.  If additional displays are selected, only one subset per page will be shown."
@@ -66,8 +66,8 @@
 		"body_id" : [
 			"relatedDisplayListOutput"
 		],
-		"update_button" : [
-			"relatedDisplayListUpdateButton"
+		"apply_button" : [
+			"relatedDisplayListApplyButton"
 		]
 	},
 	"active-cog" : {
@@ -83,8 +83,8 @@
 		"body_id" : [
 			"activeCogListOutput"
 		],
-		"update_button" : [
-			"activeCogListUpdateButton"
+		"apply_button" : [
+			"activeCogListApplyButton"
 		]
 	},
 	"cog-table-sort-filter" : {
@@ -100,8 +100,8 @@
 		"body_id" : [
 			"cogTableControlsOutput"
 		],
-		"update_button" : [
-			"cogTableControlsUpdateButton"
+		"apply_button" : [
+			"cogTableControlsApplyButton"
 		]
 	},
 	"univar-filter" : {
@@ -117,8 +117,8 @@
 		"body_id" : [
 			"cogUniFilterControlsOutput"
 		],
-		"update_button" : [
-			"cogUniFilterControlsUpdateButton"
+		"apply_button" : [
+			"cogUniFilterControlsApplyButton"
 		]
 	},
 	"bivar-filter" : {
@@ -134,8 +134,8 @@
 		"body_id" : [
 			"cogBiFilterControlsOutput"
 		],
-		"update_button" : [
-			"cogBiFilterControlsUpdateButton"
+		"apply_button" : [
+			"cogBiFilterControlsApplyButton"
 		]
 	},
 	"multivar-filter" : {
@@ -151,8 +151,8 @@
 		"body_id" : [
 			"cogMultiFilterControlsOutput"
 		],
-		"update_button" : [
-			"cogMultiFilterControlsUpdateButton"
+		"apply_button" : [
+			"cogMultiFilterControlsApplyButton"
 		],
 		"footer" : [
 			"Note: this interactive filter is not yet bound to the back-end - panels will not update when you click 'Apply'..."
@@ -172,7 +172,7 @@
 			"cogSampleControlsOutput"
 		],
 		"updateButton" : [
-			"cogSampleControlsUpdateButton"
+			"cogSampleControlsApplyButton"
 		]
 	}
 }

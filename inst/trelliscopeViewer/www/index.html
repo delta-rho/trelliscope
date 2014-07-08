@@ -21,7 +21,9 @@
     
     <title>Mustache.js External Method</title>
     <script type="text/javascript" src="assets/jquery/jquery.js" ></script>
+    <script type="text/javascript" src="assets/jquery.event.drag/jquery.event.drag-2.2.js" ></script>
     <script type="text/javascript" src="assets/mustache/mustache.js" ></script>
+    <script type="text/javascript" src="assets/custom/related-layout.js"></script>
     <script src="assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="assets/svgeezy/svgeezy.min.js"></script>
     <script>
@@ -36,6 +38,7 @@
     <script src="assets/custom/d3uniFilter.js"></script>
     <script src="assets/custom/d3biFilter.js"></script>
     <script src="assets/custom/controls-active-cog.js"></script>
+    <script src="assets/custom/controls-related.js"></script>
     <script src="assets/custom/controls-cog-table.js"></script>
     <script src="assets/custom/controls-univar-filter.js"></script>
     <script src="assets/custom/controls-bivar-filter.js"></script>
@@ -106,9 +109,9 @@
               <i class="icon-cog-list"></i>
               <span class="list-group-text">Panel Labels</span>
             </a>
-            <a href="#" class="list-group-item last-item" data-divlink="add-related-display" id="add-related-display-nav-link">
+            <a href="#" class="list-group-item last-item" data-divlink="add-related-display" id="add-related-display-nav-link" data-action="showRelatedLayoutControls">
               <i class="icon-plus-square-o"></i>
-              <span class="list-group-text">&nbsp;Add Related Display</span>
+              <span class="list-group-text">&nbsp;Related Displays</span>
             </a>
             <a href="#" class="list-group-item active list-group-item-primary list-group-item-short">
               <span class="list-group-header">Cognostics</span>
@@ -155,6 +158,7 @@
         <div id="sample-panels"         class="slide-panel panel panel-default"></div>
         
         <div class="shiny-template-output" id="panelTableContentOutput" data-post-render="panelTableContentOutputPostRender">
+          <div id="panelTableSpinner"></div>
         </div>
         
         <div class="right-panel">
@@ -174,6 +178,7 @@
       <div id="filterStateInput" class="shiny-my-data-input"></div>
       <div id="panelLabelStateInput" class="shiny-my-data-input"></div>
       <div id="panelLayoutStateInput" class="shiny-my-data-input"></div>
+      <div id="relatedDisplayStateInput" class="shiny-my-data-input"></div>
       <div id="activeCogStateInput" class="shiny-my-data-input"></div>
       <div id="sortStateInput" class="shiny-my-data-input"></div>
       <div id="exposedStateDataOutput" data-callback="updateControlsExposedState" class="shiny-my-data-output"></div>
@@ -245,15 +250,14 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
-          <h5 class="modal-title" id="myModalLabel">&nbsp;</h5>
+          <h4 class="modal-title" id="myModalLabel">Trelliscope Viewer Information</h4>
         </div>
         <div class="modal-body">
-          
           <ul class="nav nav-tabs" role="tablist" id="infoTab">
             <li class="active"><a href="#abouttrelliscope" role="tab" data-toggle="tab" class="info-tab-label">About Trelliscope</a></li>
+            <li><a href="#hotkeys" role="tab" data-toggle="tab" class="info-tab-label">Hotkeys</a></li>
             <li><a href="#viewerlog" role="tab" data-toggle="tab" class="info-tab-label">Viewer Log</a></li>
           </ul>
-
           <div class="tab-content">
             <div class="tab-pane active" id="abouttrelliscope">
               <h4>Powered by <a href="http://www.rstudio.com/shiny/">Shiny</a> and several other open-source projects</h4>
@@ -283,24 +287,71 @@
                   <a href="http://benhowdle.im/svgeezy/">svgeezy</a>
                 </li>
                 <li>
+                  <a href="http://threedubmedia.com/code/event/drag">jquery.event.drag</a>
+                </li>
+                <li>
                   <a href="http://silviomoreto.github.io/bootstrap-select/">bootstrap-select</a>
                 </li>
               </ul>
               <p>Designed and written by 
                 <a href="https://github.com/hafen">Ryan Hafen</a>, 
-                UX design consulting from Ira Blossom
+                Initial UX design consulting from Ira Blossom
                 </p>
               <p>Contribute, browse, report issues, request features on 
                 <a href="https://github.com/hafen/trelliscope">github</a>
               </p>
                 <p>Click 
-                    <a href="http://hafen.github.io/trelliscope/">here</a>
+                    <a href="http://tesseradata.org/docs-trelliscope/">here</a>
                     for a tutorial
                 </p>
             </div>
+            <div class="tab-pane" id="hotkeys">
+              <div id="hotkey-container">
+                <div id="hotkey-left-column" class="hotkey-column">
+                  <h4>Panel navigation</h4>
+                  <ul class="hotkey-list">
+                    <li><code>left</code>&nbsp;&nbsp; Page back</li>
+                    <li><code>right</code>&nbsp;&nbsp; Page forward</li>
+                  </ul>
+              
+                  <h4>Modal windows</h4>
+                  <ul class="hotkey-list">
+                    <li><code>o</code> Open "Open New Display" modal</li>
+                    <li><code>i</code> Open "Info" modal</li>
+                  </ul>
+              
+                  <h4>Inside a modal window</h4>
+                  <ul class="hotkey-list">
+                    <li><code>esc</code> Close modal</li>
+                  </ul>
+                </div>
+              
+                <div id="hotkey-left-column" class="hotkey-column">
+                  <h4>Control panels</h4>
+                  <ul class="hotkey-list">
+                    <li><code>l</code> Open "Panel Layout"</li>
+                    <li><code>f</code> Open "Panel Function"</li>
+                    <li><code>e</code> Open "Panel Labels"</li>
+                    <li><code>r</code> Open "Related Displays"</li>
+                    <li><code>a</code> Open "Active Cognostics"</li>
+                    <li><code>t</code> Open "Table Sort / Filter"</li>
+                    <li><code>u</code> Open "Univariate Filter"</li>
+                    <li><code>b</code> Open "Bivariate Filter"</li>
+                    <li><code>m</code> Open "Multivariate Filter"</li>
+                    <li><code>s</code> Open "Sample"</li>
+                  </ul>
+              
+                  <h4>Inside a control panel</h4>
+                  <ul class="hotkey-list">
+                    <li><code>esc</code> "Canel" button</li>
+                    <li><code>enter</code> "Apply" button</li>
+                  </ul>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
             <div class="tab-pane" id="viewerlog">
-              <!-- <h3>Viewer console log:</h3> -->
-              <div id="error-log"></div>              
+              <div id="error-log"></div>
             </div>
           </div>
         </div>
@@ -309,6 +360,49 @@
         </div>
       </div>
     </div>
+  </div>
+  <div id="related-layout-container" class="rl-layout" style="display: none"></div>
+  <div class="related-layout-box rl-layout" id="box0" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
+  </div>
+  <div class="related-layout-box rl-layout" id="box1" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
+  </div>
+  <div class="related-layout-box rl-layout" id="box2" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
+  </div>
+  <div class="related-layout-box rl-layout" id="box3" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
+  </div>
+  <div class="related-layout-box rl-layout" id="box4" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
+  </div>
+  <div class="related-layout-box rl-layout" id="box5" style="display: none">
+    <div><span class="box-group-label"></span> / <span class="box-name-label"></span></div>
+    <div class="handle NE"></div>
+    <div class="handle NW"></div>
+    <div class="handle SW"></div>
+    <div class="handle SE"></div>
   </div>
   
   <!-- Bootstrap core JavaScript
@@ -340,7 +434,7 @@
     <div class="pull-left control-footer">{{footer}}</div>
     <div class="pull-right">
       <button type="button" class="btn btn-default btn-panel-close" data-action="{{body_id}}CancelButton">Cancel</button>
-      <button type="button" class="btn btn-primary btn-panel-update" data-action="{{body_id}}ApplyButton">Apply</button>
+      <button type="button" class="btn btn-primary btn-panel-apply" data-action="{{body_id}}ApplyButton">Apply</button>
     </div>
   </div>
 </script>
@@ -349,14 +443,6 @@
 <script id="panelLayoutOutput-template" type="text/html">
 <div class="panel-body-wrapper" id="panel-layout-data" data-panel-aspect="{{panel_aspect}}">
   <div class="panel-layout-controls">
-    <div class="well">
-      <div class="control-group">
-        <p class="control-label">Panels per screen</p>
-        <div class="controls">
-          <input id="pppInput" type="number" value="3" class="input-small" disabled>
-        </div>
-      </div>
-    </div>    
     <div class="well">
       <div class="control-group">
         <p class="control-label">Rows</p>
@@ -383,7 +469,6 @@
           <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
         </ul>
       </div>
-      <p>
       <p class="control-label">Varies Per Page</p>
       <div class="btn-group">
         <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
@@ -395,20 +480,14 @@
           <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
         </ul>
       </div>
-      <p>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" disabled>
-          <span class="caret"></span>
-          <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
-        </ul>
+    </div>
+    <p class="control-label">Panel Arrangement</p>
+    <div id="panel-layout-toggle">
+      <div class="btn-group" id="panelArrangement">
+        <button type="button" class="btn btn-info pl-toggle active" data-val="row" id="pl-row">By Row</button>
+        <button type="button" class="btn btn-default pl-toggle" data-val="col" id="pl-col">By Column</button>
       </div>
     </div>
-    </p>
-    </p>
   </div>
   <div class="panel-layout-preview">
     <div id="panel-layout-preview-pane">preview of arrangement</div>
@@ -459,38 +538,40 @@
 </div>
 </script>
 
-<!-- add related display template -->
+<!-- related displays template -->
 <script id="relatedDisplayListOutput-template" type="text/html">
 <div class="panel-body-wrapper">
-  <div class="table-header-div">
-  <table class="table table-condensed table-bordered nice-table full-width-table table-header">
-    <thead>
-      <tr>
-        <th>Display</th>
-        <th class="thumb-column">Thumb</th>
-        <th class="select-column">Select</th>
-      </tr>
-    </thead>
-  </table>
-  </div>
-  <div id="add-related-display-selection" class="table-body-div">
-  <table class="table table-condensed table-bordered nice-table full-width-table">
-    <tbody>
-    {{#displays}}
-      <tr>
-        <td>
-          <strong>
-            <span style="color: #39b3d7;">{{group}}</span> / 
-            <span style="color: #d9534f;">{{name}}</span>
-          </strong>: {{desc}}<br/>
-          <span style="color: #888;"><em>{{n}} panels, pre-rendered={{preRender}}, data storage={{dataClass}}, updated: {{updated}}</em></span>
-        </td>
-        <td class="thumb-column"><div style="width:80px; height:60px;">{{{thumb}}}</div></td>
-        <td class="select-column selectable"></td>
-      </tr>
-      {{/displays}}
-    </tbody>
-  </table>
+  <div id="related-table-container">
+    <div class="table-header-div">
+      <table class="table table-condensed table-bordered nice-table full-width-table table-header">
+        <thead>
+          <tr>
+            <th>Display</th>
+            <th class="thumb-column">Thumb</th>
+            <th class="select-column">Select</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div id="add-related-display-selection" class="table-body-div">
+      <table class="table table-condensed table-bordered nice-table full-width-table">
+        <tbody>
+        {{#displays}}
+          <tr>
+            <td>
+              <strong>
+                <span style="color: #39b3d7;">{{group}}</span> / 
+                <span style="color: #d9534f;">{{name}}</span>
+              </strong>: {{desc}}<br/>
+              <span style="color: #888;"><em>{{n}} panels, pre-rendered={{preRender}}, data storage={{dataClass}}, updated: {{updated}}</em></span>
+            </td>
+            <td class="thumb-column"><div style="width:80px; height:60px;">{{{thumb}}}</div></td>
+            <td class="select-column related-display-select" data-name="{{name}}" data-group="{{group}}" data-aspect="{{aspect}}" id="related-display-select-{{name}}"><i class="icon-check "></i></td>
+          </tr>
+          {{/displays}}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 </script>
@@ -881,7 +962,7 @@
 
 <!-- panel table content template -->
 <script id="panelTableContentOutput-template" type="text/html">
-<div id="panelTableSpinner"></div>
+<div id="displayLoadSpinner"></div>
 <table class="panel-table-table" id="panel-table">
   {{#.}}
   <tr>

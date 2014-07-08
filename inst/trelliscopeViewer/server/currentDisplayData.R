@@ -4,7 +4,7 @@ displayListOutputData <- function(dl) {
    
    for(i in seq_along(dl)) {
       dl[[i]]$updated <- as.character(dl[[i]]$updated)
-      dl[[i]]$thumb <- paste("<img src =\"", encodePNG(file.path(getOption("vdbConn")$path, "displays", dl[[i]]$group, dl[[i]]$name, "thumb_small.png")), "\" style=\"height: 60px\">", sep = "")
+      dl[[i]]$thumb <- paste("<img src =\"", encodePNG(file.path(getOption("vdbConn")$path, "displays", dl[[i]]$group, dl[[i]]$name, "thumb_small.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
    }
    names(dl) <- NULL
    dl
@@ -92,13 +92,15 @@ relatedDisplayListOutputData <- function(x, displayList) {
       curName <- x$cdo$name
       curGroup <- x$cdo$group
       
+      # TODO: better logic about what "related" means
       relDisp <- sapply(displayList, function(a)
          !(a$name == curName && a$group == curGroup) && a$keySig == curKeySig)
       
       res <- lapply(displayList[relDisp], function(x) {
          x$updated <- as.character(x$updated)
-         img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"height: 60px\">", sep = "")
+         img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
          x$thumb <- img
+         x$aspect <- x$height / x$width
          x
       })
       

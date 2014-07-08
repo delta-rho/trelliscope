@@ -4,6 +4,7 @@ function panelLabelListOutputApplyButton() {
    var panelLabel = [];
    var needActiveCogUpdate = false;
    
+   // build up panelLabel of active labels
    $(".panel-labels-select").each(function() {
       if($(this).hasClass("active")) {
          var curName = $(this).data("name");

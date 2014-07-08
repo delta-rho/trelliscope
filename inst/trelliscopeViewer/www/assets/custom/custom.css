@@ -583,6 +583,7 @@ Sliding Panel
 .select-column {
   width: 60px;
   text-align: center;
+  vertical-align: middle !important;
   color: #fff;
 }
 
@@ -879,6 +880,10 @@ td.select-column.active {
   width: 540px;
   height: 100%;
   float: right;
+}
+
+#panel-layout-toggle button {
+  width: 110px !important;
 }
 
 .clear { clear: both;}
@@ -1260,9 +1265,40 @@ text.axis-label {
 
 
 .info-tab-label {
-  font-size: 18px;
+  font-size: 14px;
   font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
 }
+
+.hotkey-list li {
+  list-style-type: none;
+  margin-left: -15px;
+}
+
+.hotkey-list {
+  margin-bottom: 20px;
+}
+
+.hotkey-list li>code {
+  margin-right: 10px;
+}
+
+#hotkey-container {
+  width: 600px;
+  margin: auto;
+}
+
+#hotkey-left-column {
+  float: left;
+}
+
+#hotkey-right-column {
+  float: right;
+}
+
+.hotkey-column {
+  padding: 20px;
+}
+
 
 #error-log {
   max-height: 500px;
@@ -1274,3 +1310,68 @@ text.axis-label {
   padding: 10px;
   margin-top: 20px;
 }
+
+
+
+/* Related display
+----------------------------------*/
+
+#related-table-container {
+  height: 200px;
+  overflow-y: auto;
+}
+
+#related-layout-container {
+  height: 290px;
+  width: 760px;
+  border: 1px dashed #888;
+  position: absolute;
+  top: 335px;
+  left: 320px;
+  z-index: 5001;
+}
+
+.related-layout-box {
+  position: absolute;
+  top: 335px;
+  left: 320px;
+  border: 1px solid #89B;
+  background: #BCE;
+  opacity: 0.8;
+  width: 50px;
+  height: 50px;
+  cursor: move;
+  z-index: 5010;
+}
+
+.handle {
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  border: 1px solid #89B;
+  background: #9AC; 
+  opacity: 0.8;
+}
+
+.NW, .NE {
+  top: 0px;
+}
+.NE, .SE {
+  right: 0px;
+}
+.SW, .SE {
+  bottom: 0px;
+}
+.NW, .SW {
+  left: 0px;
+}
+.SE, .NW {   
+  cursor: nw-resize;
+}
+.SW, .NE {
+  cursor: ne-resize;
+}
+
+
+/*
+----------------------------------*/

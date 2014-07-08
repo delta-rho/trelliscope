@@ -25,11 +25,15 @@ currentDisplay <- reactive({
    sld <- selectedDisplay()
    
    if(!is.null(sld)) {
-      logMsg("Loaded display: ", paste(sld$group, "/", sld$name))
+      logMsg("Loading display: ", paste(sld$group, "/", sld$name))
       cdo <- do.call(getDisplay, sld)
+      logMsg("Display loaded")
+      
       if(is.null(cdo$cogDistns))
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
       
+
+      logMsg("Getting default state...")
       # default state values if not specified
       if(is.null(cdo$state$panelLabelState)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]

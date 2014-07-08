@@ -245,33 +245,28 @@ dummyCog <- function(labelVars) {
    data.frame(cog_name = labelVars, cog_value = "")
 }
 
-getPanels <- function(cdo, curRows, pixelratio = 2) {
-   if(cdo$cdo$preRender) {
-      pngs <- unlist(lapply(cdo$cdo$panelDataSource[curRows$panelKey], "[[", 2))
+getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
+   if(cdo$preRender) {
+      pngs <- unlist(lapply(cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
       tmpfile <- tempfile()
       
-      # load relatedData
-      # rel <- cdo$relatedData
-      # for(i in seq_along(rel)) {
-      #    assign(names(rel)[i], rel[[i]], environment())
-      # }
-      environment(cdo$cdo$panelFn) <- environment()
+      environment(cdo$panelFn) <- environment()
       
-      curDat <- cdo$cdo$panelDataSource[curRows$panelKey]
+      curDat <- cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
          warning("data for key ", curRows$panelKey, " could not be found.")
       
       pngs <- sapply(curDat, function(x) {
          res <- try({
             makePNG(dat = x, 
-               panelFn = cdo$cdo$panelFn, 
+               panelFn = cdo$panelFn, 
                file = tmpfile, 
-               width = cdo$cdo$state$panelLayout$w, 
-               height = cdo$cdo$state$panelLayout$h, 
-               origWidth = cdo$cdo$width,
-               # res = 72, # * cdo$cdo$state$panelLayout$w / cdo$cdo$width, 
-               lims = cdo$cdo$lims,
+               width = width, 
+               height = height, 
+               origWidth = cdo$width,
+               # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
+               lims = cdo$lims,
                pixelratio = pixelratio
             )
             encodePNG(tmpfile)

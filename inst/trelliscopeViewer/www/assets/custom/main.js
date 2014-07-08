@@ -40,6 +40,7 @@ var univarSpinner = new Spinner(spinnerOpts);
 var bivarSpinner = new Spinner(spinnerOpts);
 var multivarSpinner = new Spinner(spinnerOpts);
 var panelSpinner = new Spinner(spinnerOptsCorner);
+var displayLoadSpinner = new Spinner(spinnerOpts);
 
 // store the URL hash
 var appHash = window.location.hash;
@@ -78,9 +79,17 @@ $(window).resize(function() {
 $(window).bind('resizeEnd', function() {
    // recompute the panel preview layout after window resize
    // TODO: if that control panel is open, only change it there
-   panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
-   $("#panel-rows").trigger("change");
-   panelLayoutOutputApplyButton();
+
+   // if related displays are selected, recompute there
+   // instead of panel layout
+   if($(".related-display-select.active").length > 0) {
+      relatedLayout();
+      relatedDisplayListOutputApplyButton();
+   } else {
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      $("#panel-rows").trigger("change");
+      panelLayoutOutputApplyButton();      
+   }
 });
 
 // bind left and right keys for paging through panels
@@ -102,46 +111,62 @@ $(document).keydown(function(e) {
             break;
          case 76: // l
             $("#panel-layout-nav-link").click();
+            return false;
             break;
          case 70: // f
             $("#panel-function-nav-link").click();
+            return false;
             break;
          case 69: // e
             $("#panel-labels-nav-link").click();
+            return false;
             break;
          case 82: // r
             $("#add-related-display-nav-link").click();
+            return false;
             break;
          case 65: // a
             $("#active-cog-nav-link").click();
+            return false;
             break;
          case 84: // t
             $("#cog-table-sort-filter-nav-link").click();
+            return false;
             break;
          case 85: // u
             $("#univar-filter-nav-link").click();
+            return false;
             break;
          case 66: // b
             $("#bivar-filter-nav-link").click();
+            return false;
             break;
          case 77: // m
             $("#multivar-filter-nav-link").click();
+            return false;
             break;
-         case 83: // l
+         case 83: // s
             $("#sample-panels-nav-link").click();
+            return false;
             break;
          case 79: // o
             $("#openModal").modal("show");
+            return false;
             break;
          case 73: // i
             $("#aboutModal").modal("show");
+            return false;
             break;
       }
    } else if(slidePanel.length == 1) {
       if(e.keyCode == 27) // escape
          slidePanel.find("button.btn-panel-close").click();
+      if(e.keyCode == 13) { //enter
+         // don't want enter to do anything inside editor
+         if(slidePanel.attr("id") != "panel-function")
+            slidePanel.find("button.btn-panel-apply").click();
+      }
    }
-   
 });
 
 function pageForward() {
@@ -197,10 +222,12 @@ function masterControlPostRender() {
       }
       // open the corresponding panel with a matching class to the button's id
       $("#" + $(this).data("divlink")).toggleClass("slide-left");
+      // dispatch callback...
       toggleBackdrop();
    });
    
    $("#control-panel-backdrop").click(function() {
+      alert("hi");
       // close all .slide-left
       $(".slide-left").each(function() {
          $(this).toggleClass("slide-left");
@@ -223,7 +250,7 @@ function masterControlPostRender() {
    });
    
    // handle "apply" button of each control panel
-   $(".btn-panel-update").click(function() {
+   $(".btn-panel-apply").click(function() {
       // update action dispatch
       var actionFn = $(this).data("action");
       if(window[actionFn])
@@ -247,10 +274,6 @@ function panelFunctionOutputPostRender() {
    editor.getSession().setTabSize(3);
    editor.getSession().setUseSoftTabs(true);                  
    editor.getSession().setMode("ace/mode/r");
-}
-
-function relatedDisplayListOutputPostRender() {
-   $.getScript("assets/custom/selectables-related.js");   
 }
 
 function updateControlsExposedState() {
@@ -437,7 +460,7 @@ $(document).ready(function() {
          }
       }
    });
-      
+   
    $(".right-sticky").click(function() {
       $(".right-panel").toggleClass("right-slide");
       $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")
