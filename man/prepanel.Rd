@@ -12,7 +12,7 @@ prepanel(data, prepanelFn = NULL, control = NULL, verbose = TRUE)
 
 \item{verbose}{print status messages?}
 
-\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
+\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
 }
 \value{
 object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}.

@@ -1,7 +1,11 @@
+// http://stackoverflow.com/questions/19225086/select-cells-on-table-by-dragging-on-tablets
+
+// this code allows for multiple selection of li and td elements 
+// by holding down the mouse and dragging
 $(function() {
    var isMouseDown = false, isActive;
-   
-   $("#add-related-display-selection td.selectable")
+
+   $("#panel-labels-selection td.selectable")
    .mousedown(function () {
       isMouseDown = true;
       $(this).toggleClass("active");
@@ -22,3 +26,5 @@ $(function() {
       isMouseDown = false;
    });
 });
+
+

@@ -63,7 +63,7 @@ addDisplay <- function(
       cogFn = NA,
       n = 1,
       cogDatConn = NA,
-      cogDesc = NA,
+      cogInfo = NA,
       updated = modTime,
       keySig = NA,
       height = height,

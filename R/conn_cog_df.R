@@ -145,21 +145,22 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
    # TODO: add logic about number of breaks
    # TODO: make number of quantiles configurable
    dat <- cogDF[[name]]
-
+   dat <- dat[!is.na(dat)]
+   
    res <- list()
-
+   
    if("hist" %in% type) {
-      if(all(is.na(dat))) {
+      if(length(dat) == 0) {
          res[["hist"]] <- data.frame(xdat = c(0, 1), ydat = c(0, 0))
       } else {
          hst <- hist(dat, plot = FALSE)
          res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))
       }
    }
-
+   
    if("quant" %in% type) {
       n <- length(dat)
-      if(all(is.na(dat))) {
+      if(length(dat) == 0) {
          res[["quant"]] <- data.frame(f = c(0, 1), q = c(0, 0))
       } else {
          # get quantiles

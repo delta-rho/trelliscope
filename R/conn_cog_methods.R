@@ -76,7 +76,7 @@ getCogData <- function(x, rowIdx, colIdx, ...)
 oldGetCurCogDat <- function(cogDF, flt, ordering, colIndex, verbose, ...)
    UseMethod("oldGetCurCogDat")
 
-### for cogInfo
+### for cogDistns
 
 getCogQuantPlotData <- function(x, ...) {
    UseMethod("getCogQuantPlotData", x)

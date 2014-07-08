@@ -89,6 +89,8 @@ $.extend(myShinyDataInputBinding, {
       return $(scope).find(".shiny-my-data-input");
    },
    getValue: function(el) {
+      // console.log($(el).attr("id"));
+      // console.log($(el).data("myShinyData"));
       return $(el).data("myShinyData");
    },
    setValue: function(el, value) {
@@ -140,8 +142,16 @@ $.extend(displaySelectInputBinding, {
       } else {
          var res = $(row).data();
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
+         // store name and group as data
+         // console.log(res);
+         $("#headerDisplayNameOutput").data("curDisplay", res);
+         // close modal
          $("#openModal").modal("hide");
          
+         // run spinner
+         var target = document.getElementById("displayLoadSpinner");
+         displayLoadSpinner.stop(target);
+         displayLoadSpinner.spin(target);
          return res;
       }
    },

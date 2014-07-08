@@ -1,4 +1,4 @@
-// updateCogTableSort - 
+// updateCogTableSort
 // updateCogTableFilter
 
 // cogTableControlsOutputPostRender
@@ -8,17 +8,49 @@
 // cogTableSetFromState
 
 
+function hideColumn(columnIndex, name) {
+   // table head and foot: hide by name
+   // table body: hide by columnIndex
+   
+   $("#cogTableContentOutput td:nth-child(" + (columnIndex + 1) + ")").addClass("hidden");
+   $("#cog-table-th-" + name).addClass("hidden");
+   $("#cog-filter-td-" + name).addClass("hidden");
+   $("#cog-table-univar-td-" + name).addClass("hidden");
+}
+
+function showColumn(columnIndex, name) {
+   // $("#cogTable td:nth-child(" + (columnIndex + 1) + "), #cogTable th:nth-child(" + (columnIndex + 1) + ")").removeClass("hidden");
+   $("#cogTableContentOutput td:nth-child(" + (columnIndex + 1) + ")").removeClass("hidden");
+   $("#cog-table-th-" + name).removeClass("hidden");
+   $("#cog-filter-td-" + name).removeClass("hidden");
+   $("#cog-table-univar-td-" + name).removeClass("hidden");
+}
+
+function updateCogTableColumnVisibility() {
+   // the index of the column to hide will match the order
+   // of the non-hidden li elements
+   $("#cog-table-vars li.nothidden").each(function(index) {
+      if($(this).hasClass("active")) {
+         // showColumn(parseInt($(this).data("col-index")));
+         showColumn(index, $(this).data("name"));
+      } else {
+         // hideColumn(parseInt($(this).data("col-index")));
+         hideColumn(index, $(this).data("name"));
+      }
+   });
+}
+
 // take what user has specified for sorting through the UI
 // and send it to shiny as a data input cogColumnSortInput
 updateCogTableSort = function() {
    var iconLookup = {
       "icon-sort-up" : {
          "numeric" : "icon-sort-numeric-asc",
-         "character" : "icon-sort-alpha-asc"
+         "factor" : "icon-sort-alpha-asc"
       },
       "icon-sort-down" : {
          "numeric" : "icon-sort-numeric-desc",
-         "character" : "icon-sort-alpha-desc"
+         "factor" : "icon-sort-alpha-desc"
       }      
    }
    
@@ -138,55 +170,57 @@ updateCogTableFilter = function(el) {
    $("#cogColumnFilterInput td").each(function() {
       var curVar = $(this).data("variable");
       // alert("hi")
-      if($(this).attr("class") == "filter-numeric") {
-         var from = $(this).find(".column-filter-from").val();
-         var to = $(this).find(".column-filter-to").val();
-         if(from != "") {
-            if(!filterData[curVar])
-               filterData[curVar] = {};
-            filterData[curVar]["from"] = parseFloat(from);
-         }
-         if(to != "") {
-            if(!filterData[curVar])
-               filterData[curVar] = {};
-            filterData[curVar]["to"] = parseFloat(to);
-         }
-      } else {
-         var regex = $(this).find(".column-filter-regex").val();
-         var picker = $(this).find(".column-filter-select").selectpicker("val");
-         var vals = [];
-         if(regex != "") {
-            // don't store regex - apply it to everything in the list
-            // and select it if it matches
-            // note that if this has happened, select is already blank
-            var re = new RegExp(regex);
-            $("#text-select-" + curVar + " option").each(function() {
-               var cur = $(this).html();
-               if(re.test(cur))
-                  vals.push(cur);
-            });
-            // when nothing is selected, it means show everything
-            // except in the case of when a regex leads to nothing being selected
-            if(vals.length == 0) {
+      if(!$(this).hasClass("hidden")) {
+         if($(this).hasClass("filter-numeric")) {
+            var from = $(this).find(".column-filter-from").val();
+            var to = $(this).find(".column-filter-to").val();
+            if(from != "") {
                if(!filterData[curVar])
                   filterData[curVar] = {};
-               filterData[curVar]["empty"] = true;
+               filterData[curVar]["from"] = parseFloat(from);
             }
-            // set a class on the element so it knows it's being populated
-            // by the regex (so we will not fire off our on change trigger)
-            // now "pick" them
-            $(this).find(".column-filter-select").addClass("regex-lock");
-            $(this).find(".column-filter-select").selectpicker("val", vals);
-            $(this).find(".column-filter-select").selectpicker("refresh");
-         } else if(picker) {
-            var vals = picker;
-         }
-         if(vals.length > 0) {
-            // console.log(vals);
-            if(!filterData[curVar])
-               filterData[curVar] = {};
-            filterData[curVar]["select"] = vals;
-         }
+            if(to != "") {
+               if(!filterData[curVar])
+                  filterData[curVar] = {};
+               filterData[curVar]["to"] = parseFloat(to);
+            }
+         } else {
+            var regex = $(this).find(".column-filter-regex").val();
+            var picker = $(this).find(".column-filter-select").selectpicker("val");
+            var vals = [];
+            if(regex != "") {
+               // don't store regex - apply it to everything in the list
+               // and select it if it matches
+               // note that if this has happened, select is already blank
+               var re = new RegExp(regex);
+               $("#text-select-" + curVar + " option").each(function() {
+                  var cur = $(this).html();
+                  if(re.test(cur))
+                     vals.push(cur);
+               });
+               // when nothing is selected, it means show everything
+               // except in the case of when a regex leads to nothing being selected
+               if(vals.length == 0) {
+                  if(!filterData[curVar])
+                     filterData[curVar] = {};
+                  filterData[curVar]["empty"] = true;
+               }
+               // set a class on the element so it knows it's being populated
+               // by the regex (so we will not fire off our on change trigger)
+               // now "pick" them
+               $(this).find(".column-filter-select").addClass("regex-lock");
+               $(this).find(".column-filter-select").selectpicker("val", vals);
+               $(this).find(".column-filter-select").selectpicker("refresh");
+            } else if(picker) {
+               var vals = picker;
+            }
+            if(vals.length > 0) {
+               // console.log(vals);
+               if(!filterData[curVar])
+                  filterData[curVar] = {};
+               filterData[curVar]["select"] = vals;
+            }
+         }         
       }
       
       // add / remove filter icon
@@ -234,10 +268,10 @@ function cogTableControlsOutputPostRender(data) {
       updateCogTableColumnVisibility();
    });
    
-   // make histograms in footer
-   // console.log(data.plotDat);
+   // make histograms / bar charts in footer
    $.each(data.plotDat, function(index, value) {
-      d3footPlot(value);
+      if(value.data != undefined)
+         d3footPlot(value);
    });
    
    // handle clicks on column sort

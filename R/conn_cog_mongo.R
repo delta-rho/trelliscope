@@ -153,9 +153,9 @@ getCogData.mongoCogDatConn <- function(x, rowIdx, colIdx, ...) {
       res[[i]] <-
 as.data.frame(tmp, stringsAsFactors=FALSE)
    }
-
+   
    mongo.disconnect(mongoConn)
-
+   
    do.call(rbind, res)[, colIdx, drop=FALSE]
 }
 

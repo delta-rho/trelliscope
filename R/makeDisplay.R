@@ -22,7 +22,7 @@ if(getRversion() >= "2.15.1") {
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
-#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
+#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #'
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
 #'
@@ -284,9 +284,9 @@ makeDisplay <- function(
    if(verbose)
       message("* Storing display object...")
 
-   cogDesc <- getCogDesc(cogEx)
-   cogInfo <- getCogInfo(cogDatConn, cogDesc)
-
+   cogInfo <- getCogInfo(cogEx)
+   cogDistns <- getCogDistns(cogDatConn, cogInfo)
+   
    displayObj <- list(
       name = name,
       group = group,
@@ -297,8 +297,8 @@ makeDisplay <- function(
       cogFn = cogFn,
       n = getAttribute(data, "nDiv"),
       cogDatConn = cogDatConn,
-      cogDesc = cogDesc,
       cogInfo = cogInfo,
+      cogDistns = cogDistns,
       updated = modTime,
       keySig = keySig,
       height = height,
@@ -307,18 +307,15 @@ makeDisplay <- function(
       relatedData = globalVarList
    )
    class(displayObj) <- "displayObj"
-
+   
    save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
 
    # make thumbnail
    message("* Plotting thumbnail...")
    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
    # small thumbnail
-   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb_small.png"), width = width * (100 / height), height = 100, origWidth = width, lims = lims))
-
-   # TODO: plot small thumbnail as well
-   # suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
-
+   makeThumb(file.path(displayPrefix, "thumb.png"), file.path(displayPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
+      
    return(invisible(displayObj))
 }
 

@@ -3,12 +3,13 @@
 \alias{cogMean}
 \title{Compute Mean Cognostic}
 \usage{
-cogMean(x, desc = "mean")
+cogMean(x, desc = "mean", group = "common", defLabel = FALSE,
+  defActive = TRUE, filterable = TRUE)
 }
 \arguments{
 \item{x}{numeric vector from which to compute the mean}
 
-\item{desc}{description of cognostic}
+\item{desc,group,defLabel,defActive,filterable}{arguments passed to \code{\link{cog}}}
 }
 \description{
 Compute mean to be used as cognostics in a trelliscope display.
