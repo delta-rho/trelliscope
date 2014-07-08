@@ -10,7 +10,7 @@ if(getRversion() >= "2.15.1") {
 #' @param data an object of class "localDiv" or "rhData"
 #' @param prepanelFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param verbose print status messages?
-#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
+#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
 #'
 #' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}.
 #'
@@ -327,6 +327,7 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #'
 #' @examples
+#' \dontrun{
 #' irisSplit <- divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'    list(
@@ -336,6 +337,7 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #' }
 #' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 #' irisLims <- setLims(irisPre, x="same", y="sliced")
+#' }
 #'
 #' @export
 setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {

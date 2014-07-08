@@ -22,7 +22,7 @@ if(getRversion() >= "2.15.1") {
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
-#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
+#' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #'
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
 #'

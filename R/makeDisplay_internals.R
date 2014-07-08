@@ -114,9 +114,9 @@ updateDisplayList <- function(argList, conn) {
 
 # creates low-resolution thumbnail
 makeThumb <- function(inFile, outFile, height, width) {
-   img <- readPNG(inFile)
+   img <- png::readPNG(inFile)
    
-   png(file = outFile, height = height, width = width)
+   png(filename = outFile, height = height, width = width)
       par(mar = c(0,0,0,0), xaxs="i", yaxs = "i", ann = FALSE)
       plot(1:2, type = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "")
       lim <- par()
@@ -152,6 +152,7 @@ makeThumb <- function(inFile, outFile, height, width) {
 #' @param plotLoc TODO
 #'
 #' @export
+#' @importFrom base64enc base64encode
 encodePNG <- function(plotLoc) {
    bytes <- file.info(plotLoc)$size
    b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))

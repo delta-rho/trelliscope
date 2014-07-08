@@ -11,6 +11,9 @@ Features / changes:
 - add keyboard shortcuts for opening control panels
 - for performance reasons, now categorical cognostics with too many unique values will not have a selectpicker in the cognostics table
 - experimental support for "related displays" - view multiple displays made against the same division simultaneously and control the layout
+- added travis.ci support
+- added infrastructure to do javascript unit tests
+- addition of some simple R and javascript unit tests
 
 Big fixes:
 - fix bug with quantile computation with NAs

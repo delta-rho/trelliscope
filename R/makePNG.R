@@ -14,12 +14,13 @@
 #' @author Ryan Hafen
 #' @seealso \code{\link{makeDisplay}}
 #' @export
+#' @import lattice
 makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width, res = 72, basePointSize = 12, lims = NULL, pixelratio = 2) {
 
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (nchar(system.file(package = "Cairo"))) {
-      pngfun <- Cairo::CairoPNG
+   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+      pngfun <- CairoPNG
    } else {
       pngfun <- png
    }

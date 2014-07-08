@@ -130,6 +130,7 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 #'
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
+#' @param group optional categorization of the cognostic for organizational purposes
 #' @param type the desired type of cognostic you would like to compute (see details)
 #' @param defLabel should this cognostic be used as a panel label in the viewer by default?
 #' @param defActive should this cognostic be active (available for sort / filter / sample) by default?

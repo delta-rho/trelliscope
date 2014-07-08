@@ -73,16 +73,16 @@ webSync <- function(
 }
 
 #' Sync localDisk Objects to VDB
-#'
+#' 
 #' Sync localDisk data that is used for VDB displays located throughout the system to a 'data' directory inside the VDB - useful for collecting data before syncing with a web server, and used inside of \code{\link{webSync}}.
-#'
+#' 
 #' @param vdbConn VDB connection settings
 #' @param rsync location of rsync binary
-#'
+#' 
 #' @author Ryan Hafen
-#'
+#' 
 #' @seealso \code{\link{webSync}}, \code{\link{webConn}}
-#'
+#' 
 #' @export
 syncLocalData <- function(vdbConn = getOption("vdbConn"), rsync = NULL) {
    if(is.null(rsync))

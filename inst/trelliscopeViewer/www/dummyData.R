@@ -10,8 +10,8 @@ source("server/currentDisplayData.R")
 currentDisplay <- list(cdo = displayObj)
 
 cogState <- list(
-   filter = 
-   sort = 
+   filter =
+   sort =
 )
 
 cogState <- list(
@@ -87,7 +87,7 @@ a <- list(
    "panelTableContentOutput" = panelTableContent
 )
 
-cat(jsonlite:::toJSON(a, pretty = TRUE), file = "www/dummyData.json")
+cat(jsonlite::toJSON(a, pretty = TRUE), file = "www/dummyData.json")
 
 
 
@@ -176,4 +176,4 @@ a <- list(
       updateButton = "cogSampleControlsApplyButton"
    )
 )
-cat(jsonlite:::toJSON(a, pretty = TRUE), file = "www/templateData.json")
+cat(jsonlite::toJSON(a, pretty = TRUE), file = "www/templateData.json")

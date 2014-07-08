@@ -21,7 +21,12 @@ License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
     R (>= 2.15.1),
-    datadr,
+    base,
+    datadr
+Imports:
+    httpuv,
+    data.table,
+    grid,
     lattice (>= 0.20-23),
     base64enc,
     knitr,
@@ -35,7 +40,8 @@ Depends:
     fastICA,
     png
 Suggests:
-    Rhipe,
+    Cairo,
     rmongodb,
     scagnostics,
-    testthat
+    testthat (>= 0.8.1),
+    roxygen2 (>= 4.0.0)

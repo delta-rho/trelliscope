@@ -173,7 +173,7 @@ function pageForward() {
    var curPage = parseInt($("#curPanelPageInput").val());
    var nPages = parseInt($("#panelPageTotOutput").text());
    var by = parseInt($("#skip-button-value").html().replace("x", ""));
-   
+
    if(curPage + by <= nPages) {
       $("#curPanelPageInput").val(curPage + by);
       $("#curPanelPageInput").trigger("change");
@@ -183,7 +183,7 @@ function pageForward() {
 function pageBack() {
    var curPage = parseInt($("#curPanelPageInput").val());
    var by = parseInt($("#skip-button-value").html().replace("x", ""));
-   
+
    if(curPage - by >= 1) {
       $("#curPanelPageInput").val(curPage - by);
       $("#curPanelPageInput").trigger("change");
@@ -203,11 +203,11 @@ function masterControlPostRender() {
          $("#control-panel-backdrop").removeClass("bd-visible");
          $("#control-panel-backdrop").addClass("bd-hidden");
       } else {
-         $("#control-panel-backdrop").removeClass("bd-hidden");            
+         $("#control-panel-backdrop").removeClass("bd-hidden");
          $("#control-panel-backdrop").addClass("bd-visible");
       }
    }
-   
+
    // panel sliding by navigation
    $("div.list-group-sidebar a.list-group-item").on("click", function() {
       // when a nav element is clicked
@@ -225,7 +225,7 @@ function masterControlPostRender() {
       // dispatch callback...
       toggleBackdrop();
    });
-   
+
    $("#control-panel-backdrop").click(function() {
       alert("hi");
       // close all .slide-left
@@ -236,30 +236,30 @@ function masterControlPostRender() {
       $("#control-panel-backdrop").removeClass("bd-visible");
       $("#control-panel-backdrop").addClass("bd-hidden");
    });
-   
+
    // handle "cancel" button of each control panel
    $(".btn-panel-close").click(function() {
       // update action dispatch
       var actionFn = $(this).data("action");
       if(window[actionFn])
          window[actionFn]();
-      
+
       $(".slide-panel").removeClass("slide-left");
       $("div.list-group a.list-group-item").removeClass("selected");
       toggleBackdrop();
    });
-   
+
    // handle "apply" button of each control panel
    $(".btn-panel-apply").click(function() {
       // update action dispatch
       var actionFn = $(this).data("action");
       if(window[actionFn])
          window[actionFn]();
-      
+
       // every time apply is called, set it back to page 1
       $("#curPanelPageInput").val("1");
       $("#curPanelPageInput").trigger("change");
-      
+
       // get rid of panel and backdrop
       $(".slide-panel").removeClass("slide-left");
       $("div.list-group a.list-group-item").removeClass("selected");
@@ -270,9 +270,9 @@ function masterControlPostRender() {
 // initialize code editor
 function panelFunctionOutputPostRender() {
    var editor = ace.edit("editor");
-   editor.setTheme("ace/theme/tomorrow"); 
+   editor.setTheme("ace/theme/tomorrow");
    editor.getSession().setTabSize(3);
-   editor.getSession().setUseSoftTabs(true);                  
+   editor.getSession().setUseSoftTabs(true);
    editor.getSession().setMode("ace/mode/r");
 }
 
@@ -291,7 +291,7 @@ function cogBreadcrumbOutputPostRender() {
       delete filterData[$(this).data("name")];
       $("#filterStateInput").trigger("change");
    });
-   
+
    // if main part of a filter breadcrumb button is clicked
    // open up the univariate filter control panel and select that variable
    $(".filter-breadcrumb.cog-state-edit").click(function() {
@@ -300,26 +300,26 @@ function cogBreadcrumbOutputPostRender() {
 
       $("#univar-var-" + $(this).data("name")).trigger("click");
    });
-   
+
    // remove sorting if "x" clicked on sort breadcrumb
    $(".sort-breadcrumb.cog-state-remove").click(function() {
       var sortData = $("#sortStateInput").data("myShinyData");
       delete sortData[$(this).data("name")];
       $("#sortStateInput").trigger("change");
    });
-   
+
    // open Table Sort / Filter control if main part of sort button clicked
    $(".sort-breadcrumb.cog-state-edit").click(function() {
       if(!$("#cog-table-sort-filter").hasClass("slide-left"))
          $("#cog-table-sort-filter-nav-link").trigger("click");
-      
+
       // make sure appropriate column is active
       // console.log("#cog-table-col-select-li-" + $(this).data("name"));
       var el = $("#cog-table-col-select-li-" + $(this).data("name"));
-      
+
       if(!el.hasClass("active")) {
          el.trigger("mousedown");
-         el.trigger("mouseup");         
+         el.trigger("mouseup");
       }
    });
 }
@@ -354,15 +354,15 @@ function panelPageNavOutputPostRender() {
    $("#skip-button-menu li a").click(function(e) {
       $("#skip-button-value").html($(this).html());
    });
-   
+
    $("#pageLeftButton").click(function() {
       pageBack();
    });
-   
+
    $("#pageRightButton").click(function() {
       pageForward();
    });
-   
+
    // when page input is changed, fire up spinner
    $("#curPanelPageInput").change(function() {
       var target = document.getElementById("panelTableSpinner");
@@ -408,7 +408,6 @@ function panelTableContentOutputPostRender() {
 
 
 $(document).ready(function() {
-   
    $("#infoTab a").click(function (e) {
       e.preventDefault()
       $(this).tab("show")
@@ -417,7 +416,7 @@ $(document).ready(function() {
    // render outer templates
    var outerRender = $.getJSON("templateData.json", function(json) {
       var masterTemplate = document.getElementById("controls-master-template").innerHTML;
-      
+
       $.each(json, function(key, value) {
          var output = Mustache.render(masterTemplate, value);
          document.getElementById(key).innerHTML = output;
@@ -427,34 +426,38 @@ $(document).ready(function() {
    .complete(function() {
       // register bindings for newly created elements
       masterControlPostRender();
-      
+
       // if we are viewing index.html outside of being invoked from shiny
       // then grab some dummy data to fill in the mustache templates
       // this is a very useful way to design outside of shiny
       if(!window.Shiny) {
          console.log("Running outside of shiny... filling templates with dummy data...")
-         
+
          $.getJSON("dummyData.json", function(json) {
-            
+
             $.each(json["panels"], function(key, value) {
                renderTemplate(key, value);
             })
-            
+
             renderTemplate("panelPageNavOutput", json["panelPageNavOutput"]);
             renderTemplate("cogBreadcrumbOutput", json["cogBreadcrumbOutput"]);
             renderTemplate("displayListOutput", json["displayListOutput"]);
-            renderTemplate("panelTableContentOutput", json["panelTableContentOutput"]);               
+            renderTemplate("panelTableContentOutput", json["panelTableContentOutput"]);
          })
          .complete(function() {
             $("#headerDisplayNameOutput").html("group / display_name");
          });
       } else {
          console.log("Running in shiny mode...")
-         Shiny.unbindAll();
-         Shiny.bindAll()
-         
+         try {
+           Shiny.unbindAll();
+           Shiny.bindAll()
+         } catch (e) {
+          // do nothing
+         }
+
          if(appHash == "") {
-            $("#openModal").modal('show');      
+            $("#openModal").modal('show');
          } else {
             // $("#appHash").val(appHash);
          }
@@ -464,6 +467,6 @@ $(document).ready(function() {
    $(".right-sticky").click(function() {
       $(".right-panel").toggleClass("right-slide");
       $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")
-   });   
+   });
 });
 

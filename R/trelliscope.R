@@ -3,6 +3,9 @@
 #' @name trelliscope
 #' @docType package
 # ' @import plyr digest scales grid reshape2 proto gtable
+#' @import data.table datadr digest fastICA ggplot2 grid hexbin knitr markdown
+#' @importFrom jsonlite toJSON
+
 NULL
 
 # Pristine example of data documentation from ggplot2

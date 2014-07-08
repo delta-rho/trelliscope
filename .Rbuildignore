@@ -8,3 +8,6 @@ CONTRIBUTING.md
 Gruntfile.js
 LICENSE.md
 package.json
+protobuf-2.4.1/
+protobuf-2.4.1.tar.gz
+protobuf_install/
