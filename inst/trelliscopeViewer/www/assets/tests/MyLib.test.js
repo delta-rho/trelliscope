@@ -15,20 +15,20 @@ run_qunit_tests = function(){
 
   // http://api.qunitjs.com/category/callbacks/
   QUnit.testStart(function( details ) {
-    console.log( "Now running: '", details.module + "' > '" + details.name + "'");
+    console.log( "Now running test: '" + details.module + "' > '" + details.name + "'");
   });
   QUnit.testDone(function( details ) {
-    console.log( "Done running: '", details.module + "' > '" + details.name, "'. Passed: ", details.passed, ". Failed: ", details.failed, ". Total: ", details.total );
+    console.log( "Done running: '" + details.module + "' > '" + details.name +"'. Passed: " + details.passed + ". Failed: ", details.failed, ". Total: ", details.total );
   });
   QUnit.moduleDone(function( details) {
-    console.log( "Done running module: '", details.name, "'" );
+    console.log( "Done running module: '" + details.name + "'" );
     if (details.name == "Last Module") {
       // console.log("Closing socket");
       // Shiny.shinyapp.$socket.close()
     }
   });
   QUnit.done(function( details ) {
-    console.log( "Total: ", details.total, " Failed: ", details.failed, " Passed: ", details.passed, " Runtime: ", details.runtime );
+    console.log( "Total: " + details.total + " Failed: " + details.failed + " Passed: " + details.passed + " Runtime: " + details.runtime );
   });
   // QUnit.module('General');
 
