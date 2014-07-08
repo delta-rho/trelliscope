@@ -9,7 +9,7 @@ renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NU
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(jsonlite:::toJSON(res))
+         return(jsonlite::toJSON(res))
    }
 }
 
@@ -24,7 +24,7 @@ renderData <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) 
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(RJSONIO:::toJSON(res))
+         return(RJSONIO::toJSON(res))
    }
 }
 
@@ -42,9 +42,9 @@ cogDataString <- function(data) {
 cogTableBodyData <- function(data, nr = 10) {
    nc <- ncol(data)
    if(nc == 0) {
-      return(NULL)      
+      return(NULL)
    } else if(nrow(data) == 0) {
-      tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")   
+      tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")
    } else {
       data <- data[1:min(nr, nrow(data)),]
       tDataString <- cogDataString(data)
@@ -55,7 +55,7 @@ cogTableBodyData <- function(data, nr = 10) {
          nn <- nr - rnr
          tDataString <- rbind(tDataString, matrix(nrow = nn, ncol = nc))
          tDataString[(rnr + 1):nr, 1:nc] <- "&nbsp;"
-      }      
+      }
    }
    # res <- data.frame(tDataString, stringsAsFactors = FALSE)
    # names(res) <- names(data)
@@ -91,9 +91,9 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
       plotType <- "hist"
    if(plotType == "quantile")
       plotType <- "quant"
-   
+
    curInfo <- cdo$cogInfo[[name]]
-   
+
    if(curInfo$type == "numeric") {
       if(distType == "marginal") {
          tmp <- curInfo$marginal[[plotType]]
@@ -147,20 +147,20 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    maxcnt <- max(dat@count)
    style <- "lattice"
    trans <- NULL
-   
+
    cnt <- dat@count
    xbins <- dat@xbins
    shape <- dat@shape
    tmp <- hcell2xy(dat)
    good <- mincnt <= cnt & cnt <= maxcnt
-   
+
    xnew <- tmp$x[good]
    ynew <- tmp$y[good]
    cnt <- cnt[good]
-   
+
    sx <- xbins/diff(dat@xbnds)
    sy <- (xbins * shape)/diff(dat@ybnds)
-   
+
    if (is.null(trans)) {
       if (min(cnt, na.rm = TRUE) < 0) {
          pcnt <- cnt + min(cnt)
@@ -177,14 +177,14 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    area <- minarea + rcnt * (maxarea - minarea)
    area <- pmin(area, maxarea)
    radius <- sqrt(area)
-   
+
    inner <- 0.5
    outer <- (2 * inner)/sqrt(3)
    dx <- inner/sx
    dy <- outer/(2 * sy)
    rad <- sqrt(dx^2 + dy^2)
    hexC <- hexcoords(dx, dy, sep = NULL)
-   
+
    list(
       data = data.frame(x = xnew, y = ynew, r = radius),
       plotType = "hexbin",
@@ -246,27 +246,27 @@ getPanels <- function(cdo, curRows, pixelratio = 2) {
       pngs <- unlist(lapply(cdo$cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
       tmpfile <- tempfile()
-      
+
       # load relatedData
       # rel <- cdo$relatedData
       # for(i in seq_along(rel)) {
       #    assign(names(rel)[i], rel[[i]], environment())
       # }
       environment(cdo$cdo$panelFn) <- environment()
-      
+
       curDat <- cdo$cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
          warning("data for key ", curRows, " could not be found.")
-      
+
       pngs <- sapply(curDat, function(x) {
          res <- try({
-            makePNG(dat = x, 
-               panelFn = cdo$cdo$panelFn, 
-               file = tmpfile, 
-               width = cdo$cdo$state$panelLayout$w, 
-               height = cdo$cdo$state$panelLayout$h, 
+            makePNG(dat = x,
+               panelFn = cdo$cdo$panelFn,
+               file = tmpfile,
+               width = cdo$cdo$state$panelLayout$w,
+               height = cdo$cdo$state$panelLayout$h,
                origWidth = cdo$cdo$width,
-               # res = 72, # * cdo$cdo$state$panelLayout$w / cdo$cdo$width, 
+               # res = 72, # * cdo$cdo$state$panelLayout$w / cdo$cdo$width,
                lims = cdo$cdo$lims,
                pixelratio = pixelratio
             )
@@ -281,28 +281,28 @@ getPanels <- function(cdo, curRows, pixelratio = 2) {
 }
 
 makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
-   
+
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (nchar(system.file(package = "Cairo"))) {
-      pngfun <- Cairo::CairoPNG
+   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+      pngfun <- CairoPNG
    } else {
       pngfun <- png
    }
-   
-   pngfun(filename = filename, 
-      width = width * pixelratio, 
-      height = height * pixelratio, 
-      res = res * pixelratio, 
+
+   pngfun(filename = filename,
+      width = width * pixelratio,
+      height = height * pixelratio,
+      res = res * pixelratio,
       pointsize = basePointSize * width / origWidth)
-   
+
    dv <- dev.cur()
-   
+
    tryCatch(func(), finally = dev.off(dv))
 }
 
 # require(fastICA)
-# 
-# 
+#
+#
 # makeBivarJSON(ic$S[,1], ic$S[,2], xlab="IC 1", ylab="IC 2")
 

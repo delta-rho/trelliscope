@@ -33,12 +33,12 @@ install:
   - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
   - tar -xzf protobuf-2.4.1.tar.gz
   - mkdir protobuf_install
-  - PROTODIR="`pwd`/protobuf_install"
-  - PATH="$PATH:PROTODIR/bin"
-  - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTODIR/lib/pkgconfig"
-  - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTODIR/lib"
+  - PROTOBUF_DIR="`pwd`/protobuf_install"
+  - PATH="$PATH:PROTOBUF_DIR/bin"
+  - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTOBUF_DIR/lib/pkgconfig"
+  - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTOBUF_DIR/lib"
   - cd protobuf-2.4.1
-  - ./configure --prefix="$PROTODIR"
+  - ./configure --prefix="$PROTOBUF_DIR"
   - make
   - make install
   - cd ../
@@ -51,6 +51,8 @@ install:
   - ./travis-tool.sh install_deps
   -
   - #INSTALL NODE TESTING
+  -
+
   - npm install
   -
   - ls *
@@ -59,7 +61,16 @@ install:
 
 script:
   - ./travis-tool.sh run_tests
+  -
+  - R --vanilla < z_grunt_test/grunt_server.R &
+  - R_PID=$!
+  - echo "$R_PID"
+  - sleep 30 # let server load
+  -
   - npm test
+  -
+  - kill "$R_PID"
+
 
 after_failure:
   - ./travis-tool.sh dump_logs
@@ -74,6 +85,7 @@ branches:
   only:
     - master
     - dev
+    - r_cmd_check
 
 notifications:
   email:

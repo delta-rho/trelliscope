@@ -1,5 +1,7 @@
-context("Simple display")
-require(trelliscope)
+
+
+require(devtools)
+load_all("./")
 
 library(datadr)
 
@@ -22,22 +24,23 @@ cf <- function(x) {
    )
 }
 
-test_that("vdbConn works", {
-   vdbConn(vdbPath, autoYes = TRUE)
-})
+vdbConn(vdbPath, autoYes = TRUE)
 
-test_that("makeDisplay works", {
-   makeDisplay(bySite,
-      name = "variety_vs_yield",
-      desc = "test display with barley data",
-      panelFn = pf, cogFn = cf,
-      width = 400, height = 400,
-      lims = list(x = "same", y = "free")
-   )
+makeDisplay(bySite,
+  name = "variety_vs_yield",
+  desc = "test display with barley data",
+  panelFn = pf,
+  cogFn = cf,
+  width = 400,
+  height = 400,
+  lims = list(x = "same", y = "free")
+)
 
-   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield", "displayObj.Rdata")))
-})
 
-# view()
+view()
 
+
+# on.exit({
+#   # remove vdbPath
+# }, add = TRUE)
 

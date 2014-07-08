@@ -36,6 +36,7 @@ About "x" and "y" parameters: This is the same as in lattice.  From lattice docu
 A character string that determines how axis limits are calculated for each panel. Possible values are "same" (default), "free" and "sliced". For relation="same", the same limits, usually large enough to encompass all the data, are used for all the panels. For relation="free", limits for each panel is determined by just the points in that panel. Behavior for relation="sliced" is similar, except that the length (max - min) of the scales are constrained to remain the same across panels.
 }
 \examples{
+\dontrun{
 irisSplit <- divide(iris, "Species")
 irisPreFn <- function(x) {
    list(
@@ -45,6 +46,7 @@ irisPreFn <- function(x) {
 }
 irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
 irisLims <- setLims(irisPre, x="same", y="sliced")
+}
 }
 \author{
 Ryan Hafen
