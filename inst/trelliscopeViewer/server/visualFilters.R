@@ -6,7 +6,7 @@ output$univarFilterPlot <- renderDataLite({
    cdo <- cdoCogState()
    
    if(!is.null(selectVals) && !is.null(cdo)) {
-      getUnivarPlotDat(cdo, selectVals$varName, distType = selectVals$distType, plotType = selectVals$plotType)
+      getUnivarPlotDat(cdo, selectVals$varName, distType = selectVals$distType, plotType = selectVals$plotType, maxLevels = 10000)
    }
 })
 

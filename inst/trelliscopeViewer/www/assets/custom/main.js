@@ -40,6 +40,7 @@ var univarSpinner = new Spinner(spinnerOpts);
 var bivarSpinner = new Spinner(spinnerOpts);
 var multivarSpinner = new Spinner(spinnerOpts);
 var panelSpinner = new Spinner(spinnerOptsCorner);
+var displayLoadSpinner = new Spinner(spinnerOpts);
 
 // store the URL hash
 var appHash = window.location.hash;
@@ -55,6 +56,18 @@ function debounce(fn, delay) {
    };
 }
 
+if (typeof console  != "undefined") 
+    if (typeof console.log != 'undefined')
+        console.olog = console.log;
+    else
+        console.olog = function() {};
+
+console.log = function(message) {
+    console.olog(message);
+    $('#error-log').append('<p>' + message + '</p>');
+};
+console.error = console.debug = console.info =  console.log;
+
 // let a user resize for 250ms before triggering actions
 $(window).resize(function() {
    if(this.resizeTO) clearTimeout(this.resizeTO);
@@ -66,18 +79,93 @@ $(window).resize(function() {
 $(window).bind('resizeEnd', function() {
    // recompute the panel preview layout after window resize
    // TODO: if that control panel is open, only change it there
-   panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
-   $("#panel-rows").trigger("change");
-   panelLayoutOutputApplyButton();
+
+   // if related displays are selected, recompute there
+   // instead of panel layout
+   if($(".related-display-select.active").length > 0) {
+      relatedLayout();
+      relatedDisplayListOutputApplyButton();
+   } else {
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      $("#panel-rows").trigger("change");
+      panelLayoutOutputApplyButton();      
+   }
 });
 
 // bind left and right keys for paging through panels
 $(document).keydown(function(e) {
-   if(e.keyCode == 37) { // left
-      pageBack();
-   }
-   if(e.keyCode == 39) { // right
-      pageForward();
+   // only want right and left to work when no panels are open
+   var slidePanel = $(".slide-panel.slide-left");
+   var modals = $(".modal:visible");
+   
+   if($(document.activeElement).attr("id") != "curPanelPageInput" 
+      && slidePanel.length == 0 && modals.length == 0) {
+      switch(e.keyCode) {
+         case 37: // left
+            pageBack();
+            return false;
+            break;
+         case 39: // right
+            pageForward();
+            return false;
+            break;
+         case 76: // l
+            $("#panel-layout-nav-link").click();
+            return false;
+            break;
+         case 70: // f
+            $("#panel-function-nav-link").click();
+            return false;
+            break;
+         case 69: // e
+            $("#panel-labels-nav-link").click();
+            return false;
+            break;
+         case 82: // r
+            $("#add-related-display-nav-link").click();
+            return false;
+            break;
+         case 65: // a
+            $("#active-cog-nav-link").click();
+            return false;
+            break;
+         case 84: // t
+            $("#cog-table-sort-filter-nav-link").click();
+            return false;
+            break;
+         case 85: // u
+            $("#univar-filter-nav-link").click();
+            return false;
+            break;
+         case 66: // b
+            $("#bivar-filter-nav-link").click();
+            return false;
+            break;
+         case 77: // m
+            $("#multivar-filter-nav-link").click();
+            return false;
+            break;
+         case 83: // s
+            $("#sample-panels-nav-link").click();
+            return false;
+            break;
+         case 79: // o
+            $("#openModal").modal("show");
+            return false;
+            break;
+         case 73: // i
+            $("#aboutModal").modal("show");
+            return false;
+            break;
+      }
+   } else if(slidePanel.length == 1) {
+      if(e.keyCode == 27) // escape
+         slidePanel.find("button.btn-panel-close").click();
+      if(e.keyCode == 13) { //enter
+         // don't want enter to do anything inside editor
+         if(slidePanel.attr("id") != "panel-function")
+            slidePanel.find("button.btn-panel-apply").click();
+      }
    }
 });
 
@@ -108,25 +196,6 @@ function pageBeg() {
 }
 
 
-
-function hideColumn(columnIndex) {
-   $("#cogTable td:nth-child(" + (columnIndex+1) + "), #cogTable th:nth-child(" + (columnIndex + 1) + ")").hide();
-}
-
-function showColumn(columnIndex) {
-   $("#cogTable td:nth-child(" + (columnIndex+1) + "), #cogTable th:nth-child(" + (columnIndex + 1) + ")").show();
-}
-
-function updateCogTableColumnVisibility() {
-   $("#cog-table-vars li").each(function() {
-      if($(this).hasClass("active")) {
-         showColumn(parseInt($(this).data("col-index")));
-      } else {
-         hideColumn(parseInt($(this).data("col-index")));
-      }
-   });
-}
-
 function masterControlPostRender() {
    // if any .slide-left divs are open, hide the backdrop, else show
    function toggleBackdrop() {
@@ -153,10 +222,12 @@ function masterControlPostRender() {
       }
       // open the corresponding panel with a matching class to the button's id
       $("#" + $(this).data("divlink")).toggleClass("slide-left");
+      // dispatch callback...
       toggleBackdrop();
    });
 
    $("#control-panel-backdrop").click(function() {
+      alert("hi");
       // close all .slide-left
       $(".slide-left").each(function() {
          $(this).toggleClass("slide-left");
@@ -179,7 +250,7 @@ function masterControlPostRender() {
    });
 
    // handle "apply" button of each control panel
-   $(".btn-panel-update").click(function() {
+   $(".btn-panel-apply").click(function() {
       // update action dispatch
       var actionFn = $(this).data("action");
       if(window[actionFn])
@@ -205,15 +276,11 @@ function panelFunctionOutputPostRender() {
    editor.getSession().setMode("ace/mode/r");
 }
 
-function relatedDisplayListOutputPostRender() {
-   $.getScript("assets/custom/selectables-related.js");
-}
-
 function updateControlsExposedState() {
    univarFilterSetFromExposedState();
    bivarFilterSetFromExposedState();
    cogTableSetFromExposedState();
-   visibleCogListSetFromExposedState();
+   panelLabelListSetFromExposedState();
    panelLayoutSetFromExposedState();
 }
 
@@ -303,6 +370,13 @@ function panelPageNavOutputPostRender() {
       // setTimeout(function(){ panelSpinner.spin(target); }, 500);
       panelSpinner.spin(target);
    });
+   
+   // $("#curPanelPageInput").bind("keydown", function(e) {
+   //    console.log(e.keyCode);
+   //    if(e.keyCode == 37 || e.keyCode == 39) {
+   //       e.preventDefault();
+   //    }
+   // });
 }
 
 function cogMapOutputPostRender() {
@@ -316,9 +390,9 @@ function panelTableContentOutputPostRender() {
    // stop spinner
    var target = document.getElementById("panelTableSpinner");
    panelSpinner.stop(target);
-
+   
    // make with of cog name column uniform across
-   // TODO: compute this as part of visible cog up front and save it with exposed state
+   // TODO: compute this as part of panel labels up front and save it with exposed state
    var maxCogNameWidth = 0;
    var tmp;
    $(".panel-cog-table").first().find(".cog-name-td").each(function() {
@@ -334,7 +408,11 @@ function panelTableContentOutputPostRender() {
 
 
 $(document).ready(function() {
-
+   $("#infoTab a").click(function (e) {
+      e.preventDefault()
+      $(this).tab("show")
+   });
+   
    // render outer templates
    var outerRender = $.getJSON("templateData.json", function(json) {
       var masterTemplate = document.getElementById("controls-master-template").innerHTML;
@@ -344,6 +422,7 @@ $(document).ready(function() {
          document.getElementById(key).innerHTML = output;
       });
    })
+   
    .complete(function() {
       // register bindings for newly created elements
       masterControlPostRender();
@@ -384,7 +463,7 @@ $(document).ready(function() {
          }
       }
    });
-
+   
    $(".right-sticky").click(function() {
       $(".right-panel").toggleClass("right-slide");
       $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")

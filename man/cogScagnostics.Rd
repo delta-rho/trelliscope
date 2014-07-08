@@ -3,12 +3,15 @@
 \alias{cogScagnostics}
 \title{Compute Scagnostics}
 \usage{
-cogScagnostics(x, y)
+cogScagnostics(x, y, group = "scagnostics", defLabel = FALSE,
+  defActive = TRUE, filterable = TRUE)
 }
 \arguments{
-\item{x}{TODO}
+\item{x}{vector of the x-axis data for a scatterplot}
 
-\item{y}{TODO}
+\item{y}{vector of the y-axis data for a scatterplot}
+
+\item{group,defLabel,defActive,filterable}{arguments passed to \code{\link{cog}}}
 }
 \description{
 Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.

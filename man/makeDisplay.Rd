@@ -40,7 +40,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
 
 \item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
 
-\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{\link[Rhipe]{rhwatch}} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}}
+\item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}}
 }
 \description{
 Create a trelliscope display and add it to a visualization database (VDB)

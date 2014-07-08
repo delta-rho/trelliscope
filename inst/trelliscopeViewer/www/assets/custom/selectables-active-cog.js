@@ -5,7 +5,7 @@
 $(function() {
    var isMouseDown = false, isActive;
 
-   $("#visible-cognostics-selection td.selectable")
+   $("#active-cog-selection td.selectable")
    .mousedown(function () {
       isMouseDown = true;
       $(this).toggleClass("active");

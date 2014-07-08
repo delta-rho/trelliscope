@@ -46,7 +46,7 @@ cogTableBodyData <- function(data, nr = 10) {
    } else if(nrow(data) == 0) {
       tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")
    } else {
-      data <- data[1:min(nr, nrow(data)),]
+      data <- data[1:min(nr, nrow(data)),, drop = FALSE]
       tDataString <- cogDataString(data)
       # if fewer then the number of rows, fill with blank <td>s
       # (so that the height is always fixed)
@@ -86,41 +86,46 @@ cogTableFootHist <- function(data) {
 
 # creates data ready for univariate d3 plotting
 # either bar chart for character or hist / quantile for numeric (specify with plotType)
-getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist") {
+getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
    if(plotType == "histogram")
       plotType <- "hist"
    if(plotType == "quantile")
       plotType <- "quant"
-
-   curInfo <- cdo$cogInfo[[name]]
-
-   if(curInfo$type == "numeric") {
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal[[plotType]]
-      } else {
-         # call trelliscope:::getCogQuantPlotData...
-         return(NULL)
+   
+   curInfo <- cdo$cogDistns[[name]]
+   
+   if(!is.na(curInfo$type)) {
+      if(curInfo$type == "numeric") {
+         if(distType == "marginal") {
+            tmp <- curInfo$marginal[[plotType]]
+         } else {
+            # call trelliscope:::getCogQuantPlotData...
+            return(list(name = name))
+         }
+         if(plotType == "hist") {
+            delta <- diff(tmp$xdat[1:2])
+            tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+         } else {
+            names(tmp)[1:2] <- c("x", "y")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+         }
+      } else { # bar chart
+         if(distType == "marginal") {
+            tmp <- curInfo$marginal
+         } else {
+            # call trelliscope:::getCogCatPlotData...
+            return(list(name = name))
+         }
+         if(nrow(tmp) > maxLevels)
+            return(list(name = name))
+         tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
+         # browser()
+         tmp$ind <- seq_len(nrow(tmp))
+         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
       }
-      if(plotType == "hist") {
-         delta <- diff(tmp$xdat[1:2])
-         tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      } else {
-         names(tmp)[1:2] <- c("x", "y")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      }
-   } else {
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal
-      } else {
-         # call trelliscope:::getCogCatPlotData...
-         return(NULL)
-      }
-      tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-      # browser()
-      tmp$ind <- seq_len(nrow(tmp))
-      return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
    }
+   return(list(name = name))
 }
 
 getCogScatterPlotData <- function(x, ...)
@@ -237,37 +242,32 @@ dummyPanel <- function(w, h) {
    sprintf("<div style=\"width:%dpx; height:%dpx; background-color: #ddd\"></div>", w, h)
 }
 
-dummyCog <- function(cogVars) {
-   data.frame(cog_name = cogVars, cog_value = "")
+dummyCog <- function(labelVars) {
+   data.frame(cog_name = labelVars, cog_value = "")
 }
 
-getPanels <- function(cdo, curRows, pixelratio = 2) {
-   if(cdo$cdo$preRender) {
-      pngs <- unlist(lapply(cdo$cdo$panelDataSource[curRows$panelKey], "[[", 2))
+getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
+   if(cdo$preRender) {
+      pngs <- unlist(lapply(cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
       tmpfile <- tempfile()
-
-      # load relatedData
-      # rel <- cdo$relatedData
-      # for(i in seq_along(rel)) {
-      #    assign(names(rel)[i], rel[[i]], environment())
-      # }
-      environment(cdo$cdo$panelFn) <- environment()
-
-      curDat <- cdo$cdo$panelDataSource[curRows$panelKey]
+      
+      environment(cdo$panelFn) <- environment()
+      
+      curDat <- cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
-         warning("data for key ", curRows, " could not be found.")
-
+         warning("data for key ", curRows$panelKey, " could not be found.")
+      
       pngs <- sapply(curDat, function(x) {
          res <- try({
-            makePNG(dat = x,
-               panelFn = cdo$cdo$panelFn,
-               file = tmpfile,
-               width = cdo$cdo$state$panelLayout$w,
-               height = cdo$cdo$state$panelLayout$h,
-               origWidth = cdo$cdo$width,
-               # res = 72, # * cdo$cdo$state$panelLayout$w / cdo$cdo$width,
-               lims = cdo$cdo$lims,
+            makePNG(dat = x, 
+               panelFn = cdo$panelFn, 
+               file = tmpfile, 
+               width = width, 
+               height = height, 
+               origWidth = cdo$width,
+               # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
+               lims = cdo$lims,
                pixelratio = pixelratio
             )
             encodePNG(tmpfile)

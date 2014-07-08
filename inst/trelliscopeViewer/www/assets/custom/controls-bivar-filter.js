@@ -185,6 +185,15 @@ function cogBiFilterControlsOutputPostRender() {
       $(this).toggleClass("selected").siblings().removeClass("selected");
    });
    
+   // add tooltips
+   $("#bivar-x-filter-select li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
+   });
+   $("#bivar-y-filter-select li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
+   });
+   
+   
    // scatter / hexbin, etc. button behavior
    buttonToggleHandler();
    

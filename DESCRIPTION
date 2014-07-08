@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.7.7
-Date: 2014-06-14
+Version: 0.7.8
+Date: 2014-07-08
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
 Description: Trelliscope provides a way to create, organize, and view
@@ -21,12 +21,12 @@ License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
     R (>= 2.15.1),
-    base
+    base,
+    datadr
 Imports:
     httpuv,
     data.table,
     grid,
-    datadr,
     lattice (>= 0.20-23),
     base64enc,
     knitr,
@@ -37,10 +37,10 @@ Imports:
     hexbin,
     ggplot2,
     jsonlite,
-    fastICA
+    fastICA,
+    png
 Suggests:
     Cairo,
-    Rhipe,
     rmongodb,
     scagnostics,
     testthat (>= 0.8.1),

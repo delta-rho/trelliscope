@@ -42,17 +42,16 @@ output$cogTableInfoOutput <- renderText({
 })
 
 # data to be shown in the cognostics table sort/filter view
-# (reflects current sort and filter state and pagination value
+# (reflects current sort and filter state
 # as specified in cognostics table sort/filter panel)
 cogTableCurrentData <- reactive({
-   cdo <- currentDisplay()
-   if(!is.null(cdo)) {
+   cogDF <- exposedCogDF()
+   if(!is.null(cogDF)) {
       state <- list(
          filter = input$cogColumnFilterInput,
          sort = input$cogColumnSortInput
       )
-      
-      getCurCogDat(cdo$cdo$cogDatConn, state)
+      getCurCogDat(cogDF$curCogDF, state)
    }
 })
 
@@ -60,6 +59,8 @@ cogTableCurrentData <- reactive({
 output$cogTableContentOutput <- renderDataLite({
    cogDF <- cogTableCurrentData()
    if(!is.null(cogDF)) {
+      logMsg("Updating cog table data")
+      
       n <- cogNrow(cogDF)
       
       pg <- input$cogTablePaginationInput
@@ -71,7 +72,7 @@ output$cogTableContentOutput <- renderDataLite({
       if(n == 0) {
          idx <- integer(0)
       } else {
-         idx <- ((pg - 1)*pageLen + 1):min(pg * pageLen, n)         
+         idx <- ((pg - 1) * pageLen + 1):min(pg * pageLen, n)         
       }
       
       cogTableBodyData(getCogData(cogDF, idx))
@@ -82,6 +83,10 @@ output$cogTableContentOutput <- renderDataLite({
 getCurCogDat <- function(x, state) {
    
    filterIndex <- seq_len(cogNrow(x))
+   
+   if(length(state$activeCog) > 0) {
+      x <- x[,state$activeCog, drop = FALSE]
+   }
    
    if(length(state$filter) > 0) {
       flt <- state$filter

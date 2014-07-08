@@ -191,6 +191,11 @@ function cogUniFilterControlsOutputPostRender() {
       $(this).toggleClass("selected").siblings().removeClass("selected");
    });
    
+   // add tooltips
+   $("#univarFilterSelect li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
+   });
+   
    buttonToggleHandler();
    
    $("#univarFilterSelect li").click(function(e) {

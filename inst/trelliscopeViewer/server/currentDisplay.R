@@ -23,14 +23,31 @@ output$headerDisplayNameOutput <- renderText({
 ## holds the currently selected displayObject
 currentDisplay <- reactive({
    sld <- selectedDisplay()
+   
    if(!is.null(sld)) {
+      logMsg("Loading display: ", paste(sld$group, "/", sld$name))
       cdo <- do.call(getDisplay, sld)
-      if(is.null(cdo$cogInfo))
-         cdo$cogInfo <- trelliscope:::getCogInfo(cdo$cogDatConn)
+      logMsg("Display loaded")
       
+      if(is.null(cdo$cogDistns))
+         cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
+      
+
+      logMsg("Getting default state...")
       # default state values if not specified
-      if(is.null(cdo$state$visibleCogState))
-         cdo$state$visibleCog <- cdo$cogDesc$name[cdo$cogDesc$type == "splitVar"]
+      if(is.null(cdo$state$panelLabelState)) {
+         defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
+         if(length(defaultLabels) == 0)
+            defaultLabels <- NULL
+         cdo$state$panelLabel <- defaultLabels
+      }
+
+      if(is.null(cdo$state$activeCog)) {
+         defaultActive <- cdo$cogInfo$name[cdo$cogInfo$defActive]
+         if(length(defaultActive) == 0)
+            defaultActive <- NULL
+         cdo$state$activeCog <- defaultActive
+      }
       
       if(is.null(cdo$state$panelLayout))
          cdo$state$panelLayout <- list(nrow = 1, ncol = 1)
@@ -50,12 +67,16 @@ output$panelFunctionOutput <- renderDataLite({
    panelFunctionOutputData(currentDisplay())
 })
 
-output$visibleCogListOutput <- renderDataLite({
-   visibleCogListOutputData(currentDisplay())
+output$panelLabelListOutput <- renderDataLite({
+   panelLabelListOutputData(currentDisplay())
 })
 
 output$relatedDisplayListOutput <- renderDataLite({
    relatedDisplayListOutputData(currentDisplay(), displayList)
+})
+
+output$activeCogListOutput <- renderDataLite({
+   activeCogListOutputData(currentDisplay())
 })
 
 output$cogTableControlsOutput <- renderDataLite({
