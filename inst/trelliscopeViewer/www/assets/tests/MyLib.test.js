@@ -95,7 +95,7 @@ run_qunit_tests = function(){
 
   QUnit.asyncTest("Waiting for page to setup", 1, function (assert) {
     fn = function(){
-      txt = $("#openModal div.modal-dialog div.modal-header h3#myModalLabel").text() || "no"
+      txt = $("#openModal div.modal-dialog div.modal-header").text().trim() || "no"
       if(txt == "Open a New Display") {
         setTimeout(function() {
           assert.equal(1, 1, "Page is setup");
