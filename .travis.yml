@@ -85,7 +85,6 @@ branches:
   only:
     - master
     - dev
-    - r_cmd_check
 
 notifications:
   email:
