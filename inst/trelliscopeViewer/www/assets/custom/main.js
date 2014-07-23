@@ -386,12 +386,44 @@ function cogMapOutputPostRender() {
    })
 }
 
-function panelTableContentOutputPostRender() {
+function panelTableContentOutputPostRender(data) {
    // stop spinner
    var target = document.getElementById("panelTableSpinner");
    panelSpinner.stop(target);
    
-   // make with of cog name column uniform across
+   // if it is not a static image expect vega spec in .data
+   // console.log(data[0][0].panel_content.length);
+   // console.log(data);
+   if(data[0][0].panel_content[0].data != "") {
+      for (var i = 0; i < data.length; i++) {
+         for (var j = 0; j < data[i].length; j++) {
+            data[i][j].panel_content.forEach(function(pc) {
+               var curID = pc.data.id[0];
+               try {
+                  var spec = JSON.parse(pc.data.spec);
+               } catch (e) {
+                  console.log(e);
+                  return;
+               }
+               $(curID).data("spec", spec);
+               // console.log(curID);
+               // console.log($(curID));
+               // vg.parse.spec($(curID).data("spec"), function(chart) {   
+               vg.parse.spec(spec, function(chart) {   
+                  var ch = chart({el:curID});
+                  var w = ch.width();
+                  var h = ch.height();
+                  ch.update(); 
+                  var pd = ch.padding();
+                  ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
+                  ch.update();
+               });
+            });
+         }
+      };
+   }
+   
+   // make width of cog name column uniform across
    // TODO: compute this as part of panel labels up front and save it with exposed state
    var maxCogNameWidth = 0;
    var tmp;

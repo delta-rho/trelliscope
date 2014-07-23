@@ -56,24 +56,26 @@ output$panelTableContentOutput <- renderDataLite({
          # create list where each element is a vector of indices for a row of panels
          idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
          idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
-
-         logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
-
-         panelContent <- paste("<img src=\"", 
-            getPanels(cdo$cdo, 
-               width = w, 
-               height = h, 
-               curRows = curRows, 
-               pixelratio = session$clientData$pixelratio), 
-            "\" width=\"", w, "px\" height=\"", h, "px\">", sep = "")
          
+         logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
+         
+         # panelContent should be a list:
+         # - html
+         # - vega
+         
+         panelContent <- getPanels(cdo$cdo, 
+            width = w, 
+            height = h, 
+            curRows = curRows, 
+            pixelratio = session$clientData$pixelratio)
+         # browser()
          lapply(idxList, function(rw) {
             lapply(rw, function(i) {
                if(i + idxStart - 1 > idxEnd) {
                   curPanelContent <- dummyPanel(w, h)
                   cogData <- dummyCog(labelVars)
                } else {
-                  curPanelContent <- panelContent[i]
+                  curPanelContent <- panelContent[[i]]
                   # browser()
                   tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
                   if(is.null(labelVars)) {
@@ -82,9 +84,12 @@ output$panelTableContentOutput <- renderDataLite({
                      cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
                   }
                }
+               # browser()
                list(
                   i = i,
-                  panel_content = curPanelContent,
+                  html_wrap_start = "",
+                  panel_content = list(curPanelContent),
+                  html_wrap_end = "",
                   cogs = cogData
                )
             })
@@ -104,35 +109,37 @@ output$panelTableContentOutput <- renderDataLite({
          pageHeight <- cdo$cdo$state$relatedDisplays[[1]]$pageHeight
          pageWidth <- cdo$cdo$state$relatedDisplays[[1]]$pageWidth
          
-         curPanelContent <- paste(
-            sapply(cdo$cdo$state$relatedDisplays, function(a) {
-               dispKey <- paste(a$group, a$name, sep = "___")
-               if(is.null(cdo$cdo$relatedDisplayObjects[[dispKey]])) {
-                  curDisp <- cdo$cdo
-               } else {
-                  curDisp <- cdo$cdo$relatedDisplayObjects[[dispKey]]
-               }
-               paste("<div style=\"position: absolute; top: ", a$top, "px; left: ", a$left, "px;\"><img src=\"", 
-                  getPanels(curDisp, 
-                     width = a$width, 
-                     height = a$height, 
-                     curRows = curRows, 
-                     pixelratio = session$clientData$pixelratio),
-                  "\" width=\"", a$width + 4, "px\" height=\"", a$height - 4, "px\"></div>", sep = "")
-            }), collapse = "")
+         curPanelContent <- lapply(seq_along(cdo$cdo$state$relatedDisplays), function(i) {
+            a <- cdo$cdo$state$relatedDisplays[[i]]
+            dispKey <- paste(a$group, a$name, sep = "___")
+            if(is.null(cdo$cdo$relatedDisplayObjects[[dispKey]])) {
+               curDisp <- cdo$cdo
+            } else {
+               curDisp <- cdo$cdo$relatedDisplayObjects[[dispKey]]
+            }
+            
+            tmp <- getPanels(curDisp, 
+               width = a$width, # + 4
+               height = a$height, # - 4
+               curRows = curRows, 
+               pixelratio = session$clientData$pixelratio)[[1]]
+            
+            tmp$data$id <- paste("#rel-disp-div-", i, sep = "")
+            tmp$html <- paste("<div style=\"position: absolute; top: ", a$top, "px; left: ", a$left, "px;\" id=\"rel-disp-div-", i, "\">", tmp$html, "</div>", sep = "")
+            tmp
+         })
          
-         curPanelContent <- paste(
-            "<div style=\"width: ", 
-               pageWidth, "px; height: ", 
-               pageHeight, "px;\">",
-            curPanelContent,
-            "</div>", sep = "")
-         
-         list(
+         names(curPanelContent) <- NULL
+         # browser()
+         list(list(list(
             i = 1,
+            html_wrap_start = paste("<div style=\"width: ", 
+               pageWidth, "px; height: ", 
+               pageHeight, "px;\">", sep = ""),
             panel_content = curPanelContent,
+            html_wrap_end = "</div>",
             cogs = cogData
-         )
+         )))
       }
    }
 })

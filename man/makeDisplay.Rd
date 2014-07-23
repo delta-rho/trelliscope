@@ -7,7 +7,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
   width = 800, panelFn = NULL, lims = list(x = "free", y = "free",
   prepanelFn = NULL), cogFn = NULL, preRender = FALSE,
   cogConn = dfCogConn(), output = NULL, conn = getOption("vdbConn"),
-  verbose = TRUE, params = NULL, control = NULL)
+  verbose = TRUE, params = NULL, packages = NULL, control = NULL)
 }
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}

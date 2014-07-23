@@ -31,9 +31,11 @@
     </script>
     <script src="assets/spin/spin.js"></script>
     <script src="assets/bootstrap-select/bootstrap-select.js"></script>
-
+    <script src="assets/sizeof/sizeof.js"></script>
+    
     <script src="assets/d3/d3.min.js"></script>
-
+    <script src="assets/d3/vega.min.js"></script>
+    
     <script src="assets/custom/d3footPlot.js"></script>
     <script src="assets/custom/d3uniFilter.js"></script>
     <script src="assets/custom/d3biFilter.js"></script>
@@ -200,7 +202,7 @@
          </div>
       </div>
     </div>
-
+  
   <!-- Modal -->
   <div class="modal fade" id="displayInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -660,7 +662,7 @@
         {{/numeric}}
           {{^numeric}}
             <input id="text-column-{{name}}" type="text" placeholder="regex" class="form-control column-filter column-filter-regex" spellcheck="false" autocorrect="false"/>
-            <select id="text-select-{{name}}" class="selectpicker dropup column-filter column-filter-select" multiple data-selected-text-format="count>0" data-count-selected-text="{0} of {1}" title="select" data-dropup-auto="false" data-width="auto" data-size="10" {{disabled}}>
+            <select id="text-select-{{name}}" class="selectpicker dropup column-filter column-filter-select {{disabled}}" multiple data-selected-text-format="count>0" data-count-selected-text="{0} of {1}" title="select" data-dropup-auto="false" data-width="auto" data-size="10" {{disabled}}>
               {{#levels}}
               <option>{{.}}</option>
               {{/levels}}
@@ -985,7 +987,11 @@
           <td class="display-panel-td" name="{{i}}">
             <div class="panel-image-wrapper">
               <div id="display-panel-table-{{i}}">
-                {{{panel_content}}}
+                {{{html_wrap_start}}}
+                {{#panel_content}}
+                  {{{html}}}
+                {{/panel_content}}
+                {{{html_wrap_end}}}
               </div>
               <div class="panel-image-download">
                 <i class="icon-download"></i>

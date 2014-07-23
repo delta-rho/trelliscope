@@ -222,9 +222,18 @@ function relatedDisplayListOutputApplyButton() {
       $("#panel-cols").val(1);
       $("#panel-rows").trigger("change"); // recalculate dims
       panelLayoutOutputApplyButton();
+      
+      // now disable these
+      $("#panel-rows").prop("disabled", true)
+      $("#panel-cols").prop("disabled", true)
+      $("#panel-layout").find(".control-footer").html("Note: in related display mode, only one panel can be shown per page.  Disable related displays to control panel layout.");
+   } else {
+      $("#panel-rows").prop("disabled", false)
+      $("#panel-cols").prop("disabled", false)      
+      $("#panel-layout").find(".control-footer").html("");
    }
    
-   console.log(relatedDisplays);
+   // console.log(relatedDisplays);
    $("#relatedDisplayStateInput").data("myShinyData", relatedDisplays);
    $("#relatedDisplayStateInput").trigger("change");
 }

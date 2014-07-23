@@ -118,7 +118,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
          pointsize = pointsize)
 
       print(xyplot(NA ~ NA, xlab = "", ylab = "", scales = list(draw = FALSE), panel = function(x, y, ...) panel.text(0.5, 0.5, "no panel")))
-
+      
       dev.off()
    }
 }

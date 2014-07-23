@@ -35,7 +35,6 @@ if (! window.shouldTest) {
 	return
 }
 
-
 var QUnit,
 	assert,
 	config,

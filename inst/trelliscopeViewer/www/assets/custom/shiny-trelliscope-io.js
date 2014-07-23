@@ -9,6 +9,8 @@ function renderTemplate(objId, data, templateId) {
       if(outObj) {
          var templ = tmplObj.innerHTML;
          var output = Mustache.render(templ, data);
+         // if(templateId == "panelTableContentOutput-template")
+         //    console.log(output);
          outObj.innerHTML = output;
       } else {
          console.log("Warning: could not find element with id=" + objId + " in which to place rendered template output")
@@ -35,6 +37,16 @@ $.extend(templateOutputBinding, {
       data = JSON.parse(data);
       if(data) {
          var objId = $(el).attr("id");
+         
+         // if(objId == "cogTableControlsOutput")
+         //    console.log(data);
+         // if(objId == "panelTableContentOutput") {
+         //    console.log(data[0]);
+         //    console.log(sizeof(data[0][0].panel_content));
+         // }
+         
+         // console.log("Updated tempate data for element ID " + objId + "; " + sizeof(data) + " bytes");
+         
          // console.log(objId);
          // console.log(data);
          var templateId = $(el).data("template-id");
@@ -89,6 +101,8 @@ $.extend(myShinyDataInputBinding, {
       return $(scope).find(".shiny-my-data-input");
    },
    getValue: function(el) {
+      // console.log("Updated data for element ID " + $(el).attr("id") + "; " + sizeof($(el).data("myShinyData")) + " bytes");
+      
       // console.log($(el).attr("id"));
       // console.log($(el).data("myShinyData"));
       return $(el).data("myShinyData");

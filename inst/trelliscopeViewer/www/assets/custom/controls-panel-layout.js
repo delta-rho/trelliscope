@@ -1,6 +1,7 @@
 
 
 function panelLayoutOutputApplyButton() {
+   
    var panelDims = $("#panel-layout-data").data("panelDims");
    
    var arrangement = $("#panelArrangement").find("button.active").data("val");

@@ -111,7 +111,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
          }
          tmp <- try(startServer(host, port, list()), silent = TRUE)
          if (!inherits(tmp, "try-error")) {
-            stopServer(tmp)
+            httpuv:::stopServer(tmp)
             .globals$lastPort <- port
             break
          }
@@ -124,7 +124,7 @@ myRunApp <- function (appDir = getwd(), port = NULL, launch.browser = getOption(
       on.exit(appParts$onEnd(), add = TRUE)
    server <- shiny:::startApp(appParts, port, host, quiet)
    on.exit({
-      stopServer(server)
+      httpuv:::stopServer(server)
    }, add = TRUE)
    if (!is.character(port)) {
       browseHost <- if (identical(host, "0.0.0.0"))

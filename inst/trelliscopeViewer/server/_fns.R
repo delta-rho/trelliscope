@@ -66,16 +66,22 @@ cogTableBodyData <- function(data, nr = 10) {
 cogTableFootFilter <- function(data) {
    nms <- names(data)
    lapply(seq_along(data), function(i) {
+      disabled <- ""
       if(inherits(data[[i]], c("numeric", "integer"))) {
          list(i = i, name = nms[i], numeric = TRUE)
       } else {
          if(nms[i] == "panelKey") {
             levels <- ""
+            disabled <- "disabled"
          } else {
             # TODO: deal with very large number of levels
             levels <- sort(unique(as.character(data[[i]])))
+            if(length(levels) > 100) {
+               levels <- ""
+               disabled <- "disabled"
+            }
          }
-         list(i = i, name = nms[i], levels = levels)
+         list(i = i, name = nms[i], levels = levels, disabled = disabled)
       }
    })
 }
@@ -250,57 +256,116 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
    if(cdo$preRender) {
       pngs <- unlist(lapply(cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
-      tmpfile <- tempfile()
-      
       environment(cdo$panelFn) <- environment()
       
       curDat <- cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
          warning("data for key ", curRows$panelKey, " could not be found.")
       
-      pngs <- sapply(curDat, function(x) {
+      panelContent <- lapply(seq_along(curDat), function(i) {
+         x <- curDat[[i]]
          res <- try({
-            makePNG(dat = x, 
-               panelFn = cdo$panelFn, 
-               file = tmpfile, 
-               width = width, 
-               height = height, 
-               origWidth = cdo$width,
-               # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
-               lims = cdo$lims,
-               pixelratio = pixelratio
+            list(
+               html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
+               data = list(
+                  id = paste("#display-panel-table-", i, sep = ""),
+                  spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+               )
             )
-            encodePNG(tmpfile)
          })
          if(inherits(res, "try-error"))
             res <- NULL
          res
       })
    }
-   pngs
+   panelContent
 }
 
-makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
+renderPanelHtml <- function(panelFn, ...)
+   UseMethod("renderPanelHtml", panelFn)
 
-   if(capabilities("aqua")) {
-      pngfun <- png
-   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
-      pngfun <- CairoPNG
-   } else {
-      pngfun <- png
-   }
+renderPanelHtml.rplotFn <- function(panelFn, ...)
+   renderPanelHtml.trellisFn(panelFn, ...)
 
-   pngfun(filename = filename,
-      width = width * pixelratio,
-      height = height * pixelratio,
-      res = res * pixelratio,
-      pointsize = basePointSize * width / origWidth)
+renderPanelHtml.ggplotFn <- function(panelFn, ...)
+   renderPanelHtml.trellisFn(panelFn, ...)
 
-   dv <- dev.cur()
-
-   tryCatch(func(), finally = dev.off(dv))
+renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   tmpfile <- tempfile()
+   on.exit(rm(tmpfile))
+   
+   makePNG(dat = x, 
+      panelFn = panelFn, 
+      file = tmpfile, 
+      width = width, 
+      height = height, 
+      origWidth = origWidth,
+      # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
+      lims = lims,
+      pixelratio = pixelratio
+   )
+   paste("<img src=\"", encodePNG(tmpfile),
+      "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")   
 }
 
+renderPanelHtml.ggvisFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData <- function(panelFn, ...)
+   UseMethod("renderPanelData", panelFn)
+
+renderPanelData.rplotFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.trellisFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.ggplotFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   # plotXLim <- tmp$x.limits
+   # plotYLim <- tmp$y.limits
+   # curXLim <- trsCurXLim(lims, x, plotXLim)
+   # curYLim <- trsCurYLim(lims, x, plotYLim)
+   p <- kvApply(panelFn, x)
+   p <- set_options(p, width = width, height = height)
+   
+   getVegaSpec(p)
+}
+
+
+getVegaSpec <- function(x) {
+   spec <- ggvis:::as.vega(x)
+   RJSONIO::toJSON(spec)
+}
+
+
+# makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
+# 
+#    if(capabilities("aqua")) {
+#       pngfun <- png
+#    } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+#       pngfun <- CairoPNG
+#    } else {
+#       pngfun <- png
+#    }
+#    
+#    pngfun(filename = filename,
+#       width = width * pixelratio,
+#       height = height * pixelratio,
+#       res = res * pixelratio,
+#       pointsize = basePointSize * width / origWidth)
+# 
+#    dv <- dev.cur()
+# 
+#    tryCatch(func(), finally = dev.off(dv))
+# }
+# 
 # require(fastICA)
 #
 #

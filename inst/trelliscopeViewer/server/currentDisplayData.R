@@ -132,7 +132,6 @@ cogTableControlsOutputData <- function(x) {
       plotDat <- lapply(cogInfo$name, function(nm) {
          getUnivarPlotDat(x$cdo, name = nm, maxLevels = 100)
       })
-      
       list(
          data = cogTableBodyData(curDF),
          filter = cogTableFootFilter(cogDF),
