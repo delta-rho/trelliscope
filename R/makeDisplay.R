@@ -202,15 +202,9 @@ makeDisplay <- function(
       trsCurYLim = trsCurYLim
    ))
    
-   setup <- expression({
-      pkgs <- c("lattice", "ggplot2", "digest", "base64enc", "scagnostics", "data.table")
-      for(pkg in pkgs)
-         suppressMessages(require(pkg, character.only = TRUE))
-   })
+   packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "scagnostics", "data.table")
    # } else {
-   #    setup <- expression({
-   #       suppressMessages(require(trelliscope))
-   #    })
+   #    packages <- c(packages, "trelliscope")
    # }
    
    panelGlobals <- drGetGlobals(panelFn)
