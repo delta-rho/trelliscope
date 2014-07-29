@@ -150,7 +150,7 @@ getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
 }
 
 getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30) {
-   dat <- hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
+   dat <- hexbin:::hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
    style <- "lattice"
    minarea <- 0.05
    maxarea <- 0.8

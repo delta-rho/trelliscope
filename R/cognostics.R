@@ -77,20 +77,20 @@ cogHref <- function(x, label = "link", desc = "link", group = "common", target =
 }
 
 #' Compute Scagnostics
-#'
+#' 
 #' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
-#'
+#' 
 #' @param x vector of the x-axis data for a scatterplot
 #' @param y vector of the y-axis data for a scatterplot
 #' @param group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
-#'
+#' 
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
-#' cogScagnostics(cars$dist, cars$speed)
+#' cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
 #' @export
+#' @import scagnostics
 cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
-   suppressMessages(require(scagnostics))
    tmp <- try(scagnostics(x, y), silent = TRUE)
    if(inherits(tmp, "try-error")) {
       # make a data.frame of NA
@@ -125,9 +125,9 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 }
 
 #' Create a Cognostics Object
-#'
+#' 
 #' Create a cognostics object.  To be used inside of the function passed to the \code{cogFn} argument of \code{\link{makeDisplay}} for each cognostics value to be computed for each subset.
-#'
+#' 
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
 #' @param group optional categorization of the cognostic for organizational purposes
@@ -135,13 +135,13 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 #' @param defLabel should this cognostic be used as a panel label in the viewer by default?
 #' @param defActive should this cognostic be active (available for sort / filter / sample) by default?
 #' @param filterable should this cognostic be filterable?  Default is \code{TRUE}.  It can be useful to set this to \code{FALSE} if the cognostic is categorical with many unique values and is only desired to be used as a panel label.
-#'
+#' 
 #' @return object of class "cog"
-#'
+#' 
 #' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
-#'
+#' 
 #' @author Ryan Hafen
-#'
+#' 
 #' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}
 #'
 #' @export

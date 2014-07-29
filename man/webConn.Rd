@@ -3,16 +3,17 @@
 \alias{webConn}
 \title{Initialize a Web Connection}
 \usage{
-webConn(user = NULL, ip, appDir, name)
+webConn(user = NULL, ip = NULL, appDir = "/srv/shiny-server",
+  name = NULL)
 }
 \arguments{
 \item{user}{the username to log on to the web server}
 
-\item{ip}{the IP address of the web server}
+\item{ip}{the IP address of the web server - if \code{NULL}, it is assumed that your web server is on the same machine that you are working on}
 
-\item{appDir}{the directory where Shiny apps go on the web server}
+\item{appDir}{the directory where Shiny apps go on the web server - defaults to the default location of /srv/shiny-server}
 
-\item{name}{the name under which to store the application}
+\item{name}{the name of the directory in \code{appDir} under which to store the application - if not supplied, it defaults to the name provided in the vdb connection}
 }
 \description{
 Initialize a connection to a web server

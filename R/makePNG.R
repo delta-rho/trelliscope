@@ -19,10 +19,13 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
 
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
-      pngfun <- CairoPNG
    } else {
-      pngfun <- png
+      pkg <- "Cairo"
+      if(suppressWarnings(suppressMessages(require(pkg, character.only = TRUE)))) {
+         pngfun <- CairoPNG
+      } else {
+         pngfun <- png
+      }
    }
 
    pointsize <- basePointSize * width / origWidth * pixelratio

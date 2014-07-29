@@ -177,20 +177,18 @@ prepanel <- function(
       # ))
 
       setup <- expression({
-         suppressMessages(require(lattice))
-         suppressMessages(require(ggplot2))
-         suppressMessages(require(data.table))
+         pkgs <- c("lattice", "ggplot2", "data.table")
+         for(pkg in pkgs)
+            suppressMessages(require(pkg, character.only = TRUE))
       })
    } else {
       setup <- expression({
-         suppressMessages(require(lattice))
-         suppressMessages(require(ggplot2))
-         suppressMessages(require(data.table))
-         suppressMessages(require(trelliscope))
-         suppressMessages(require(datadr))
+         pkgs <- c("trelliscope")
+         for(pkg in pkgs)
+            suppressMessages(require(pkg, character.only = TRUE))
       })
    }
-
+   
    # suppressMessages(capture.output(
    jobRes <- mrExec(
       data,

@@ -1,14 +1,14 @@
 library(shiny)
 library(jsonlite) # TODO: make trelliscope depend on this
 
-connFile <- "../conn.Rdata"
-vdbDir <- normalizePath(file.path(getwd(), ".."))
-hostname <- system("hostname", intern = TRUE)
+# connFile <- "../conn.Rdata"
+# vdbDir <- normalizePath(file.path(getwd(), ".."))
+# hostname <- system("hostname", intern = TRUE)
 # things are a little different on glimmer because app can't be in subdirectory
-if(hostname == "glimmer.rstudio.com") {
-   connFile <- "conn.Rdata"
-   vdbDir <- getwd()
-}
+# if(hostname == "glimmer.rstudio.com") {
+connFile <- "conn.Rdata"
+vdbDir <- getwd()
+# }
 
 if(file.exists(connFile)) {
    library(trelliscope)

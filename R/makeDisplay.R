@@ -17,11 +17,12 @@ if(getRversion() >= "2.15.1") {
 #' @param lims either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
 #' @param preRender should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly in the viewer (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.
-#' @param cogConn a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}, but if there are many subsets (millions or more), \code{\link{mongoCogConn}()} is recommended (if MongoDB is an option).
+#' @param cogConn a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
+#' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #'
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
@@ -90,8 +91,11 @@ makeDisplay <- function(
          stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output = NULL when pre-rendering.")
       }
    } else {
-      if(inherits(data, "kvMemory"))
-         data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE))
+      if(inherits(data, "kvMemory")) {
+         # if an in-memory data set is too large we want to put it on disk
+         if(object.size(data) > 50 * 1024^2)
+            data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE))
+      }
       
       panelDataSource <- data
    }
@@ -180,10 +184,10 @@ makeDisplay <- function(
       encodePNG = encodePNG,
       cogEmit = cogEmit,
       cogEmit.dfCogConn = cogEmit.dfCogConn,
-      cogEmit.mongoCogConn = cogEmit.mongoCogConn,
+      # cogEmit.mongoCogConn = cogEmit.mongoCogConn,
       cogCollect = cogCollect,
       cogCollect.dfCogConn = cogCollect.dfCogConn,
-      cogCollect.mongoCogConn = cogCollect.mongoCogConn,
+      # cogCollect.mongoCogConn = cogCollect.mongoCogConn,
       cog = cog,
       cogScagnostics = cogScagnostics,
       as.cogGeo = as.cogGeo,
@@ -199,12 +203,9 @@ makeDisplay <- function(
    ))
    
    setup <- expression({
-      suppressMessages(require(lattice))
-      suppressMessages(require(ggplot2))
-      suppressMessages(require(digest))
-      suppressMessages(require(base64enc))
-      suppressMessages(require(scagnostics))
-      suppressMessages(require(data.table))
+      pkgs <- c("lattice", "ggplot2", "digest", "base64enc", "scagnostics", "data.table")
+      for(pkg in pkgs)
+         suppressMessages(require(pkg, character.only = TRUE))
    })
    # } else {
    #    setup <- expression({

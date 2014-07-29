@@ -4,7 +4,7 @@
 \title{Sync VDB and notebook Files to a Web Server}
 \usage{
 webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
-  fixPermissions = FALSE, verbose = FALSE, rsync = NULL)
+  fixPermissions = TRUE, verbose = FALSE, rsync = NULL)
 }
 \arguments{
 \item{vdbConn}{VDB connection settings}
@@ -21,7 +21,7 @@ webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
 Sync VDB and notebook files to a web server
 }
 \details{
-If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
+This requires rsync to be installed on your machine.  If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
 }
 \author{
 Ryan Hafen

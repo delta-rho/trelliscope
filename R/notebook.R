@@ -48,7 +48,7 @@ bsSetup(
 )
 ```
 ", sep=""), fileString, collapse="\n", sep="")
-
+   
    cat(fileString, file=filePath)
    message("New notebook available for editing at ", filePath)
 }

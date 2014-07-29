@@ -15,9 +15,9 @@
 #'
 #' @export
 splodPanelFn <- function(df) {
-   xyplot(y ~ x, data=df,
-      xlab=attr(df, "split")$xVar,
-      ylab=attr(df, "split")$yVar
+   xyplot(y ~ x, data = df,
+      xlab = attr(df, "split")$xVar,
+      ylab = attr(df, "split")$yVar
    )
 }
 
@@ -59,7 +59,7 @@ splodCogFn <- function(df) {
 #' @seealso \code{\link{splod}}, \code{\link{splodPanelFn}}
 #'
 #' @export
-makeSplodData <- function(data, id.vars=NULL, ...) {
+makeSplodData <- function(data, id.vars = NULL, ...) {
    nCol <- ncol(data)
    dataNames <- names(data)
 
@@ -89,35 +89,35 @@ makeSplodData <- function(data, id.vars=NULL, ...) {
 }
 
 #' Create a Scatterplot Display
-#'
+#' 
 #' Create a scatterplot display (splod)
-#'
+#' 
 #' @param data a data.frame or an object of class "splodDat"
 #' @param id.vars variables to ignore when computing all pairs of variables
 #' @param name,desc,cogFn,panelFn,verbose,\ldots parameters passed to \code{\link{makeDisplay}}
-#'
+#' 
 #' @return an object of class 'localDiv' that can be passed to \code{\link{splod}}
-#'
+#' 
 #' @references
 #' Wilkinson's scagnostics paper.
-#'
+#' 
 #' @author Ryan Hafen
-#'
+#' 
 #' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}
-#'
+#' 
 #' @export
 splod <- function(
    data,
-   id.vars=NULL,
-   name=NULL,
-   desc=NULL,
+   id.vars = NULL,
+   name = NULL,
+   desc = NULL,
    cogFn = splodCogFn,
    panelFn = splodPanelFn,
-   verbose=TRUE,
+   verbose = TRUE,
    ...
 ) {
    if(is.null(name))
-      name <- paste(deparse(substitute(data)), "_splod", sep="")
+      name <- paste(deparse(substitute(data)), "_splod", sep = "")
 
    if(is.null(desc))
       desc <- paste("Scatterplot display")
@@ -125,8 +125,8 @@ splod <- function(
    if(!inherits(data, "splodDat")) {
       if(verbose)
          message("Transforming data into splodDat format...")
-      data <- makeSplodData(data, id.vars=id.vars)
+      data <- makeSplodData(data, id.vars = id.vars)
    }
 
-   makeDisplay(data, name=name, cogFn=cogFn, panelFn=panelFn, verbose=verbose, ...)
+   makeDisplay(data, name = name, cogFn = cogFn, panelFn = panelFn, verbose = verbose, ...)
 }

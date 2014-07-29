@@ -1,4 +1,4 @@
-Version 0.7.8.1
+Version 0.7.9
 -------------------------------------------------------------------------------
 
 FEATURES / CHANGES
@@ -11,6 +11,15 @@ FEATURES / CHANGES
 - when in related display mode, disable panel layout with a note
 - when there is no selectpicker, only send regex back to R
 - use datadr's new `getGlobals()` method for panel and cognostic functions
+- remove custom `runApp()` function to deal with passing parameters to 
+  trelliscope viewer - will handle this through R options in the future
+- enable `webSync()` to sync to the same machine without need for ssh
+  by setting `ip` to NULL (default) when calling `webConn()`
+- remove MongoDB cognostics connection code for now - it was not up to date and
+  it is uncertain whether it will be able to do everything required of it
+- remove elnino data to reduce package size - will put that in separate package
+- if using in-memory ddo, but it is very large, convert it to local disk 
+  connection in makeDisplay to help memory management when viewing
 
 Version 0.7.8
 -------------------------------------------------------------------------------
