@@ -75,7 +75,13 @@ $.extend(d3outputBinding, {
          data = JSON.parse(data);
          // console.log(data);
          var functionName = $(el).data("d3-fn");
-         window[functionName](data, $(el).attr("id"));
+         
+         try {
+            window[functionName](data, $(el).attr("id"));
+         } catch (e) {
+            console.log(e);
+            return;
+         }
          
          var callbackName = $(el).data("callback");
          if(callbackName) {

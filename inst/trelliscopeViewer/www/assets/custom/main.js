@@ -56,17 +56,17 @@ function debounce(fn, delay) {
    };
 }
 
-if (typeof console  != "undefined") 
-    if (typeof console.log != 'undefined')
-        console.olog = console.log;
-    else
-        console.olog = function() {};
-
-console.log = function(message) {
-    console.olog(message);
-    $('#error-log').append('<p>' + message + '</p>');
-};
-console.error = console.debug = console.info =  console.log;
+// if (typeof console  != "undefined") 
+//     if (typeof console.log != 'undefined')
+//         console.olog = console.log;
+//     else
+//         console.olog = function() {};
+// 
+// console.log = function(message) {
+//     console.olog(message);
+//     $('#error-log').append('<p>' + message + '</p>');
+// };
+// console.error = console.debug = console.info =  console.log;
 
 // let a user resize for 250ms before triggering actions
 $(window).resize(function() {
@@ -79,7 +79,7 @@ $(window).resize(function() {
 $(window).bind('resizeEnd', function() {
    // recompute the panel preview layout after window resize
    // TODO: if that control panel is open, only change it there
-
+   
    // if related displays are selected, recompute there
    // instead of panel layout
    if($(".related-display-select.active").length > 0) {
@@ -183,7 +183,7 @@ function pageForward() {
 function pageBack() {
    var curPage = parseInt($("#curPanelPageInput").val());
    var by = parseInt($("#skip-button-value").html().replace("x", ""));
-
+   
    if(curPage - by >= 1) {
       $("#curPanelPageInput").val(curPage - by);
       $("#curPanelPageInput").trigger("change");
@@ -227,7 +227,6 @@ function masterControlPostRender() {
    });
 
    $("#control-panel-backdrop").click(function() {
-      alert("hi");
       // close all .slide-left
       $(".slide-left").each(function() {
          $(this).toggleClass("slide-left");
@@ -257,8 +256,8 @@ function masterControlPostRender() {
          window[actionFn]();
 
       // every time apply is called, set it back to page 1
-      $("#curPanelPageInput").val("1");
-      $("#curPanelPageInput").trigger("change");
+      // $("#curPanelPageInput").val("1");
+      // $("#curPanelPageInput").trigger("change");
 
       // get rid of panel and backdrop
       $(".slide-panel").removeClass("slide-left");
@@ -398,26 +397,28 @@ function panelTableContentOutputPostRender(data) {
       for (var i = 0; i < data.length; i++) {
          for (var j = 0; j < data[i].length; j++) {
             data[i][j].panel_content.forEach(function(pc) {
-               var curID = pc.data.id[0];
-               try {
-                  var spec = JSON.parse(pc.data.spec);
-               } catch (e) {
-                  console.log(e);
-                  return;
+               if(pc.data.spec[0] != "") {
+                  var curID = pc.data.id[0];
+                  try {
+                     var spec = JSON.parse(pc.data.spec);
+                  } catch (e) {
+                     console.log(e);
+                     return;
+                  }
+                  $(curID).data("spec", spec);
+                  // console.log(curID);
+                  // console.log($(curID));
+                  // vg.parse.spec($(curID).data("spec"), function(chart) {   
+                  vg.parse.spec(spec, function(chart) {   
+                     var ch = chart({el:curID});
+                     var w = ch.width();
+                     var h = ch.height();
+                     ch.update(); 
+                     var pd = ch.padding();
+                     ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
+                     ch.update();
+                  });
                }
-               $(curID).data("spec", spec);
-               // console.log(curID);
-               // console.log($(curID));
-               // vg.parse.spec($(curID).data("spec"), function(chart) {   
-               vg.parse.spec(spec, function(chart) {   
-                  var ch = chart({el:curID});
-                  var w = ch.width();
-                  var h = ch.height();
-                  ch.update(); 
-                  var pd = ch.padding();
-                  ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
-                  ch.update();
-               });
             });
          }
       };

@@ -244,7 +244,7 @@ updateCogTableFilter = function(el) {
          $("#cog-table-col-select-li-" + curVar + " i.icon-filter").addClass("hidden");
       }
    });
-   console.log(filterData);
+   // console.log(filterData);
    
    // save filter data to shiny data output element
    $("#cogColumnFilterInput").data("myShinyData", filterData);
@@ -267,6 +267,8 @@ function cogTableControlsOutputCancelButton() {
 }
 
 function cogTableControlsOutputPostRender(data) {
+   $.getScript("assets/custom/selectables-cogtable.js");
+      
    // initialize multiselect dropups in cognostics table
    $(".selectpicker").selectpicker();
    $(".bootstrap-select.disabled").css("visibility", "hidden");
@@ -280,8 +282,14 @@ function cogTableControlsOutputPostRender(data) {
    
    // make histograms / bar charts in footer
    $.each(data.plotDat, function(index, value) {
-      if(value.data != undefined)
-         d3footPlot(value);
+      if(value.data != undefined) {
+         try {
+            d3footPlot(value);
+         } catch (e) {
+            console.log(e);
+            return;
+         }
+      }
    });
    
    // handle clicks on column sort

@@ -1,15 +1,31 @@
 
 
 function panelLayoutOutputApplyButton() {
-   
    var panelDims = $("#panel-layout-data").data("panelDims");
    
    var arrangement = $("#panelArrangement").find("button.active").data("val");
    
    if(panelDims != undefined) {
+      // determine what page to switch to depending on what we changed from
+      var prevLayout = $("#panelLayoutStateInput").data("myShinyData");
+      if(prevLayout) {
+         var prevNrow = prevLayout.nrow;
+         var prevNcol = prevLayout.ncol;
+      } else {
+         var prevNrow = 1;
+         var prevNcol = 1;
+      }
+      var prevPage = $("#curPanelPageInput").val();
+      
+      var curNrow = parseInt($("#panel-rows").val());
+      var curNcol = parseInt($("#panel-cols").val());
+      var curPage = Math.floor(((prevPage - 1) * prevNrow * prevNcol) / (curNrow * curNcol)) + 1;
+      $("#curPanelPageInput").val(curPage + "");
+      $("#curPanelPageInput").trigger("change");
+      
       var panelLayout = {
-         "nrow"    : parseInt($("#panel-rows").val()),
-         "ncol"    : parseInt($("#panel-cols").val()),
+         "nrow"    : curNrow,
+         "ncol"    : curNcol,
          "w"       : panelDims.w,
          "h"       : panelDims.h,
          "arrange" : arrangement
