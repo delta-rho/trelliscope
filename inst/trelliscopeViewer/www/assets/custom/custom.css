@@ -955,6 +955,16 @@ td.select-column.active {
   margin: 0 auto;
 }
 
+#active-cog-selection {
+  max-height: 450px;
+  overflow-y: auto;
+}
+
+#add-related-display-selection {
+  max-height: 167px;
+  overflow-y: auto;  
+}
+
 #editor { 
   position: relative;
   border: 1px;
@@ -1315,11 +1325,6 @@ text.axis-label {
 
 /* Related display
 ----------------------------------*/
-
-#related-table-container {
-  height: 200px;
-  overflow-y: auto;
-}
 
 #related-layout-container {
   height: 290px;
