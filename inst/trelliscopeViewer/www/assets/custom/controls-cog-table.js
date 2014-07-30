@@ -252,6 +252,10 @@ updateCogTableFilter = function(el) {
 }
 
 function cogTableControlsOutputApplyButton() {
+   // reset to page one
+   $("#curPanelPageInput").val("1");
+   $("#curPanelPageInput").trigger("change");
+   
    // trigger change
    var filterData = $("#cogColumnFilterInput").data("myShinyData");
    $("#filterStateInput").data("myShinyData", filterData);

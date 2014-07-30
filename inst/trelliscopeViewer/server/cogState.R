@@ -30,7 +30,7 @@ cdoExposedCogState <- reactive({
    panelLabelState <- input$panelLabelStateInput
    if(!is.null(panelLabelState)) {
       logMsg("- panel label state changed: ", paste(panelLabelState, collapse=","))
-      if(panelLabelState == "__none__")
+      if(any(panelLabelState == "__none__"))
          panelLabelState <- NULL
       cdo$state$panelLabel <- panelLabelState      
    }
@@ -46,6 +46,7 @@ cdoExposedCogState <- reactive({
       logMsg("- active cog state changed: ", paste(activeCogState, collapse=","))
       cdo$state$activeCog <- activeCogState
    }
+   
    relatedDisplayState <- input$relatedDisplayStateInput
    if(length(relatedDisplayState) > 0) {
       # load the additional displays

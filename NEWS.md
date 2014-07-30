@@ -20,6 +20,9 @@ FEATURES / CHANGES
 - remove elnino data to reduce package size - will put that in separate package
 - if using in-memory ddo, but it is very large, convert it to local disk 
   connection in makeDisplay to help memory management when viewing
+- add conditional / marginal (renamed to "filtered" / "all") in visual filters
+  so that current filter state can be reflected in the visual filter plot 
+  (previously was just "all")
 
 Version 0.7.8
 -------------------------------------------------------------------------------

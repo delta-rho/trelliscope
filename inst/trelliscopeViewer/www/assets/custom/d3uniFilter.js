@@ -81,12 +81,30 @@ function d3univar(data, id) {
      .append("g")
        .attr("transform", "translate(" + d3univarMargin.left + "," + d3univarMargin.top + ")");
    
+   // if there is a filter for this variable
+   // we will use that to make sure the extent of the axes
+   // reaches far enough
+   activeVar = $("#univarFilterSelect li.active");
+   var filter;
+   if(activeVar) {
+      var filterData = $("#univarFilterState").data("filterData");
+      if(!filterData)
+         filterData = {};
+      var varName = activeVar.data("name");
+      filter = filterData[varName];
+   }
+   
    if(plotType == "hist") {
       var delta = data[1].xdat - data[0].xdat;
       
       var xrange = d3.extent(data.map(function(d) { return d.xdat; }));
       xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.07;
       xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
+      
+      if(filter != undefined) {
+         xrange[0] = Math.min(xrange[0], filter.from);
+         xrange[1] = Math.max(xrange[1], filter.to);
+      }
       
       d3univarX.domain(xrange);
       d3univarY.domain([0, d3.max(data.map(function(d) { return d.ydat; }))]);
@@ -115,6 +133,11 @@ function d3univar(data, id) {
       var yrange = d3.extent(data.map(function(d) { return d.y; }));
       yrange[0] = yrange[0] - (yrange[1] - yrange[0]) * 0.07;
       yrange[1] = yrange[1] + (yrange[1] - yrange[0]) * 0.07;
+      
+      if(filter != undefined) {
+         yrange[0] = Math.min(yrange[0], filter.from);
+         yrange[1] = Math.max(yrange[1], filter.to);
+      }
       
       d3univarX.domain(xrange);
       d3univarY.domain(yrange);

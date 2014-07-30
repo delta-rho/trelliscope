@@ -777,8 +777,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="univarFilterPlot" data-d3-fn="d3univar" data-callback="univarFilterLocalLoad" data-spinner="univarSpinner"></div>
     <div id="univar-dist-toggle">
       <div class="btn-group" id="univarDistType" data-action="updateUnivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="univar-type-toggle">
@@ -826,8 +826,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="bivarFilterPlot"  data-d3-fn="d3bivar" data-callback="bivarFilterLocalLoad" data-spinner="bivarSpinner"></div>
     <div id="bivar-dist-toggle">
       <div class="btn-group" id="bivarDistType" data-action="updateBivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="bivar-type-toggle">

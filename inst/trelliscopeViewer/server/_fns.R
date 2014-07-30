@@ -98,15 +98,14 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
    if(plotType == "quantile")
       plotType <- "quant"
    
-   curInfo <- cdo$cogDistns[[name]]
+   curInfo <- cdo$cdo$cogDistns[[name]]
    
    if(!is.na(curInfo$type)) {
       if(curInfo$type == "numeric") {
-         if(distType == "marginal") {
+         if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
             tmp <- curInfo$marginal[[plotType]]
          } else {
-            # call trelliscope:::getCogQuantPlotData...
-            return(list(name = name))
+            tmp <- trelliscope:::getCogQuantPlotData(cdo$curCogDF, name, plotType)
          }
          if(plotType == "hist") {
             delta <- diff(tmp$xdat[1:2])
@@ -120,8 +119,7 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
          if(distType == "marginal") {
             tmp <- curInfo$marginal
          } else {
-            # call trelliscope:::getCogCatPlotData...
-            return(list(name = name))
+            tmp <- trelliscope:::getCogCatPlotData(cdo$curCogDF, name, plotType)$freq
          }
          if(nrow(tmp) > maxLevels)
             return(list(name = name))
@@ -141,8 +139,9 @@ getCogHexbinPlotData <- function(x, ...)
    UseMethod("getCogHexbinPlotData", x)
 
 getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
+   idx <- complete.cases(cogDF[,c(xVar, yVar)])
    list(
-      data = data.frame(x = cogDF[,xVar], y = cogDF[,yVar]),
+      data = data.frame(x = cogDF[idx,xVar], y = cogDF[idx,yVar]),
       plotType = "scatter",
       xlab = xVar,
       ylab = yVar
@@ -150,6 +149,7 @@ getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
 }
 
 getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30) {
+   require(hexbin)
    dat <- hexbin:::hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
    style <- "lattice"
    minarea <- 0.05
@@ -158,20 +158,20 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    maxcnt <- max(dat@count)
    style <- "lattice"
    trans <- NULL
-
+   
    cnt <- dat@count
    xbins <- dat@xbins
    shape <- dat@shape
    tmp <- hcell2xy(dat)
    good <- mincnt <= cnt & cnt <= maxcnt
-
+   
    xnew <- tmp$x[good]
    ynew <- tmp$y[good]
    cnt <- cnt[good]
-
+   
    sx <- xbins/diff(dat@xbnds)
    sy <- (xbins * shape)/diff(dat@ybnds)
-
+   
    if (is.null(trans)) {
       if (min(cnt, na.rm = TRUE) < 0) {
          pcnt <- cnt + min(cnt)
@@ -188,14 +188,14 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    area <- minarea + rcnt * (maxarea - minarea)
    area <- pmin(area, maxarea)
    radius <- sqrt(area)
-
+   
    inner <- 0.5
    outer <- (2 * inner)/sqrt(3)
    dx <- inner/sx
    dy <- outer/(2 * sy)
    rad <- sqrt(dx^2 + dy^2)
    hexC <- hexcoords(dx, dy, sep = NULL)
-
+   
    list(
       data = data.frame(x = xnew, y = ynew, r = radius),
       plotType = "hexbin",
@@ -208,11 +208,18 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
 }
 
 getBivarPlotDat <- function(cdo, xVar, yVar, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-   # TODO: handle marginal...
-   if(plotType == "scatter") {
-      getCogScatterPlotData(cdo$cogDatConn, xVar, yVar)
+   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+      if(plotType == "scatter") {
+         getCogScatterPlotData(cdo$cdo$cogDatConn, xVar, yVar)
+      } else {
+         getCogHexbinPlotData(cdo$cdo$cogDatConn, xVar, yVar, shape, xbin)
+      }
    } else {
-      getCogHexbinPlotData(cdo$cogDatConn, xVar, yVar, shape, xbin)
+      if(plotType == "scatter") {
+         getCogScatterPlotData(cdo$curCogDF, xVar, yVar)
+      } else {
+         getCogHexbinPlotData(cdo$curCogDF, xVar, yVar, shape, xbin)
+      }
    }
 }
 
@@ -222,7 +229,8 @@ getCogICA <- function(x, ...)
 getCogICA.data.frame <- function(cogDF, vars) {
    require(fastICA)
    set.seed(4331)
-   res <- fastICA(cogDF[,vars], n.comp=2)
+   idx <- which(complete.cases(cogDF[,vars]))
+   res <- fastICA(cogDF[idx, vars], n.comp=2)
    data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
 }
 

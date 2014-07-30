@@ -5,7 +5,6 @@ exposedCogDF <- reactive({
    cdo <- cdoExposedCogState()
    if(!is.null(cdo)) {
       cogDF <- getCurCogDat(cdo$cogDatConn, cdo$state)
-
       list(cdo = cdo, curCogDF = cogDF)      
    }
 })
