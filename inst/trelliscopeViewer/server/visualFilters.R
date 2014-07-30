@@ -19,7 +19,7 @@ output$bivarFilterPlot <- renderDataLite({
 
 output$multivarFilterPlot <- renderDataLite({
    selectVals <- input$multivarFilterSelect
-   cdo <- cdoCogState()
+   cdo <- exposedCogDF()
    
    if(!is.null(selectVals) && !is.null(cdo)) {
       getMultivarPlotDat(cdo, unlist(selectVals$varNames), distType = selectVals$distType, plotType = selectVals$plotType)

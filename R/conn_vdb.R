@@ -62,7 +62,7 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, verbose = TRUE) {
 #' @export
 print.vdbConn <- function(x, ...) {
    if(is.null(x$name)) {
-      nm <- "[none]"
+      nm <- "[name:none]"
    } else {
       nm <- paste("\"", x$name, "\"", sep = "")
    }

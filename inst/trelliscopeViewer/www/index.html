@@ -861,8 +861,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="multivarFilterPlot" data-d3-fn="d3bivar" data-callback="multivarFilterLocalLoad" data-spinner="multivarSpinner"></div>
     <div id="multivar-dist-toggle">
       <div class="btn-group" id="multivarDistType" data-action="updateMultivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="multivar-type-toggle">

@@ -110,10 +110,12 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
          if(plotType == "hist") {
             delta <- diff(tmp$xdat[1:2])
             tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
+            # add random normal to make sure it triggers even when it 
+            # doesn't change - this is to ensure spinner will get replaced
          } else {
             names(tmp)[1:2] <- c("x", "y")
-            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
          }
       } else { # bar chart
          if(distType == "marginal") {
@@ -126,7 +128,7 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
          tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
          # browser()
          tmp$ind <- seq_len(nrow(tmp))
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
+         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = rnorm(1)))
       }
    }
    return(list(name = name))
@@ -228,17 +230,20 @@ getCogICA <- function(x, ...)
 
 getCogICA.data.frame <- function(cogDF, vars) {
    require(fastICA)
-   set.seed(4331)
+   # set.seed(4331)
    idx <- which(complete.cases(cogDF[,vars]))
    res <- fastICA(cogDF[idx, vars], n.comp=2)
    data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
 }
 
 getMultivarPlotDat <- function(cdo, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-   # TODO: handle marginal...
    xVar <- "IC1"
    yVar <- "IC2"
-   icaDat <- getCogICA(cdo$cogDatConn, vars)
+   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+      icaDat <- getCogICA(cdo$cdo$cogDatConn, vars)
+   } else {
+      icaDat <- getCogICA(cdo$curCogDF, vars)      
+   }
    if(plotType == "scatter") {
       getCogScatterPlotData(icaDat, xVar, yVar)
    } else {
