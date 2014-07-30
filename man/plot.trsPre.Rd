@@ -30,7 +30,7 @@ irisPreFn <- function(x) {
       ylim = range(x$Sepal.Width)
    )
 }
-irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
+irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
 plot(irisPre)
 }
 }
