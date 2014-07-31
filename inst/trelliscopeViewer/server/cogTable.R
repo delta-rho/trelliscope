@@ -49,7 +49,8 @@ cogTableCurrentData <- reactive({
    if(!is.null(cogDF)) {
       state <- list(
          filter = input$cogColumnFilterInput,
-         sort = input$cogColumnSortInput
+         sort = input$cogColumnSortInput,
+         activeCog = input$activeCogStateInput
       )
       getCurCogDat(cogDF, state)
    }

@@ -361,7 +361,7 @@ function panelPageNavOutputPostRender() {
    $("#pageRightButton").click(function() {
       pageForward();
    });
-
+   
    // when page input is changed, fire up spinner
    $("#curPanelPageInput").change(function() {
       var target = document.getElementById("panelTableSpinner");
@@ -389,6 +389,14 @@ function panelTableContentOutputPostRender(data) {
    // stop spinner
    var target = document.getElementById("panelTableSpinner");
    panelSpinner.stop(target);
+   
+   // stop display load spinner too (in case it's spinning)
+   var target = document.getElementById("displayLoadSpinner");
+   if(displayLoadSpinner.el) {
+      displayLoadSpinner.stop(target);
+      // if it is spinning, open display modal is open
+      $("#openModal").modal("hide");
+   }
    
    // if it is not a static image expect vega spec in .data
    // console.log(data[0][0].panel_content.length);

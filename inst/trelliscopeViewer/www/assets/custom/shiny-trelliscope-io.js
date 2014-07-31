@@ -161,12 +161,21 @@ $.extend(displaySelectInputBinding, {
          return null;
       } else {
          var res = $(row).data();
+         
+         var curDisplay = $("#headerDisplayNameOutput").data("curDisplay");
+         
+         // if it is the same display as before, don't do anything
+         if(curDisplay) {
+            if(curDisplay.name == res.name && curDisplay.group == res.group) {
+               $("#openModal").modal("hide");
+               return(res);
+            }
+         }
+         
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
          // store name and group as data
          // console.log(res);
          $("#headerDisplayNameOutput").data("curDisplay", res);
-         // close modal
-         $("#openModal").modal("hide");
          
          // run spinner
          var target = document.getElementById("displayLoadSpinner");

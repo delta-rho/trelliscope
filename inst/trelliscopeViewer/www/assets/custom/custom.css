@@ -270,6 +270,7 @@ body {
   -webkit-transition: margin .65s; /* For safari 3.1 to 6.0 */
   -moz-transition: margin .65s;
   transition: margin .65s;
+  visibility: hidden; /* until cogmap is working */
 }
 
 .right-slide {

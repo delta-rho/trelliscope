@@ -172,7 +172,6 @@
         <div id="sample-panels"         class="slide-panel panel panel-default"></div>
 
         <div class="shiny-template-output" id="panelTableContentOutput" data-post-render="panelTableContentOutputPostRender">
-          <div id="panelTableSpinner"></div>
         </div>
 
         <div class="right-panel">
@@ -243,6 +242,7 @@
   
   <!-- Modal -->
   <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="displayLoadSpinner"></div>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -976,7 +976,7 @@
 
 <!-- panel table content template -->
 <script id="panelTableContentOutput-template" type="text/html">
-<div id="displayLoadSpinner"></div>
+<div id="panelTableSpinner"></div>
 <table class="panel-table-table" id="panel-table">
   {{#.}}
   <tr>
