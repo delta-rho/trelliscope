@@ -227,7 +227,6 @@ makeDisplay <- function(
       parList <- c(parList, params)
    
    jobRes <- mrExec(data,
-      setup    = setup,
       map      = map,
       reduce   = reduce,
       output   = output,

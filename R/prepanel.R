@@ -185,7 +185,6 @@ prepanel <- function(
    # suppressMessages(capture.output(
    jobRes <- mrExec(
       data,
-      setup = setup,
       map = map,
       reduce = reduce,
       control = control,
@@ -349,7 +348,7 @@ setLims <- function(lims, x = "same", y = "same", xQuant = c(0,1), yQuant = c(0,
             dat$min <- as.numeric(dat$min)
          }
       }
-
+      
       # TODO: if character and not "free" then set limits
       # to all levels of the variable, if known
       if(type == "sliced" && datClass != "character") {
