@@ -3,8 +3,8 @@
 \alias{makeDisplay}
 \title{Create a Trelliscope Display}
 \usage{
-makeDisplay(data, name, group = "common", desc = "", height = 800,
-  width = 800, panelFn = NULL, lims = list(x = "free", y = "free",
+makeDisplay(data, name, group = "common", desc = "", height = 500,
+  width = 500, panelFn = NULL, lims = list(x = "free", y = "free",
   prepanelFn = NULL), cogFn = NULL, preRender = FALSE,
   cogConn = dfCogConn(), output = NULL, conn = getOption("vdbConn"),
   verbose = TRUE, params = NULL, packages = NULL, control = NULL)
