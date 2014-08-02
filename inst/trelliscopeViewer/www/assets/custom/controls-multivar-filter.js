@@ -15,7 +15,7 @@ function updateMultivarPlot() {
       varNames.push($(this).html());
    });
    var dat = {
-      "distType" : $("#multivarDistType .active").html().toLowerCase(),
+      "distType" : $("#multivarDistType .active").data("dist-type"),
       "plotType" : $("#multivarPlotType .active").html().toLowerCase(),
       "varNames" : varNames
    };

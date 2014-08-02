@@ -11,13 +11,13 @@ It would be great if you'd introduce yourself to the group but it's not required
 ## Check the issue tracker
 
 Before you write too much code, check the [open issues in the trelliscope issue tracker](https://github.com/tesseradata/trelliscope/issues?state=open)
-to see if someone else has already filed an issue related to your work or is already working on it. If not, go ahead and 
+to see if someone else has already filed an issue related to your work or is already working on it. If not, go ahead and
 [open a new issue](https://github.com/tesseradata/trelliscope/issues/new).
 
 ## Announce your work on the mailing list
 
 Shoot us a quick email on the mailing list letting us know what you're working on. There
-will likely be people on the list who can give you tips about where to find relevant 
+will likely be people on the list who can give you tips about where to find relevant
 source or alert you to other planned changes that might effect your work.
 
 If the work you're proposing makes substantive changes to trelliscope, you may be asked to attach a design document
@@ -44,5 +44,5 @@ into self-contained and incremental pull requests, if need be, and reference dep
 request builds on request #92. Please review #92 first."
 * The first line of commit messages should be a short (<80 character) summary, followed by an empty line and then,
 optionally, any details that you want to share about the commit.
-* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org)
-to check every pull request and commit.  We use the [testthat](http://adv-r.had.co.nz/Testing.html) R package for running unit tests.  See code in the `inst/tests` for examples.
+* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org/tesseradata/trelliscope)
+to check every pull request and commit.  We use the [testthat](http://adv-r.had.co.nz/Testing.html) R package for running unit tests.  See code in the `tests/testthat` for examples.

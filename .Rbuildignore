@@ -1,0 +1,14 @@
+.git
+^\.travis\.yml$
+.DS_Store
+node_modules/
+z_grunt_test/
+..Rcheck
+CONTRIBUTING\.md
+Gruntfile.js
+LICENSE\.md
+NEWS\.md
+package.json
+protobuf-2.4.1/
+protobuf-2.4.1.tar.gz
+protobuf_install/

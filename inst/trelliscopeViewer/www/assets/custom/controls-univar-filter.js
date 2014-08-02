@@ -9,7 +9,7 @@ function updateUnivarPlot() {
    // then trigger the shiny input$univarFilterSelect to get this data
    // the input will be used to get plot data and trigger plot output
    var dat = {
-      "distType" : $("#univarDistType .active").html().toLowerCase(),
+      "distType" : $("#univarDistType .active").data("dist-type"),
       "plotType" : $("#univarPlotType .active").html().toLowerCase(),
       "varName"  : $("#univarFilterSelect li.active .uni-filter-var-name").html()
    };
@@ -137,12 +137,19 @@ univarFilterLocalLoad = function() {
 }
 
 function cogUniFilterControlsOutputApplyButton() {
+   // reset to page one
+   $("#curPanelPageInput").val("1");
+   $("#curPanelPageInput").trigger("change");
+   
    // trigger save in case currently-active filter hasn't been saved
    univarFilterLocalSave();
    // trigger change
    var filterData = $("#univarFilterState").data("filterData");
    $("#filterStateInput").data("myShinyData", filterData);
    $("#filterStateInput").trigger("change");
+   
+   $("#univarFilterSelect li").removeClass("active");
+   removeUnivarPlot();
 }
 
 function cogUniFilterControlsOutputCancelButton() {
@@ -189,6 +196,11 @@ function univarFilterSetFromExposedState() {
 function cogUniFilterControlsOutputPostRender() {
    $(".list-group").on("click", "a", function() {
       $(this).toggleClass("selected").siblings().removeClass("selected");
+   });
+   
+   // add tooltips
+   $("#univarFilterSelect li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
    });
    
    buttonToggleHandler();

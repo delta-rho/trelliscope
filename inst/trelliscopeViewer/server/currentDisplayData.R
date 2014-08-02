@@ -1,13 +1,18 @@
-displayListOutputData <- function(displayList) {
-   tmp <- lapply(displayList, function(x) {
-      x$updated <- as.character(x$updated)
-      img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"height: 60px\">", sep = "")
-      x$thumb <- img
-      x
-   })
-   names(tmp) <- NULL
-   tmp
+
+displayListOutputData <- function(dl) {
+   # logMsg("Populating display list")
+   
+   for(i in seq_along(dl)) {
+      dl[[i]]$updated <- as.character(dl[[i]]$updated)
+      dl[[i]]$thumb <- paste("<img src =\"", encodePNG(file.path(getOption("vdbConn")$path, "displays", dl[[i]]$group, dl[[i]]$name, "thumb_small.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
+   }
+   names(dl) <- NULL
+   dl
 }
+
+## every time a new display is selected, these functions
+## populate the data that initially fills out each control
+## panel
 
 # cdName and cdGroup are added to all outputs
 # to make outputs unique when a display is changed
@@ -24,7 +29,7 @@ panelLayoutOutputData <- function(x) {
          ncol <- 1
       
       list(panel_aspect = x$cdo$height / x$cdo$width, 
-         n_visible_cog = max(1, length(which(x$cdo$cogDesc$type == "splitVar"))),
+         n_panel_labels = length(which(x$cdo$cogInfo$defLabel)),
          nrow = nrow, ncol = ncol, cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }
@@ -37,13 +42,47 @@ panelFunctionOutputData <- function(x) {
    }
 }
 
-visibleCogListOutputData <- function(x) {
+panelLabelListOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      cogDesc <- x$cdo$cogDesc
-      cogDesc$active <- ""
-      ind <- cogDesc$type == "splitVar"
-      cogDesc$active[ind] <- "active"
-      list(cog = cogDesc, cdName = x$cdo$name, cdGroup = x$cdo$group)
+      cogInfo <- x$cdo$cogInfo
+      cogInfo$active <- ""
+      cogInfo$active[cogInfo$defLabel] <- "active"
+      
+      ci <- split(cogInfo, cogInfo$group)
+      nms <- names(ci)
+      # panelKey, condVar, and bsv go first, then sorted
+      newNms <- intersect(c("panelKey", "condVar", "bsv"), nms)
+      newNms <- c(newNms, setdiff(nms, newNms))
+      ci <- lapply(newNms, function(a) {
+         list(
+            groupName = a,
+            data = ci[[a]][, c("name", "desc", "active")]
+         )
+      })
+      list(cog = ci, cdName = x$cdo$name, cdGroup = x$cdo$group)
+   }
+}
+
+activeCogListOutputData <- function(x) {
+   if(!is.null(x$cdo)) {
+      cogInfo <- x$cdo$cogInfo
+      cogInfo$active <- ""
+      cogInfo$active[cogInfo$defActive] <- "active"
+      cogInfo$selectable <- "selectable"
+      cogInfo$selectable[cogInfo$name == "panelKey"] <- ""
+      
+      ci <- split(cogInfo, cogInfo$group)
+      nms <- names(ci)
+      # panelKey, condVar, and bsv go first, then sorted
+      newNms <- intersect(c("panelKey", "condVar", "bsv"), nms)
+      newNms <- c(newNms, setdiff(nms, newNms))
+      ci <- lapply(newNms, function(a) {
+         list(
+            groupName = a,
+            data = ci[[a]][, c("name", "desc", "active", "selectable")]
+         )
+      })
+      list(cog = ci, cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }
 
@@ -53,13 +92,15 @@ relatedDisplayListOutputData <- function(x, displayList) {
       curName <- x$cdo$name
       curGroup <- x$cdo$group
       
+      # TODO: better logic about what "related" means
       relDisp <- sapply(displayList, function(a)
          !(a$name == curName && a$group == curGroup) && a$keySig == curKeySig)
       
       res <- lapply(displayList[relDisp], function(x) {
          x$updated <- as.character(x$updated)
-         img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"height: 60px\">", sep = "")
+         img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
          x$thumb <- img
+         x$aspect <- x$height / x$width
          x
       })
       
@@ -69,31 +110,33 @@ relatedDisplayListOutputData <- function(x, displayList) {
 }
 
 cogTableControlsOutputData <- function(x) {
+   # render the entire cognostics table (all possible cognostics)
+   # then we will dynamically change which are shown with different
+   # choices of active cogs and selected columns
+   
    if(!is.null(x$cdo)) {
       # TODO: apply sorting and filtering in filterState, etc.
+      ac <- x$cdo$state$activeCog
+      cogInfo <- x$cdo$cogInfo
+      # cogInfo <- subset(cogInfo, name %in% ac)
+      cogInfo$index <- seq_len(nrow(cogInfo)) - 1
+      cogInfo$active <- ""
+      cogInfo$active[cogInfo$filterable] <- "active"
+      # cogInfo$hidden <- "hidden"
+      # cogInfo$hidden[cogInfo$name %in% ac] <- ""
+      
       cogDF <- x$cdo$cogDatConn
       n <- cogNrow(cogDF)
       curDF <- getCogData(cogDF, seq_len(min(n, 10)))
-      cogDesc <- x$cdo$cogDesc
-      cogDesc$index <- seq_len(ncol(cogDF)) - 1
-      cogDesc$active <- ""
-      # cogDesc$active[cogDesc$name %in% names(curDF)] <- "active"
-      cogDesc$active[-1] <- "active"
-      plotDat <- lapply(names(x$cdo$cogInfo), function(nm) {
-         getUnivarPlotDat(x$cdo, name = nm)         
+      
+      plotDat <- lapply(cogInfo$name, function(nm) {
+         getUnivarPlotDat(x, name = nm, maxLevels = 100)
       })
-      
-      dfInfo <- data.frame(
-         name = c("panelKey", sapply(x$cdo$cogInfo, function(a) a$name)), 
-         type = c("character", sapply(x$cdo$cogInfo, function(a) a$type)),
-         stringsAsFactors = FALSE)
-      
       list(
-         dfInfo = dfInfo,
          data = cogTableBodyData(curDF),
          filter = cogTableFootFilter(cogDF),
          plotDat = plotDat,
-         cogNames = cogDesc,
+         cogInfo = cogInfo,
          cdName = x$cdo$name, cdGroup = x$cdo$group,
          cogTableInfo = paste("Showing entries 1 - 8 of", n),
          curPage = "1",
@@ -104,17 +147,17 @@ cogTableControlsOutputData <- function(x) {
 
 cogUniFilterControlsOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      cd <- x$cdo$cogDesc
-      cd$dataType[cd$dataType == "integer"] <- "numeric"
-      list(cogs = subset(cd, type != "panelKey"), cdName = x$cdo$name, cdGroup = x$cdo$group)
+      cd <- x$cdo$cogInfo
+      cd$type[cd$type == "integer"] <- "numeric"
+      list(cogs = subset(cd, filterable), cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }
 
 cogBiFilterControlsOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      cd <- x$cdo$cogDesc
-      cd$dataType[cd$dataType == "integer"] <- "numeric"
-      list(cogs = subset(cd, dataType == "numeric"), cdName = x$cdo$name, cdGroup = x$cdo$group)
+      cd <- x$cdo$cogInfo
+      cd$type[cd$type == "integer"] <- "numeric"
+      list(cogs = subset(cd, type == "numeric"), cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }
 

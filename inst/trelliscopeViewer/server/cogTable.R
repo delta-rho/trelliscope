@@ -42,17 +42,17 @@ output$cogTableInfoOutput <- renderText({
 })
 
 # data to be shown in the cognostics table sort/filter view
-# (reflects current sort and filter state and pagination value
+# (reflects current sort and filter state
 # as specified in cognostics table sort/filter panel)
 cogTableCurrentData <- reactive({
-   cdo <- currentDisplay()
-   if(!is.null(cdo)) {
+   cogDF <- currentDisplay()$cdo$cogDatConn
+   if(!is.null(cogDF)) {
       state <- list(
          filter = input$cogColumnFilterInput,
-         sort = input$cogColumnSortInput
+         sort = input$cogColumnSortInput,
+         activeCog = input$activeCogStateInput
       )
-      
-      getCurCogDat(cdo$cdo$cogDatConn, state)
+      getCurCogDat(cogDF, state)
    }
 })
 
@@ -60,6 +60,8 @@ cogTableCurrentData <- reactive({
 output$cogTableContentOutput <- renderDataLite({
    cogDF <- cogTableCurrentData()
    if(!is.null(cogDF)) {
+      logMsg("Updating cog table data")
+      
       n <- cogNrow(cogDF)
       
       pg <- input$cogTablePaginationInput
@@ -71,7 +73,7 @@ output$cogTableContentOutput <- renderDataLite({
       if(n == 0) {
          idx <- integer(0)
       } else {
-         idx <- ((pg - 1)*pageLen + 1):min(pg * pageLen, n)         
+         idx <- ((pg - 1) * pageLen + 1):min(pg * pageLen, n)         
       }
       
       cogTableBodyData(getCogData(cogDF, idx))
@@ -80,10 +82,14 @@ output$cogTableContentOutput <- renderDataLite({
 
 # takes a displayObj object and applies "state" to cognostics and returns result
 getCurCogDat <- function(x, state) {
-   
    filterIndex <- seq_len(cogNrow(x))
    
+   if(length(state$activeCog) > 0) {
+      x <- x[,state$activeCog, drop = FALSE]
+   }
+   
    if(length(state$filter) > 0) {
+      # browser()
       flt <- state$filter
       if(any(unlist(lapply(flt, function(x) x$empty)))) {
          filterIndex <- logical(0)
@@ -104,6 +110,8 @@ getCurCogDat <- function(x, state) {
                #    filterIndex <- intersect(filterIndex, which(grepl(cur$regex, x[[nm]])))
                if(!is.null(cur$select)) {
                   filterIndex <- intersect(filterIndex, which(x[[nm]] %in% unlist(cur$select)))
+               } else if(!is.null(cur$regex)) {
+                  filterIndex <- intersect(filterIndex, which(grepl(cur$regex, x[[nm]])))
                }
             }
          }         

@@ -1,9 +1,9 @@
 function updateBivarPlot() {
-   // set data to be currently-selected x/y variables, hist/quant, and marg/cond
+   // set data to be currently-selected x/y variables, scatter/hexbin, and marg/cond
    // then trigger the shiny input$bivarFilterSelect to get this data
    // the input will be used to get plot data and trigger plot output
    var dat = {
-      "distType" : $("#bivarDistType .active").html().toLowerCase(),
+      "distType" : $("#bivarDistType .active").data("dist-type"),
       "plotType" : $("#bivarPlotType .active").html().toLowerCase(),
       "xName"  : $("#bivar-x-filter-select li.active .bi-filter-x-name").html(),
       "yName"  : $("#bivar-y-filter-select li.active .bi-filter-y-name").html()
@@ -105,6 +105,8 @@ bivarFilterLocalLoad = function() {
          // if both x and y fill the domain, don't brush
          yFill = (yf[1] - yf[0]) > (yDomain[1] - yDomain[0]) / 1.01;
          xFill = (xf[1] - xf[0]) > (xDomain[1] - xDomain[0]) / 1.01;
+         xFill = false;
+         yFill = false;
          
          if(!(xFill && yFill)) {
             // console.log("brushing!");
@@ -166,6 +168,10 @@ function bivarFilterSetFromExposedState() {
 }
 
 function cogBiFilterControlsOutputApplyButton() {
+   // reset to page one
+   $("#curPanelPageInput").val("1");
+   $("#curPanelPageInput").trigger("change");
+   
    // trigger save in case currently-active filter hasn't been saved
    bivarFilterLocalSave();
    // trigger change
@@ -184,6 +190,15 @@ function cogBiFilterControlsOutputPostRender() {
    $(".list-group").on("click", "a", function() {
       $(this).toggleClass("selected").siblings().removeClass("selected");
    });
+   
+   // add tooltips
+   $("#bivar-x-filter-select li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
+   });
+   $("#bivar-y-filter-select li").each(function() {
+      $(this).tooltip({'placement': 'right', 'delay': { show: 500, hide: 100 }});
+   });
+   
    
    // scatter / hexbin, etc. button behavior
    buttonToggleHandler();

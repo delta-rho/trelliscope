@@ -1,14 +1,14 @@
 library(shiny)
 library(jsonlite) # TODO: make trelliscope depend on this
 
-connFile <- "../conn.Rdata"
-vdbDir <- normalizePath(file.path(getwd(), ".."))
-hostname <- system("hostname", intern = TRUE)
+# connFile <- "../conn.Rdata"
+# vdbDir <- normalizePath(file.path(getwd(), ".."))
+# hostname <- system("hostname", intern = TRUE)
 # things are a little different on glimmer because app can't be in subdirectory
-if(hostname == "glimmer.rstudio.com") {
-   connFile <- "conn.Rdata"
-   vdbDir <- getwd()
-}
+# if(hostname == "glimmer.rstudio.com") {
+connFile <- "conn.Rdata"
+vdbDir <- getwd()
+# }
 
 if(file.exists(connFile)) {
    library(trelliscope)
@@ -22,9 +22,15 @@ message("vdbPrefix is ", vdbPrefix)
 
 options(vdbShinyPrefix = vdbPrefix)
 
-verbose <- TRUE
-if(is.null(verbose))
-   verbose <- TRUE
+LOGGING <- FALSE
+if(Sys.getenv("TRELLISCOPE_LOGGING") == "true")
+   LOGGING <- TRUE
+
+logMsg <- function(...) {
+   text <- list(...)
+   if(LOGGING)
+      message(paste(c("* ", text), sep=""))
+}
 
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
 

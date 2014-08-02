@@ -1,75 +1,96 @@
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("type"))
+}
 
 #' Compute RMSE of Loess Fit Cognostic
-#' 
+#'
 #' Compute RMSE of loess fit as a cognostic to be used as cognostics in a trelliscope display.
-#' 
+#'
 #' @param \ldots arguments to be passed to \code{link{loess}}, such as the formula, data, smoothing parameters, etc.
-#' @param desc description of cognostic
-#' 
+#' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
 #' cogLoessRMSE(dist ~ speed, span = 0.5, data = cars)
 #' @export
-cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit") {
+cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
    suppressWarnings(tmp <- try(loess(...), silent = TRUE))
    if(inherits(tmp, "try-error"))
       return(NA)
-   cog(tmp$s, desc = desc, type = "num")
+   cog(tmp$s, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
 }
 
 #' Compute Range Cognostic
-#' 
+#'
 #' Compute range to be used as cognostics in a trelliscope display.
 #'
 #' @param x numeric vector from which to compute the range
-#' @param desc description of cognostic
-#' 
+#' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
 #' cogRange(rnorm(100))
 #' @export
-cogRange <- function(x, desc = "range (max - min)") {
+cogRange <- function(x, desc = "range (max - min)", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
    res <- suppressWarnings(diff(range(x, na.rm = TRUE)))
    if(is.infinite(res))
       res <- NA
-   cog(res, desc = desc, type = "num")
+   cog(res, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
 }
 
 #' Compute Mean Cognostic
-#' 
+#'
 #' Compute mean to be used as cognostics in a trelliscope display.
-#' 
+#'
 #' @param x numeric vector from which to compute the mean
-#' @param desc description of cognostic
-#' 
+#' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
 #' cogMean(rnorm(100))
 #' @export
-cogMean <- function(x, desc = "mean") {
+cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
    res <- suppressWarnings(mean(x, na.rm = TRUE))
    if(is.infinite(res))
       res <- NA
-   cog(res, desc = desc, type = "num")
+   cog(res, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
+}
+
+#' Href Cognostic
+#'
+#' Create href to be used as cognostics in a trelliscope display.
+#'
+#' @param x URL to link to
+#' @param label label of the href
+#' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
+#' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
+#'
+#' @author Ryan Hafen
+#' @seealso \code{\link{cog}}
+#' @examples
+#' cogHref("www.google.com")
+#' @export
+cogHref <- function(x, label = "link", desc = "link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
+   cog(paste("<a href=\"", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
 }
 
 #' Compute Scagnostics
 #' 
-#' Compute list of scagnostics (see \code{\cite{scagnostics}}) to be used as cognostics in a trelliscope display.
-#'
-#' @param x,y
-#' @param desc description of cognostic
+#' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
+#' 
+#' @param x vector of the x-axis data for a scatterplot
+#' @param y vector of the y-axis data for a scatterplot
+#' @param group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
 #' 
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
-#' cogScagnostics(cars$dist, cars$speed)
+#' cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
 #' @export
-cogScagnostics <- function(x, y) {
-   suppressMessages(require(scagnostics))
+#' @import scagnostics
+cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
    tmp <- try(scagnostics(x, y), silent = TRUE)
    if(inherits(tmp, "try-error")) {
       # make a data.frame of NA
@@ -82,58 +103,61 @@ cogScagnostics <- function(x, y) {
    }
    names(res)[9] <- "Monoton" # so it's not too wide in cog table
    list(
-      outly   = cog(res[1] , type = "num",  
-         desc = "Proportion of the total edge length due to extremely long edges connected to points of single degree"),
-      skew     = cog(res[2] , type = "num",  
-         desc  = "Ratio of quantiles of edge lengths"),
-      clumpy   = cog(res[3] , type = "num",  
-         desc  = "A runt-based measure that emphasizes clusters with small intra-cluster distances relative to the length of their connecting edge"),
-      sparse   = cog(res[4] , type = "num",  
-         desc  = "Measures whether points in a 2D scatterplot are confined to a lattice or a small number of locations on the plane"),
-      striated = cog(res[5] , type = "num",  
-         desc  = "Measure of coherence"),
-      convex   = cog(res[6] , type = "num",  
-         desc  = "Ratio of the area of the alpha hull and the area of the convex hull"),
-      skinny   = cog(res[7] , type = "num",  
-         desc  = "Ratio of perimeter to area of a polygon -- roughly, how skinny it is. A circle yields a value of 0, a square yields 0.12 and a skinny polygon yields a value near one."),
-      stringy  = cog(res[8] , type = "num",  
-         desc  = "A stringy shape is a skinny shape with no branches"),
-      monoton  = cog(res[9] , type = "num",  
-         desc  = "Squared Spearman correlation coefficient")
+      outly   = cog(res[1] , type = "numeric",
+         desc = "Proportion of the total edge length due to extremely long edges connected to points of single degree", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      skew     = cog(res[2] , type = "numeric",
+         desc  = "Ratio of quantiles of edge lengths", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      clumpy   = cog(res[3] , type = "numeric",
+         desc  = "A runt-based measure that emphasizes clusters with small intra-cluster distances relative to the length of their connecting edge", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      sparse   = cog(res[4] , type = "numeric",
+         desc  = "Measures whether points in a 2D scatterplot are confined to a lattice or a small number of locations on the plane", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      striated = cog(res[5] , type = "numeric",
+         desc  = "Measure of coherence", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      convex   = cog(res[6] , type = "numeric",
+         desc  = "Ratio of the area of the alpha hull and the area of the convex hull", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      skinny   = cog(res[7] , type = "numeric",
+         desc  = "Ratio of perimeter to area of a polygon -- roughly, how skinny it is. A circle yields a value of 0, a square yields 0.12 and a skinny polygon yields a value near one.", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      stringy  = cog(res[8] , type = "numeric",
+         desc  = "A stringy shape is a skinny shape with no branches", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable),
+      monoton  = cog(res[9] , type = "numeric",
+         desc  = "Squared Spearman correlation coefficient", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
    )
 }
 
-
-# TODO: document example
 #' Create a Cognostics Object
 #' 
 #' Create a cognostics object.  To be used inside of the function passed to the \code{cogFn} argument of \code{\link{makeDisplay}} for each cognostics value to be computed for each subset.
 #' 
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
-#' @param the desired type of cognostic you would like to compute (see details)
+#' @param group optional categorization of the cognostic for organizational purposes
+#' @param type the desired type of cognostic you would like to compute (see details)
+#' @param defLabel should this cognostic be used as a panel label in the viewer by default?
+#' @param defActive should this cognostic be active (available for sort / filter / sample) by default?
+#' @param filterable should this cognostic be filterable?  Default is \code{TRUE}.  It can be useful to set this to \code{FALSE} if the cognostic is categorical with many unique values and is only desired to be used as a panel label.
 #' 
 #' @return object of class "cog"
 #' 
-#' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "int", "num", "fac", "date", "time", "geo", "rel", "hier".
+#' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
 #' 
 #' @author Ryan Hafen
 #' 
-#' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}} 
-#' 
+#' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}
+#'
 #' @export
-cog <- function(val = NULL, desc = "", type = NULL) {
+cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
+   
    cogTypes <- list(
-      key  = as.character,
-      int  = as.integer  ,
-      num  = as.numeric  ,
-      fac  = as.character,
-      date = as.Date     ,
-      time = as.POSIXct  ,
-      geo  = as.cogGeo   ,
-      rel  = as.cogRel   ,
-      hier = as.cogHier  ,
-      href = as.cogHref
+      key      = as.character,
+      inteter  = as.integer  ,
+      numeric  = as.numeric  ,
+      factor   = as.character,
+      date     = as.Date     ,
+      time     = as.POSIXct  ,
+      geo      = as.cogGeo   ,
+      rel      = as.cogRel   ,
+      hier     = as.cogHier  ,
+      href     = as.cogHref
    )
    
    types <- names(cogTypes)
@@ -149,51 +173,77 @@ cog <- function(val = NULL, desc = "", type = NULL) {
       if(is.factor(val))
          val <- as.character(val)
       
-      if(!(is.character(val) || is.numeric(val) || inherits(val, "Date") || inherits(val, "POSIXct")))
+      if(is.character(val)) {
+         type <- "factor"         
+      } else if(is.numeric(val)) {
+         type <- "numeric"
+      } else if(inherits(val, "Date")) {
+         type <- "date"
+      } else if(inherits(val, "POSIXct")) {
+         type <- "time"
+      } else {
          val <- NA
+         type <- NA
+      }
    }
    
-   attr(val, "desc") <- desc
+   cogAttrs <- list(
+      desc = desc,
+      type = type,
+      group = group,
+      defLabel = defLabel,
+      defActive = defActive,
+      filterable = filterable
+   )
+   attr(val, "cogAttrs") <- cogAttrs
+   
    class(val) <- c("cog", class(val))
    val
 }
 
-#' @S3method print cog
-print.cog <- function(x, ...) { 
-   attr(x, "desc") <- NULL 
+#' @export
+print.cog <- function(x, ...) {
+   attr(x, "cogAttrs") <- NULL
    class(x) <- setdiff(class(x), "cog")
    print(x)
 }
 
 #' Apply Cognostics Function to a Key-Value Pair
-#' 
+#'
 #' Apply cognostics function to a key-value pair
-#' 
+#'
 #' @param cogFn cognostics function
 #' @param kvSubset key-value pair
-#' 
+#' @param conn TODO
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
 #' @export
 applyCogFn <- function(cogFn, kvSubset, conn) {
+   res <- list()
    if(inherits(conn, "localDiskConn")) {
       panelKey <- conn$fileHashFn(list(kvSubset[[1]]), conn)
    } else {
       panelKey <- digest(kvSubset[[1]])
    }
-   res <- list(
-      panelKey = cog(panelKey, desc = "panel key", type = "key")
-   )
+   res$panelKey <- cog(panelKey, desc = "panel key", type = "key", group = "panelKey", defActive = TRUE, filterable = FALSE)
    splitVars <- getSplitVars(kvSubset)
    if(!is.null(splitVars)) {
-      res$splitVars <- splitVars
+      nms <- names(splitVars)
+      for(i in seq_along(splitVars)) {
+         res[[nms[i]]] <- cog(splitVars[[i]], desc = "conditioning variable", type = "factor", group="condVar", defLabel = TRUE)
+      }
    }
    bsvs <- getBsvs(kvSubset)
    if(!is.null(bsvs)) {
-      res$bsv <- bsvs
+      nms <- names(bsvs)
+      # TODO: get bsvInfo so we can get bsv description
+      for(i in seq_along(splitVars)) {
+         res[[nms[i]]] <- cog(bsvs[[i]], desc = "bsv")
+      }
    }
    if(!is.null(cogFn))
-      res$cog <- kvApply(cogFn, kvSubset)
+      res <- c(res, kvApply(cogFn, kvSubset))
    
    res
 }
@@ -204,7 +254,8 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
 cog2df <- function(x) {
    # TODO: when class(x[[i]]) == "cogRel", first concatenate
    # TODO: make sure it is 1 row
-   data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors = FALSE)
+   # data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors = FALSE)
+   data.frame(x, stringsAsFactors = FALSE)
 }
 
 as.cogGeo <- function(x) {
@@ -220,7 +271,16 @@ as.cogRel <- function(x) {
 }
 
 as.cogHref <- function(x) {
-   paste("<a href=\"", x$href, "\">", x$label, ">")
+   if(is.character(x)) {
+      if(grepl("^<a href=", tolower(x)))
+         return(x)
+      x <- list(href = x)
+   }
+   if(is.null(x$label))
+      x$label <- "link"
+   if(is.null(x$target))
+      x$target <- "_blank"
+   paste("<a href=\"", x$href, "\" target=\"", x$target, "\">", x$label, "</a>", sep = "")
 }
 
 as.cogHier <- function(x) {
@@ -233,61 +293,24 @@ cogFlatten <- function(x) {
    x
 }
 
-getCogDesc <- function(x, df = TRUE) {
-   getDesc <- function(a) {
-      tmp <- attr(a, "desc")
-      ifelse(is.null(tmp), "", tmp)
-   }
-   getType <- function(a) {
-      lapply(a, function(x) setdiff(class(x), "cog"))
-   }
+getCogInfo <- function(x, df = TRUE) {
+   nms <- names(x)
+   res <- do.call(rbind, lapply(seq_along(x), function(i) {
+      tmp <- attr(x[[i]], "cogAttrs")
+      data.frame(name = nms[i], tmp, stringsAsFactors = FALSE)
+   }))
    
-   pk <- data.frame(type = "panelKey", name = "panelKey", desc = "panel key", dataType = "panelKey", stringsAsFactors = FALSE)
-   sv <- if(!is.null(x$splitVars)) {
-      tmp <- lapply(x$splitVars, function(x) "conditioning variable")
-      data.frame(type = "splitVar", name = names(tmp), desc = unlist(tmp), dataType = "character", stringsAsFactors = FALSE)
-   } else {
-      NULL
-   }
-   bsvs <- if(!is.null(x$bsv)) {
-      descs <- lapply(x$bsv, getDesc)
-      types <- getType(x$bsv)
-      data.frame(type = "bsv", name = names(descs), desc = unlist(descs), dataType = unlist(types), stringsAsFactors = FALSE)
-   } else {
-      NULL
-   }
-   cogs <- if(!is.null(x$cog)) {
-      descs <- lapply(x$cog, getDesc)
-      types <- getType(x$cog)
-      data.frame(type = "cog", name = names(descs), desc = unlist(descs), dataType = unlist(types), stringsAsFactors = FALSE)
-   } else {
-      NULL
-   }
-   
-   res <- rbind(
-      pk, sv, bsvs, cogs
-   )
-   rownames(res) <- NULL
-   class(res) <- c("cogDesc", "data.frame")
+   class(res) <- c("cogInfo", "data.frame")
    res
 }
 
-getCognostics <- function(data, cogFn, splitKeys = NULL) {
-   if(is.null(splitKeys))
-      splitKeys <- names(data)
-      
-   isCondDiv <- data$divBy$type == "condDiv"
-   lapply(seq_along(data), function(ii) {
-      getCognosticsSub(data[[ii]], cogFn, isCondDiv, splitKeys[[ii]])
-   })
-}
+# gets distribution of 
+getCogDistns <- function(x, cogInfo) {
+   cogInfo <- subset(cogInfo, type != "panelKey")
+   res <- lapply(seq_len(nrow(cogInfo)), function(i) {
+      curRow <- cogInfo[i,]
 
-getCogInfo <- function(x, cogDesc) {
-   cogDesc <- subset(cogDesc, type != "panelKey")
-   res <- lapply(seq_len(nrow(cogDesc)), function(i) {
-      curRow <- cogDesc[i,]
-      
-      if(curRow$dataType %in% c("character", "factor")) {
+      if(curRow$type %in% c("character", "factor")) {
          res <- getCogCatPlotData(x, curRow$name)
          return(list(
             name = curRow$name,
@@ -295,16 +318,22 @@ getCogInfo <- function(x, cogDesc) {
             n = res$n,
             marginal = res$freq
          ))
-      } else {
+      } else if(curRow$type %in% c("numeric", "integer")) {
          return(list(
             name = curRow$name,
             type = "numeric",
             marginal = getCogQuantPlotData(x, curRow$name, type = c("hist", "quant"))
          ))
+      } else {
+         return(list(
+            name = curRow$name,
+            type = NA,
+            marginal = NA
+         ))
       }
    })
    names(res) <- sapply(res, function(x) x$name)
-   class(res) <- c("cogInfo", "list")
+   class(res) <- c("cogDistns", "list")
    res
 }
 

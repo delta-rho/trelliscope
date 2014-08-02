@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'customicons';
-	src:url('fonts/customicons.eot?6v32fv');
-	src:url('fonts/customicons.eot?#iefix6v32fv') format('embedded-opentype'),
-		url('fonts/customicons.woff?6v32fv') format('woff'),
-		url('fonts/customicons.ttf?6v32fv') format('truetype'),
-		url('fonts/customicons.svg?6v32fv#customicons') format('svg');
+	src:url('fonts/customicons.eot?-iwzhxa');
+	src:url('fonts/customicons.eot?#iefix-iwzhxa') format('embedded-opentype'),
+		url('fonts/customicons.woff?-iwzhxa') format('woff'),
+		url('fonts/customicons.ttf?-iwzhxa') format('truetype'),
+		url('fonts/customicons.svg?-iwzhxa#customicons') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,6 +23,12 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-active-cog:before {
+	content: "\e60a";
+}
+.icon-active-cog2:before {
+	content: "\e60b";
+}
 .icon-plus-square-o:before {
 	content: "\e608";
 }
@@ -64,6 +70,9 @@
 }
 .icon-times:before {
 	content: "\f00d";
+}
+.icon-gear:before {
+	content: "\f013";
 }
 .icon-file-o:before {
 	content: "\f016";
@@ -133,4 +142,13 @@
 }
 .icon-sort-numeric-desc:before {
 	content: "\f163";
+}
+.icon-bug:before {
+	content: "\f188";
+}
+.icon-stopwatch:before {
+	content: "\e60c";
+}
+.icon-file-pdf:before {
+	content: "\e60d";
 }

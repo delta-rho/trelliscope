@@ -9,7 +9,7 @@ renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NU
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(jsonlite:::toJSON(res))
+         return(jsonlite::toJSON(res))
    }
 }
 
@@ -24,7 +24,7 @@ renderData <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) 
       # jsonlite handles data frames the way we want
       res <- func()
       if(!is.null(res))
-         return(RJSONIO:::toJSON(res))
+         return(RJSONIO::toJSON(res))
    }
 }
 
@@ -42,11 +42,11 @@ cogDataString <- function(data) {
 cogTableBodyData <- function(data, nr = 10) {
    nc <- ncol(data)
    if(nc == 0) {
-      return(NULL)      
+      return(NULL)
    } else if(nrow(data) == 0) {
-      tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")   
+      tDataString <- matrix(nrow = nr, ncol = nc, data = "&nbsp;")
    } else {
-      data <- data[1:min(nr, nrow(data)),]
+      data <- data[1:min(nr, nrow(data)),, drop = FALSE]
       tDataString <- cogDataString(data)
       # if fewer then the number of rows, fill with blank <td>s
       # (so that the height is always fixed)
@@ -55,7 +55,7 @@ cogTableBodyData <- function(data, nr = 10) {
          nn <- nr - rnr
          tDataString <- rbind(tDataString, matrix(nrow = nn, ncol = nc))
          tDataString[(rnr + 1):nr, 1:nc] <- "&nbsp;"
-      }      
+      }
    }
    # res <- data.frame(tDataString, stringsAsFactors = FALSE)
    # names(res) <- names(data)
@@ -66,16 +66,22 @@ cogTableBodyData <- function(data, nr = 10) {
 cogTableFootFilter <- function(data) {
    nms <- names(data)
    lapply(seq_along(data), function(i) {
+      disabled <- ""
       if(inherits(data[[i]], c("numeric", "integer"))) {
          list(i = i, name = nms[i], numeric = TRUE)
       } else {
          if(nms[i] == "panelKey") {
             levels <- ""
+            disabled <- "disabled"
          } else {
             # TODO: deal with very large number of levels
             levels <- sort(unique(as.character(data[[i]])))
+            if(length(levels) > 100) {
+               levels <- ""
+               disabled <- "disabled"
+            }
          }
-         list(i = i, name = nms[i], levels = levels)
+         list(i = i, name = nms[i], levels = levels, disabled = disabled)
       }
    })
 }
@@ -86,41 +92,46 @@ cogTableFootHist <- function(data) {
 
 # creates data ready for univariate d3 plotting
 # either bar chart for character or hist / quantile for numeric (specify with plotType)
-getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist") {
+getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
    if(plotType == "histogram")
       plotType <- "hist"
    if(plotType == "quantile")
       plotType <- "quant"
    
-   curInfo <- cdo$cogInfo[[name]]
+   curInfo <- cdo$cdo$cogDistns[[name]]
    
-   if(curInfo$type == "numeric") {
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal[[plotType]]
-      } else {
-         # call trelliscope:::getCogQuantPlotData...
-         return(NULL)
+   if(!is.na(curInfo$type)) {
+      if(curInfo$type == "numeric") {
+         if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+            tmp <- curInfo$marginal[[plotType]]
+         } else {
+            tmp <- trelliscope:::getCogQuantPlotData(cdo$curCogDF, name, plotType)
+         }
+         if(plotType == "hist") {
+            delta <- diff(tmp$xdat[1:2])
+            tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
+            # add random normal to make sure it triggers even when it 
+            # doesn't change - this is to ensure spinner will get replaced
+         } else {
+            names(tmp)[1:2] <- c("x", "y")
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
+         }
+      } else { # bar chart
+         if(distType == "marginal") {
+            tmp <- curInfo$marginal
+         } else {
+            tmp <- trelliscope:::getCogCatPlotData(cdo$curCogDF, name, plotType)$freq
+         }
+         if(nrow(tmp) > maxLevels)
+            return(list(name = name))
+         tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
+         # browser()
+         tmp$ind <- seq_len(nrow(tmp))
+         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = rnorm(1)))
       }
-      if(plotType == "hist") {
-         delta <- diff(tmp$xdat[1:2])
-         tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      } else {
-         names(tmp)[1:2] <- c("x", "y")
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType))
-      }
-   } else {
-      if(distType == "marginal") {
-         tmp <- curInfo$marginal
-      } else {
-         # call trelliscope:::getCogCatPlotData...
-         return(NULL)
-      }
-      tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-      # browser()
-      tmp$ind <- seq_len(nrow(tmp))
-      return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar"))
    }
+   return(list(name = name))
 }
 
 getCogScatterPlotData <- function(x, ...)
@@ -130,8 +141,9 @@ getCogHexbinPlotData <- function(x, ...)
    UseMethod("getCogHexbinPlotData", x)
 
 getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
+   idx <- complete.cases(cogDF[,c(xVar, yVar)])
    list(
-      data = data.frame(x = cogDF[,xVar], y = cogDF[,yVar]),
+      data = data.frame(x = cogDF[idx,xVar], y = cogDF[idx,yVar]),
       plotType = "scatter",
       xlab = xVar,
       ylab = yVar
@@ -139,7 +151,8 @@ getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
 }
 
 getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30) {
-   dat <- hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
+   require(hexbin)
+   dat <- hexbin:::hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
    style <- "lattice"
    minarea <- 0.05
    maxarea <- 0.8
@@ -197,11 +210,18 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
 }
 
 getBivarPlotDat <- function(cdo, xVar, yVar, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-   # TODO: handle marginal...
-   if(plotType == "scatter") {
-      getCogScatterPlotData(cdo$cogDatConn, xVar, yVar)
+   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+      if(plotType == "scatter") {
+         getCogScatterPlotData(cdo$cdo$cogDatConn, xVar, yVar)
+      } else {
+         getCogHexbinPlotData(cdo$cdo$cogDatConn, xVar, yVar, shape, xbin)
+      }
    } else {
-      getCogHexbinPlotData(cdo$cogDatConn, xVar, yVar, shape, xbin)
+      if(plotType == "scatter") {
+         getCogScatterPlotData(cdo$curCogDF, xVar, yVar)
+      } else {
+         getCogHexbinPlotData(cdo$curCogDF, xVar, yVar, shape, xbin)
+      }
    }
 }
 
@@ -210,16 +230,20 @@ getCogICA <- function(x, ...)
 
 getCogICA.data.frame <- function(cogDF, vars) {
    require(fastICA)
-   set.seed(4331)
-   res <- fastICA(cogDF[,vars], n.comp=2)
+   # set.seed(4331)
+   idx <- which(complete.cases(cogDF[,vars]))
+   res <- fastICA(cogDF[idx, vars], n.comp=2)
    data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
 }
 
 getMultivarPlotDat <- function(cdo, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-   # TODO: handle marginal...
    xVar <- "IC1"
    yVar <- "IC2"
-   icaDat <- getCogICA(cdo$cogDatConn, vars)
+   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+      icaDat <- getCogICA(cdo$cdo$cogDatConn, vars)
+   } else {
+      icaDat <- getCogICA(cdo$curCogDF, vars)      
+   }
    if(plotType == "scatter") {
       getCogScatterPlotData(icaDat, xVar, yVar)
    } else {
@@ -237,72 +261,126 @@ dummyPanel <- function(w, h) {
    sprintf("<div style=\"width:%dpx; height:%dpx; background-color: #ddd\"></div>", w, h)
 }
 
-dummyCog <- function(cogVars) {
-   data.frame(cog_name = cogVars, cog_value = "")
+dummyCog <- function(labelVars) {
+   data.frame(cog_name = labelVars, cog_value = "")
 }
 
-getPanels <- function(cdo, curRows, pixelratio = 2) {
-   if(cdo$cdo$preRender) {
-      pngs <- unlist(lapply(cdo$cdo$panelDataSource[curRows$panelKey], "[[", 2))
+getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
+   if(cdo$preRender) {
+      pngs <- unlist(lapply(cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
-      tmpfile <- tempfile()
+      environment(cdo$panelFn) <- environment()
       
-      # load relatedData
-      # rel <- cdo$relatedData
-      # for(i in seq_along(rel)) {
-      #    assign(names(rel)[i], rel[[i]], environment())
-      # }
-      environment(cdo$cdo$panelFn) <- environment()
-      
-      curDat <- cdo$cdo$panelDataSource[curRows$panelKey]
+      curDat <- cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
-         warning("data for key ", curRows, " could not be found.")
+         warning("data for key ", curRows$panelKey, " could not be found.")
       
-      pngs <- sapply(curDat, function(x) {
+      panelContent <- lapply(seq_along(curDat), function(i) {
+         x <- curDat[[i]]
          res <- try({
-            makePNG(dat = x, 
-               panelFn = cdo$cdo$panelFn, 
-               file = tmpfile, 
-               width = cdo$cdo$state$panelLayout$w, 
-               height = cdo$cdo$state$panelLayout$h, 
-               origWidth = cdo$cdo$width,
-               # res = 72, # * cdo$cdo$state$panelLayout$w / cdo$cdo$width, 
-               lims = cdo$cdo$lims,
-               pixelratio = pixelratio
+            list(
+               html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
+               data = list(
+                  id = paste("#display-panel-table-", i, sep = ""),
+                  spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+               )
             )
-            encodePNG(tmpfile)
          })
          if(inherits(res, "try-error"))
             res <- NULL
          res
       })
    }
-   pngs
+   panelContent
 }
 
-makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
+renderPanelHtml <- function(panelFn, ...)
+   UseMethod("renderPanelHtml", panelFn)
+
+renderPanelHtml.rplotFn <- function(panelFn, ...)
+   renderPanelHtml.trellisFn(panelFn, ...)
+
+renderPanelHtml.ggplotFn <- function(panelFn, ...)
+   renderPanelHtml.trellisFn(panelFn, ...)
+
+renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   tmpfile <- tempfile()
+   on.exit(rm(tmpfile))
    
-   if(capabilities("aqua")) {
-      pngfun <- png
-   } else if (nchar(system.file(package = "Cairo"))) {
-      pngfun <- Cairo::CairoPNG
-   } else {
-      pngfun <- png
-   }
-   
-   pngfun(filename = filename, 
-      width = width * pixelratio, 
-      height = height * pixelratio, 
-      res = res * pixelratio, 
-      pointsize = basePointSize * width / origWidth)
-   
-   dv <- dev.cur()
-   
-   tryCatch(func(), finally = dev.off(dv))
+   makePNG(dat = x, 
+      panelFn = panelFn, 
+      file = tmpfile, 
+      width = width, 
+      height = height, 
+      origWidth = origWidth,
+      # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
+      lims = lims,
+      pixelratio = pixelratio
+   )
+   paste("<img src=\"", encodePNG(tmpfile),
+      "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")   
 }
 
+renderPanelHtml.ggvisFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData <- function(panelFn, ...)
+   UseMethod("renderPanelData", panelFn)
+
+renderPanelData.rplotFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.trellisFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.ggplotFn <- function(panelFn, ...) {
+   ""
+}
+
+renderPanelData.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   # plotXLim <- tmp$x.limits
+   # plotYLim <- tmp$y.limits
+   # curXLim <- trsCurXLim(lims, x, plotXLim)
+   # curYLim <- trsCurYLim(lims, x, plotYLim)
+   p <- kvApply(panelFn, x)
+   p <- set_options(p, width = width, height = height)
+   
+   getVegaSpec(p)
+}
+
+
+getVegaSpec <- function(x) {
+   spec <- ggvis:::as.vega(x)
+   RJSONIO::toJSON(spec)
+}
+
+
+# makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
+# 
+#    if(capabilities("aqua")) {
+#       pngfun <- png
+#    } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
+#       pngfun <- CairoPNG
+#    } else {
+#       pngfun <- png
+#    }
+#    
+#    pngfun(filename = filename,
+#       width = width * pixelratio,
+#       height = height * pixelratio,
+#       res = res * pixelratio,
+#       pointsize = basePointSize * width / origWidth)
+# 
+#    dv <- dev.cur()
+# 
+#    tryCatch(func(), finally = dev.off(dv))
+# }
+# 
 # require(fastICA)
-# 
-# 
+#
+#
 # makeBivarJSON(ic$S[,1], ic$S[,2], xlab="IC 1", ylab="IC 2")
 

@@ -115,6 +115,14 @@ body > .container {
   overflow-y: auto;
 }
 
+#openModal {
+  z-index: 10000 !important;
+}
+
+#openModal .modal-dialog {
+  min-width: 835px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -262,6 +270,7 @@ body {
   -webkit-transition: margin .65s; /* For safari 3.1 to 6.0 */
   -moz-transition: margin .65s;
   transition: margin .65s;
+  visibility: hidden; /* until cogmap is working */
 }
 
 .right-slide {
@@ -574,6 +583,13 @@ Sliding Panel
 
 .select-column {
   width: 60px;
+  text-align: center;
+  vertical-align: middle !important;
+  color: #fff;
+}
+
+.select-column.active {
+  color: #000;
 }
 
 .thumb-column {
@@ -594,6 +610,9 @@ Sliding Panel
   z-index: 1001;
 }
 
+.list-group-item-primary {
+  pointer-events: none !important;
+}
 
 li.list-group-item.active {
   color: #fff;
@@ -829,15 +848,20 @@ th.select-column {
 }
 
 td.select-column.active {
-  background-color: #5cb85c !important;
-  border-color: #47a447 !important;
+  background-color: #DEF1DE !important;
+  border-color: #CEEACE !important;
 /*  background-color: #f0ad4e;
   border: 1px solid #ed9c28;*/
 }
 
-#visible-cognostics-selection {
+#panel-labels-selection {
   max-height: 450px;
   overflow-y: auto;
+}
+
+.panel-labels-group {
+  text-align: center;
+  background-color: #eee;
 }
 
 #displayListOutput td {
@@ -857,6 +881,10 @@ td.select-column.active {
   width: 540px;
   height: 100%;
   float: right;
+}
+
+#panel-layout-toggle button {
+  width: 110px !important;
 }
 
 .clear { clear: both;}
@@ -926,6 +954,16 @@ td.select-column.active {
   width: 780px;
   max-height: 500px;
   margin: 0 auto;
+}
+
+#active-cog-selection {
+  max-height: 450px;
+  overflow-y: auto;
+}
+
+#add-related-display-selection {
+  max-height: 167px;
+  overflow-y: auto;  
 }
 
 #editor { 
@@ -1231,3 +1269,115 @@ text.axis-label {
   display: none;
 }
 
+
+.control-footer {
+  padding-left: 20px;
+}
+
+
+.info-tab-label {
+  font-size: 14px;
+  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
+}
+
+.hotkey-list li {
+  list-style-type: none;
+  margin-left: -15px;
+}
+
+.hotkey-list {
+  margin-bottom: 20px;
+}
+
+.hotkey-list li>code {
+  margin-right: 10px;
+}
+
+#hotkey-container {
+  width: 600px;
+  margin: auto;
+}
+
+#hotkey-left-column {
+  float: left;
+}
+
+#hotkey-right-column {
+  float: right;
+}
+
+.hotkey-column {
+  padding: 20px;
+}
+
+
+#error-log {
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: #eee;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  color: darkgray;
+  font-size: 12px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+
+
+/* Related display
+----------------------------------*/
+
+#related-layout-container {
+  height: 290px;
+  width: 760px;
+  border: 1px dashed #888;
+  position: absolute;
+  top: 335px;
+  left: 320px;
+  z-index: 5001;
+}
+
+.related-layout-box {
+  position: absolute;
+  top: 335px;
+  left: 320px;
+  border: 1px solid #89B;
+  background: #BCE;
+  opacity: 0.8;
+  width: 50px;
+  height: 50px;
+  cursor: move;
+  z-index: 5010;
+}
+
+.handle {
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  border: 1px solid #89B;
+  background: #9AC; 
+  opacity: 0.8;
+}
+
+.NW, .NE {
+  top: 0px;
+}
+.NE, .SE {
+  right: 0px;
+}
+.SW, .SE {
+  bottom: 0px;
+}
+.NW, .SW {
+  left: 0px;
+}
+.SE, .NW {   
+  cursor: nw-resize;
+}
+.SW, .NE {
+  cursor: ne-resize;
+}
+
+
+/*
+----------------------------------*/
