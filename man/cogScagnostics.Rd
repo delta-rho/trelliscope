@@ -17,7 +17,7 @@ cogScagnostics(x, y, group = "scagnostics", defLabel = FALSE,
 Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 }
 \examples{
-cogScagnostics(cars$dist, cars$speed)
+cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
 }
 \author{
 Ryan Hafen

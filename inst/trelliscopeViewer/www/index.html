@@ -31,9 +31,11 @@
     </script>
     <script src="assets/spin/spin.js"></script>
     <script src="assets/bootstrap-select/bootstrap-select.js"></script>
-
+    <script src="assets/sizeof/sizeof.js"></script>
+    
     <script src="assets/d3/d3.min.js"></script>
-
+    <script src="assets/d3/vega.min.js"></script>
+    
     <script src="assets/custom/d3footPlot.js"></script>
     <script src="assets/custom/d3uniFilter.js"></script>
     <script src="assets/custom/d3biFilter.js"></script>
@@ -77,10 +79,10 @@
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Trelliscope Viewer</a>
+          <a class="navbar-brand" href="javascript:">Trelliscope Viewer</a>
           <div class="left-icons">
             <ul>
-              <a data-toggle="modal" data-target="#displayInfoModal" href="#"><li><i class="icon-file-info"></i></li></a>
+              <a data-toggle="modal" data-target="#displayInfoModal" href="javascript:"><li><i class="icon-file-info"></i></li></a>
               <span id="headerDisplayNameOutput" class="shiny-text-output"></span>
             </ul>
           </div>
@@ -88,9 +90,9 @@
           </div>
           <div class="right-icons">
             <ul>
-              <a data-toggle="modal" data-target="#userModal" href="#"><li><i class="icon-user"></i></li></a>
-              <a data-toggle="modal" data-target="#openModal" href="#"><li><i class="icon-folder-open"></i></li></a>
-              <a data-toggle="modal" data-target="#aboutModal" href="#"><li><i class="icon-info-circle"></i></li></a>
+              <a data-toggle="modal" data-target="#userModal" href="javascript:"><li><i class="icon-user"></i></li></a>
+              <a data-toggle="modal" data-target="#openModal" href="javascript:"><li><i class="icon-folder-open"></i></li></a>
+              <a data-toggle="modal" data-target="#aboutModal" href="javascript:"><li><i class="icon-info-circle"></i></li></a>
             </ul>
           </div>
         </div>
@@ -105,54 +107,54 @@
             <img src="assets/images/logo.svg">
           </div>
           <div class="list-group list-group-sidebar">
-            <a href="#" class="list-group-item active list-group-item-primary list-group-item-short">
+            <a href="javascript:" class="list-group-item active list-group-item-primary list-group-item-short">
             <span class="list-group-header">View Options</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="panel-layout" id="panel-layout-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="panel-layout" id="panel-layout-nav-link">
               <i class="icon-th"></i>
               <span class="list-group-text">Panel Layout</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="panel-function" id="panel-function-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="panel-function" id="panel-function-nav-link">
               <i class="icon-panel-edit"></i>
               <span class="list-group-text">Panel Function</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="panel-labels" id="panel-labels-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="panel-labels" id="panel-labels-nav-link">
                <!-- data-action="panelLabelListSetFromExposedState"> -->
               <i class="icon-cog-list"></i>
               <span class="list-group-text">Panel Labels</span>
             </a>
-            <a href="#" class="list-group-item last-item" data-divlink="add-related-display" id="add-related-display-nav-link" data-action="showRelatedLayoutControls">
+            <a href="javascript:" class="list-group-item last-item" data-divlink="add-related-display" id="add-related-display-nav-link" data-action="showRelatedLayoutControls">
               <i class="icon-plus-square-o"></i>
               <span class="list-group-text">&nbsp;Related Displays</span>
             </a>
-            <a href="#" class="list-group-item active list-group-item-primary list-group-item-short">
+            <a href="javascript:" class="list-group-item active list-group-item-primary list-group-item-short">
               <span class="list-group-header">Cognostics</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="active-cog" id="active-cog-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="active-cog" id="active-cog-nav-link">
                <!-- data-action="cogTableSetFromExposedState"> -->
               <i class="icon-active-cog"></i>
               <span class="list-group-text">Active Cognostics</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="cog-table-sort-filter" id="cog-table-sort-filter-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="cog-table-sort-filter" id="cog-table-sort-filter-nav-link">
                <!-- data-action="cogTableSetFromExposedState"> -->
               <i class="icon-sort-filter"></i>
               <span class="list-group-text">Table Sort / Filter</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="univar-filter" id="univar-filter-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="univar-filter" id="univar-filter-nav-link">
                <!-- data-action="univarFilterSetFromExposedState"> -->
               <i class="icon-bars"></i>
               <span class="list-group-text">Univariate Filter</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="bivar-filter" id="bivar-filter-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="bivar-filter" id="bivar-filter-nav-link">
                <!-- data-action="bivarFilterSetFromExposedState"> -->
               <i class="icon-stats"></i>
               <span class="list-group-text">Bivariate Filter</span>
             </a>
-            <a href="#" class="list-group-item" data-divlink="multivar-filter" id="multivar-filter-nav-link">
+            <a href="javascript:" class="list-group-item" data-divlink="multivar-filter" id="multivar-filter-nav-link">
               <i class="icon-multivar"></i>
               <span class="list-group-text">Multivariate Filter</span>
             </a>
-            <a href="#" class="list-group-item last-item" data-divlink="sample-panels" id="sample-panels-nav-link">
+            <a href="javascript:" class="list-group-item last-item" data-divlink="sample-panels" id="sample-panels-nav-link">
               <i class="icon-sample"></i>
               <span class="list-group-text">Sample</span>
             </a>
@@ -170,7 +172,6 @@
         <div id="sample-panels"         class="slide-panel panel panel-default"></div>
 
         <div class="shiny-template-output" id="panelTableContentOutput" data-post-render="panelTableContentOutputPostRender">
-          <div id="panelTableSpinner"></div>
         </div>
 
         <div class="right-panel">
@@ -200,7 +201,7 @@
          </div>
       </div>
     </div>
-
+  
   <!-- Modal -->
   <div class="modal fade" id="displayInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -241,6 +242,7 @@
   
   <!-- Modal -->
   <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="displayLoadSpinner"></div>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -435,7 +437,7 @@
       <p>{{{panel_description}}}</p>
     </div>
     <div class="panel-right">
-      <a href="#" class="btn-panel-close">
+      <a href="javascript:" class="btn-panel-close">
         <span class="panel-close"><i class="icon-times"></i></span>
       </a>
     </div>
@@ -478,7 +480,7 @@
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
+          <li><a href="javascript:">Var1<span class="badge pull-right">42</span></a></a></li>
         </ul>
       </div>
       <p class="control-label">Varies Per Page</p>
@@ -489,7 +491,7 @@
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="#">Var1<span class="badge pull-right">42</span></a></a></li>
+          <li><a href="javascript:">Var1<span class="badge pull-right">42</span></a></a></li>
         </ul>
       </div>
     </div>
@@ -660,7 +662,7 @@
         {{/numeric}}
           {{^numeric}}
             <input id="text-column-{{name}}" type="text" placeholder="regex" class="form-control column-filter column-filter-regex" spellcheck="false" autocorrect="false"/>
-            <select id="text-select-{{name}}" class="selectpicker dropup column-filter column-filter-select" multiple data-selected-text-format="count>0" data-count-selected-text="{0} of {1}" title="select" data-dropup-auto="false" data-width="auto" data-size="10" {{disabled}}>
+            <select id="text-select-{{name}}" class="selectpicker dropup column-filter column-filter-select {{disabled}}" multiple data-selected-text-format="count>0" data-count-selected-text="{0} of {1}" title="select" data-dropup-auto="false" data-width="auto" data-size="10" {{disabled}}>
               {{#levels}}
               <option>{{.}}</option>
               {{/levels}}
@@ -688,17 +690,17 @@
   <div class="pull-right" id="cog-table-pagination">
     <ul class="pagination shiny-my-data-input" id="cogTablePaginationInput">
       <li>
-        <a href="#" id="cogTablePageStart">
+        <a href="javascript:" id="cogTablePageStart">
           <i class="icon-step-backward"></i>
         </a>
       </li>
       <li>
-        <a href="#" id="cogTablePagePrev">
+        <a href="javascript:" id="cogTablePagePrev">
           <i class="icon-chevron-left"></i>
         </a>
       </li>
       <li>
-        <a href="#">
+        <a href="javascript:">
           <span id="cogTableCurPageOutput" class="shiny-text-output">
             {{curPage}}
           </span>
@@ -709,11 +711,11 @@
         </a>
       </li>
       <li>
-        <a href="#" id="cogTablePageNext">
+        <a href="javascript:" id="cogTablePageNext">
           <i class="icon-chevron-right"></i>
         </a>
       </li>
-      <li><a href="#" id="cogTablePageEnd"><i class="icon-step-forward"></i></a></li>
+      <li><a href="javascript:" id="cogTablePageEnd"><i class="icon-step-forward"></i></a></li>
     </ul>
   </div>
 </div>
@@ -775,8 +777,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="univarFilterPlot" data-d3-fn="d3univar" data-callback="univarFilterLocalLoad" data-spinner="univarSpinner"></div>
     <div id="univar-dist-toggle">
       <div class="btn-group" id="univarDistType" data-action="updateUnivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="univar-type-toggle">
@@ -824,8 +826,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="bivarFilterPlot"  data-d3-fn="d3bivar" data-callback="bivarFilterLocalLoad" data-spinner="bivarSpinner"></div>
     <div id="bivar-dist-toggle">
       <div class="btn-group" id="bivarDistType" data-action="updateBivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="bivar-type-toggle">
@@ -859,8 +861,8 @@
     <div class="vis-filter-plot empty-plot shiny-d3-output" id="multivarFilterPlot" data-d3-fn="d3bivar" data-callback="multivarFilterLocalLoad" data-spinner="multivarSpinner"></div>
     <div id="multivar-dist-toggle">
       <div class="btn-group" id="multivarDistType" data-action="updateMultivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Marginal</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Conditional</button>
+        <button type="button" class="btn btn-info mc-toggle active" data-dist-type="conditional">Filtered</button>
+        <button type="button" class="btn btn-default mc-toggle" data-dist-type="marginal">All</button>
       </div>
     </div>
     <div id="multivar-type-toggle">
@@ -940,7 +942,7 @@
     </button>
     <ul class="dropdown-menu" id="skip-button-menu" role="menu" style="min-width:0px; right:0; left:auto;">
     {{#skips}}
-      <li><a href="#">{{.}}x</a></li>
+      <li><a href="javascript:">{{.}}x</a></li>
     {{/skips}}
     </ul>
   </div>
@@ -974,7 +976,7 @@
 
 <!-- panel table content template -->
 <script id="panelTableContentOutput-template" type="text/html">
-<div id="displayLoadSpinner"></div>
+<div id="panelTableSpinner"></div>
 <table class="panel-table-table" id="panel-table">
   {{#.}}
   <tr>
@@ -985,7 +987,11 @@
           <td class="display-panel-td" name="{{i}}">
             <div class="panel-image-wrapper">
               <div id="display-panel-table-{{i}}">
-                {{{panel_content}}}
+                {{{html_wrap_start}}}
+                {{#panel_content}}
+                  {{{html}}}
+                {{/panel_content}}
+                {{{html_wrap_end}}}
               </div>
               <div class="panel-image-download">
                 <i class="icon-download"></i>

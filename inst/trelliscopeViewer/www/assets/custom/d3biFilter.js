@@ -21,31 +21,31 @@ function bivarFilterPlotBrushFn() {
    } else {
       $("#bivarFilterPlotRange").html("x: " + prec(curBrush[0][0]) + " to " + prec(curBrush[1][0]) + " </br> y: " + prec(curBrush[0][1]) + " to " + prec(curBrush[1][1]) + "");
       
-      // show filter icon if brush is legitimate
-      var xDomain = bivarFilterPlotX.domain();
-      var yDomain = bivarFilterPlotY.domain();
-      var xf = [curBrush[0][0], curBrush[1][0]];
-      var yf = [curBrush[0][1], curBrush[1][1]];
-      
+      // // show filter icon if brush is legitimate
+      // var xDomain = bivarFilterPlotX.domain();
+      // var yDomain = bivarFilterPlotY.domain();
+      // var xf = [curBrush[0][0], curBrush[1][0]];
+      // var yf = [curBrush[0][1], curBrush[1][1]];
+      // 
       // if both x and y fill the domain, don't brush
-      yFill = (yf[1] - yf[0]) > (yDomain[1] - yDomain[0]) / 1.01;
-      xFill = (xf[1] - xf[0]) > (xDomain[1] - xDomain[0]) / 1.01;
-      
-      if(xFill) {
-         activeXvar.find("i").addClass("hidden");
-         correspYvar.find("i").addClass("hidden");
-      } else if(xf[0] != xf[1]) {
-         activeXvar.find("i").removeClass("hidden");
-         correspYvar.find("i").removeClass("hidden");
-      }
-      
-      if(yFill) {
-         activeYvar.find("i").addClass("hidden");
-         correspXvar.find("i").addClass("hidden");
-      } else if(yf[0] != yf[1]) {
-         activeYvar.find("i").removeClass("hidden");         
-         correspXvar.find("i").removeClass("hidden");
-      }
+      // yFill = (yf[1] - yf[0]) > (yDomain[1] - yDomain[0]) / 1.01;
+      // xFill = (xf[1] - xf[0]) > (xDomain[1] - xDomain[0]) / 1.01;
+      // 
+      // if(xFill) {
+      //    activeXvar.find("i").addClass("hidden");
+      //    correspYvar.find("i").addClass("hidden");
+      // } else if(xf[0] != xf[1]) {
+      //    activeXvar.find("i").removeClass("hidden");
+      //    correspYvar.find("i").removeClass("hidden");
+      // }
+      // 
+      // if(yFill) {
+      //    activeYvar.find("i").addClass("hidden");
+      //    correspXvar.find("i").addClass("hidden");
+      // } else if(yf[0] != yf[1]) {
+      //    activeYvar.find("i").removeClass("hidden");         
+      //    correspXvar.find("i").removeClass("hidden");
+      // }
    }
 }
 
@@ -126,13 +126,41 @@ function d3bivar(data, id) {
      .append("g")
        .attr("transform", "translate(" + bivarFilterPlotMargin.left + "," + bivarFilterPlotMargin.top + ")");
    
+   var filterData = $("#univarFilterState").data("filterData");
+   if(!filterData)
+      filterData = {};
+   
+   var xFilter;
+   activeXvar = $("#bivar-x-filter-select li.active");
+   if(activeXvar) {
+      var varName = activeXvar.data("name");
+      xFilter = filterData[varName];
+   }
+
+   var yFilter;
+   activeYvar = $("#bivar-y-filter-select li.active");
+   if(activeYvar) {
+      var varName = activeYvar.data("name");
+      yFilter = filterData[varName];
+   }
+   
    var xrange = d3.extent(data.data.map(function(d) { return d.x; }));
    xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.07;
    xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
    
+   if(xFilter) {
+      xrange[0] = Math.min(xrange[0], xFilter.from);
+      xrange[1] = Math.max(xrange[1], xFilter.to);
+   }
+   
    var yrange = d3.extent(data.data.map(function(d) { return d.y; }));
    yrange[0] = yrange[0] - (yrange[1] - yrange[0]) * 0.07;
    yrange[1] = yrange[1] + (yrange[1] - yrange[0]) * 0.07;
+   
+   if(yFilter) {
+      yrange[0] = Math.min(yrange[0], yFilter.from);
+      yrange[1] = Math.max(yrange[1], yFilter.to);
+   }
    
    window[id + "X"].domain(xrange);
    window[id + "Y"].domain(yrange);

@@ -56,7 +56,7 @@ function d3footPlot(data) {
            .style("left", (d3.event.pageX - 5) + "px")
            .style("top", (d3.event.pageY - 29) + "px")
            .text(d.label);
-           
+
          // Show the tooltip
          d3.select("#d3tooltip").classed("hidden", false);
       })

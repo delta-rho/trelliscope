@@ -29,10 +29,28 @@ currentDisplay <- reactive({
       cdo <- do.call(getDisplay, sld)
       logMsg("Display loaded")
       
+      # load required packages
+      if(!is.null(cdo$relatedPackages)) {
+         logMsg("Loading packages: ", paste(cdo$relatedPackages, collapse = ", "))
+         for(pkg in cdo$relatedPackages)
+            suppressMessages(require(pkg, character.only = TRUE))
+      }
+      
+      # set up an environment for this display to be evaluated in
+      dispEnv <- new.env(parent = .GlobalEnv)
+      cdo$envir <- .GlobalEnv
+      
+      # load any related data into global environment
+      # note: these should not be put in global environment
+      # but a display-specific environment - need to update
+      if(!is.null(cdo$relatedData)) {
+         for(nm in names(cdo$relatedData))
+            .GlobalEnv[[nm]] <- cdo$relatedData[[nm]]
+      }
+      
       if(is.null(cdo$cogDistns))
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
       
-
       logMsg("Getting default state...")
       # default state values if not specified
       if(is.null(cdo$state$panelLabelState)) {

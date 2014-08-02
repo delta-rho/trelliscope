@@ -44,8 +44,8 @@ irisPreFn <- function(x) {
       ylim = range(x$Sepal.Width)
    )
 }
-irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
-irisLims <- setLims(irisPre, x="same", y="sliced")
+irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
+irisLims <- setLims(irisPre, x = "same", y = "sliced")
 }
 }
 \author{

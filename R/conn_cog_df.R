@@ -24,7 +24,7 @@ dfCogConn <- function() {
 
 #' @export
 print.dfCogConn <- function(x, ...) {
-   cat("dfCogConn object")
+   cat("dfCogConn object\n")
 }
 
 #' @export
@@ -35,7 +35,6 @@ cogPre.dfCogConn <- function(cogConn, conn, group, name, ...) {
 
 #' @export
 cogEmit.dfCogConn <- function(cogConn, data, ...) {
-   # add to mongo collection
    collect("TRS___cog", do.call(rbind, lapply(data, cog2df)))
 }
 
@@ -78,11 +77,11 @@ getCogData.data.frame <- function(x, rowIdx, colIdx, ...) {
 #' @export
 oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE, ...) {
    filterIndex <- seq_len(cogNrow(cogDF))
-
+   
    if(!is.null(flt)) {
       logMsg("Updating cognostic filter index", verbose = verbose)
       flt <- processFilterInput(flt)
-
+      
       for(i in seq_along(flt)) {
          cur <- flt[[i]]
          if(cur[1] == "from") {
@@ -98,7 +97,7 @@ oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose =
          filterIndex <- intersect(filterIndex, newIndex)
       }
    }
-
+   
    # before ordering, perform any filters
    logMsg("Updating cognostic sort index", verbose = verbose)
    cogDF <- cogDF[filterIndex,, drop = FALSE]

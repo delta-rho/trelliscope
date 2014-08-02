@@ -37,7 +37,7 @@ if(getRversion() >= "2.15.1") {
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
 #' plot(irisPre)#' }
 #'
 #' @export
@@ -48,8 +48,8 @@ prepanel <- function(
    verbose = TRUE
 ) {
    banking <- function(dx, dy) {
-      if (length(dx)!=length(dy)) return(NA)
-      id <- dx!=0 & dy!=0 & !is.na(dx) & !is.na(dy)
+      if (length(dx) != length(dy)) return(NA)
+      id <- dx != 0 & dy != 0 & !is.na(dx) & !is.na(dy)
       if (any(id)) {
          r  <- abs(dx[id]/dy[id])
          median(r)
@@ -92,7 +92,7 @@ prepanel <- function(
          if(prepanelFnIsTrellis) {
             # temporarily remove axis padding
             curOption <- lattice.getOption("axis.padding")$numeric
-            lattice.options(axis.padding=list(numeric=0))
+            lattice.options(axis.padding = list(numeric = 0))
             p <- kvApply(prepanelFn, list(k, r))
             if(all(is.na(p$panel.args[[1]]$x)) || all(is.na(p$panel.args[[1]]$y))) {
                xr <- c(NA, NA)
@@ -104,14 +104,14 @@ prepanel <- function(
                yr <- p$y.limits
             }
 
-            lattice.options(axis.padding=list(numeric=curOption))
+            lattice.options(axis.padding = list(numeric = curOption))
             # # TODO: for ggplot:
             # a <- print(p) # need to not make it actually plot
             # a$panel$ranges[[1]]$x.range
             # a$panel$ranges[[1]]$y.range
          } else if(prepanelFnIsGgplot) {
             p <- kvApply(prepanelFn, list(k, r))
-            gglims <- try(ggplot_build(p)$panel$ranges, silent=TRUE)
+            gglims <- try(ggplot_build(p)$panel$ranges, silent = TRUE)
 
             if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
                xr <- gglims[[1]]$x.range
@@ -133,21 +133,21 @@ prepanel <- function(
          }
 
          collect("x", data.frame(
-            key=digest(k),
-            min=xr[1],
-            max=xr[2],
-            # med=median(x, na.rm=TRUE),
-            bnk=bnk,
-            stringsAsFactors=FALSE
+            key = digest(k),
+            min = xr[1],
+            max = xr[2],
+            # med = median(x, na.rm = TRUE),
+            bnk = bnk,
+            stringsAsFactors = FALSE
          ))
 
          collect("y", data.frame(
-            key=digest(k),
-            min=yr[1],
-            max=yr[2],
-            # med=median(y, na.rm=TRUE),
-            bnk=bnk,
-            stringsAsFactors=FALSE
+            key = digest(k),
+            min = yr[1],
+            max = yr[2],
+            # med = median(y, na.rm = TRUE),
+            bnk = bnk,
+            stringsAsFactors = FALSE
          ))
       }
    })
@@ -164,41 +164,32 @@ prepanel <- function(
          collect(reduce.key, res)
       }
    )
-
+   
    parList <- list(
       prepanelFn = prepanelFn,
       prepanelFnIsTrellis = prepanelFnIsTrellis,
       prepanelFnIsGgplot = prepanelFnIsGgplot,
       doBanking = doBanking
    )
-
+   packages <- NULL
+   
    if(! "package:trelliscope" %in% search()) {
       # parList <- c(parList, list(
       # ))
-
-      setup <- expression({
-         suppressMessages(require(lattice))
-         suppressMessages(require(ggplot2))
-         suppressMessages(require(data.table))
-      })
+      
+      packages <- c(packages, "lattice", "ggplot2", "data.table")
    } else {
-      setup <- expression({
-         suppressMessages(require(lattice))
-         suppressMessages(require(ggplot2))
-         suppressMessages(require(data.table))
-         suppressMessages(require(trelliscope))
-         suppressMessages(require(datadr))
-      })
+      packages <- c(packages, "trelliscope")
    }
-
+   
    # suppressMessages(capture.output(
    jobRes <- mrExec(
       data,
-      setup=setup,
-      map=map,
-      reduce=reduce,
-      control=control,
-      params=parList,
+      map = map,
+      reduce = reduce,
+      control = control,
+      params = parList,
+      packages = packages
    )
 
    res <- list(
@@ -236,13 +227,13 @@ prepanel <- function(
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
+#' irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
 #' plot(irisPre)
 #' }
 #'
 #' @method plot trsPre
 #' @export
-plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.25), xlab="Rank", ylab="Panel Limits", ...
+plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, strip.left = TRUE, between = list(y = 0.25), xlab = "Rank", ylab = "Panel Limits", ...
 ) {
    # TODO: what about dx and dy for aspect ratio?
    lims <- x
@@ -262,12 +253,12 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 
       if(type == "sliced") {
          dat[,2:4] <- dat[,2:4] - (dat$max + dat$min) / 2
-         dat <- dat[order(dat$max - dat$min, decreasing=FALSE),]
+         dat <- dat[order(dat$max - dat$min, decreasing = FALSE),]
       } else {
-         dat <- dat[order((dat$max + dat$min) / 2, decreasing=FALSE),]
+         dat <- dat[order((dat$max + dat$min) / 2, decreasing = FALSE),]
       }
       dat$rank <- seq_len(nrow(dat))
-      dat$which <- paste(var, " (", type, ")", sep="")
+      dat$which <- paste(var, " (", type, ")", sep = "")
       dat
    }
 
@@ -278,23 +269,23 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
       adjust("y", "sliced")
    )
 
-   p <- xyplot(min + max ~ rank | which, data=lims2,
-      panel=function(x, y, ..., subscripts) {
+   p <- xyplot(min + max ~ rank | which, data = lims2,
+      panel = function(x, y, ..., subscripts) {
          curlims <- lims2[subscripts,]
-         panel.abline(v=pretty(curlims$rank), col="#e6e6e6")
-         panel.abline(h=pretty(c(curlims$min, curlims$max)), col="#e6e6e6")
+         panel.abline(v = pretty(curlims$rank), col = "#e6e6e6")
+         panel.abline(h = pretty(c(curlims$min, curlims$max)), col = "#e6e6e6")
          panel.segments(curlims$rank, curlims$min, curlims$rank, curlims$max)
-         # panel.lines(curlims$rank, curlims$med, col="red", pch=".")
-         panel.lines(curlims$rank, (curlims$max + curlims$min) / 2, col="red", pch=".")
+         # panel.lines(curlims$rank, curlims$med, col = "red", pch = ".")
+         panel.lines(curlims$rank, (curlims$max + curlims$min) / 2, col = "red", pch = ".")
       },
-      scales=list(y=list(relation="free")),
-      layout=layout,
-      as.table=as.table,
-      strip=strip,
-      strip.left=strip.left,
-      between=between,
-      xlab=xlab,
-      ylab=ylab,
+      scales = list(y = list(relation = "free")),
+      layout = layout,
+      as.table = as.table,
+      strip = strip,
+      strip.left = strip.left,
+      between = between,
+      xlab = xlab,
+      ylab = ylab,
       ...
    )
 
@@ -335,15 +326,15 @@ plot.trsPre <- function(x, layout=c(2, 2), as.table=TRUE, strip=FALSE, strip.lef
 #'       ylim = range(x$Sepal.Width)
 #'    )
 #' }
-#' irisPre <- prepanel(irisSplit, prepanelFn=irisPreFn)
-#' irisLims <- setLims(irisPre, x="same", y="sliced")
+#' irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
+#' irisLims <- setLims(irisPre, x = "same", y = "sliced")
 #' }
 #'
 #' @export
-setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRangeQuant=1, yRangeQuant=1, prop=0.07) {
+setLims <- function(lims, x = "same", y = "same", xQuant = c(0,1), yQuant = c(0,1), xRangeQuant = 1, yRangeQuant = 1, prop = 0.07) {
 
    alreadyWarned <- FALSE
-   # xQuant=c(0,1); yQuant=c(0,1); xRangeQuant=1; yRangeQuant=1
+   # xQuant = c(0,1); yQuant = c(0,1); xRangeQuant = 1; yRangeQuant = 1
    getLims <- function(var, type, quant, rangeQuant) {
       dat <- lims[[var]]
       datClass <- class(dat$max)[1]
@@ -357,25 +348,25 @@ setLims <- function(lims, x="same", y="same", xQuant=c(0,1), yQuant=c(0,1), xRan
             dat$min <- as.numeric(dat$min)
          }
       }
-
+      
       # TODO: if character and not "free" then set limits
       # to all levels of the variable, if known
       if(type == "sliced" && datClass != "character") {
-         tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant, na.rm=TRUE))
+         tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant, na.rm = TRUE))
          tmp <- tmp + 2 * prop * tmp
-         res <- list(type="sliced", lim=NULL, range=tmp)
+         res <- list(type = "sliced", lim = NULL, range = tmp)
       } else if(type == "same" && datClass != "character") {
-         tmp <- as.numeric(c(quantile(dat$min, quant[1], na.rm=TRUE), quantile(dat$max, quant[2], na.rm=TRUE)))
+         tmp <- as.numeric(c(quantile(dat$min, quant[1], na.rm = TRUE), quantile(dat$max, quant[2], na.rm = TRUE)))
          tmp <- tmp + c(-1, 1) * diff(tmp) * prop
-         res <- list(type="same", lim=tmp, range=NULL)
+         res <- list(type = "same", lim = tmp, range = NULL)
       } else {
-         res <- list(type="free", lim=NULL, range=NULL)
+         res <- list(type = "free", lim = NULL, range = NULL)
          return(res)
       }
-      if(datClass=="Date")
-         res$lim <- as.Date(res$lim, origin="1970-01-01")
-      if(datClass=="POSIXct")
-         res$lim <- as.POSIXct(res$lim, origin="1970-01-01")
+      if(datClass == "Date")
+         res$lim <- as.Date(res$lim, origin = "1970-01-01")
+      if(datClass == "POSIXct")
+         res$lim <- as.POSIXct(res$lim, origin = "1970-01-01")
       # TODO: time zone checking
       res
    }

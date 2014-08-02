@@ -7,7 +7,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
   width = 800, panelFn = NULL, lims = list(x = "free", y = "free",
   prepanelFn = NULL), cogFn = NULL, preRender = FALSE,
   cogConn = dfCogConn(), output = NULL, conn = getOption("vdbConn"),
-  verbose = TRUE, params = NULL, control = NULL)
+  verbose = TRUE, params = NULL, packages = NULL, control = NULL)
 }
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}
@@ -30,7 +30,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
 
 \item{preRender}{should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly in the viewer (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.}
 
-\item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}, but if there are many subsets (millions or more), \code{\link{mongoCogConn}()} is recommended (if MongoDB is an option).}
+\item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.}
 
 \item{output}{how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)}
 
@@ -39,6 +39,8 @@ makeDisplay(data, name, group = "common", desc = "", height = 800,
 \item{verbose}{print status messages?}
 
 \item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
+
+\item{packages}{a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)}
 
 \item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}}
 }

@@ -12,12 +12,12 @@
 #' @seealso \code{\link{viewNotebook}}, \code{\link{newNotebook}}
 #'
 #' @export
-typeset <- function(name="index", conn=getOption("vdbConn")) {
+typeset <- function(name = "index", conn = getOption("vdbConn")) {
    prefix <- conn$path
 
    fileBase <- sub("(.+)[.][^.]+$", "\\1", name)
    if(fileBase == name)
-      name <- paste(name, ".Rmd", sep="")
+      name <- paste(name, ".Rmd", sep = "")
 
    filePath <- file.path(prefix, "notebook", name)
 
@@ -26,12 +26,12 @@ typeset <- function(name="index", conn=getOption("vdbConn")) {
 
    message(paste("Processing file:", filePath))
 
-   outFilePath <- file.path(prefix, "notebook", paste(fileBase, ".html", sep=""))
+   outFilePath <- file.path(prefix, "notebook", paste(fileBase, ".html", sep = ""))
 
 	tmpDir <- tempdir()
 
-   out <- knit(input=filePath, output=file.path(tmpDir, "tmp.md"), envir = parent.frame())
-   markdownToHTML(out, file.path(tmpDir, "tmp.html"), options=c("fragment_only", "toc", "base64_images", "use_xhtml"))
+   out <- knit(input = filePath, output = file.path(tmpDir, "tmp.md"), envir = parent.frame())
+   markdownToHTML(out, file.path(tmpDir, "tmp.html"), options = c("fragment_only", "toc", "base64_images", "use_xhtml"))
 
 	preTOC <- readLines(file.path(tmpDir, "preTOC.html"))
 	postTOC <- readLines(file.path(tmpDir, "postTOC.html"))
@@ -60,7 +60,7 @@ typeset <- function(name="index", conn=getOption("vdbConn")) {
 			prepend <- prepend - 10
 			tocLines[i] <- ""
 		} else if(tocLines[i] == "<li>") {
-			tocLines[i] <- paste("<li style='margin-left:", prepend, "px'>", sep="")
+			tocLines[i] <- paste("<li style='margin-left:", prepend, "px'>", sep = "")
 		}
 	}
 
@@ -78,7 +78,7 @@ typeset <- function(name="index", conn=getOption("vdbConn")) {
       bodyLines[i] <- gsub("<table>", "<table class='table table-striped'>", bodyLines[i])
    }
 
-	cat(paste(c(preTOC, tocLines, postTOC, bodyLines, postContent), collapse="\n"), file=outFilePath)
+	cat(paste(c(preTOC, tocLines, postTOC, bodyLines, postContent), collapse = "\n"), file = outFilePath)
 }
 
 

@@ -124,6 +124,8 @@ function cogTableSetFromExposedState() {
             if(value.select) {
                curTd.find(".column-filter-select").selectpicker("val", value.select);
                curTd.find(".column-filter-select").selectpicker("refresh");               
+            } else if(value.regex) {
+               curTd.find(".column-filter-regex").val(value.regex);
             }
          }
       });
@@ -158,10 +160,13 @@ updateCogTableFilter = function(el) {
       var name = el.closest("td").data("variable");
       $("#text-column-" + name).val("");
    } else if(el.hasClass("column-filter-regex")) {
-      // if user is typing regex then clear the select picker
+      // if user is typing regex and there is a select picker
+      // then clear the select picker
       var name = el.closest("td").data("variable");
-      $("#text-select-" + name).selectpicker("deselectAll");
-      $("#text-select-" + name).selectpicker("refresh");
+      if(!$("#text-select-" + name).hasClass("disabled")) {
+         $("#text-select-" + name).selectpicker("deselectAll");
+         $("#text-select-" + name).selectpicker("refresh");
+      }
    }
    
    // put filter inputs in array
@@ -169,7 +174,7 @@ updateCogTableFilter = function(el) {
    
    $("#cogColumnFilterInput td").each(function() {
       var curVar = $(this).data("variable");
-      // alert("hi")
+      
       if(!$(this).hasClass("hidden")) {
          if($(this).hasClass("filter-numeric")) {
             var from = $(this).find(".column-filter-from").val();
@@ -189,28 +194,37 @@ updateCogTableFilter = function(el) {
             var picker = $(this).find(".column-filter-select").selectpicker("val");
             var vals = [];
             if(regex != "") {
-               // don't store regex - apply it to everything in the list
+               // only store regex if there is no select picker
+               // otherwise, apply it to everything in the picker list
                // and select it if it matches
                // note that if this has happened, select is already blank
                var re = new RegExp(regex);
-               $("#text-select-" + curVar + " option").each(function() {
-                  var cur = $(this).html();
-                  if(re.test(cur))
-                     vals.push(cur);
-               });
-               // when nothing is selected, it means show everything
-               // except in the case of when a regex leads to nothing being selected
-               if(vals.length == 0) {
+               
+               if(!$("#text-select-" + curVar).hasClass("disabled")) {
+                  $("#text-select-" + curVar + " option").each(function() {
+                     var cur = $(this).html();
+                     if(re.test(cur))
+                        vals.push(cur);
+                  });
+                  
+                  // when nothing is selected, it means show everything
+                  // except in the case of when a regex leads to nothing being selected
+                  if(vals.length == 0) {
+                     if(!filterData[curVar])
+                        filterData[curVar] = {};
+                     filterData[curVar]["empty"] = true;
+                  }
+                  // set a class on the element so it knows it's being populated
+                  // by the regex (so we will not fire off our on change trigger)
+                  // now "pick" them
+                  $(this).find(".column-filter-select").addClass("regex-lock");
+                  $(this).find(".column-filter-select").selectpicker("val", vals);
+                  $(this).find(".column-filter-select").selectpicker("refresh");
+               } else {
                   if(!filterData[curVar])
                      filterData[curVar] = {};
-                  filterData[curVar]["empty"] = true;
+                  filterData[curVar]["regex"] = regex;
                }
-               // set a class on the element so it knows it's being populated
-               // by the regex (so we will not fire off our on change trigger)
-               // now "pick" them
-               $(this).find(".column-filter-select").addClass("regex-lock");
-               $(this).find(".column-filter-select").selectpicker("val", vals);
-               $(this).find(".column-filter-select").selectpicker("refresh");
             } else if(picker) {
                var vals = picker;
             }
@@ -220,7 +234,7 @@ updateCogTableFilter = function(el) {
                   filterData[curVar] = {};
                filterData[curVar]["select"] = vals;
             }
-         }         
+         }
       }
       
       // add / remove filter icon
@@ -238,6 +252,10 @@ updateCogTableFilter = function(el) {
 }
 
 function cogTableControlsOutputApplyButton() {
+   // reset to page one
+   $("#curPanelPageInput").val("1");
+   $("#curPanelPageInput").trigger("change");
+   
    // trigger change
    var filterData = $("#cogColumnFilterInput").data("myShinyData");
    $("#filterStateInput").data("myShinyData", filterData);
@@ -253,13 +271,11 @@ function cogTableControlsOutputCancelButton() {
 }
 
 function cogTableControlsOutputPostRender(data) {
+   $.getScript("assets/custom/selectables-cogtable.js");
+      
    // initialize multiselect dropups in cognostics table
    $(".selectpicker").selectpicker();
-   $.getScript("assets/custom/selectables-cogtable.js");
-   
-   // // by default, all options are selected
-   // $(".selectpicker").not("#text-select-panelKey").selectpicker("selectAll");
-   // $(".selectpicker").selectpicker("refresh");
+   $(".bootstrap-select.disabled").css("visibility", "hidden");
    
    // show / hide columns
    updateCogTableColumnVisibility();
@@ -270,8 +286,14 @@ function cogTableControlsOutputPostRender(data) {
    
    // make histograms / bar charts in footer
    $.each(data.plotDat, function(index, value) {
-      if(value.data != undefined)
-         d3footPlot(value);
+      if(value.data != undefined) {
+         try {
+            d3footPlot(value);
+         } catch (e) {
+            console.log(e);
+            return;
+         }
+      }
    });
    
    // handle clicks on column sort

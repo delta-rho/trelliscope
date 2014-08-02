@@ -9,10 +9,10 @@ source("server/currentDisplayData.R")
 
 currentDisplay <- list(cdo = displayObj)
 
-cogState <- list(
-   filter =
-   sort =
-)
+# cogState <- list(
+#    filter =
+#    sort =
+# )
 
 cogState <- list(
    list(name = "var1", action = "sort", type = "numeric", dir = "asc")),

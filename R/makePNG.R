@@ -19,10 +19,13 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
 
    if(capabilities("aqua")) {
       pngfun <- png
-   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
-      pngfun <- CairoPNG
    } else {
-      pngfun <- png
+      pkg <- "Cairo"
+      if(suppressWarnings(suppressMessages(require(pkg, character.only = TRUE)))) {
+         pngfun <- CairoPNG
+      } else {
+         pngfun <- png
+      }
    }
 
    pointsize <- basePointSize * width / origWidth * pixelratio
@@ -118,7 +121,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
          pointsize = pointsize)
 
       print(xyplot(NA ~ NA, xlab = "", ylab = "", scales = list(draw = FALSE), panel = function(x, y, ...) panel.text(0.5, 0.5, "no panel")))
-
+      
       dev.off()
    }
 }

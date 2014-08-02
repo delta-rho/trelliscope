@@ -8,7 +8,7 @@ if(getRversion() >= "2.15.1") {
 #' @param x TODO
 #' @param ... TODO
 print.displayObj <- function(x, ...) {
-   cat("display object...")
+   cat("display object...\n")
 }
 
 #' Retrieve Display Object from VDB

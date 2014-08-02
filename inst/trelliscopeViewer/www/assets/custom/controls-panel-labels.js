@@ -29,8 +29,16 @@ function panelLabelListOutputApplyButton() {
    $("#panelLabelStateInput").data("myShinyData", panelLabel);
    $("#panelLabelStateInput").trigger("change");
    
-   $("#panel-rows").trigger("change");
-   panelLayoutOutputApplyButton();
+   // if related displays are selected, recompute there
+   // instead of panel layout
+   if($(".related-display-select.active").length > 0) {
+      relatedLayout();
+      relatedDisplayListOutputApplyButton();
+   } else {
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      $("#panel-rows").trigger("change");
+      panelLayoutOutputApplyButton();      
+   }
 }
 
 function panelLabelListOutputCancelButton() {

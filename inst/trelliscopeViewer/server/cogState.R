@@ -30,7 +30,7 @@ cdoExposedCogState <- reactive({
    panelLabelState <- input$panelLabelStateInput
    if(!is.null(panelLabelState)) {
       logMsg("- panel label state changed: ", paste(panelLabelState, collapse=","))
-      if(panelLabelState == "__none__")
+      if(any(panelLabelState == "__none__"))
          panelLabelState <- NULL
       cdo$state$panelLabel <- panelLabelState      
    }
@@ -51,10 +51,10 @@ cdoExposedCogState <- reactive({
    if(length(relatedDisplayState) > 0) {
       # load the additional displays
       logMsg("- related display state changed")
+      relatedDisplayObjects <- list()
       for(i in seq_along(relatedDisplayState)) {
          curName <- relatedDisplayState[[i]]$name
          curGroup <- relatedDisplayState[[i]]$group
-         relatedDisplayObjects <- list()
          dispKey <- paste(curGroup, curName, sep = "___")
          if(curName == cdo$name && curGroup == cdo$group) {
             relatedDisplayObjects[[dispKey]] <- NULL

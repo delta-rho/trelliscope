@@ -45,13 +45,14 @@ output$cogTableInfoOutput <- renderText({
 # (reflects current sort and filter state
 # as specified in cognostics table sort/filter panel)
 cogTableCurrentData <- reactive({
-   cogDF <- exposedCogDF()
+   cogDF <- currentDisplay()$cdo$cogDatConn
    if(!is.null(cogDF)) {
       state <- list(
          filter = input$cogColumnFilterInput,
-         sort = input$cogColumnSortInput
+         sort = input$cogColumnSortInput,
+         activeCog = input$activeCogStateInput
       )
-      getCurCogDat(cogDF$curCogDF, state)
+      getCurCogDat(cogDF, state)
    }
 })
 
@@ -81,7 +82,6 @@ output$cogTableContentOutput <- renderDataLite({
 
 # takes a displayObj object and applies "state" to cognostics and returns result
 getCurCogDat <- function(x, state) {
-   
    filterIndex <- seq_len(cogNrow(x))
    
    if(length(state$activeCog) > 0) {
@@ -89,6 +89,7 @@ getCurCogDat <- function(x, state) {
    }
    
    if(length(state$filter) > 0) {
+      # browser()
       flt <- state$filter
       if(any(unlist(lapply(flt, function(x) x$empty)))) {
          filterIndex <- logical(0)
@@ -109,6 +110,8 @@ getCurCogDat <- function(x, state) {
                #    filterIndex <- intersect(filterIndex, which(grepl(cur$regex, x[[nm]])))
                if(!is.null(cur$select)) {
                   filterIndex <- intersect(filterIndex, which(x[[nm]] %in% unlist(cur$select)))
+               } else if(!is.null(cur$regex)) {
+                  filterIndex <- intersect(filterIndex, which(grepl(cur$regex, x[[nm]])))
                }
             }
          }         
