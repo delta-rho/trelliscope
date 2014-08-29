@@ -15,14 +15,14 @@ currentDisplay <- list(cdo = displayObj)
 # )
 
 cogState <- list(
-   list(name = "var1", action = "sort", type = "numeric", dir = "asc")),
-   list(name = "var2", action = "sort", type = "numeric", dir = "desc")),
-   list(name = "var3", action = "sort", type = "categ", dir = "desc")),
-   list(name = "var4", action = "sort", type = "categ", dir = "asc")),
+   list(name = "var1", action = "sort", type = "numeric", dir = "asc"),
+   list(name = "var2", action = "sort", type = "numeric", dir = "desc"),
+   list(name = "var3", action = "sort", type = "categ", dir = "desc"),
+   list(name = "var4", action = "sort", type = "categ", dir = "asc"),
    list(name = "var1", action = "filter"),
    list(name = "var3", action = "filter"),
    list(name = "var3", action = "filter"),
-   list(name = "var1, var2, var3"), action = "multivar"),
+   list(name = c("var1, var2, var3"), action = "multivar"),
    list(name = "var2", type = "sample")
 )
 
