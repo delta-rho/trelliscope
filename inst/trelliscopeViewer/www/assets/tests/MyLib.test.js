@@ -9,26 +9,26 @@ run_qunit_tests = function(){
   $("body").append("<div id=\"qunit\" style=\"width: 500px; height: 500px; overflow: auto; position: absolute; top: 50px; right: 0px; \"></div><div id=\"qunit-fixture\"></div>");
   $(".right-panel-container").css("z-index", "99");
   // $("body").append();
-  console.log("appended to body")
+  console.log("appended qunit visual output to body")
 
 
 
   // http://api.qunitjs.com/category/callbacks/
   QUnit.testStart(function( details ) {
-    console.log( "Now running: '", details.module + "' > '" + details.name + "'");
+    console.log( "Now running test: '" + details.module + "' > '" + details.name + "'");
   });
   QUnit.testDone(function( details ) {
-    console.log( "Done running: '", details.module + "' > '" + details.name, "'. Passed: ", details.passed, ". Failed: ", details.failed, ". Total: ", details.total );
+    console.log( "Done running: '" + details.module + "' > '" + details.name +"'. Passed: " + details.passed + ". Failed: ", details.failed, ". Total: ", details.total );
   });
   QUnit.moduleDone(function( details) {
-    console.log( "Done running module: '", details.name, "'" );
+    console.log( "Done running module: '" + details.name + "'" );
     if (details.name == "Last Module") {
       // console.log("Closing socket");
       // Shiny.shinyapp.$socket.close()
     }
   });
   QUnit.done(function( details ) {
-    console.log( "Total: ", details.total, " Failed: ", details.failed, " Passed: ", details.passed, " Runtime: ", details.runtime );
+    console.log( "Total: " + details.total + " Failed: " + details.failed + " Passed: " + details.passed + " Runtime: " + details.runtime );
   });
   // QUnit.module('General');
 
@@ -95,7 +95,7 @@ run_qunit_tests = function(){
 
   QUnit.asyncTest("Waiting for page to setup", 1, function (assert) {
     fn = function(){
-      txt = $("#openModal div.modal-dialog div.modal-header h3#myModalLabel").text() || "no"
+      txt = $("#openModal div.modal-dialog div.modal-header").text().trim() || "no"
       if(txt == "Open a New Display") {
         setTimeout(function() {
           assert.equal(1, 1, "Page is setup");

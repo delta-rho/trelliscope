@@ -29,7 +29,7 @@ $.extend({
 (function( window ) {
 
 window.shouldTest = $.getUrlVar('test') || false;
-console.log("Should Test: ", window.shouldTest);
+console.log("Should Test: " + window.shouldTest);
 
 if (! window.shouldTest) {
 	return
