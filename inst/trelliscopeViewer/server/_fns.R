@@ -322,15 +322,27 @@ renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims
 }
 
 renderPanelHtml.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-   p <- kvApply(panelFn, x)
-   p <- set_options(p, width = width, height = height)
+   ""
 }
 
 renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   
    p <- kvApply(panelFn, x)
    p$set(width = width, height = height)
+   # paste(capture.output(p$print()), collapse = '\n')
    
-   paste(capture.output(p$print()), collapse = '\n')
+   p <- capture.output(p$show('iframesrc', cdn = TRUE))
+   
+   ind <- which(grepl("iframe\\.rChart", p))
+   if(length(ind) > 0) {
+      p[ind[1]] <- "<style>iframe.rChart{ width: 100%; height: 100%;}</style>"
+   }
+   
+   paste(c(
+      sprintf("<div style='width:%dpx; height:%dpx'>", width, height),
+      p,
+      "</div>"
+   ), collapse = "\n")
 }
 
 renderPanelData <- function(panelFn, ...)
