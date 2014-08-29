@@ -172,6 +172,12 @@ $.extend(displaySelectInputBinding, {
             }
          }
          
+         // remove all related displays
+         if($(".related-display-select.active").length > 0) {
+            $(".related-display-select.active").click();
+            relatedDisplayListOutputApplyButton();
+         }
+         
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
          // store name and group as data
          // console.log(res);
