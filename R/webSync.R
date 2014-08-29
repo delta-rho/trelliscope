@@ -203,6 +203,23 @@ deployToShinyApps <- function(
       }
    }
    
+   message("*** Copying latest viewer to vdb directory...")
+   
+   shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
+   if(shinyAppPrefix == "")
+      shinyAppPrefix <- file.path(system.file(package = "trelliscope"), "trelliscopeViewer")
+   
+   serverLoc <- file.path(vdbConn$path, "server")
+   if(file.exists(serverLoc))
+      unlink(serverLoc, recursive = TRUE)
+   
+   wwwLoc <- file.path(vdbConn$path, "www")
+   if(file.exists(wwwLoc))
+      unlink(wwwLoc, recursive = TRUE)
+   
+   file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
+   file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
+   
    message("*** Syncing local data...")
    syncLocalData(vdbConn)
       
@@ -229,3 +246,4 @@ deployToShinyApps <- function(
    message("*** Deploying app...\n")
    shinyapps::deployApp(vdbDir, appName = appName, account = account)
 }
+

@@ -401,9 +401,9 @@ function panelTableContentOutputPostRender(data) {
    // this is a hack right now
    // when panels contain scripts that need to be executed
    // calling jQuery's html() runs those scripts
-   $(".panel-image-wrapper").each(function() {
-   	$(this).html($(this).html());
-   });
+   // $(".panel-image-wrapper").each(function() {
+   //    $(this).html($(this).html());
+   // });
    
    // if it is not a static image expect vega spec in .data
    // console.log(data[0][0].panel_content.length);
