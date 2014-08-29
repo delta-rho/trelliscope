@@ -59,7 +59,24 @@ cdoExposedCogState <- reactive({
          if(curName == cdo$name && curGroup == cdo$group) {
             relatedDisplayObjects[[dispKey]] <- NULL
          } else {
-            relatedDisplayObjects[[dispKey]] <- getDisplay(name = curName, group = curGroup)
+            tmp <- getDisplay(name = curName, group = curGroup)
+            
+            # load packages and data
+            if(!is.null(tmp$relatedPackages)) {
+               logMsg("Loading packages: ", paste(tmp$relatedPackages, collapse = ", "))
+               for(pkg in tmp$relatedPackages)
+                  suppressMessages(require(pkg, character.only = TRUE))
+            }
+            
+            # load any related data into global environment
+            # note: these should not be put in global environment
+            # but a display-specific environment - need to update
+            if(!is.null(tmp$relatedData)) {
+               for(nm in names(tmp$relatedData))
+                  .GlobalEnv[[nm]] <- tmp$relatedData[[nm]]
+            }
+            
+            relatedDisplayObjects[[dispKey]] <- tmp
          }
       }
       cdo$relatedDisplayObjects <- relatedDisplayObjects

@@ -37,8 +37,8 @@ currentDisplay <- reactive({
       }
       
       # set up an environment for this display to be evaluated in
-      dispEnv <- new.env(parent = .GlobalEnv)
-      cdo$envir <- .GlobalEnv
+      # dispEnv <- new.env(parent = .GlobalEnv)
+      # cdo$envir <- .GlobalEnv
       
       # load any related data into global environment
       # note: these should not be put in global environment

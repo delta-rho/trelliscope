@@ -321,8 +321,16 @@ renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims
       "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")   
 }
 
-renderPanelHtml.ggvisFn <- function(panelFn, ...) {
-   ""
+renderPanelHtml.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   p <- kvApply(panelFn, x)
+   p <- set_options(p, width = width, height = height)
+}
+
+renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   p <- kvApply(panelFn, x)
+   p$set(width = width, height = height)
+   
+   paste(capture.output(p$print()), collapse = '\n')
 }
 
 renderPanelData <- function(panelFn, ...)
@@ -349,6 +357,11 @@ renderPanelData.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, 
    p <- set_options(p, width = width, height = height)
    
    getVegaSpec(p)
+}
+
+renderPanelData.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+   # TODO: javascript library dependency
+   ""
 }
 
 

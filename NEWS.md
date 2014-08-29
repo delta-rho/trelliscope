@@ -1,3 +1,17 @@
+Version 0.7.9.1
+-------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- add experimental support for rCharts panels
+- add experimental support for deploying to shinyapps.io
+
+BUG FIXES
+
+- load packages and related data objects for related displays
+- fix opening new display when current state is showing related displays
+
+
 Version 0.7.9
 -------------------------------------------------------------------------------
 
