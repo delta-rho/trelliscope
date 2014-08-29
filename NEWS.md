@@ -4,6 +4,7 @@ Version 0.7.9.1
 FEATURES / CHANGES
 
 - add experimental support for rCharts panels
+- add experimental support for deploying to shinyapps.io
 
 BUG FIXES
 
