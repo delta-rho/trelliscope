@@ -33,6 +33,8 @@ getPanelFnType <- function(panelEx) {
       panelFnType <- "ggplotFn"
    } else if(inherits(panelEx, "ggvis")) {
       panelFnType <- "ggvisFn"
+   } else if(inherits(panelEx, "rCharts")) {
+      panelFnType <- "rChartsFn"
    }
    if(is.null(panelFnType))
       stop("Unsupported panel function", call. = FALSE)
