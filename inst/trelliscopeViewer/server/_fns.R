@@ -339,7 +339,7 @@ renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims
    }
    
    paste(c(
-      sprintf("<div style='width:%dpx; height:%dpx'>", width, height),
+      sprintf("<div style='width:%dpx; height:%dpx'>", as.integer(width), as.integer(height)),
       p,
       "</div>"
    ), collapse = "\n")
