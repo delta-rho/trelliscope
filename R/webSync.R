@@ -87,7 +87,7 @@ webSync <- function(
          sshQuote <- "'"
       }
       message("* Attempting to fix permissions...")
-      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, "/", webConn$name, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
+      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
       if(verbose)
          cat(paste(c("*** Output ***", lns), collapse = "\n"))
    }

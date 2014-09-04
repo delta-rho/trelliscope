@@ -10,6 +10,7 @@ BUG FIXES
 
 - load packages and related data objects for related displays
 - fix opening new display when current state is showing related displays
+- fix path in webSync for changing app permissions on server
 
 
 Version 0.7.9
