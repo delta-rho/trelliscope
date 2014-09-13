@@ -54,6 +54,11 @@ updateCogTableSort = function() {
       }      
    }
    
+   var dirLookup = {
+      "icon-sort-up" : "asc",
+      "icon-sort-down" : "desc"
+   }
+   
    // put sort order in array
    var sortData = {};
    $("#cogColumnSortInput th").each(function() {
@@ -67,11 +72,11 @@ updateCogTableSort = function() {
       if(curEl.attr("class") != "icon-unsorted") {
          // add sort icon for this in variable list
          var curIcon = iconLookup[curEl.attr("class")][curType];
+         var curDir = dirLookup[curEl.attr("class")];
          $("#cog-table-col-select-li-" + curVar + " i." + curIcon).removeClass("hidden");
-
+         
          sortData[$(this).data("variable")] = {
-            "icon"   : curEl.attr("class"),
-            "bcIcon" : curIcon,
+            "dir"    : curDir,
             "order"  : curEl.data("sort-order"),
          };
       }

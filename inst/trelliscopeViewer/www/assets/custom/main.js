@@ -449,7 +449,7 @@ function panelTableContentOutputPostRender(data) {
          maxCogNameWidth = tmp;
    });
    $(".cog-name-td").width(maxCogNameWidth - 1);
-   var totWidth = $("#exposedStateDataOutput").data("myShinyData").panelLayout.w;
+   var totWidth = $("#exposedStateDataOutput").data("myShinyData").layout.w;
    $(".cog-value-td").width(totWidth - maxCogNameWidth - 21);
    // $(".panel-cog-table").width(totWidth);
 }
@@ -503,11 +503,12 @@ $(document).ready(function() {
          } catch (e) {
           // do nothing
          }
-
+         
          if(appHash == "") {
-            $("#openModal").modal('show');
+            $("#openModal").modal("show");
          } else {
-            // $("#appHash").val(appHash);
+            $("#appHashInput").data("myShinyData", appHash);
+            $("#appHashInput").trigger("change");
          }
       }
    });

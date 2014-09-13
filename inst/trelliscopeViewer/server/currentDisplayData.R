@@ -20,7 +20,7 @@ displayListOutputData <- function(dl) {
 
 panelLayoutOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      panelLayout <- x$cdo$state$panelLayout
+      panelLayout <- x$cdo$state$layout
       nrow <- panelLayout$nrow
       if(is.null(nrow))
          nrow <- 1
@@ -163,8 +163,8 @@ cogBiFilterControlsOutputData <- function(x) {
 
 panelPageNavOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      nrow <- x$cdo$state$panelLayout$nrow
-      ncol <- x$cdo$state$panelLayout$ncol
+      nrow <- x$cdo$state$layout$nrow
+      ncol <- x$cdo$state$layout$ncol
       if(is.null(nrow))
          nrow <- 1
       if(is.null(ncol))

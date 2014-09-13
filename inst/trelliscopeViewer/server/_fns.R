@@ -92,20 +92,20 @@ cogTableFootHist <- function(data) {
 
 # creates data ready for univariate d3 plotting
 # either bar chart for character or hist / quantile for numeric (specify with plotType)
-getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
+getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
    if(plotType == "histogram")
       plotType <- "hist"
    if(plotType == "quantile")
       plotType <- "quant"
    
-   curInfo <- cdo$cdo$cogDistns[[name]]
+   curInfo <- cd$cdo$cogDistns[[name]]
    
    if(!is.na(curInfo$type)) {
       if(curInfo$type == "numeric") {
-         if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+         if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
             tmp <- curInfo$marginal[[plotType]]
          } else {
-            tmp <- trelliscope:::getCogQuantPlotData(cdo$curCogDF, name, plotType)
+            tmp <- trelliscope:::getCogQuantPlotData(cd$curCogDF, name, plotType)
          }
          if(plotType == "hist") {
             delta <- diff(tmp$xdat[1:2])
@@ -121,7 +121,7 @@ getUnivarPlotDat <- function(cdo, name, distType = "marginal", plotType = "hist"
          if(distType == "marginal") {
             tmp <- curInfo$marginal
          } else {
-            tmp <- trelliscope:::getCogCatPlotData(cdo$curCogDF, name, plotType)$freq
+            tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
          }
          if(nrow(tmp) > maxLevels)
             return(list(name = name))
@@ -209,18 +209,18 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    )
 }
 
-getBivarPlotDat <- function(cdo, xVar, yVar, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
+getBivarPlotDat <- function(cd, xVar, yVar, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
+   if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
       if(plotType == "scatter") {
-         getCogScatterPlotData(cdo$cdo$cogDatConn, xVar, yVar)
+         getCogScatterPlotData(cd$cdo$cogDatConn, xVar, yVar)
       } else {
-         getCogHexbinPlotData(cdo$cdo$cogDatConn, xVar, yVar, shape, xbin)
+         getCogHexbinPlotData(cd$cdo$cogDatConn, xVar, yVar, shape, xbin)
       }
    } else {
       if(plotType == "scatter") {
-         getCogScatterPlotData(cdo$curCogDF, xVar, yVar)
+         getCogScatterPlotData(cd$curCogDF, xVar, yVar)
       } else {
-         getCogHexbinPlotData(cdo$curCogDF, xVar, yVar, shape, xbin)
+         getCogHexbinPlotData(cd$curCogDF, xVar, yVar, shape, xbin)
       }
    }
 }
@@ -236,13 +236,13 @@ getCogICA.data.frame <- function(cogDF, vars) {
    data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
 }
 
-getMultivarPlotDat <- function(cdo, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
+getMultivarPlotDat <- function(cd, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
    xVar <- "IC1"
    yVar <- "IC2"
-   if(distType == "marginal" || cogNrow(cdo$cdo$cogDatConn) == nrow(cdo$curCogDF)) {
-      icaDat <- getCogICA(cdo$cdo$cogDatConn, vars)
+   if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
+      icaDat <- getCogICA(cd$cdo$cogDatConn, vars)
    } else {
-      icaDat <- getCogICA(cdo$curCogDF, vars)      
+      icaDat <- getCogICA(cd$curCogDF, vars)      
    }
    if(plotType == "scatter") {
       getCogScatterPlotData(icaDat, xVar, yVar)
@@ -313,7 +313,7 @@ renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims
       width = width, 
       height = height, 
       origWidth = origWidth,
-      # res = 72, # * cdo$state$panelLayout$w / cdo$width, 
+      # res = 72, # * cdo$state$layout$w / cdo$width, 
       lims = lims,
       pixelratio = pixelratio
    )

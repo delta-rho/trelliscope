@@ -28,6 +28,20 @@ function renderTemplate(objId, data, templateId) {
    }
 }
 
+var appHashOutputBinding = new Shiny.OutputBinding();
+$.extend(appHashOutputBinding, {
+   find: function(scope) {
+      return $(scope).find(".shiny-apphash-output");
+   },
+   renderValue: function(el, data) {
+      if(data) {
+			window.location.hash = data;
+		}
+   }
+});
+Shiny.outputBindings.register(appHashOutputBinding, "shiny.appHashOutputBinding");
+
+
 var templateOutputBinding = new Shiny.OutputBinding();
 $.extend(templateOutputBinding, {
    find: function(scope) {

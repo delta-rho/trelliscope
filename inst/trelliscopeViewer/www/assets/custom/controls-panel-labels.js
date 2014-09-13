@@ -53,12 +53,12 @@ function panelLabelListSetFromExposedState() {
    });
    
    if(state) {
-      if(state.panelLabel) {
+      if(state.labels) {
          // console.log(state);
-         if(!(state.panelLabel instanceof Array)) {
-            state.panelLabel = [state.panelLabel];
+         if(!(state.labels instanceof Array)) {
+            state.labels = [state.labels];
          }
-         $.each(state.panelLabel, function(key, value) {
+         $.each(state.labels, function(key, value) {
             $("#panel-labels-select-" + value).addClass("active");
          });
       }      

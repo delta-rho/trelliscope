@@ -7,11 +7,41 @@ output$displayListOutput <- renderDataLite({
 })
 outputOptions(output, "displayListOutput", suspendWhenHidden = FALSE)
 
+appHash <- reactive({
+   str <- input$appHashInput
+   if(!is.null(str)) {
+      if(substr(str, 1, 1) == "#")
+         str <- substr(str, 2, nchar(str))
+      res <- parseQueryString(str)
+      cls <- paste(names(res), "Hash", sep = "")
+      for(i in seq_along(res))
+         class(res[[i]]) <- c("character", cls[i])
+      return(res)
+   }
+})
+
 ## holds name and group of currently selected display
 selectedDisplay <- reactive({
-   # TODO: appHash stuff here...
-   input$displaySelectInput
+   # priority: input, appHash, options
+   sld <- input$displaySelectInput
+   
+   if(is.null(sld))
+      sld <- appHash()[c("name", "group")]
+   
+   if(is.null(sld))
+      sld <- currentViewState[c("name", "group")]
+   
+   sld
 })
+
+# http://127.0.0.1:8100/#name=list_sold_vs_time&group=common&layout=ncol:2&sort=state:asc,slope:desc&filter=county:(regex:a),state:(select:AL;AR),slope:(from:0;to:1),meanList:(from:50)&labels=county,state,slope
+
+
+# if(!is.null(currentViewState$name))
+#    sld <- list(name = currentViewState$name,
+#       group = currentViewState$group)
+# options(trsCurrentViewState = list(group = "common", name = "list_sold_vs_time"))
+
 
 ## name of the display printed in the header
 output$headerDisplayNameOutput <- renderText({
@@ -52,14 +82,45 @@ currentDisplay <- reactive({
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
       
       logMsg("Getting default state...")
-      # default state values if not specified
-      if(is.null(cdo$state$panelLabelState)) {
+      
+      ah <- appHash()
+
+      if(!is.null(ah$labels)) {
+         cdo$state$labels <- fromHash(ah$labels)
+      } else {
+         cdo$state$labels <- currentViewState$labels
+      }
+      if(is.null(cdo$state$labels)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
+         class(defaultLabels) <- c(class(defaultLabels), "labelState")
          if(length(defaultLabels) == 0)
             defaultLabels <- NULL
-         cdo$state$panelLabel <- defaultLabels
+         cdo$state$labels <- defaultLabels
       }
-
+      
+      if(!is.null(ah$layout)) {
+         cdo$state$layout <- fromHash(ah$layout)
+      } else {
+         cdo$state$layout <- currentViewState$layout
+      }
+      if(is.null(cdo$state$layout)) {
+         lyt <- list(nrow = 1, ncol = 1, arrange = "row")
+         class(lyt) <- c("list", "layoutState")
+         cdo$state$layout <- lyt
+      }
+      
+      if(!is.null(ah$sort)) {
+         cdo$state$sort <- fromHash(ah$sort)
+      } else {
+         cdo$state$sort <- currentViewState$sort
+      }
+      
+      if(!is.null(ah$filter)) {
+         cdo$state$filter <- fromHash(ah$filter)
+      } else {
+         cdo$state$filter <- currentViewState$filter
+      }
+      
       if(is.null(cdo$state$activeCog)) {
          defaultActive <- cdo$cogInfo$name[cdo$cogInfo$defActive]
          if(length(defaultActive) == 0)
@@ -67,10 +128,6 @@ currentDisplay <- reactive({
          cdo$state$activeCog <- defaultActive
       }
       
-      if(is.null(cdo$state$panelLayout))
-         cdo$state$panelLayout <- list(nrow = 1, ncol = 1)
-      
-      # TODO: add related
       list(cdo = cdo)
    }
 })
