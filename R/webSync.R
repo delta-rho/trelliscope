@@ -17,7 +17,7 @@ if(getRversion() >= "2.15.1") {
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{typeset}}, \code{\link{webConn}}, \code{\link{syncLocalData}}
-#'
+#' 
 #' @export
 webSync <- function(
    vdbConn = getOption("vdbConn"),
@@ -222,7 +222,7 @@ deployToShinyApps <- function(
    
    message("*** Syncing local data...")
    syncLocalData(vdbConn)
-      
+   
    vdbDir <- vdbConn$path
    load(file.path(vdbDir, "displays", "_displayList.Rdata"))
    

@@ -25,11 +25,19 @@ selectedDisplay <- reactive({
    # priority: input, appHash, options
    sld <- input$displaySelectInput
    
-   if(is.null(sld))
-      sld <- appHash()[c("name", "group")]
+   if(is.null(sld)) {
+      sld <- appHash()
+      if(!is.null(sld)) {
+         sld$labels <- fromHash(sld$labels)
+         sld$layout <- fromHash(sld$layout)
+         sld$sort <- fromHash(sld$sort)
+         sld$filter <- fromHash(sld$filter)
+      }
+   }
    
-   if(is.null(sld))
-      sld <- currentViewState[c("name", "group")]
+   if(is.null(sld)) {
+      sld <- getOption("trsCurrentViewState")
+   }
    
    sld
 })
@@ -56,7 +64,7 @@ currentDisplay <- reactive({
    
    if(!is.null(sld)) {
       logMsg("Loading display: ", paste(sld$group, "/", sld$name))
-      cdo <- do.call(getDisplay, sld)
+      cdo <- do.call(getDisplay, sld[c("name", "group")])
       logMsg("Display loaded")
       
       # load required packages
@@ -83,43 +91,24 @@ currentDisplay <- reactive({
       
       logMsg("Getting default state...")
       
-      ah <- appHash()
-
-      if(!is.null(ah$labels)) {
-         cdo$state$labels <- fromHash(ah$labels)
-      } else {
-         cdo$state$labels <- currentViewState$labels
-      }
+      cdo$state$labels <- sld$labels
       if(is.null(cdo$state$labels)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
-         class(defaultLabels) <- c(class(defaultLabels), "labelState")
+         class(defaultLabels) <- c(class(defaultLabels), "labelsState")
          if(length(defaultLabels) == 0)
             defaultLabels <- NULL
          cdo$state$labels <- defaultLabels
       }
       
-      if(!is.null(ah$layout)) {
-         cdo$state$layout <- fromHash(ah$layout)
-      } else {
-         cdo$state$layout <- currentViewState$layout
-      }
+      cdo$state$layout <- sld$layout
       if(is.null(cdo$state$layout)) {
          lyt <- list(nrow = 1, ncol = 1, arrange = "row")
          class(lyt) <- c("list", "layoutState")
          cdo$state$layout <- lyt
       }
       
-      if(!is.null(ah$sort)) {
-         cdo$state$sort <- fromHash(ah$sort)
-      } else {
-         cdo$state$sort <- currentViewState$sort
-      }
-      
-      if(!is.null(ah$filter)) {
-         cdo$state$filter <- fromHash(ah$filter)
-      } else {
-         cdo$state$filter <- currentViewState$filter
-      }
+      cdo$state$sort <- sld$sort
+      cdo$state$filter <- sld$filter
       
       if(is.null(cdo$state$activeCog)) {
          defaultActive <- cdo$cogInfo$name[cdo$cogInfo$defActive]
@@ -127,6 +116,9 @@ currentDisplay <- reactive({
             defaultActive <- NULL
          cdo$state$activeCog <- defaultActive
       }
+      
+      # if(!is.null(currentViewState))
+      #    options(trsCurrentViewState = NULL)
       
       list(cdo = cdo)
    }
@@ -182,7 +174,3 @@ output$cogMapOutput <- renderDataLite({
    cogBiFilterControlsOutputData(currentDisplay())
 })
 
-cdoCogState <- reactive({
-   cdo <- currentDisplay()$cdo
-   cdo
-})

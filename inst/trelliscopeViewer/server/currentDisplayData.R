@@ -46,7 +46,7 @@ panelLabelListOutputData <- function(x) {
    if(!is.null(x$cdo)) {
       cogInfo <- x$cdo$cogInfo
       cogInfo$active <- ""
-      cogInfo$active[cogInfo$defLabel] <- "active"
+      cogInfo$active[cogInfo$name %in% x$cdo$state$labels] <- "active"
       
       ci <- split(cogInfo, cogInfo$group)
       nms <- names(ci)

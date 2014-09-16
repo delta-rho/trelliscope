@@ -66,7 +66,7 @@ cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defAct
 #' @param label label of the href
 #' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
 #' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
-#'
+#' 
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -75,6 +75,33 @@ cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defAct
 cogHref <- function(x, label = "link", desc = "link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
    cog(paste("<a href=\"", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
 }
+
+
+#' DisplayHref Cognostic
+#' 
+#' Create href that points to another trelliscope display with optional state
+#' 
+#' @param displayName the name of the display
+#' @param displayGroup the group the display belongs to
+#' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
+#' @param label label of the href
+#' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
+#' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
+#' 
+#' @return a hash string
+#' 
+#' @author Ryan Hafen
+#' 
+#' @seealso \code{\link{validateState}}, \code{\link{cogHref}}
+#' @export
+cogDisplayHref <- function(displayName, displayGroup = NULL, state = NULL, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
+   
+   state <- validateState(state, displayName, displayGroup)
+   x <- makeStateHash(state, displayName, displayGroup)
+   
+   cog(paste("<a href=\"#", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
+}
+
 
 #' Compute Scagnostics
 #' 

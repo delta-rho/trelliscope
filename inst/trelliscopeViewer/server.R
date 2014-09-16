@@ -32,8 +32,6 @@ logMsg <- function(...) {
       message(paste(c("* ", text), sep=""))
 }
 
-currentViewState <- getOption("trsCurrentViewState")
-
 load(file.path(vdbPrefix, "displays/_displayList.Rdata"))
 
 ind <- which(is.na(displayListDF$dataClass))

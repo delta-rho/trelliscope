@@ -27,15 +27,15 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
          pngfun <- png
       }
    }
-
+   
    pointsize <- basePointSize * width / origWidth * pixelratio
-
+   
    pngfun(filename = file,
       width = width * pixelratio,
       height = height * pixelratio,
       # res = res * pixelratio,
       pointsize = pointsize)
-
+   
    dv <- dev.cur()
    tryCatch({
       if(inherits(dat, "trellis")) {
@@ -51,12 +51,12 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
       } else {
          # plot objects such as trellis or lattice
          tmp <- kvApply(panelFn, dat)
-
+         
          if(!is.null(lims)) {
             if(inherits(tmp, "trellis")) {
                # set pointsize
                tmp$par.settings$fontsize <- list(text = pointsize, points = pointsize * 2 / 3)
-
+               
                # if there are multiple panels inside of one plot, we can't do this
                if(!(inherits(tmp$x.limits, "list") || inherits(tmp$y.limits, "list"))) {
 

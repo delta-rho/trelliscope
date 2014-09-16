@@ -1,3 +1,13 @@
+Version 0.7.9.3
+-------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- add state specification - specify default state through makeDisplay, viewing
+  state when calling `view()`, or through specifying a URL hash in viewer
+- add `cogDisplayHref()` function for creating cognostic links to other
+  displays
+
 Version 0.7.9.1
 -------------------------------------------------------------------------------
 

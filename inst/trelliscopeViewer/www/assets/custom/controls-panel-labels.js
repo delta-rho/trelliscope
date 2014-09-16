@@ -66,6 +66,10 @@ function panelLabelListSetFromExposedState() {
 }
 
 function panelLabelListOutputPostRender() {
+   // console.log($(".panel-labels-select.active").length);
+   
+   $("#openModal").modal("hide");
+   
    $.getScript("assets/custom/selectables-panel-labels.js");
    
    // $("#panel-rows").trigger("change");

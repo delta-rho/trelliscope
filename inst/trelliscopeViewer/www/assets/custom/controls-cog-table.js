@@ -134,6 +134,7 @@ function cogTableSetFromExposedState() {
             }
          }
       });
+      $("#filterStateInput").data("myShinyData", state.filter);
    }
    $("#cogColumnFilterInput").data("myShinyData", state.filter);
    $("#cogColumnFilterInput").trigger("change");
@@ -144,9 +145,15 @@ function cogTableSetFromExposedState() {
       $(".cog-table-sort-span i").attr("class", "icon-unsorted");
       // set icons for ones that should be
       $.each(state.sort, function(key, value) {
-         $("#cog-table-sort-icon-" + key).attr("class", value.icon);
+         var iconLookup = {
+            "asc" : "icon-sort-up",
+            "desc" : "icon-sort-down"
+         }
+         
+         $("#cog-table-sort-icon-" + key).attr("class", iconLookup[value.dir]);
          $("#cog-table-sort-icon-" + key).data("sort-order", value.order);
       });
+      $("#sortStateInput").data("myShinyData", state.sort);
       
       updateCogTableSort();
    }

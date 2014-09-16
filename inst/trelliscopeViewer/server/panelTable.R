@@ -40,65 +40,67 @@ output$panelTableContentOutput <- renderDataLite({
       labelVars <- cd$cdo$state$labels
       
       if(is.null(cd$cdo$state$relatedDisplays)) {
-         # we are in regular plotting mode
          w <- cd$cdo$state$layout$w
          h <- cd$cdo$state$layout$h
-         nr <- cd$cdo$state$layout$nrow
-         nc <- cd$cdo$state$layout$ncol
-         arrange <- cd$cdo$state$layout$arrange
-         byRow <- TRUE
-         if(arrange == "col")
-            byRow <- FALSE
-         ppp <- nr * nc
-         
-         idxStart <- (curPage - 1) * ppp + 1
-         if(idxStart > cogNrow(cd$curCogDF))
-            return(NULL)
-         idxEnd <- min(cogNrow(cd$curCogDF), curPage * ppp)
-         
-         curRows <- cd$curCogDF[idxStart:idxEnd, , drop = FALSE]
-         
-         # create list where each element is a vector of indices for a row of panels
-         idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
-         idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
-         
-         logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
-         
-         # panelContent should be a list:
-         # - html
-         # - vega
-         
-         panelContent <- getPanels(cd$cdo, 
-            width = w, 
-            height = h, 
-            curRows = curRows, 
-            pixelratio = session$clientData$pixelratio)
-         # browser()
-         lapply(idxList, function(rw) {
-            lapply(rw, function(i) {
-               if(i + idxStart - 1 > idxEnd) {
-                  curPanelContent <- dummyPanel(w, h)
-                  cogData <- dummyCog(labelVars)
-               } else {
-                  curPanelContent <- panelContent[[i]]
-                  # browser()
-                  tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
-                  if(is.null(labelVars)) {
-                     cogData <- NULL
+         if(!is.null(h) && !is.null(w)) {
+            # we are in regular plotting mode
+            nr <- cd$cdo$state$layout$nrow
+            nc <- cd$cdo$state$layout$ncol
+            arrange <- cd$cdo$state$layout$arrange
+            byRow <- TRUE
+            if(arrange == "col")
+               byRow <- FALSE
+            ppp <- nr * nc
+
+            idxStart <- (curPage - 1) * ppp + 1
+            if(idxStart > cogNrow(cd$curCogDF))
+               return(NULL)
+            idxEnd <- min(cogNrow(cd$curCogDF), curPage * ppp)
+
+            curRows <- cd$curCogDF[idxStart:idxEnd, , drop = FALSE]
+
+            # create list where each element is a vector of indices for a row of panels
+            idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
+            idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
+
+            logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
+
+            # panelContent should be a list:
+            # - html
+            # - vega
+
+            panelContent <- getPanels(cd$cdo, 
+               width = w, 
+               height = h, 
+               curRows = curRows, 
+               pixelratio = session$clientData$pixelratio)
+            # browser()
+            lapply(idxList, function(rw) {
+               lapply(rw, function(i) {
+                  if(i + idxStart - 1 > idxEnd) {
+                     curPanelContent <- dummyPanel(w, h)
+                     cogData <- dummyCog(labelVars)
                   } else {
-                     cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+                     curPanelContent <- panelContent[[i]]
+                     # browser()
+                     tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
+                     if(is.null(labelVars)) {
+                        cogData <- NULL
+                     } else {
+                        cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+                     }
                   }
-               }
-               # browser()
-               list(
-                  i = i,
-                  html_wrap_start = "",
-                  panel_content = list(curPanelContent),
-                  html_wrap_end = "",
-                  cogs = cogData
-               )
-            })
-         })
+                  # browser()
+                  list(
+                     i = i,
+                     html_wrap_start = "",
+                     panel_content = list(curPanelContent),
+                     html_wrap_end = "",
+                     cogs = cogData
+                  )
+               })
+            })            
+         }
       } else {
          # we are showing related displays
          curRows <- cd$curCogDF[curPage, , drop = FALSE]

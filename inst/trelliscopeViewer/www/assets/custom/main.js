@@ -306,7 +306,7 @@ function cogBreadcrumbOutputPostRender() {
       delete sortData[$(this).data("name")];
       $("#sortStateInput").trigger("change");
    });
-
+   
    // open Table Sort / Filter control if main part of sort button clicked
    $(".sort-breadcrumb.cog-state-edit").click(function() {
       if(!$("#cog-table-sort-filter").hasClass("slide-left"))
@@ -412,27 +412,29 @@ function panelTableContentOutputPostRender(data) {
       for (var i = 0; i < data.length; i++) {
          for (var j = 0; j < data[i].length; j++) {
             data[i][j].panel_content.forEach(function(pc) {
-               if(pc.data.spec[0] != "") {
-                  var curID = pc.data.id[0];
-                  try {
-                     var spec = JSON.parse(pc.data.spec);
-                  } catch (e) {
-                     console.log(e);
-                     return;
-                  }
-                  $(curID).data("spec", spec);
-                  // console.log(curID);
-                  // console.log($(curID));
-                  // vg.parse.spec($(curID).data("spec"), function(chart) {   
-                  vg.parse.spec(spec, function(chart) {   
-                     var ch = chart({el:curID});
-                     var w = ch.width();
-                     var h = ch.height();
-                     ch.update(); 
-                     var pd = ch.padding();
-                     ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
-                     ch.update();
-                  });
+               if(pc.data.spec) {
+                  if(pc.data.spec[0] != "") {
+                     var curID = pc.data.id[0];
+                     try {
+                        var spec = JSON.parse(pc.data.spec);
+                     } catch (e) {
+                        console.log(e);
+                        return;
+                     }
+                     $(curID).data("spec", spec);
+                     // console.log(curID);
+                     // console.log($(curID));
+                     // vg.parse.spec($(curID).data("spec"), function(chart) {   
+                     vg.parse.spec(spec, function(chart) {   
+                        var ch = chart({el:curID});
+                        var w = ch.width();
+                        var h = ch.height();
+                        ch.update(); 
+                        var pd = ch.padding();
+                        ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
+                        ch.update();
+                     });
+                  }                  
                }
             });
          }

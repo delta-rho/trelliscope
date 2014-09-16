@@ -18,9 +18,9 @@ filterState <- reactive({
    if(is.null(fs)) {
       fs <- currentDisplay()$cdo$state$filter
    } else {
-      logMsg("- filter state changed")
       class(fs) <- c(class(fs), "filterState")
    }
+   logMsg("- filter state changed: ", toHash(fs))
    fs
 })
 
@@ -29,9 +29,9 @@ sortState <- reactive({
    if(is.null(ss)) {
       ss <- currentDisplay()$cdo$state$sort
    } else {
-      logMsg("- panel sort state changed")
       class(ss) <- c(class(ss), "sortState")
    }
+   logMsg("- panel sort state changed: ", toHash(ss))
    ss
 })
 
@@ -40,11 +40,11 @@ panelLabelState <- reactive({
    if(is.null(pl)) {
       pl <- currentDisplay()$cdo$state$labels
    } else {
-      logMsg("- panel label state changed: ", paste(pl, collapse = ","))
-      class(pl) <- c(class(pl), "labelState")
+      class(pl) <- c(class(pl), "labelsState")
       if(pl[1] == "__none__")
          pl <- NULL
    }
+   logMsg("- panel label state changed: ", toHash(pl))
    pl
 })
 
@@ -53,18 +53,18 @@ panelLayoutState <- reactive({
    if(is.null(pls)) {
       pls <- currentDisplay()$cdo$state$layout      
    } else {
-      logMsg("- panel layout state changed: nrow: ", pls$nrow, ", ncol: ", pls$ncol, ", w: ", pls$w, " h: ", pls$h, " arrange: ", pls$arrange)
       class(pls) <- c(class(pls), "layoutState")
    }
+   logMsg("- panel layout state changed: nrow: ", pls$nrow, ", ncol: ", pls$ncol, ", w: ", pls$w, " h: ", pls$h, " arrange: ", pls$arrange)
    pls
 })
 
 activeCogState <- reactive({
    ac <- input$activeCogStateInput
    if(!is.null(ac)) {
-      class(ac) <- c(class(ac, "activeCogState"))
-      logMsg("- active cog state changed: ", paste(ac, collapse=","))
+      class(ac) <- c(class(ac), "activeCogState")
    }
+   logMsg("- active cog state changed: ", paste(ac, collapse=","))
    ac
 })
 
@@ -180,160 +180,11 @@ output$cogBreadcrumbOutput <- renderDataLite({
 output$appHashOutput <- renderText({
    cdo <- cdoExposedCogState()
    
-   res <- list()
-   
-   res$name <- cdo$name
-   res$group <- cdo$group
-   
-   if(!is.null(cdo$state$layout))
-      res$layout <- toHash(cdo$state$layout)
-   
-   if(length(cdo$state$sort) > 0)
-      res$sort <- toHash(cdo$state$sort)
-   
-   if(length(cdo$state$filter) > 0)
-      res$filter <- toHash(cdo$state$filter)
-   
-   if(length(cdo$state$labels) > 0) {
-      curLabels <- sort(as.character(cdo$state$labels))
-      defaultLabels <- sort(as.character(cdo$cogInfo$name[cdo$cogInfo$defLabel]))
-      if(!identical(curLabels, defaultLabels))
-         res$labels <- toHash(cdo$state$labels)
-   }
-   
-   # TODO: add curPage()
-   
-   res <- unlist(res)
-   if(!is.null(res))
-      paste(names(res), res, collapse = "&", sep = "=")
+   if(!is.null(cdo))
+      makeStateHash(cdo$state, cdo$name, cdo$group)
 })
 
-# $layout
-# [1] "ncol:2"
-# $sort
-# [1] "state:asc,slope:desc"
-# $filter
-# [1] "county:(regex:a),state:(select:AL;AR),slope:(from:0;to:1),meanList:(from:50)"
-# $labels
-# [1] "county,state,slope"
 
-toHash <- function(x) {
-   UseMethod("toHash")
-}
-
-fromHash <- function(x) {
-   UseMethod("fromHash")
-}
-
-toHash.filterState <- function(x) {
-   res <- sapply(x, function(a) {
-      if(names(a)[1] == "regex") {
-         res <- paste("(regex:", a, ")", sep = "")
-      } else if(names(a)[1] == "select") {
-         res <- paste("(select:", paste(unlist(a), collapse = ";", sep = ""), ")", sep = "")
-      } else if(names(a)[1] %in% c("from", "to")) {
-         res <- paste("(", paste(paste(names(a), ":", sep = ""), a, collapse = ";", sep = ""), ")", sep = "")
-      }
-      res
-   })
-   paste(names(res), res, collapse = ",", sep = ":")
-}
-
-fromHash.filterHash <- function(x) {
-   res <- strsplit(x, ",")[[1]]
-   res <- strsplit(res, ":")
-   keys <- lapply(res, "[", 1)
-   values <- lapply(res, function(a) {
-      val <- gsub("\\(|\\)", "", a[-1])
-      if(val[1] == "regex") {
-         val <- list(regex = val[2])
-      } else if(val[1] == "select") {
-         val <- list(select = as.list(strsplit(val[2], ";")[[1]]))
-      } else if(val[1] %in% c("from", "to")) {
-         tmp <- do.call(c, strsplit(val, ";"))
-         idx <- seq(1, length(tmp), 2)
-         val <- as.list(as.numeric(tmp[idx + 1]))
-         names(val) <- tmp[idx]
-      }
-      val
-   })
-   res <- setNames(values, keys)
-   class(res) <- c(class(res), "filterState")
-   res
-}
-
-toHash.sortState <- function(x) {
-   orders <- as.integer(sapply(x, function(a) a$order))
-   res <- sapply(x[order(orders)], function(x) x$dir)
-   paste(names(res), res, collapse = ",", sep = ":")
-}
-
-fromHash.sortHash <- function(x) {
-   res <- strsplit(x, ",")[[1]]
-   res <- strsplit(res, ":")
-   keys <- sapply(res, "[", 1)
-   values <- lapply(seq_along(res), function(i) {
-      list(dir = res[[i]][2], order = i)
-   })
-   res <- setNames(as.list(values), keys)
-   class(res) <- c(class(res), "sortState")
-   res
-}
-
-toHash.labelState <- function(x) {
-   paste(x, collapse = ",", sep = "")
-}
-
-fromHash.labelsHash <- function(x) {
-   res <- strsplit(x, ",")[[1]]
-   class(res) <- c(class(res), "labelState")
-   res
-}
-
-toHash.layoutState <- function(x) {
-   x$w <- x$h <- NULL # don't store height / width state
-   # if defaults, don't include in string
-   if(x$nrow == 1)
-      x$nrow <- NULL
-   if(x$ncol == 1)
-      x$ncol <- NULL
-   if(x$arrange == "row")
-      x$arrange <- NULL
-   
-   x <- unlist(x)
-   if(length(x) > 0) {
-      paste(names(x), x, collapse = ",", sep = ":")      
-   } else {
-      NULL
-   }
-}
-
-fromHash.layoutHash <- function(x) {
-   res <- strsplit(x, ",")[[1]]
-   res <- strsplit(res, ":")
-   keys <- sapply(res, "[", 1)
-   values <- sapply(res, "[", 2)
-   res <- setNames(as.list(values), keys)
-   
-   if(is.null(res$nrow)) {
-      res$nrow <- 1
-   } else {
-      res$nrow <- as.integer(res$nrow)
-   }
-
-   if(is.null(res$ncol)) {
-      res$ncol <- 1
-   } else {
-      res$ncol <- as.integer(res$ncol)
-   }
-   
-   if(is.null(res$arrange)) {
-      res$arrange <- "row"
-   }
-   
-   class(res) <- c(class(res), "layoutState")
-   res
-}
 
 
 
