@@ -62,10 +62,11 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
    if(shinyAppPrefix == "")
       shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
    
-   if(is.null(state)) {
-      options("trsCurrentViewState" = NULL)
+   if(!is.null(state) || !is.null(name)) {
+      state <- c(list(name = name, group = group), validateState(state))
+      options("trsCurrentViewState" = state)
    } else {
-      options("trsCurrentViewState" = c(list(name = name, group = group), validateState(state)))
+      options("trsCurrentViewState" = NULL)
    }
    
    runApp(shinyAppPrefix, port = port, launch.browser = openBrowser)

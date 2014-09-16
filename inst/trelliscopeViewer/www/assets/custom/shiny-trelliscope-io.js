@@ -176,11 +176,11 @@ $.extend(displaySelectInputBinding, {
       } else {
          var res = $(row).data();
          
-         var curDisplay = $("#headerDisplayNameOutput").data("curDisplay");
+         var state = $("#exposedStateDataOutput").data("myShinyData");
          
          // if it is the same display as before, don't do anything
-         if(curDisplay) {
-            if(curDisplay.name == res.name && curDisplay.group == res.group) {
+         if(state) {
+            if(state.name == res.name && state.group == res.group) {
                $("#openModal").modal("hide");
                return(res);
             }
@@ -195,7 +195,6 @@ $.extend(displaySelectInputBinding, {
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
          // store name and group as data
          // console.log(res);
-         $("#headerDisplayNameOutput").data("curDisplay", res);
          
          // run spinner
          var target = document.getElementById("displayLoadSpinner");

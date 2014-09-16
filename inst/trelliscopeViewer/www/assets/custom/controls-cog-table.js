@@ -284,7 +284,7 @@ function cogTableControlsOutputCancelButton() {
 
 function cogTableControlsOutputPostRender(data) {
    $.getScript("assets/custom/selectables-cogtable.js");
-      
+   
    // initialize multiselect dropups in cognostics table
    $(".selectpicker").selectpicker();
    $(".bootstrap-select.disabled").css("visibility", "hidden");

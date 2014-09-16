@@ -134,7 +134,7 @@ output$exposedStateDataOutput <- renderData({
    cdo <- cdoExposedCogState()
    # if(!is.null(cdo$state))
    #    browser()
-   cdo$state
+   c(list(name = cdo$name, group = cdo$group), cdo$state)
 })
 
 output$cogBreadcrumbOutput <- renderDataLite({

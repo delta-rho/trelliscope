@@ -51,14 +51,14 @@ output$panelTableContentOutput <- renderDataLite({
             if(arrange == "col")
                byRow <- FALSE
             ppp <- nr * nc
-
+            
             idxStart <- (curPage - 1) * ppp + 1
             if(idxStart > cogNrow(cd$curCogDF))
                return(NULL)
             idxEnd <- min(cogNrow(cd$curCogDF), curPage * ppp)
-
+            
             curRows <- cd$curCogDF[idxStart:idxEnd, , drop = FALSE]
-
+            
             # create list where each element is a vector of indices for a row of panels
             idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
             idxList <- lapply(seq_len(nr), function(x) idxMat[x,])

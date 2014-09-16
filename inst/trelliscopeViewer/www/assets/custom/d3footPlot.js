@@ -29,26 +29,25 @@ function d3footPlot(data) {
       
    }
    
-   var delta = (data[1].xdat | data[1].ind) - (data[0].xdat | data[0].ind);
-   
-   var xrange = d3.extent(data.map(function(d) { return d.xdat | d.ind; }));
+   var delta = data[1].xdat - data[0].xdat;
+   var xrange = d3.extent(data.map(function(d) { return d.xdat; }));
    xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.01;
    xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.01;
    
-   var yrange = d3.extent(data.map(function(d) { return d.ydat | d.Freq; }));
+   var yrange = d3.extent(data.map(function(d) { return d.ydat; }));
    
    d3footHistX.domain(xrange);
-   d3footHistY.domain([0, d3.max(data.map(function(d) { return d.ydat | d.Freq; }))]);
+   d3footHistY.domain([0, d3.max(data.map(function(d) { return d.ydat; }))]);
    
    svg.selectAll("." + barClass)
       .data(data)
      .enter().append("rect")
       .attr("class", barClass)
-      .attr("x", function(d) { return d3footHistX(d.xdat | d.ind); })
+      .attr("x", function(d) { return d3footHistX(d.xdat); })
       .attr("width", d3footHistX(delta) - d3footHistX(0) - 0.75)
-      .attr("y", function(d) { return d3footHistY(d.ydat | d.Freq); })
+      .attr("y", function(d) { return d3footHistY(d.ydat); })
       .attr("height", function(d) { 
-         return d3footHistHeight - d3footHistY(d.ydat | d.Freq);
+         return d3footHistHeight - d3footHistY(d.ydat);
       })
       .on("mouseover", function(d) {
          // Update the tooltip position and value

@@ -15,10 +15,12 @@ function activeCogListOutputApplyButton() {
          $("#bivar-x-" + curName).removeClass("hidden");
          $("#bivar-y-" + curName).removeClass("hidden");
          $("#multivar-var-" + curName).removeClass("hidden");
-
-         $("#cog-table-th-" + curName).removeClass("hidden");
-         $("#cog-filter-td-" + curName).removeClass("hidden");
-         $("#cog-table-univar-td-" + curName).removeClass("hidden");
+         
+         if($("cog-table-col-select-li-" + curName).hasClass("active")) {
+            $("#cog-table-th-" + curName).removeClass("hidden");
+            $("#cog-filter-td-" + curName).removeClass("hidden");
+            $("#cog-table-univar-td-" + curName).removeClass("hidden");
+         }
          $("#cog-table-col-select-li-" + curName).removeClass("hidden").addClass("nothidden");
       } else {
          // remove any filters for this variable
@@ -42,6 +44,9 @@ function activeCogListOutputApplyButton() {
          $("#cog-table-univar-td-" + curName).addClass("hidden");
          $("#cog-table-col-select-li-" + curName).addClass("hidden").removeClass("nothidden");
       }
+      
+      
+      
    });
    
    // console.log($(".panel-labels-select.active"));

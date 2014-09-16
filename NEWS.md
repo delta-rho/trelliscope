@@ -8,6 +8,14 @@ FEATURES / CHANGES
 - add `cogDisplayHref()` function for creating cognostic links to other
   displays
 
+BUG FIXES
+
+- fix cog sort/filter table column visibility dependence on active cogs
+- fix hiding related display layout when other control panels are clicked
+- fix column highlighting in cog table sort/filter when loading from state
+- fix footer histograms when bin start/end values are not integers
+- fix view() not working with name specified only (no state)
+
 Version 0.7.9.1
 -------------------------------------------------------------------------------
 

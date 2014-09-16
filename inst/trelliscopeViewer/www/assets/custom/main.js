@@ -213,6 +213,8 @@ function masterControlPostRender() {
       // when a nav element is clicked
       $(".slide-panel").not($("#" + $(this).data("divlink"))).removeClass("slide-left");
       $(this).toggleClass("selected");
+      // make sure related layout div is hidden (this isn't contained in the control panel)
+      $(".rl-layout").hide();
       // if the user opens a control panel, call action function
       // which typically will be making sure the currently exposed state is set
       if($(this).hasClass("selected")) {

@@ -92,7 +92,7 @@ cogTableFootHist <- function(data) {
 
 # creates data ready for univariate d3 plotting
 # either bar chart for character or hist / quantile for numeric (specify with plotType)
-getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist", maxLevels = 100) {
+getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist", maxLevels = 100, calledFromFooter = FALSE) {
    if(plotType == "histogram")
       plotType <- "hist"
    if(plotType == "quantile")
@@ -110,12 +110,12 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
          if(plotType == "hist") {
             delta <- diff(tmp$xdat[1:2])
             tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1))))
             # add random normal to make sure it triggers even when it 
             # doesn't change - this is to ensure spinner will get replaced
          } else {
             names(tmp)[1:2] <- c("x", "y")
-            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = rnorm(1)))
+            return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1))))
          }
       } else { # bar chart
          if(distType == "marginal") {
@@ -124,11 +124,11 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
             tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
          }
          if(nrow(tmp) > maxLevels)
-            return(list(name = name))
+            return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
          tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-         # browser()
-         tmp$ind <- seq_len(nrow(tmp))
-         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = rnorm(1)))
+         names(tmp)[which(names(tmp) == "Freq")] <- "ydat"
+         tmp$xdat <- seq_len(nrow(tmp))
+         return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = ifelse(calledFromFooter, 1, rnorm(1))))
       }
    }
    return(list(name = name))
