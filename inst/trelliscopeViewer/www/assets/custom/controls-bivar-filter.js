@@ -79,9 +79,9 @@ bivarFilterLocalLoad = function() {
       if(xVar) {
          var xf = filterData[xVar];
          if(xf) {
-            if(!xf.from)
+            if(xf.from == undefined)
                xf.from = xDomain[0];
-            if(!xf.to)
+            if(xf.to == undefined)
                xf.to = xDomain[1];
             xf = [xf.from, xf.to];
          }
@@ -89,9 +89,9 @@ bivarFilterLocalLoad = function() {
       if(yVar) {
          var yf = filterData[yVar];
          if(yf) {
-            if(!yf.from)
+            if(yf.from == undefined)
                yf.from = yDomain[0];
-            if(!yf.to)
+            if(yf.to == undefined)
                yf.to = yDomain[1];
             yf = [yf.from, yf.to];
          }

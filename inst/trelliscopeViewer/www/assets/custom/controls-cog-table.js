@@ -120,16 +120,16 @@ function cogTableSetFromExposedState() {
          // fill in input elements
          curTd = $("#cog-filter-td-" + key);
          if(curTd.data("type") == "numeric") {
-            if(value.from)
+            if(value.from != undefined)
                curTd.find(".column-filter-from").val(value.from);
-            if(value.to)
+            if(value.to != undefined)
                curTd.find(".column-filter-to").val(value.to);
          } else {
             // select categorical values
-            if(value.select) {
+            if(value.select != undefined) {
                curTd.find(".column-filter-select").selectpicker("val", value.select);
                curTd.find(".column-filter-select").selectpicker("refresh");               
-            } else if(value.regex) {
+            } else if(value.regex != undefined) {
                curTd.find(".column-filter-regex").val(value.regex);
             }
          }
