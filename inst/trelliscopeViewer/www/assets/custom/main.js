@@ -213,6 +213,8 @@ function masterControlPostRender() {
       // when a nav element is clicked
       $(".slide-panel").not($("#" + $(this).data("divlink"))).removeClass("slide-left");
       $(this).toggleClass("selected");
+      // make sure related layout div is hidden (this isn't contained in the control panel)
+      $(".rl-layout").hide();
       // if the user opens a control panel, call action function
       // which typically will be making sure the currently exposed state is set
       if($(this).hasClass("selected")) {
@@ -306,7 +308,7 @@ function cogBreadcrumbOutputPostRender() {
       delete sortData[$(this).data("name")];
       $("#sortStateInput").trigger("change");
    });
-
+   
    // open Table Sort / Filter control if main part of sort button clicked
    $(".sort-breadcrumb.cog-state-edit").click(function() {
       if(!$("#cog-table-sort-filter").hasClass("slide-left"))
@@ -398,6 +400,13 @@ function panelTableContentOutputPostRender(data) {
       $("#openModal").modal("hide");
    }
    
+   // this is a hack right now
+   // when panels contain scripts that need to be executed
+   // calling jQuery's html() runs those scripts
+   // $(".panel-image-wrapper").each(function() {
+   //    $(this).html($(this).html());
+   // });
+   
    // if it is not a static image expect vega spec in .data
    // console.log(data[0][0].panel_content.length);
    // console.log(data);
@@ -405,27 +414,29 @@ function panelTableContentOutputPostRender(data) {
       for (var i = 0; i < data.length; i++) {
          for (var j = 0; j < data[i].length; j++) {
             data[i][j].panel_content.forEach(function(pc) {
-               if(pc.data.spec[0] != "") {
-                  var curID = pc.data.id[0];
-                  try {
-                     var spec = JSON.parse(pc.data.spec);
-                  } catch (e) {
-                     console.log(e);
-                     return;
-                  }
-                  $(curID).data("spec", spec);
-                  // console.log(curID);
-                  // console.log($(curID));
-                  // vg.parse.spec($(curID).data("spec"), function(chart) {   
-                  vg.parse.spec(spec, function(chart) {   
-                     var ch = chart({el:curID});
-                     var w = ch.width();
-                     var h = ch.height();
-                     ch.update(); 
-                     var pd = ch.padding();
-                     ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
-                     ch.update();
-                  });
+               if(pc.data.spec) {
+                  if(pc.data.spec[0] != "") {
+                     var curID = pc.data.id[0];
+                     try {
+                        var spec = JSON.parse(pc.data.spec);
+                     } catch (e) {
+                        console.log(e);
+                        return;
+                     }
+                     $(curID).data("spec", spec);
+                     // console.log(curID);
+                     // console.log($(curID));
+                     // vg.parse.spec($(curID).data("spec"), function(chart) {   
+                     vg.parse.spec(spec, function(chart) {   
+                        var ch = chart({el:curID});
+                        var w = ch.width();
+                        var h = ch.height();
+                        ch.update(); 
+                        var pd = ch.padding();
+                        ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
+                        ch.update();
+                     });
+                  }                  
                }
             });
          }
@@ -442,7 +453,7 @@ function panelTableContentOutputPostRender(data) {
          maxCogNameWidth = tmp;
    });
    $(".cog-name-td").width(maxCogNameWidth - 1);
-   var totWidth = $("#exposedStateDataOutput").data("myShinyData").panelLayout.w;
+   var totWidth = $("#exposedStateDataOutput").data("myShinyData").layout.w;
    $(".cog-value-td").width(totWidth - maxCogNameWidth - 21);
    // $(".panel-cog-table").width(totWidth);
 }
@@ -496,11 +507,12 @@ $(document).ready(function() {
          } catch (e) {
           // do nothing
          }
-
+         
          if(appHash == "") {
-            $("#openModal").modal('show');
+            $("#openModal").modal("show");
          } else {
-            // $("#appHash").val(appHash);
+            $("#appHashInput").data("myShinyData", appHash);
+            $("#appHashInput").trigger("change");
          }
       }
    });

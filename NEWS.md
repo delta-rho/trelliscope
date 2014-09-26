@@ -1,3 +1,38 @@
+Version 0.7.9.3
+-------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- add state specification - specify default state through makeDisplay, viewing
+  state when calling `view()`, or through specifying a URL hash in viewer
+- add `cogDisplayHref()` function for creating cognostic links to other
+  displays
+
+BUG FIXES
+
+- fix cog sort/filter table column visibility dependence on active cogs
+- fix hiding related display layout when other control panels are clicked
+- fix column highlighting in cog table sort/filter when loading from state
+- fix footer histograms when bin start/end values are not integers
+- fix view() not working with name specified only (no state)
+- fix issue with zero values in filter being ignore when restoring state
+- fix issue with cognostics having too many levels for select drop-downs
+
+Version 0.7.9.1
+-------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- add experimental support for rCharts panels
+- add experimental support for deploying to shinyapps.io
+
+BUG FIXES
+
+- load packages and related data objects for related displays
+- fix opening new display when current state is showing related displays
+- fix path in webSync for changing app permissions on server
+
+
 Version 0.7.9
 -------------------------------------------------------------------------------
 

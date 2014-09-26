@@ -45,11 +45,11 @@ function panelLayoutSetFromExposedState() {
    var state = $("#exposedStateDataOutput").data("myShinyData");
    
    if(state) {
-      if(state.panelLayout) {
-         $("#panel-rows").val(state.panelLayout.nrow);
-         $("#panel-cols").val(state.panelLayout.ncol);
+      if(state.layout) {
+         $("#panel-rows").val(state.layout.nrow);
+         $("#panel-cols").val(state.layout.ncol);
          $("#panel-rows").trigger("change");
-         $("#pl-" + state.panelLayout.arrange).click();
+         $("#pl-" + state.layout.arrange).click();
       }
    }
 }

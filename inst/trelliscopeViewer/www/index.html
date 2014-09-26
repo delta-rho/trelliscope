@@ -7,19 +7,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
-
+    
     <title>Trelliscope Viewer</title>
-
+    
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <link href="assets/bootstrap-select/bootstrap-select.css" rel="stylesheet">
-
+    
     <!-- Custom styles -->
     <link href="assets/custom/custom.css" rel="stylesheet">
   	<link href="assets/icons/style.css" rel="stylesheet">
-
-    <title>Mustache.js External Method</title>
+    
     <script type="text/javascript" src="assets/jquery/jquery.js" ></script>
     <script type="text/javascript" src="assets/jquery.event.drag/jquery.event.drag-2.2.js" ></script>
     <script type="text/javascript" src="assets/mustache/mustache.js" ></script>
@@ -27,7 +26,7 @@
     <script src="assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="assets/svgeezy/svgeezy.min.js"></script>
     <script>
-        svgeezy.init(false, 'png');
+      svgeezy.init(false, 'png');
     </script>
     <script src="assets/spin/spin.js"></script>
     <script src="assets/bootstrap-select/bootstrap-select.js"></script>
@@ -194,6 +193,8 @@
       <div id="relatedDisplayStateInput" class="shiny-my-data-input"></div>
       <div id="activeCogStateInput" class="shiny-my-data-input"></div>
       <div id="sortStateInput" class="shiny-my-data-input"></div>
+      <div id="appHashInput" class="shiny-my-data-input"></div>
+      <div id="appHashOutput" class="shiny-apphash-output"></div>
       <div id="exposedStateDataOutput" data-callback="updateControlsExposedState" class="shiny-my-data-output"></div>
       <div id="panelDimInput" class="shiny-my-data-input"></div>
       <div class="container">
@@ -461,13 +462,13 @@
       <div class="control-group">
         <p class="control-label">Rows</p>
         <div class="controls">
-          <input id="panel-rows" type="number" value="1" class="input-small">
+          <input id="panel-rows" type="number" value="{{nrow}}" class="input-small">
         </div>
       </div>
       <div class="control-group">
         <p class="control-label">Columns</p>
         <div class="controls">
-          <input id="panel-cols" type="number" value="1" class="input-small">
+          <input id="panel-cols" type="number" value="{{ncol}}" class="input-small">
         </div>
       </div>
     </div>

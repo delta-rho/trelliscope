@@ -10,18 +10,17 @@ exposedCogDF <- reactive({
 })
 
 output$panelPageTotOutput <- renderText({
-   cdo <- exposedCogDF()
+   cd <- exposedCogDF()
    
-   if(!is.null(cdo)) {
-      totPanels <- cogNrow(cdo$curCogDF)
-      ppp <- cdo$cdo$state$panelLayout$nrow * cdo$cdo$state$panelLayout$ncol
+   if(!is.null(cd)) {
+      totPanels <- cogNrow(cd$curCogDF)
+      ppp <- cd$cdo$state$layout$nrow * cd$cdo$state$layout$ncol
       
       ceiling(totPanels / ppp)      
    }
 })
 
-output$panelTableContentOutput <- renderDataLite({
-   cdo <- exposedCogDF()
+curPage <- reactive({
    curPage <- suppressWarnings(as.integer(input$curPanelPageInput))
    if(length(curPage) == 0)
       curPage <- NULL
@@ -29,73 +28,82 @@ output$panelTableContentOutput <- renderDataLite({
       if(is.na(curPage))
          curPage <- NULL
    }
-   
-   if(!is.null(cdo) && !is.null(curPage)) {
-      labelVars <- cdo$cdo$state$panelLabel
-      
-      if(is.null(cdo$cdo$state$relatedDisplays)) {
-         # we are in regular plotting mode
-         w <- cdo$cdo$state$panelLayout$w
-         h <- cdo$cdo$state$panelLayout$h
-         nr <- cdo$cdo$state$panelLayout$nrow
-         nc <- cdo$cdo$state$panelLayout$ncol
-         arrange <- cdo$cdo$state$panelLayout$arrange
-         byRow <- TRUE
-         if(arrange == "col")
-            byRow <- FALSE
-         ppp <- nr * nc
+   curPage
+})
 
-         idxStart <- (curPage - 1) * ppp + 1
-         if(idxStart > cogNrow(cdo$curCogDF))
-            return(NULL)
-         idxEnd <- min(cogNrow(cdo$curCogDF), curPage * ppp)
-         
-         curRows <- cdo$curCogDF[idxStart:idxEnd, , drop = FALSE]
-         
-         # create list where each element is a vector of indices for a row of panels
-         idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
-         idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
-         
-         logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
-         
-         # panelContent should be a list:
-         # - html
-         # - vega
-         
-         panelContent <- getPanels(cdo$cdo, 
-            width = w, 
-            height = h, 
-            curRows = curRows, 
-            pixelratio = session$clientData$pixelratio)
-         # browser()
-         lapply(idxList, function(rw) {
-            lapply(rw, function(i) {
-               if(i + idxStart - 1 > idxEnd) {
-                  curPanelContent <- dummyPanel(w, h)
-                  cogData <- dummyCog(labelVars)
-               } else {
-                  curPanelContent <- panelContent[[i]]
-                  # browser()
-                  tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
-                  if(is.null(labelVars)) {
-                     cogData <- NULL
+output$panelTableContentOutput <- renderDataLite({
+   cd <- exposedCogDF()
+   
+   curPage <- curPage()
+   
+   if(!is.null(cd) && !is.null(curPage)) {
+      labelVars <- cd$cdo$state$labels
+      
+      if(is.null(cd$cdo$state$relatedDisplays)) {
+         w <- cd$cdo$state$layout$w
+         h <- cd$cdo$state$layout$h
+         if(!is.null(h) && !is.null(w)) {
+            # we are in regular plotting mode
+            nr <- cd$cdo$state$layout$nrow
+            nc <- cd$cdo$state$layout$ncol
+            arrange <- cd$cdo$state$layout$arrange
+            byRow <- TRUE
+            if(arrange == "col")
+               byRow <- FALSE
+            ppp <- nr * nc
+            
+            idxStart <- (curPage - 1) * ppp + 1
+            if(idxStart > cogNrow(cd$curCogDF))
+               return(NULL)
+            idxEnd <- min(cogNrow(cd$curCogDF), curPage * ppp)
+            
+            curRows <- cd$curCogDF[idxStart:idxEnd, , drop = FALSE]
+            
+            # create list where each element is a vector of indices for a row of panels
+            idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
+            idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
+
+            logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
+
+            # panelContent should be a list:
+            # - html
+            # - vega
+
+            panelContent <- getPanels(cd$cdo, 
+               width = w, 
+               height = h, 
+               curRows = curRows, 
+               pixelratio = session$clientData$pixelratio)
+            # browser()
+            lapply(idxList, function(rw) {
+               lapply(rw, function(i) {
+                  if(i + idxStart - 1 > idxEnd) {
+                     curPanelContent <- dummyPanel(w, h)
+                     cogData <- dummyCog(labelVars)
                   } else {
-                     cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+                     curPanelContent <- panelContent[[i]]
+                     # browser()
+                     tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
+                     if(is.null(labelVars)) {
+                        cogData <- NULL
+                     } else {
+                        cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+                     }
                   }
-               }
-               # browser()
-               list(
-                  i = i,
-                  html_wrap_start = "",
-                  panel_content = list(curPanelContent),
-                  html_wrap_end = "",
-                  cogs = cogData
-               )
-            })
-         })
+                  # browser()
+                  list(
+                     i = i,
+                     html_wrap_start = "",
+                     panel_content = list(curPanelContent),
+                     html_wrap_end = "",
+                     cogs = cogData
+                  )
+               })
+            })            
+         }
       } else {
          # we are showing related displays
-         curRows <- cdo$curCogDF[curPage, , drop = FALSE]
+         curRows <- cd$curCogDF[curPage, , drop = FALSE]
          
          # div with each related display rendered with relative position
          tmp <- cogDataString(curRows[1, labelVars, drop = FALSE])
@@ -105,16 +113,16 @@ output$panelTableContentOutput <- renderDataLite({
             cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
          }
          
-         pageHeight <- cdo$cdo$state$relatedDisplays[[1]]$pageHeight
-         pageWidth <- cdo$cdo$state$relatedDisplays[[1]]$pageWidth
+         pageHeight <- cd$cdo$state$relatedDisplays[[1]]$pageHeight
+         pageWidth <- cd$cdo$state$relatedDisplays[[1]]$pageWidth
          
-         curPanelContent <- lapply(seq_along(cdo$cdo$state$relatedDisplays), function(i) {
-            a <- cdo$cdo$state$relatedDisplays[[i]]
+         curPanelContent <- lapply(seq_along(cd$cdo$state$relatedDisplays), function(i) {
+            a <- cd$cdo$state$relatedDisplays[[i]]
             dispKey <- paste(a$group, a$name, sep = "___")
-            if(is.null(cdo$cdo$relatedDisplayObjects[[dispKey]])) {
-               curDisp <- cdo$cdo
+            if(is.null(cd$cdo$relatedDisplayObjects[[dispKey]])) {
+               curDisp <- cd$cdo
             } else {
-               curDisp <- cdo$cdo$relatedDisplayObjects[[dispKey]]
+               curDisp <- cd$cdo$relatedDisplayObjects[[dispKey]]
             }
             
             tmp <- getPanels(curDisp, 

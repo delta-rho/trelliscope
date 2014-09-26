@@ -17,7 +17,7 @@ if(getRversion() >= "2.15.1") {
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{typeset}}, \code{\link{webConn}}, \code{\link{syncLocalData}}
-#'
+#' 
 #' @export
 webSync <- function(
    vdbConn = getOption("vdbConn"),
@@ -87,7 +87,7 @@ webSync <- function(
          sshQuote <- "'"
       }
       message("* Attempting to fix permissions...")
-      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, "/", webConn$name, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
+      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
       if(verbose)
          cat(paste(c("*** Output ***", lns), collapse = "\n"))
    }
@@ -165,3 +165,85 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
    
    rsync
 }
+
+#' Deploy VDB to shinyapps.io
+#' 
+#' Deploy VDB to shinyapps.io
+#' 
+#' @param vdbConn VDB connection settings
+#' @param appName name of application (app will be available at https://[account].shinyapps.io/[appName]/) - if not supplied, will use the name of VDB connection
+#' @param account passed to \code{shinyapps::configureApp}
+#' @param redeploy passed to \code{shinyapps::configureApp}
+#' @param size passed to \code{shinyapps::configureApp}
+#' @param instances passed to \code{shinyapps::configureApp}
+#' @param quiet passed to \code{shinyapps::configureApp}
+#' 
+#' @details If you do not have a shinyapps.io account and have not set your account info, first visit here prior to calling this function: \url{http://shiny.rstudio.com/articles/shinyapps.html}.
+#' 
+#' @author Ryan Hafen
+#' 
+#' \code{\link{syncLocalData}}
+#' 
+#' @export
+deployToShinyApps <- function(
+   vdbConn = getOption("vdbConn"),
+   appName = NULL, account = NULL, redeploy = TRUE, 
+   size = NULL, instances = NULL, quiet = FALSE) {
+   
+   if (!requireNamespace("shinyapps", quietly = TRUE)) {
+      stop("The 'shinyapps' package is needed for this function to work. Please install it. (see here: http://shiny.rstudio.com/articles/shinyapps.html)",
+         call. = FALSE)
+   }
+   
+   if(is.null(appName)) {
+      if(!is.null(vdbConn$name)) {
+         appName <- vdbConn$name
+      } else {
+         stop("Must either supply 'appName' or set the name of your VDB in vdbConn()")
+      }
+   }
+   
+   message("*** Copying latest viewer to vdb directory...")
+   
+   shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
+   if(shinyAppPrefix == "")
+      shinyAppPrefix <- file.path(system.file(package = "trelliscope"), "trelliscopeViewer")
+   
+   serverLoc <- file.path(vdbConn$path, "server")
+   if(file.exists(serverLoc))
+      unlink(serverLoc, recursive = TRUE)
+   
+   wwwLoc <- file.path(vdbConn$path, "www")
+   if(file.exists(wwwLoc))
+      unlink(wwwLoc, recursive = TRUE)
+   
+   file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
+   file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
+   
+   message("*** Syncing local data...")
+   syncLocalData(vdbConn)
+   
+   vdbDir <- vdbConn$path
+   load(file.path(vdbDir, "displays", "_displayList.Rdata"))
+   
+   message("*** Configuring app...")
+   shinyapps::configureApp(appName = appName, account = account, redeploy = redeploy, size = size, instances = instances, quiet = quiet)
+   
+   message("\n*** Getting package dependencies...")
+   pkgs <- as.vector(do.call(c, lapply(displayList, function(x) {
+      a <- getDisplay(x$name, x$group)
+      a$relatedPackages
+   })))
+   
+   pkgs <- sort(unique(c(pkgs, "datadr", "trelliscope")))
+   
+   depFile <- file.path(vdbDir, "dependencies.R")
+   if(file.exists(depFile))
+      file.remove(depFile)
+   
+   cat(paste("library(", pkgs, ")\n", sep = "", collapse = ""), file = depFile)
+   
+   message("*** Deploying app...\n")
+   shinyapps::deployApp(vdbDir, appName = appName, account = account)
+}
+

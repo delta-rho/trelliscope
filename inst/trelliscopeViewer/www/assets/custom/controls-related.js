@@ -69,9 +69,9 @@ function relatedLayout() {
    
    var disps = [];
    var curAspect = $("#panel-layout-data").data("panelAspect")
-   var curDisplay = $("#headerDisplayNameOutput").data("curDisplay");
+   var state = $("#exposedStateDataOutput").data("myShinyData");
    
-   var curDisp = {"name": curDisplay.name, "group": curDisplay.group, "aspect": curAspect};
+   var curDisp = {"name": state.name, "group": state.group, "aspect": curAspect};
    
    disps.push(curDisp);
    $(".related-display-select.active").each(function() {
