@@ -17,7 +17,7 @@ if(getRversion() >= "2.15.1") {
 #' @author Ryan Hafen
 #' 
 #' @seealso \code{\link{typeset}}, \code{\link{webConn}}, \code{\link{syncLocalData}}
-#'
+#' 
 #' @export
 webSync <- function(
    vdbConn = getOption("vdbConn"),
@@ -87,7 +87,7 @@ webSync <- function(
          sshQuote <- "'"
       }
       message("* Attempting to fix permissions...")
-      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, "/", webConn$name, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
+      lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$appDir, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
       if(verbose)
          cat(paste(c("*** Output ***", lns), collapse = "\n"))
    }
@@ -222,7 +222,7 @@ deployToShinyApps <- function(
    
    message("*** Syncing local data...")
    syncLocalData(vdbConn)
-      
+   
    vdbDir <- vdbConn$path
    load(file.path(vdbDir, "displays", "_displayList.Rdata"))
    

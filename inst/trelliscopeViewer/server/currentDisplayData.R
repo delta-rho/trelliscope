@@ -20,7 +20,7 @@ displayListOutputData <- function(dl) {
 
 panelLayoutOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      panelLayout <- x$cdo$state$panelLayout
+      panelLayout <- x$cdo$state$layout
       nrow <- panelLayout$nrow
       if(is.null(nrow))
          nrow <- 1
@@ -46,7 +46,7 @@ panelLabelListOutputData <- function(x) {
    if(!is.null(x$cdo)) {
       cogInfo <- x$cdo$cogInfo
       cogInfo$active <- ""
-      cogInfo$active[cogInfo$defLabel] <- "active"
+      cogInfo$active[cogInfo$name %in% x$cdo$state$labels] <- "active"
       
       ci <- split(cogInfo, cogInfo$group)
       nms <- names(ci)
@@ -130,7 +130,7 @@ cogTableControlsOutputData <- function(x) {
       curDF <- getCogData(cogDF, seq_len(min(n, 10)))
       
       plotDat <- lapply(cogInfo$name, function(nm) {
-         getUnivarPlotDat(x, name = nm, maxLevels = 100)
+         getUnivarPlotDat(x, name = nm, maxLevels = 100, calledFromFooter = TRUE)
       })
       list(
          data = cogTableBodyData(curDF),
@@ -163,8 +163,8 @@ cogBiFilterControlsOutputData <- function(x) {
 
 panelPageNavOutputData <- function(x) {
    if(!is.null(x$cdo)) {
-      nrow <- x$cdo$state$panelLayout$nrow
-      ncol <- x$cdo$state$panelLayout$ncol
+      nrow <- x$cdo$state$layout$nrow
+      ncol <- x$cdo$state$layout$ncol
       if(is.null(nrow))
          nrow <- 1
       if(is.null(ncol))

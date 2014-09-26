@@ -56,7 +56,7 @@ var d3univarYbrush = d3.svg.brush()
     .on("brush", d3univarYbrushFn);
 
 function d3univar(data, id) {
-      
+   
    var plotType = data.plotType[0];
    var xlab = data.name[0];
    var ylab = "Frequency";

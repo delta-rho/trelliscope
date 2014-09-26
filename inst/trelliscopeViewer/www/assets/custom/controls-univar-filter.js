@@ -90,9 +90,9 @@ univarFilterLocalLoad = function() {
          if($("#univarPlotType button.histogram-button").hasClass("active")) {
             if(filter) {
                var dm = d3univarX.domain();
-               if(!filter.from)
+               if(filter.from == undefined)
                   filter.from = dm[0];
-               if(!filter.to)
+               if(filter.to == undefined)
                   filter.to = dm[1];
                filter = [filter.from, filter.to];
                d3.select("#univarFilterPlot")

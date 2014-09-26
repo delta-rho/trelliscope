@@ -4,9 +4,9 @@ if(getRversion() >= "2.15.1") {
 
 
 #' Create a Trelliscope Display
-#'
+#' 
 #' Create a trelliscope display and add it to a visualization database (VDB)
-#'
+#' 
 #' @param data data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})
 #' @param name the name of the display (no spaces or special characters)
 #' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
@@ -16,6 +16,7 @@ if(getRversion() >= "2.15.1") {
 #' @param panelFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with panelFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)
 #' @param lims either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
+#' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
 #' @param preRender should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly in the viewer (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.
 #' @param cogConn a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
@@ -24,18 +25,18 @@ if(getRversion() >= "2.15.1") {
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
-#'
+#' 
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
-#'
+#' 
 #' Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Then panels are rendered on the fly.  If a user would like to pre-render the images, then by default these will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
-#'
+#' 
 #' @author Ryan Hafen
-#'
+#' 
 #' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
-#'
+#' 
 #' @examples
 #' # see docs
-#'
+#' 
 #' @export
 makeDisplay <- function(
    data,
@@ -47,6 +48,7 @@ makeDisplay <- function(
    panelFn = NULL, # function to be applied to each split,
    lims = list(x = "free", y = "free", prepanelFn = NULL),
    cogFn = NULL,
+   state = NULL,
    preRender = FALSE,
    cogConn = dfCogConn(),
    output = NULL,
@@ -81,7 +83,7 @@ makeDisplay <- function(
    
    if(!inherits(cogConn, "cogConn"))
       stop("Argument 'cogConn' not valid")
-
+   
    # if pre-rendering images and no output is specified
    # then store on disk in the VDB directory
    if(preRender) {
@@ -292,6 +294,9 @@ makeDisplay <- function(
       relatedPackages = packages
    )
    class(displayObj) <- "displayObj"
+   
+   if(!is.null(state))
+      displayObj$state <- validateState(name, group, state, displayObj)
    
    save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
    
