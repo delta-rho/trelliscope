@@ -1,4 +1,4 @@
-Version 0.7.9.3
+Version 0.7.9.4
 -------------------------------------------------------------------------------
 
 FEATURES / CHANGES
@@ -17,6 +17,7 @@ BUG FIXES
 - fix view() not working with name specified only (no state)
 - fix issue with zero values in filter being ignore when restoring state
 - fix issue with cognostics having too many levels for select drop-downs
+- fix a few bugs in `deployToShinyApps()`
 
 Version 0.7.9.1
 -------------------------------------------------------------------------------
