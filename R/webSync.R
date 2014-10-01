@@ -219,6 +219,7 @@ deployToShinyApps <- function(
    
    file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
    file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
+   file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path)
    
    message("*** Syncing local data...")
    syncLocalData(vdbConn)
@@ -227,7 +228,7 @@ deployToShinyApps <- function(
    load(file.path(vdbDir, "displays", "_displayList.Rdata"))
    
    message("*** Configuring app...")
-   shinyapps::configureApp(appName = appName, account = account, redeploy = redeploy, size = size, instances = instances, quiet = quiet)
+   try(shinyapps::configureApp(appName = appName, account = account, redeploy = redeploy, size = size, instances = instances, quiet = quiet))
    
    message("\n*** Getting package dependencies...")
    pkgs <- as.vector(do.call(c, lapply(displayList, function(x) {
