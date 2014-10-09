@@ -203,6 +203,10 @@ $.extend(displaySelectInputBinding, {
          // reset sorting
          $("#filterStateInput").data("myShinyData", null);
          $("#filterStateInput").trigger("change");
+
+         // reset active cognostics
+         $("#activeCogStateInput").data("myShinyData", null);
+         $("#activeCogStateInput").trigger("change");
          
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
          
