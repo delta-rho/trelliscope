@@ -79,7 +79,7 @@ validateLims <- function(lims, data, panelFn, verbose) {
          lims <- setLims(pre, x = xLimType, y = yLimType)
       } else {
          if(verbose)
-            message("* ... skipping this step since both are axes are free ...")
+            message("* ... skipping this step since both axes are free ...")
          lims <- list(x = list(type = "free"), y = list(type = "free"))
       }
    }

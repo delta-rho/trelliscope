@@ -123,7 +123,7 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
          } else {
             tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
          }
-         if(!is.null(tmp)) {
+         if(is.data.frame(tmp)) {
             if(nrow(tmp) > maxLevels)
                return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
             tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
