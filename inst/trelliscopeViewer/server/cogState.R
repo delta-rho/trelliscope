@@ -36,9 +36,10 @@ sortState <- reactive({
 })
 
 panelLabelState <- reactive({
+   cur <- currentDisplay()$cdo$state$labels
    pl <- input$panelLabelStateInput
    if(is.null(pl)) {
-      pl <- currentDisplay()$cdo$state$labels
+      pl <- cur
    } else {
       class(pl) <- c(class(pl), "labelsState")
       if(pl[1] == "__none__")

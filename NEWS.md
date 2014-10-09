@@ -1,4 +1,4 @@
-Version 0.7.9.4
+Version 0.8.0
 -------------------------------------------------------------------------------
 
 FEATURES / CHANGES
@@ -18,6 +18,8 @@ BUG FIXES
 - fix issue with zero values in filter being ignore when restoring state
 - fix issue with cognostics having too many levels for select drop-downs
 - fix a few bugs in `deployToShinyApps()`
+- fix bug in label, sort, filter state not resetting on display change
+- fix bug in marginal distribution checking for viewer cog table
 
 Version 0.7.9.1
 -------------------------------------------------------------------------------

@@ -192,9 +192,23 @@ $.extend(displaySelectInputBinding, {
             relatedDisplayListOutputApplyButton();
          }
          
+         // reset panel labels
+         $("#panelLabelStateInput").data("myShinyData", null);
+         $("#panelLabelStateInput").trigger("change");
+         
+         // reset sorting
+         $("#sortStateInput").data("myShinyData", null);
+         $("#sortStateInput").trigger("change");
+         
+         // reset sorting
+         $("#filterStateInput").data("myShinyData", null);
+         $("#filterStateInput").trigger("change");
+
+         // reset active cognostics
+         $("#activeCogStateInput").data("myShinyData", null);
+         $("#activeCogStateInput").trigger("change");
+         
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
-         // store name and group as data
-         // console.log(res);
          
          // run spinner
          var target = document.getElementById("displayLoadSpinner");
