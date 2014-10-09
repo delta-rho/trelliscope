@@ -123,6 +123,10 @@ getCurCogDat <- function(x, state) {
    if(length(state$sort) > 0) {
       srt <- state$sort
       srtNm <- names(srt)
+      
+      srtNm <- intersect(srtNm, names(x))
+      # TODO: warning if some srtNm are not in names of x?
+      
       if(length(srt) == 1) {
          orderIndex <- order(x[, srtNm, drop = FALSE], decreasing = srt[[1]]$dir == "desc")
       } else {

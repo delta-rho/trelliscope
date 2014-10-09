@@ -35,6 +35,7 @@ selectedDisplay <- reactive({
       }
    }
    
+   # if appHash didn't have it:
    if(is.null(sld)) {
       sld <- getOption("trsCurrentViewState")
    }
@@ -90,7 +91,7 @@ currentDisplay <- reactive({
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
       
       logMsg("Getting default state...")
-      
+            
       cdo$state$labels <- sld$labels
       if(is.null(cdo$state$labels)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
@@ -119,7 +120,6 @@ currentDisplay <- reactive({
       
       # if(!is.null(currentViewState))
       #    options(trsCurrentViewState = NULL)
-      
       list(cdo = cdo)
    }
 })
