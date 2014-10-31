@@ -27,6 +27,15 @@ addDisplay <- function(
    conn = getOption("vdbConn")
 ) {
    validateConn(conn)
+
+   # check name and group
+   if(grepl("[^a-zA-Z0-9_\\.]", name)) {
+      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   }
+   if(grepl("[^a-zA-Z0-9_\\.]", group)) {
+      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   }
+
    vdbPrefix <- conn$path
 
    # get display prefix (and move old display to backup if it already exists)
