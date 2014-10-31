@@ -3,3 +3,4 @@ _ignore
 .DS_Store
 node_modules
 ..Rcheck
+*.sublime-*
