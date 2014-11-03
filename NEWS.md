@@ -1,10 +1,24 @@
-Version 0.8.0
--------------------------------------------------------------------------------
+Version 0.8.0.2
+---------------------------------------------------------------------
 
 FEATURES / CHANGES
 
-- add state specification - specify default state through makeDisplay, viewing
-  state when calling `view()`, or through specifying a URL hash in viewer
+- remove strict dependency on scagnostics package
+- add validation for name and group arguments in `makeDisplay()` and `addDisplay()`
+
+BUG FIXES
+
+- fix `vdbConn()` to properly retrieve VDB name from previous connection
+- fix `makePNG()` to deal with "Date" class axis limits for lattice
+
+Version 0.8.0
+---------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- add state specification - specify default state through 
+  `makeDisplay()`, viewing state when calling `view()`, or through 
+  specifying a URL hash in viewer
 - add `cogDisplayHref()` function for creating cognostic links to other
   displays
 
