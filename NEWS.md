@@ -10,6 +10,7 @@ BUG FIXES
 
 - fix `vdbConn()` to properly retrieve VDB name from previous connection
 - fix `makePNG()` to deal with "Date" class axis limits for lattice
+- fix `addDispay()` to properly deal with 
 
 Version 0.8.0
 ---------------------------------------------------------------------
