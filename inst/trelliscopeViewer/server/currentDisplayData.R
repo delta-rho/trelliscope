@@ -28,8 +28,14 @@ panelLayoutOutputData <- function(x) {
       if(is.null(ncol))
          ncol <- 1
       
+      labelState <- x$cdo$state$labels
+      if(is.null(labelState)) {
+         nLabels <- length(which(x$cdo$cogInfo$defLabel))
+      } else {
+         nLabels <- length(labelState)
+      }
       list(panel_aspect = x$cdo$height / x$cdo$width, 
-         n_panel_labels = length(which(x$cdo$cogInfo$defLabel)),
+         n_panel_labels = nLabels,
          nrow = nrow, ncol = ncol, cdName = x$cdo$name, cdGroup = x$cdo$group)
    }
 }

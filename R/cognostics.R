@@ -116,12 +116,17 @@ cogDisplayHref <- function(displayName, displayGroup = NULL, state = NULL, label
 #' @examples
 #' cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
 #' @export
-#' @import scagnostics
 cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
-   tmp <- try(scagnostics(x, y), silent = TRUE)
+
+   if (!requireNamespace("scagnostics", quietly = TRUE)) {
+      stop("Package 'scagnostics' is needed for this function to work. Please install it.",
+      call. = FALSE)
+   }
+
+   tmp <- try(scagnostics::scagnostics.default(x, y), silent = TRUE)
    if(inherits(tmp, "try-error")) {
       # make a data.frame of NA
-      res <- scagnostics(1:10, 1:10)
+      res <- scagnostics::scagnostics.default(1:10, 1:10)
       res <- as.data.frame(t(as.matrix(res)))
       res[1,] <- NA
       res$cor <- NA

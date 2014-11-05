@@ -1,10 +1,10 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.0
-Date: 2014-10-08
+Version: 0.8.0.2
+Date: 2014-11-03
 Author: Ryan Hafen
-Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
+Maintainer: Ryan Hafen <rhafen@gmail.com>
 Description: Trelliscope provides a way to create, organize, and view
     multi-panel displays, a collection of which is called a visualization
     database (VDB).  This package provides a mechanism for extending the ideas
@@ -36,10 +36,10 @@ Imports:
     hexbin,
     jsonlite,
     fastICA,
-    scagnostics,
     png
 Suggests:
     Cairo,
     testthat (>= 0.8.1),
     roxygen2 (>= 4.0.0),
+    scagnostics,
     shinyapps

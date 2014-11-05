@@ -2,7 +2,7 @@
 
 function panelLayoutOutputApplyButton() {
    var panelDims = $("#panel-layout-data").data("panelDims");
-   
+
    var arrangement = $("#panelArrangement").find("button.active").data("val");
    
    if(panelDims != undefined) {
@@ -55,7 +55,8 @@ function panelLayoutSetFromExposedState() {
 }
 
 function panelLayoutOutputPostRender(data) {
-   
+   $("#panel-layout-data").data("nCog", data.n_panel_labels)
+
    // handle by-row / by-column toggle
    $(".pl-toggle").click(function() {
       // if this button is not the one currently selected
@@ -74,11 +75,11 @@ function panelLayoutOutputPostRender(data) {
    
    // actions for changing nrow and ncol
    $("#panel-rows").change(function() {
-      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()), $("#panel-layout-data").data("nCog"));
    });
    
    $("#panel-cols").change(function() {
-      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()), $("#panel-layout-data").data("nCog"));
    });
    
    $("#panel-rows").trigger("change");
@@ -93,7 +94,7 @@ function panelLayoutOutputPostRender(data) {
 }
 
 
-function getPanelDims(nRow, nCol) {
+function getPanelDims(nRow, nCol, nCog) {
    // var nRow = 2;
    // var nCol = 3;
    
@@ -101,7 +102,7 @@ function getPanelDims(nRow, nCol) {
    if(panelAspect) {
       var tPad = 3; // padding on either side of the panel
       var cogHeight = 30; // height of a row of cog output
-      var nCog = $(".panel-labels-select.active").length; // number of cogs to show
+      // var nCog = $(".panel-labels-select.active").length; // number of cogs to show
       // extra padding beyond what is plotted
       // these remain fixed while width and height can change
       var wExtra = 2 + 2 * tPad; // 2 for border + tPad on either side
@@ -148,7 +149,7 @@ function getPanelDims(nRow, nCol) {
    }
 }
 
-function panelLayoutPreview(nRow, nCol) {
+function panelLayoutPreview(nRow, nCol, nCog) {
    // var nRow = 2;
    // var nCol = 3;
    
@@ -166,7 +167,7 @@ function panelLayoutPreview(nRow, nCol) {
    var previewHeight = 491; // this is the hard-coded height for control panels
    var previewAspect = previewHeight / previewWidth;
    
-   var pd = getPanelDims(nRow, nCol);
+   var pd = getPanelDims(nRow, nCol, nCog);
    
    if(pd.pageAspect < previewAspect) {
       previewHeight = previewWidth * pd.pageAspect;
@@ -176,7 +177,7 @@ function panelLayoutPreview(nRow, nCol) {
       $("#panel-layout-preview-pane").width(previewWidth);
       $("#panel-layout-preview-pane").height(previewHeight);      
    }
-      
+   
    var data = {};
    if(pd.fullWidth) {
       data.w = previewWidth - 2;
