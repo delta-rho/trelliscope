@@ -27,6 +27,8 @@ print.displayObj <- function(x, ...) {
 #' @export
 getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 
+   validateVdbConn(conn, mustHaveDisplays = TRUE)
+
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
    displayInfo <- findDisplay(name = name, group = group, conn = conn)
@@ -62,6 +64,7 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #' @param name the name of the display
 #' @param group the group of the display
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param autoYes should questions to proceed with display removal be automatically answered with "yes"?
 #' @param verbose logical - print messages about what is being done
 #'
 #' @details If a display is uniquely determined by its name, then group is not required.
@@ -70,11 +73,29 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #'
 #' @seealso \code{\link{makeDisplay}}
 #' @export
-removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), verbose = TRUE) {
+removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), autoYes = FALSE, verbose = TRUE) {
+
+   validateVdbConn(conn, mustHaveDisplays = TRUE)
+
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
    displayInfo <- findDisplay(name, group, conn)
    vdbPrefix <- conn$path
+
+   fileLoc <- file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name)
+
+   if(file.exists(fileLoc)) {
+      if(autoYes) {
+         ans <- "y"
+      } else {
+         ans <- readline(paste("Are you sure you want to remove ", fileLoc, "? (y = yes) ", sep = ""))
+      }
+      if(!tolower(substr(ans, 1, 1)) == "y")
+         return()
+      unlink(fileLoc, recursive = TRUE)
+   } else {
+      stop("Files associated with display not found: ", fileLoc, call. = FALSE)
+   }
 
    displayList[paste(displayInfo$group, displayInfo$name, sep = "_")] <- NULL
 
@@ -84,16 +105,16 @@ removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn")
 
    displayListDF <- displayListDF[-ind,]
 
-   unlink(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name), recursive = TRUE)
-
-   save(displayList, displayListDF, displayListNames, file = file.path(conn$path, "displays", "_displayList.Rdata"))
-
+   # if there are no displays, remove the file
+   if(length(displayList) == 0) {
+      file.remove(file.path(conn$path, "displays", "_displayList.Rdata"))
+   } else {
+      save(displayList, displayListDF, displayListNames, file = file.path(conn$path, "displays", "_displayList.Rdata"))
+   }
+   
    if(verbose)
       message("* Display removed successfully")
 }
-
-# TODO: listDisplays function (print list of displays)
-# TODO: cleanupDisplays function (remove _bak displays)
 
 ## internal
 ## ensures that a display exists and returns its name and group
@@ -136,6 +157,8 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #' @seealso \code{\link{makeDisplay}}, \code{\link{addDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
 #' @export
 listDisplays <- function(conn = getOption("vdbConn")) {
+   validateVdbConn(conn, mustHaveDisplays = TRUE)
+
    load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
    tmp <- as.matrix(displayListDF[,c("name", "group", "desc", "n", "dataClass")])

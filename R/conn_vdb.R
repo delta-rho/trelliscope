@@ -86,8 +86,8 @@ vdbInit <- function(path, autoYes, verbose) {
 
    dir.create(file.path(path, "displays"))
 
-   if(verbose)
-      message("* Moving notebook files over")
+   # if(verbose)
+   #    message("* Moving notebook files over")
    file.copy(file.path(pkgPath, "notebook"), path, recursive = TRUE, overwrite = TRUE)
 
    TRUE
