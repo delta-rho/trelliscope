@@ -27,6 +27,15 @@ addDisplay <- function(
    conn = getOption("vdbConn")
 ) {
    validateConn(conn)
+
+   # check name and group
+   if(grepl("[^a-zA-Z0-9_\\.]", name)) {
+      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   }
+   if(grepl("[^a-zA-Z0-9_\\.]", group)) {
+      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   }
+
    vdbPrefix <- conn$path
 
    # get display prefix (and move old display to backup if it already exists)
@@ -44,6 +53,7 @@ addDisplay <- function(
       name = name,
       desc = desc,
       n = 1,
+      panelFnType = NA,
       preRender = NA,
       dataClass = NA,
       cogClass = NA,
@@ -59,17 +69,20 @@ addDisplay <- function(
       desc = desc,
       preRender = NA,
       panelFn = NA,
+      panelFnType = NA,
       panelDataSource = NA,
       cogFn = NA,
       n = 1,
       cogDatConn = NA,
       cogInfo = NA,
+      cogDistns = NA,
       updated = modTime,
       keySig = NA,
       height = height,
       width = width,
       lims = NA,
-      relatedData = NA
+      relatedData = NA,
+      relatedPackages = NA
    )
    class(displayObj) <- "displayObj"
 

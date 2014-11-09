@@ -200,7 +200,7 @@ $.extend(displaySelectInputBinding, {
          $("#sortStateInput").data("myShinyData", null);
          $("#sortStateInput").trigger("change");
          
-         // reset sorting
+         // reset filtering
          $("#filterStateInput").data("myShinyData", null);
          $("#filterStateInput").trigger("change");
 

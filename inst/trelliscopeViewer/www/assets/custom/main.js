@@ -86,7 +86,7 @@ $(window).bind('resizeEnd', function() {
       relatedLayout();
       relatedDisplayListOutputApplyButton();
    } else {
-      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()), $(".panel-labels-select.active").length);
       $("#panel-rows").trigger("change");
       panelLayoutOutputApplyButton();      
    }
@@ -453,7 +453,8 @@ function panelTableContentOutputPostRender(data) {
          maxCogNameWidth = tmp;
    });
    $(".cog-name-td").width(maxCogNameWidth - 1);
-   var totWidth = $("#exposedStateDataOutput").data("myShinyData").layout.w;
+   // var totWidth = $("#exposedStateDataOutput").data("myShinyData").layout.w;
+   var totWidth = $("#panel-layout-data").data("panelDims").w;
    $(".cog-value-td").width(totWidth - maxCogNameWidth - 21);
    // $(".panel-cog-table").width(totWidth);
 }

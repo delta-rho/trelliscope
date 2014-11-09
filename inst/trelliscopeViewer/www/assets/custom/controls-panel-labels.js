@@ -35,9 +35,10 @@ function panelLabelListOutputApplyButton() {
       relatedLayout();
       relatedDisplayListOutputApplyButton();
    } else {
-      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()));
+      $("#panel-layout-data").data("nCog", panelLabel.length);
+      panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()), panelLabel.length);
       $("#panel-rows").trigger("change");
-      panelLayoutOutputApplyButton();      
+      panelLayoutOutputApplyButton();
    }
 }
 
