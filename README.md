@@ -8,8 +8,8 @@ For simple use, all that is needed for Trelliscope is R.  Trelliscope depends on
 
 ```s
 library(devtools)
-install_github("datadr", "tesseradata")
-install_github("trelliscope", "tesseradata")
+install_github("tesseradata/datadr")
+install_github("tesseradata/trelliscope")
 ```
 
 ## Tutorial
