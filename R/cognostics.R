@@ -181,7 +181,7 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
    
    cogTypes <- list(
       key      = as.character,
-      inteter  = as.integer  ,
+      integer  = as.integer  ,
       numeric  = as.numeric  ,
       factor   = as.character,
       date     = as.Date     ,
