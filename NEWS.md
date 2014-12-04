@@ -6,6 +6,7 @@ FEATURES / CHANGES
 - remove strict dependency on scagnostics package
 - add validation for name and group arguments in `makeDisplay()` and `addDisplay()`
 - add better error handling / messaging dealing with viewing, adding, and removing displays
+- add CDN override for rCharts js libraries to allow rCharts to show up properly on shinyapps.io
 
 BUG FIXES
 
