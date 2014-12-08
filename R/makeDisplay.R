@@ -64,8 +64,8 @@ makeDisplay <- function(
    if(grepl("[^a-zA-Z0-9_\\.]", name)) {
       stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
    }
-   if(grepl("[^a-zA-Z0-9_\\.]", group)) {
-      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   if(grepl("[^a-zA-Z0-9_/\\.]", group)) {
+      stop("Argument 'group' must contain only numbers, letters or symbols '.'' or '_'")
    }
 
    if(!inherits(data, "ddo")) {
