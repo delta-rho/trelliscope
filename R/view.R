@@ -23,7 +23,7 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
    
    port <- as.integer(port)
    
-   validateConn(conn)
+   validateVdbConn(conn, mustHaveDisplays = TRUE)
    vdbPrefix <- conn$path
 	packagePath <- system.file(package = "trelliscope")
    

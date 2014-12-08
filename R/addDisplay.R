@@ -26,7 +26,7 @@ addDisplay <- function(
    width = 800,
    conn = getOption("vdbConn")
 ) {
-   validateConn(conn)
+   validateVdbConn(conn)
 
    # check name and group
    if(grepl("[^a-zA-Z0-9_\\.]", name)) {

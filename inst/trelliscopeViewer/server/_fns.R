@@ -333,6 +333,15 @@ renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims
    p$set(width = width, height = height)
    # paste(capture.output(p$print()), collapse = '\n')
    
+   # override the cdn settings that ship with rCharts
+   # as some aren't available over https
+   # which is used by shinyapps.io
+   cdnPath <- file.path(system.file(package = "trelliscope"), 
+      "rChartsCdnOverride", 
+      tolower(class(p))[1])
+   if(file.exists(file.path(cdnPath, "config.yml")))
+      p$LIB$url <- cdnPath
+
    p <- capture.output(p$show('iframesrc', cdn = TRUE))
    
    ind <- which(grepl("iframe\\.rChart", p))
