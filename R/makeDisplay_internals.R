@@ -1,7 +1,16 @@
 
-validateConn <- function(conn) {
+## internal
+validateVdbConn <- function(conn, mustHaveDisplays = FALSE) {
    if(!inherits(conn, "vdbConn"))
-      stop("connection must be valid vdb connection")
+      stop("connection must be valid vdb connection", call. = FALSE)
+
+   if(!file.exists(conn$path))
+      stop("VDB connection path: ", conn$path, " does not exist.  Initiate a valid VDB connection by calling vdbConn()", call. = FALSE)
+
+   if(mustHaveDisplays) {
+      if(!file.exists(file.path(conn$path, "displays", "_displayList.Rdata")))
+         stop("Visualization database does not have any displays: ", conn$path, call. = FALSE)
+   }
 }
 
 ## internal
@@ -17,7 +26,7 @@ validateCogFn <- function(dat, cogFn, verbose = FALSE) {
 
    exdf <- cog2df(ex)
    if(nrow(exdf) > 1)
-      stop("'cogFn' must return something that can be coerced into a 1-row data.frame")
+      stop("'cogFn' must return something that can be coerced into a 1-row data.frame", call. = FALSE)
    if(verbose)
       message("ok")
    ex
@@ -111,11 +120,6 @@ updateDisplayList <- function(argList, conn) {
       load(displayListPath)
    }
 
-   displayListNames <- c("uid", "Group", "Name", "Description", "Panels", "Pre-rendered", "Data Class", "Cog Class", "Height (px)", "Width (px)", "Resolution", "Aspect Ratio", "Last Updated", "Key Signature")
-
-   if(!is.null(argList))
-      displayList[[paste(argList$group, argList$name, sep = "_")]] <- argList
-
    # make sure all other displays still exist
    gps <- do.call(c, lapply(displayList, function(x) x$group))
    nms <- do.call(c, lapply(displayList, function(x) x$name))
@@ -123,6 +127,11 @@ updateDisplayList <- function(argList, conn) {
       file.path(conn$path, "displays", gps, nms)
    )
    displayList <- displayList[existsInd]
+
+   displayListNames <- c("uid", "Group", "Name", "Description", "Panels", "Pre-rendered", "Data Class", "Cog Class", "Height (px)", "Width (px)", "Resolution", "Aspect Ratio", "Last Updated", "Key Signature")
+
+   if(!is.null(argList))
+      displayList[[paste(argList$group, argList$name, sep = "_")]] <- argList
 
    displayListDF <- do.call(rbind, lapply(displayList, function(x) as.data.frame(x, stringsAsFactors = FALSE)))
    displayListDF <- displayListDF[order(displayListDF$group, displayListDF$name),]

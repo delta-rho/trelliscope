@@ -26,7 +26,7 @@ if(getRversion() >= "2.15.1") {
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #' 
-#' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation on github: \url{http://hafen.github.io/trelliscope}
+#' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 #' 
 #' Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Then panels are rendered on the fly.  If a user would like to pre-render the images, then by default these will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
 #' 
@@ -58,14 +58,14 @@ makeDisplay <- function(
    packages = NULL,
    control = NULL
 ) {
-   validateConn(conn)
+   validateVdbConn(conn)
    
    # check name and group
    if(grepl("[^a-zA-Z0-9_\\.]", name)) {
-      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+      stop("Argument 'name' must contain only numbers, letters, or the symbols '.' or '_'")
    }
-   if(grepl("[^a-zA-Z0-9_\\.]", group)) {
-      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
+   if(grepl("[^a-zA-Z0-9_/\\.]", group)) {
+      stop("Argument 'name' must contain only numbers, letters, or the symbols '.' or '_' or '/'")
    }
 
    if(!inherits(data, "ddo")) {
@@ -79,10 +79,10 @@ makeDisplay <- function(
    
    vdbPrefix <- conn$path
    
-   # get display prefix (and move old display to backup if it already exists)
-   displayPrefix <- file.path(vdbPrefix, "displays", group, name)
-   checkDisplayPath(displayPrefix, verbose)
-   
+   # temporary location for display
+   tempPrefix <- tempfile()
+   dir.create(tempPrefix)
+
    dataConn <- getAttribute(data, "conn")
    
    # if no cognostics connection was specified, use cogDatConn
@@ -96,7 +96,7 @@ makeDisplay <- function(
    # then store on disk in the VDB directory
    if(preRender) {
       if(is.null(output)) {
-         output <- localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE)
+         output <- localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE)
       } else if(!inherits(output, "kvConnection")) {
          stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output = NULL when pre-rendering.")
       }
@@ -104,7 +104,7 @@ makeDisplay <- function(
       if(inherits(data, "kvMemory")) {
          # if an in-memory data set is too large we want to put it on disk
          if(object.size(data) > 50 * 1024^2)
-            data <- convert(data, localDiskConn(file.path(displayPrefix, "panels"), autoYes = TRUE))
+            data <- convert(data, localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
       }
       
       panelDataSource <- data
@@ -212,7 +212,7 @@ makeDisplay <- function(
       trsCurYLim = trsCurYLim
    ))
    
-   packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "scagnostics", "data.table")
+   packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "data.table")
    # } else {
    #    packages <- c(packages, "trelliscope")
    # }
@@ -245,6 +245,7 @@ makeDisplay <- function(
       packages = packages
    )
    
+   tryRes <- try({
    if(preRender)
       panelDataSource <- jobRes
    
@@ -253,27 +254,9 @@ makeDisplay <- function(
    
    # get panelKey "signature"
    keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
-   
-   if(verbose)
-      message("* Updating displayList...")
-   
+      
    modTime <- Sys.time()
-   
-   updateDisplayList(list(
-      group = group,
-      name = name,
-      desc = desc,
-      n = getAttribute(data, "nDiv"),
-      panelFnType = panelFnType,
-      preRender = preRender,
-      dataClass = tail(class(data), 1),
-      cogClass = class(cogConn)[1],
-      height = height,
-      width = width,
-      updated = modTime,
-      keySig = keySig
-   ), conn)
-   
+
    if(verbose)
       message("* Storing display object...")
    
@@ -306,21 +289,49 @@ makeDisplay <- function(
    if(!is.null(state))
       displayObj$state <- validateState(name, group, state, displayObj)
    
-   save(displayObj, file = file.path(displayPrefix, "displayObj.Rdata"))
-   
+   save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+
    # make thumbnail
    message("* Plotting thumbnail...")
-   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(displayPrefix, "thumb.png"), width = width, height = height, lims = lims))
+   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
    # small thumbnail
-   makeThumb(file.path(displayPrefix, "thumb.png"), file.path(displayPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
+   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)      
+   })
    
+   if(inherits(tryRes, "try-error")) {
+      stop("The above error(s) occurred after making the display.", call. = FALSE)
+   } else {
+      if(verbose)
+         message("* Updating displayList...")
+
+      updateDisplayList(list(
+         group = group,
+         name = name,
+         desc = desc,
+         n = getAttribute(data, "nDiv"),
+         panelFnType = panelFnType,
+         preRender = preRender,
+         dataClass = tail(class(data), 1),
+         cogClass = class(cogConn)[1],
+         height = height,
+         width = width,
+         updated = modTime,
+         keySig = keySig
+      ), conn)
+
+      # get display prefix (and move old display to backup if it already exists)
+      displayPrefix <- file.path(vdbPrefix, "displays", group, name)
+      checkDisplayPath(displayPrefix, verbose)
+      file.rename(tempPrefix, displayPrefix)
+   }
+
    return(invisible(displayObj))
 }
 
 
 ## remove all _bak directories
 cleanupDisplays <- function(conn = getOption("vdbConn")) {
-   validateConn(conn)
+   validateVdbConn(conn)
    
    ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
    for(f in ff) {

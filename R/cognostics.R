@@ -170,7 +170,7 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 #' 
 #' @return object of class "cog"
 #' 
-#' @details Different types of cognostics can be specified through the \code{type} argument that will effect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
+#' @details Different types of cognostics can be specified through the \code{type} argument that will affect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
 #' 
 #' @author Ryan Hafen
 #' 
@@ -181,7 +181,7 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
    
    cogTypes <- list(
       key      = as.character,
-      inteter  = as.integer  ,
+      integer  = as.integer  ,
       numeric  = as.numeric  ,
       factor   = as.character,
       date     = as.Date     ,

@@ -21,7 +21,7 @@ webConn <- function(
       message("* Name not provided - attempting to use name in vdbConn")
       name <- getOption("vdbConn")$name
       if(is.null(name))
-         stop("Name not specified", call. = FALSE)
+         stop("Web connection name not specified and VDB connection does not have a name - couldn't determine a name for the web connection.", call. = FALSE)
    }
    
    res <- structure(list(

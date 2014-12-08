@@ -26,11 +26,7 @@ webSync <- function(
    verbose = FALSE,
    rsync = NULL
 ) {
-   
-   # conn <- getOption("vdbConn")
-   # rsync <- NULL
-   
-   ## sync local vdb directory to web server's vdb directory
+   # sync local vdb directory to web server's vdb directory
    if(is.null(rsync))
       rsync <- findRsync()
    
@@ -110,7 +106,9 @@ webSync <- function(
 syncLocalData <- function(vdbConn = getOption("vdbConn"), rsync = NULL) {
    if(is.null(rsync))
       rsync <- findRsync()
- 
+   
+   validateVdbConn(vdbConn, mustHaveDisplays = TRUE)
+
    # if there are localDisk objects, put them in VDB
    load(file.path(vdbConn$path, "displays", "_displayList.Rdata"))
    ldDisp <- subset(displayListDF, dataClass == "kvLocalDisk")

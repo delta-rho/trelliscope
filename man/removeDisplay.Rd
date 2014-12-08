@@ -4,7 +4,7 @@
 \title{Remove a Display from a VDB}
 \usage{
 removeDisplay(name = NULL, group = NULL, conn = getOption("vdbConn"),
-  verbose = TRUE)
+  autoYes = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{name}{the name of the display}
@@ -12,6 +12,8 @@ removeDisplay(name = NULL, group = NULL, conn = getOption("vdbConn"),
 \item{group}{the group of the display}
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
+
+\item{autoYes}{should questions to proceed with display removal be automatically answered with "yes"?}
 
 \item{verbose}{logical - print messages about what is being done}
 }
