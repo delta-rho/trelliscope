@@ -218,6 +218,19 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
          type <- NA
       }
    }
+
+   # This stop is a quick hack by Landon Sego:
+   # NA's for any cognostic cause the entire Table Sort/Filter to throw an error,
+   # and it also causes the Univarite Filter to fail for that particular cognostic.
+   # A better solution for when is.na(val) = TRUE would be to issue a warning instead and
+   # to add the following functionality:
+   # when the cognostic function is applied in makeDisplay(), run some quick check over
+   # the resulting cognostics list, and if there are NA's, remove them from the list before passing
+   # them on to the display (so they never appear in the display)
+   if(is.na(val)) {
+     stop("Unable to infer the 'type' of the cognostic with desc = '", desc, "'")
+   }
+       
    
    cogAttrs <- list(
       desc = desc,
