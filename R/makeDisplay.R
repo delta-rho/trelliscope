@@ -8,8 +8,9 @@ if(getRversion() >= "2.15.1") {
 #' Create a trelliscope display and add it to a visualization database (VDB)
 #' 
 #' @param data data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})
-#' @param name the name of the display (no spaces or special characters)
-#' @param group the group the display belongs to (displays are organized into groups).  Defaults to "common"
+#' @param name the name of the display (no special characters, spaces are converted to underscores)
+#' @param group the group the display belongs to, where displays are organized into groups (no special characters, spaces are
+#' converted to underscores).  Defaults to "common"
 #' @param desc a description of the display (used in the viewer and in notebooks)
 #' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
@@ -59,13 +60,17 @@ makeDisplay <- function(
    control = NULL
 ) {
    validateVdbConn(conn)
+
+   # If spaces are present in name or gropu, fill them with underscores
+   name <- gsub("\\ ", "_", name)
+   group <- gsub("\\ ", "_", group)
    
    # check name and group
    if(grepl("[^a-zA-Z0-9_\\.]", name)) {
-      stop("Argument 'name' must contain only numbers, letters, or the symbols '.' or '_'")
+      stop("Argument 'name' must contain only numbers, letters, spaces, or the symbols '.' or '_'")
    }
    if(grepl("[^a-zA-Z0-9_/\\.]", group)) {
-      stop("Argument 'group' must contain only numbers, letters, or the symbols '.', '_', or '/'")
+      stop("Argument 'group' must contain only numbers, letters, spaces, or the symbols '.', '_', or '/'")
    }
 
    if(!inherits(data, "ddo")) {
