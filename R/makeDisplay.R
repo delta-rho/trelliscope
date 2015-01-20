@@ -14,7 +14,7 @@ if(getRversion() >= "2.15.1") {
 #' @param desc a description of the display (used in the viewer and in notebooks)
 #' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
-#' @param panelFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with panelFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)
+#' @param panelFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  It is recommended that you first test \code{panelFn} on a single key-value pair using \code{panelFn(data[[1]][[2]])}. This function must return either an object of class "ggplot", "trellis", or return "NULL" (for base plot commands)
 #' @param lims either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}
 #' @param cogFn a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))
 #' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
@@ -29,7 +29,7 @@ if(getRversion() >= "2.15.1") {
 #' 
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 #' 
-#' Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{\preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+#' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
 #' 
 #' @author Ryan Hafen
 #' 
@@ -61,7 +61,7 @@ makeDisplay <- function(
 ) {
    validateVdbConn(conn)
 
-   # If spaces are present in name or gropu, fill them with underscores
+   # If spaces are present in name or group, fill them with underscores
    name <- gsub("\\ ", "_", name)
    group <- gsub("\\ ", "_", group)
    

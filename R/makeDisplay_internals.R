@@ -46,7 +46,7 @@ getPanelFnType <- function(panelEx) {
       panelFnType <- "rChartsFn"
    }
    if(is.null(panelFnType))
-      stop("Unsupported panel function", call. = FALSE)
+      stop("Unsupported panel function.  If panel function uses base R commands, be sure to include 'return(NULL)' at the end of the function definition.", call. = FALSE)
    
    panelFnType
 }
