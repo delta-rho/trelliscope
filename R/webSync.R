@@ -22,7 +22,7 @@ if(getRversion() >= "2.15.1") {
 webSync <- function(
    vdbConn = getOption("vdbConn"),
    webConn = getOption("vdbWebConn"),
-   fixPermissions = TRUE,
+   fixPermissions = FALSE,
    verbose = FALSE,
    rsync = NULL
 ) {
