@@ -12,9 +12,10 @@ makeDisplay(data, name, group = "common", desc = "", height = 500,
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}
 
-\item{name}{the name of the display (no spaces or special characters)}
+\item{name}{the name of the display (no special characters, spaces are converted to underscores)}
 
-\item{group}{the group the display belongs to (displays are organized into groups).  Defaults to "common"}
+\item{group}{the group the display belongs to, where displays are organized into groups (no special characters, spaces are
+converted to underscores).  Defaults to "common"}
 
 \item{desc}{a description of the display (used in the viewer and in notebooks)}
 
@@ -22,7 +23,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 500,
 
 \item{width}{reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)}
 
-\item{panelFn}{a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  Useful to test with panelFn(divExample(dat)).  Must return either an object of class "ggplot", "trellis", or "expression" (of base plot commands)}
+\item{panelFn}{a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  It is recommended that you first test \code{panelFn} on a single key-value pair using \code{panelFn(data[[1]][[2]])}. This function must return either an object of class "ggplot", "trellis", or return "NULL" (for base plot commands)}
 
 \item{lims}{either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}}
 
@@ -30,7 +31,7 @@ makeDisplay(data, name, group = "common", desc = "", height = 500,
 
 \item{state}{if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)}
 
-\item{preRender}{should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly in the viewer (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.}
+\item{preRender}{should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.  See Details.}
 
 \item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.}
 
@@ -52,7 +53,7 @@ Create a trelliscope display and add it to a visualization database (VDB)
 \details{
 Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 
-Panels by default are not pre-rendered.  Instead, this function creates a display object and computes and stores the cognostics.  Then panels are rendered on the fly.  If a user would like to pre-render the images, then by default these will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
 }
 \examples{
 # see docs

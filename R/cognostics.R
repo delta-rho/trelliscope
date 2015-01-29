@@ -218,7 +218,7 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
          type <- NA
       }
    }
-   
+
    cogAttrs <- list(
       desc = desc,
       type = type,
