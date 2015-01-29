@@ -1,3 +1,15 @@
+Version 0.8.0.5
+---------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- Improved various aspects of the documentation of `makeDisplay()`
+- Added overall package documentation.  See `help(trelliscope)`
+
+BUG FIXES
+
+- fix `makeDisplay()` to correctly launch trelliscope views on Windows
+
 Version 0.8.0.3
 ---------------------------------------------------------------------
 
