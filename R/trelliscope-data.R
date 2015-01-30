@@ -1,12 +1,3 @@
-#' trelliscope.
-#'
-#' @name trelliscope
-#' @docType package
-#' @import data.table datadr digest fastICA ggplot2 grid hexbin knitr markdown
-#' @importFrom jsonlite toJSON
-
-NULL
-
 # Pristine example of data documentation from ggplot2
 #
 # # ' Prices of 50,000 round cut diamonds
@@ -136,6 +127,3 @@ NULL
 #' @usage data(batting)
 #' @format A data frame with 1406 rows and 22 variables
 NULL
-
-
-

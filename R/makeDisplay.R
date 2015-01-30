@@ -61,17 +61,7 @@ makeDisplay <- function(
 ) {
    validateVdbConn(conn)
 
-   # If spaces are present in name or group, fill them with underscores
-   name <- gsub("\\ ", "_", name)
-   group <- gsub("\\ ", "_", group)
-   
-   # check name and group
-   if(grepl("[^a-zA-Z0-9_\\.]", name)) {
-      stop("Argument 'name' must contain only numbers, letters, spaces, or the symbols '.' or '_'")
-   }
-   if(grepl("[^a-zA-Z0-9_/\\.]", group)) {
-      stop("Argument 'group' must contain only numbers, letters, spaces, or the symbols '.', '_', or '/'")
-   }
+   validateNameGroup(name, group)
 
    if(!inherits(data, "ddo")) {
       stop("Input data must be an object of class 'ddo'")

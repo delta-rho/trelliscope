@@ -3,7 +3,7 @@
 \alias{cogDisplayHref}
 \title{DisplayHref Cognostic}
 \usage{
-cogDisplayHref(displayName, displayGroup = NULL, state = NULL,
+cogDisplayHref(displayName, displayGroup = "common", state = NULL,
   label = "link", desc = "display link", group = "common",
   target = "_blank", defLabel = FALSE, defActive = FALSE,
   filterable = FALSE)
