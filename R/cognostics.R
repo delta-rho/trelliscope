@@ -94,7 +94,7 @@ cogHref <- function(x, label = "link", desc = "link", group = "common", target =
 #' 
 #' @seealso \code{\link{validateState}}, \code{\link{cogHref}}
 #' @export
-cogDisplayHref <- function(displayName, displayGroup = NULL, state = NULL, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
+cogDisplayHref <- function(displayName, displayGroup = "common", state = NULL, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
    
    state <- validateState(state, displayName, displayGroup)
    x <- makeStateHash(state, displayName, displayGroup)
@@ -218,7 +218,7 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
          type <- NA
       }
    }
-   
+
    cogAttrs <- list(
       desc = desc,
       type = type,

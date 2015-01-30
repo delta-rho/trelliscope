@@ -4,7 +4,7 @@
 \title{Sync VDB and notebook Files to a Web Server}
 \usage{
 webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
-  fixPermissions = TRUE, verbose = FALSE, rsync = NULL)
+  fixPermissions = FALSE, verbose = FALSE, rsync = NULL)
 }
 \arguments{
 \item{vdbConn}{VDB connection settings}

@@ -14,6 +14,27 @@ validateVdbConn <- function(conn, mustHaveDisplays = FALSE) {
 }
 
 ## internal
+validateNameGroup <- function(name, group) {
+    
+   # If spaces are present in name or group, fill them with underscores
+   name <- gsub("\\ ", "_", name)
+   group <- gsub("\\ ", "_", group)
+   
+   # check name and group
+   if(grepl("[^a-zA-Z0-9_\\.]", name)) {
+      stop("Argument 'name' must contain only numbers, letters, spaces, or the symbols '.' or '_'")
+   }
+   if(grepl("[^a-zA-Z0-9_/\\.]", group)) {
+      stop("Argument 'group' must contain only numbers, letters, spaces, or the symbols '.', '_', or '/'")
+   }
+
+   # Send back the updated name and group into the calling function
+   assign("name", name, envir = parent.frame())
+   assign("group", group, envir = parent.frame())
+   
+}
+
+## internal
 validateCogFn <- function(dat, cogFn, verbose = FALSE) {
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF = FALSE)
@@ -46,7 +67,7 @@ getPanelFnType <- function(panelEx) {
       panelFnType <- "rChartsFn"
    }
    if(is.null(panelFnType))
-      stop("Unsupported panel function", call. = FALSE)
+      stop("Unsupported panel function.  If panel function uses base R commands, be sure to include 'return(NULL)' at the end of the function definition.", call. = FALSE)
    
    panelFnType
 }

@@ -28,13 +28,7 @@ addDisplay <- function(
 ) {
    validateVdbConn(conn)
 
-   # check name and group
-   if(grepl("[^a-zA-Z0-9_\\.]", name)) {
-      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
-   }
-   if(grepl("[^a-zA-Z0-9_\\.]", group)) {
-      stop("Argument 'name' must contain only numbers, letters or symbols '.'' or '_'")
-   }
+   validateNameGroup(name, group)
 
    vdbPrefix <- conn$path
 
