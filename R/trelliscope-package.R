@@ -21,8 +21,6 @@
 ##' License: \tab BSD_3_clause + file LICENSE\cr 
 ##' Maintainer: \tab Ryan Hafen \email{rhafen@@gmail.com}\cr}
 ##' 
-##  Landon here:  I'm displaying the full link in the text so that people will know where they
-##                are being redirected when the click the link.
 ##' An extensive vignette and documentation is available at \url{http://tessera.io/docs-trelliscope}.
 ##' Additional information can be found at \url{http://tessera.io} and \url{http://tessera.io/blog}.
 ##' 

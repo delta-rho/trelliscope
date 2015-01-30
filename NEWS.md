@@ -3,8 +3,10 @@ Version 0.8.0.5
 
 FEATURES / CHANGES
 
-- Improved various aspects of the documentation of `makeDisplay()`
-- Added overall package documentation.  See `help(trelliscope)`
+- improve various aspects of the documentation of `makeDisplay()`
+- add validation for name and group arguments in `makeDisplay()` and `addDisplay()`
+- add ability to include spaces in name and group arguments in `makeDisplay()` and `addDisplay()`
+- add overall package documentation.  See `help(trelliscope)`
 
 BUG FIXES
 
@@ -16,7 +18,6 @@ Version 0.8.0.3
 FEATURES / CHANGES
 
 - remove strict dependency on scagnostics package
-- add validation for name and group arguments in `makeDisplay()` and `addDisplay()`
 - add better error handling / messaging dealing with viewing, adding, and removing displays
 - add CDN override for rCharts js libraries to allow rCharts to show up properly on shinyapps.io
 
