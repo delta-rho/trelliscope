@@ -4,9 +4,9 @@ if(getRversion() >= "2.15.1") {
 
 
 #' Create a Trelliscope Display
-#' 
+#'
 #' Create a trelliscope display and add it to a visualization database (VDB)
-#' 
+#'
 #' @param data data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})
 #' @param name the name of the display (no special characters, spaces are converted to underscores)
 #' @param group the group the display belongs to, where displays are organized into groups (no special characters, spaces are
@@ -26,18 +26,18 @@ if(getRversion() >= "2.15.1") {
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
-#' 
+#'
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
-#' 
+#'
 #' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
-#' 
+#'
 #' @examples
 #' # see docs
-#' 
+#'
 #' @export
 makeDisplay <- function(
    data,
@@ -66,27 +66,27 @@ makeDisplay <- function(
    if(!inherits(data, "ddo")) {
       stop("Input data must be an object of class 'ddo'")
    }
-   
+
    if(!preRender && !hasExtractableKV(data)) {
       if(!inherits(data, "kvLocalDisk"))
          stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender == FALSE.  Try calling makeExtractable() on the data.")
    }
-   
+
    vdbPrefix <- conn$path
-   
+
    # temporary location for display
    tempPrefix <- tempfile()
    dir.create(tempPrefix)
 
    dataConn <- getAttribute(data, "conn")
-   
+
    # if no cognostics connection was specified, use cogDatConn
    if(is.null(cogConn))
       cogConn <- dfCogConn()
-   
+
    if(!inherits(cogConn, "cogConn"))
       stop("Argument 'cogConn' not valid")
-   
+
    # if pre-rendering images and no output is specified
    # then store on disk in the VDB directory
    if(preRender) {
@@ -101,24 +101,24 @@ makeDisplay <- function(
          if(object.size(data) > 50 * 1024^2)
             data <- convert(data, localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
       }
-      
+
       panelDataSource <- data
    }
-   
+
    if(verbose) message("* Validating 'panelFn'...")
    panelEx <- kvApply(panelFn, kvExample(data))
-   
+
    cogEx <- validateCogFn(data, cogFn, verbose)
-   
+
    if(is.null(desc) || is.na(desc))
       desc <- "(no description)"
-   
+
    panelFnType <- getPanelFnType(panelEx)
    class(panelFn) <- c("function", panelFnType)
    lims <- validateLims(lims, data, panelFn, verbose)
-   
+
    cogPre(cogConn, conn, group, name)
-   
+
    ## set up a mr job -- this job simply applies the
    ## cognostics (and panel if preRender = TRUE) to each subset
    map <- expression({
@@ -137,7 +137,7 @@ makeDisplay <- function(
       }
       cogEmit(cogConn, cogRes, conn, group, name)
    })
-   
+
    # rbind the results
    reduce <- expression(
       pre = {
@@ -159,7 +159,7 @@ makeDisplay <- function(
          }
       }
    )
-   
+
    parList <- list(
       dataConn    = dataConn,
       group       = group,
@@ -173,7 +173,7 @@ makeDisplay <- function(
       height      = height,
       width       = width
    )
-   
+
    # if the package isn't loaded, need to pass other functions as well
    # (assuming that they are defined in the global environment instead)
    # (debugging and updating the package is a lot easier when just
@@ -206,19 +206,19 @@ makeDisplay <- function(
       trsCurXLim = trsCurXLim,
       trsCurYLim = trsCurYLim
    ))
-   
+
    packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "data.table")
    # } else {
    #    packages <- c(packages, "trelliscope")
    # }
-   
+
    panelGlobals <- drGetGlobals(panelFn)
    cogGlobals <- drGetGlobals(cogFn)
-   
+
    packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
-   
+
    globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
-   
+
    if(length(globalVarList) > 0) {
       # don't want duplicates
       nms <- names(globalVarList)
@@ -227,10 +227,10 @@ makeDisplay <- function(
       nms <- names(parList)
       parList <- parList[which(!duplicated(nms))]
    }
-   
+
    if(length(params) > 0)
       parList <- c(parList, params)
-   
+
    jobRes <- mrExec(data,
       map      = map,
       reduce   = reduce,
@@ -239,25 +239,25 @@ makeDisplay <- function(
       params   = parList,
       packages = packages
    )
-   
+
    tryRes <- try({
    if(preRender)
       panelDataSource <- jobRes
-   
+
    # read in cognostics
    cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
-   
+
    # get panelKey "signature"
    keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
-      
+
    modTime <- Sys.time()
 
    if(verbose)
       message("* Storing display object...")
-   
+
    cogInfo <- getCogInfo(cogEx)
    cogDistns <- getCogDistns(cogDatConn, cogInfo)
-   
+
    displayObj <- list(
       name = name,
       group = group,
@@ -280,19 +280,19 @@ makeDisplay <- function(
       relatedPackages = packages
    )
    class(displayObj) <- "displayObj"
-   
+
    if(!is.null(state))
       displayObj$state <- validateState(name, group, state, displayObj)
-   
+
    save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
 
    # make thumbnail
    message("* Plotting thumbnail...")
    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
    # small thumbnail
-   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)      
+   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
    })
-   
+
    if(inherits(tryRes, "try-error")) {
       stop("The above error(s) occurred after making the display.", call. = FALSE)
    } else {
@@ -323,7 +323,7 @@ makeDisplay <- function(
          stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
       }
 
-      
+
    }
 
    return(invisible(displayObj))
@@ -333,7 +333,7 @@ makeDisplay <- function(
 ## remove all _bak directories
 cleanupDisplays <- function(conn = getOption("vdbConn")) {
    validateVdbConn(conn)
-   
+
    ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
    for(f in ff) {
       unlink(f, recursive = TRUE)

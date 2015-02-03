@@ -5,18 +5,18 @@ exposedCogDF <- reactive({
    cdo <- cdoExposedCogState()
    if(!is.null(cdo)) {
       cogDF <- getCurCogDat(cdo$cogDatConn, cdo$state)
-      list(cdo = cdo, curCogDF = cogDF)      
+      list(cdo = cdo, curCogDF = cogDF)
    }
 })
 
 output$panelPageTotOutput <- renderText({
    cd <- exposedCogDF()
-   
+
    if(!is.null(cd)) {
       totPanels <- cogNrow(cd$curCogDF)
       ppp <- cd$cdo$state$layout$nrow * cd$cdo$state$layout$ncol
-      
-      ceiling(totPanels / ppp)      
+
+      ceiling(totPanels / ppp)
    }
 })
 
@@ -33,12 +33,12 @@ curPage <- reactive({
 
 output$panelTableContentOutput <- renderDataLite({
    cd <- exposedCogDF()
-   
+
    curPage <- curPage()
-   
+
    if(!is.null(cd) && !is.null(curPage)) {
       labelVars <- cd$cdo$state$labels
-      
+
       if(is.null(cd$cdo$state$relatedDisplays)) {
          w <- cd$cdo$state$layout$w
          h <- cd$cdo$state$layout$h
@@ -51,14 +51,14 @@ output$panelTableContentOutput <- renderDataLite({
             if(arrange == "col")
                byRow <- FALSE
             ppp <- nr * nc
-            
+
             idxStart <- (curPage - 1) * ppp + 1
             if(idxStart > cogNrow(cd$curCogDF))
                return(NULL)
             idxEnd <- min(cogNrow(cd$curCogDF), curPage * ppp)
-            
+
             curRows <- cd$curCogDF[idxStart:idxEnd, , drop = FALSE]
-            
+
             # create list where each element is a vector of indices for a row of panels
             idxMat <- matrix(seq_len(nr * nc), nrow = nr, ncol = nc, byrow = byRow)
             idxList <- lapply(seq_len(nr), function(x) idxMat[x,])
@@ -69,10 +69,10 @@ output$panelTableContentOutput <- renderDataLite({
             # - html
             # - vega
 
-            panelContent <- getPanels(cd$cdo, 
-               width = w, 
-               height = h, 
-               curRows = curRows, 
+            panelContent <- getPanels(cd$cdo,
+               width = w,
+               height = h,
+               curRows = curRows,
                pixelratio = session$clientData$pixelratio)
             # browser()
             lapply(idxList, function(rw) {
@@ -99,12 +99,12 @@ output$panelTableContentOutput <- renderDataLite({
                      cogs = cogData
                   )
                })
-            })            
+            })
          }
       } else {
          # we are showing related displays
          curRows <- cd$curCogDF[curPage, , drop = FALSE]
-         
+
          # div with each related display rendered with relative position
          tmp <- cogDataString(curRows[1, labelVars, drop = FALSE])
          if(is.null(labelVars)) {
@@ -112,10 +112,10 @@ output$panelTableContentOutput <- renderDataLite({
          } else {
             cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
          }
-         
+
          pageHeight <- cd$cdo$state$relatedDisplays[[1]]$pageHeight
          pageWidth <- cd$cdo$state$relatedDisplays[[1]]$pageWidth
-         
+
          curPanelContent <- lapply(seq_along(cd$cdo$state$relatedDisplays), function(i) {
             a <- cd$cdo$state$relatedDisplays[[i]]
             dispKey <- paste(a$group, a$name, sep = "___")
@@ -124,24 +124,24 @@ output$panelTableContentOutput <- renderDataLite({
             } else {
                curDisp <- cd$cdo$relatedDisplayObjects[[dispKey]]
             }
-            
-            tmp <- getPanels(curDisp, 
+
+            tmp <- getPanels(curDisp,
                width = a$width, # + 4
                height = a$height, # - 4
-               curRows = curRows, 
+               curRows = curRows,
                pixelratio = session$clientData$pixelratio)[[1]]
-            
+
             tmp$data$id <- paste("#rel-disp-div-", i, sep = "")
             tmp$html <- paste("<div style=\"position: absolute; top: ", a$top, "px; left: ", a$left, "px;\" id=\"rel-disp-div-", i, "\">", tmp$html, "</div>", sep = "")
             tmp
          })
-         
+
          names(curPanelContent) <- NULL
          # browser()
          list(list(list(
             i = 1,
-            html_wrap_start = paste("<div style=\"width: ", 
-               pageWidth, "px; height: ", 
+            html_wrap_start = paste("<div style=\"width: ",
+               pageWidth, "px; height: ",
                pageHeight, "px;\">", sep = ""),
             panel_content = curPanelContent,
             html_wrap_end = "</div>",

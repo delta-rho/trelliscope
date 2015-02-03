@@ -52,7 +52,7 @@ panelLabelState <- reactive({
 panelLayoutState <- reactive({
    pls <- input$panelLayoutStateInput
    if(is.null(pls)) {
-      pls <- currentDisplay()$cdo$state$layout      
+      pls <- currentDisplay()$cdo$state$layout
    } else {
       class(pls) <- c(class(pls), "layoutState")
    }
@@ -72,7 +72,7 @@ activeCogState <- reactive({
 relatedDisplayState <- reactive({
    rd <- input$relatedDisplayStateInput
    if(length(rd) > 0) {
-      logMsg("- related display state changed")      
+      logMsg("- related display state changed")
    } else {
       rd <- NULL
    }
@@ -81,7 +81,7 @@ relatedDisplayState <- reactive({
 
 cdoExposedCogState <- reactive({
    cdo <- currentDisplay()$cdo
-   
+
    if(!is.null(cdo)) {
       cdo$state$filter <- filterState()
       cdo$state$sort <- sortState()
@@ -89,7 +89,7 @@ cdoExposedCogState <- reactive({
       cdo$state$layout <- panelLayoutState()
       cdo$state$activeCog <- activeCogState()
       cdo$state$relatedDisplays <- relatedDisplayState()
-      
+
       relatedDisplayObjects <- list()
       if(length(cdo$state$relatedDisplays) > 0) {
          # load the additional displays
@@ -102,32 +102,27 @@ cdoExposedCogState <- reactive({
                relatedDisplayObjects[[dispKey]] <- NULL
             } else {
                tmp <- getDisplay(name = curName, group = curGroup)
-               
+
                # load packages and data
                if(!is.null(tmp$relatedPackages)) {
                   logMsg("Loading packages: ", paste(tmp$relatedPackages, collapse = ", "))
                   for(pkg in tmp$relatedPackages)
                      suppressMessages(require(pkg, character.only = TRUE))
                }
-               
-               # load any related data into global environment
-               # note: these should not be put in global environment
-               # but a display-specific environment - need to update
-               if(!is.null(tmp$relatedData)) {
-                  for(nm in names(tmp$relatedData))
-                     .GlobalEnv[[nm]] <- tmp$relatedData[[nm]]
-               }
-               
+
+               # don't need cog data
+               tmp$cogDatConn <- NULL
+
                relatedDisplayObjects[[dispKey]] <- tmp
             }
          }
       }
-      cdo$relatedDisplayObjects <- relatedDisplayObjects      
+      cdo$relatedDisplayObjects <- relatedDisplayObjects
    }
-   
-   # cdo$state$sample <- 
-   # cdo$state$multivar <- 
-   
+
+   # cdo$state$sample <-
+   # cdo$state$multivar <-
+
    cdo
 })
 
@@ -144,12 +139,12 @@ output$cogBreadcrumbOutput <- renderDataLite({
       # btnLookup <- list(sort = "btn-primary", filter = "btn-success", multivar = "btn-warning", sample = "btn-danger")
       # iconLookup <- list(sort = list(numeric = list(asc = "icon-sort-numeric-asc", desc = "icon-sort-numeric-desc"), categ = list(asc = "icon-sort-alpha-asc", desc = "icon-sort-alpha-desc")), filter = "icon-filter", multivar = "icon-multivar", sample = "icon-sample")
       state <- cdo$state
-      
+
       filterNm <- names(state$filter)
       filters <- lapply(filterNm, function(nm) {
          list(name = nm, class = "btn-success filter-breadcrumb", icon = "icon-filter", type = "filter")
       })
-      
+
       iconLookup <- list(
          "asc" = list(
             "numeric" = "icon-sort-numeric-asc",
@@ -160,7 +155,7 @@ output$cogBreadcrumbOutput <- renderDataLite({
             "factor" = "icon-sort-alpha-desc"
          )
       )
-      
+
       sortNm <- names(state$sort)
       sorts <- lapply(sortNm, function(nm) {
          cur <- state$sort[[nm]]
@@ -168,19 +163,19 @@ output$cogBreadcrumbOutput <- renderDataLite({
          bcIcon <- iconLookup[[cur$dir]][[type]]
          list(name = nm, class = "btn-primary sort-breadcrumb", icon = bcIcon, order = cur$order, type = "sort")
       })
-      
+
       if(length(sorts) > 0) {
          ord <- sapply(sorts, function(x) x$order)
          sorts <- sorts[order(ord)]
       }
-      
+
       return(list(buttons = c(filters, sorts)))
    }
 })
 
 output$appHashOutput <- renderText({
    cdo <- cdoExposedCogState()
-   
+
    if(!is.null(cdo))
       makeStateHash(cdo$state, cdo$name, cdo$group)
 })

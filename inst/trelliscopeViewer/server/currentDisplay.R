@@ -24,7 +24,7 @@ appHash <- reactive({
 selectedDisplay <- reactive({
    # priority: input, appHash, options
    sld <- input$displaySelectInput
-   
+
    if(is.null(sld)) {
       sld <- appHash()
       if(!is.null(sld)) {
@@ -34,12 +34,12 @@ selectedDisplay <- reactive({
          sld$filter <- fromHash(sld$filter)
       }
    }
-   
+
    # if appHash didn't have it:
    if(is.null(sld)) {
       sld <- getOption("trsCurrentViewState")
    }
-   
+
    sld
 })
 
@@ -62,36 +62,25 @@ output$headerDisplayNameOutput <- renderText({
 ## holds the currently selected displayObject
 currentDisplay <- reactive({
    sld <- selectedDisplay()
-   
+
    if(!is.null(sld)) {
       logMsg("Loading display: ", paste(sld$group, "/", sld$name))
       cdo <- do.call(getDisplay, sld[c("name", "group")])
       logMsg("Display loaded")
-      
+
       # load required packages
       if(!is.null(cdo$relatedPackages)) {
          logMsg("Loading packages: ", paste(cdo$relatedPackages, collapse = ", "))
          for(pkg in cdo$relatedPackages)
             suppressMessages(require(pkg, character.only = TRUE))
       }
-      
-      # set up an environment for this display to be evaluated in
-      # dispEnv <- new.env(parent = .GlobalEnv)
-      # cdo$envir <- .GlobalEnv
-      
-      # load any related data into global environment
-      # note: these should not be put in global environment
-      # but a display-specific environment - need to update
-      if(!is.null(cdo$relatedData)) {
-         for(nm in names(cdo$relatedData))
-            .GlobalEnv[[nm]] <- cdo$relatedData[[nm]]
-      }
-      
+      # could set up environment here instead of when panelFn is evaluated
+      # in getPanels()
       if(is.null(cdo$cogDistns))
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
-      
+
       logMsg("Getting default state...")
-            
+
       cdo$state$labels <- sld$labels
       if(is.null(cdo$state$labels)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
@@ -100,24 +89,24 @@ currentDisplay <- reactive({
             defaultLabels <- NULL
          cdo$state$labels <- defaultLabels
       }
-      
+
       cdo$state$layout <- sld$layout
       if(is.null(cdo$state$layout)) {
          lyt <- list(nrow = 1, ncol = 1, arrange = "row")
          class(lyt) <- c("list", "layoutState")
          cdo$state$layout <- lyt
       }
-      
+
       cdo$state$sort <- sld$sort
       cdo$state$filter <- sld$filter
-      
+
       if(is.null(cdo$state$activeCog)) {
          defaultActive <- cdo$cogInfo$name[cdo$cogInfo$defActive]
          if(length(defaultActive) == 0)
             defaultActive <- NULL
          cdo$state$activeCog <- defaultActive
       }
-      
+
       # if(!is.null(currentViewState))
       #    options(trsCurrentViewState = NULL)
       list(cdo = cdo)
