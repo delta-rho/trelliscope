@@ -97,9 +97,9 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
       plotType <- "hist"
    if(plotType == "quantile")
       plotType <- "quant"
-   
+
    curInfo <- cd$cdo$cogDistns[[name]]
-   
+
    if(!is.na(curInfo$type)) {
       if(curInfo$type == "numeric") {
          if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
@@ -111,7 +111,7 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
             delta <- diff(tmp$xdat[1:2])
             tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
             return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1))))
-            # add random normal to make sure it triggers even when it 
+            # add random normal to make sure it triggers even when it
             # doesn't change - this is to ensure spinner will get replaced
          } else {
             names(tmp)[1:2] <- c("x", "y")
@@ -162,20 +162,20 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    maxcnt <- max(dat@count)
    style <- "lattice"
    trans <- NULL
-   
+
    cnt <- dat@count
    xbins <- dat@xbins
    shape <- dat@shape
    tmp <- hcell2xy(dat)
    good <- mincnt <= cnt & cnt <= maxcnt
-   
+
    xnew <- tmp$x[good]
    ynew <- tmp$y[good]
    cnt <- cnt[good]
-   
+
    sx <- xbins/diff(dat@xbnds)
    sy <- (xbins * shape)/diff(dat@ybnds)
-   
+
    if (is.null(trans)) {
       if (min(cnt, na.rm = TRUE) < 0) {
          pcnt <- cnt + min(cnt)
@@ -192,14 +192,14 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
    area <- minarea + rcnt * (maxarea - minarea)
    area <- pmin(area, maxarea)
    radius <- sqrt(area)
-   
+
    inner <- 0.5
    outer <- (2 * inner)/sqrt(3)
    dx <- inner/sx
    dy <- outer/(2 * sy)
    rad <- sqrt(dx^2 + dy^2)
    hexC <- hexcoords(dx, dy, sep = NULL)
-   
+
    list(
       data = data.frame(x = xnew, y = ynew, r = radius),
       plotType = "hexbin",
@@ -244,7 +244,7 @@ getMultivarPlotDat <- function(cd, vars, distType = "marginal", plotType = "scat
    if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
       icaDat <- getCogICA(cd$cdo$cogDatConn, vars)
    } else {
-      icaDat <- getCogICA(cd$curCogDF, vars)      
+      icaDat <- getCogICA(cd$curCogDF, vars)
    }
    if(plotType == "scatter") {
       getCogScatterPlotData(icaDat, xVar, yVar)
@@ -272,26 +272,31 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
       pngs <- unlist(lapply(cdo$panelDataSource[curRows$panelKey], "[[", 2))
    } else {
       environment(cdo$panelFn) <- environment()
-      
+
       curDat <- cdo$panelDataSource[curRows$panelKey]
       if(is.null(curDat))
          warning("data for key ", curRows$panelKey, " could not be found.")
-      
-      panelContent <- lapply(seq_along(curDat), function(i) {
-         x <- curDat[[i]]
-         res <- try({
-            list(
-               html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
-               data = list(
-                  id = paste("#display-panel-table-", i, sep = ""),
-                  spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+
+      env <- list2env(cdo$relatedData)
+      environment(cdo$panelFn) <- env
+
+      panelContent <- eval(expression({
+         lapply(seq_along(curDat), function(i) {
+            x <- curDat[[i]]
+            res <- try({
+               list(
+                  html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
+                  data = list(
+                     id = paste("#display-panel-table-", i, sep = ""),
+                     spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+                  )
                )
-            )
+            })
+            if(inherits(res, "try-error"))
+               res <- NULL
+            res
          })
-         if(inherits(res, "try-error"))
-            res <- NULL
-         res
-      })
+      }), envir = env)
    }
    panelContent
 }
@@ -308,19 +313,19 @@ renderPanelHtml.ggplotFn <- function(panelFn, ...)
 renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
    tmpfile <- tempfile()
    on.exit(rm(tmpfile))
-   
-   makePNG(dat = x, 
-      panelFn = panelFn, 
-      file = tmpfile, 
-      width = width, 
-      height = height, 
+
+   makePNG(dat = x,
+      panelFn = panelFn,
+      file = tmpfile,
+      width = width,
+      height = height,
       origWidth = origWidth,
-      # res = 72, # * cdo$state$layout$w / cdo$width, 
+      # res = 72, # * cdo$state$layout$w / cdo$width,
       lims = lims,
       pixelratio = pixelratio
    )
    paste("<img src=\"", encodePNG(tmpfile),
-      "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")   
+      "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
 }
 
 renderPanelHtml.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
@@ -328,27 +333,27 @@ renderPanelHtml.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, 
 }
 
 renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-   
+
    p <- kvApply(panelFn, x)
    p$set(width = width, height = height)
    # paste(capture.output(p$print()), collapse = '\n')
-   
+
    # override the cdn settings that ship with rCharts
    # as some aren't available over https
    # which is used by shinyapps.io
-   cdnPath <- file.path(system.file(package = "trelliscope"), 
-      "rChartsCdnOverride", 
+   cdnPath <- file.path(system.file(package = "trelliscope"),
+      "rChartsCdnOverride",
       tolower(class(p))[1])
    if(file.exists(file.path(cdnPath, "config.yml")))
       p$LIB$url <- cdnPath
 
    p <- capture.output(p$show('iframesrc', cdn = TRUE))
-   
+
    ind <- which(grepl("iframe\\.rChart", p))
    if(length(ind) > 0) {
       p[ind[1]] <- "<style>iframe.rChart{ width: 100%; height: 100%;}</style>"
    }
-   
+
    paste(c(
       sprintf("<div style='width:%dpx; height:%dpx'>", as.integer(width), as.integer(height)),
       p,
@@ -378,7 +383,7 @@ renderPanelData.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, 
    # curYLim <- trsCurYLim(lims, x, plotYLim)
    p <- kvApply(panelFn, x)
    p <- set_options(p, width = width, height = height)
-   
+
    getVegaSpec(p)
 }
 
@@ -395,7 +400,7 @@ getVegaSpec <- function(x) {
 
 
 # makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
-# 
+#
 #    if(capabilities("aqua")) {
 #       pngfun <- png
 #    } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
@@ -403,18 +408,18 @@ getVegaSpec <- function(x) {
 #    } else {
 #       pngfun <- png
 #    }
-#    
+#
 #    pngfun(filename = filename,
 #       width = width * pixelratio,
 #       height = height * pixelratio,
 #       res = res * pixelratio,
 #       pointsize = basePointSize * width / origWidth)
-# 
+#
 #    dv <- dev.cur()
-# 
+#
 #    tryCatch(func(), finally = dev.off(dv))
 # }
-# 
+#
 # require(fastICA)
 #
 #

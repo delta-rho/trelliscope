@@ -1,5 +1,5 @@
 ##' Trelliscope: Create, organize, and view multi-panel displays in a web interface
-##' 
+##'
 ##' Trelliscope provides a way to create, organize, and view
 ##' multi-panel displays, a collection of which is called a visualization
 ##' database (VDB).  This package provides a mechanism for extending the ideas
@@ -16,14 +16,14 @@
 ##' \tabular{ll}{
 ##' Package: \tab trelliscope\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 0.8.0.5\cr
-##' Date: \tab 2015-01-29\cr
-##' License: \tab BSD_3_clause + file LICENSE\cr 
+##' Version: \tab 0.8.0.6\cr
+##' Date: \tab 2015-02-02\cr
+##' License: \tab BSD_3_clause + file LICENSE\cr
 ##' Maintainer: \tab Ryan Hafen \email{rhafen@@gmail.com}\cr}
-##' 
+##'
 ##' An extensive vignette and documentation is available at \url{http://tessera.io/docs-trelliscope}.
 ##' Additional information can be found at \url{http://tessera.io} and \url{http://tessera.io/blog}.
-##' 
+##'
 ##' @name trelliscope-package
 ##' @aliases trelliscope
 ##' @docType package

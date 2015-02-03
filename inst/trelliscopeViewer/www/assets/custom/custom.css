@@ -29,9 +29,9 @@ body {
   font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
 }
 
-@media(max-width: 1023px) {
+@media (max-width: 1023px) {
   #resolution-alert {
-    font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;  
+    font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -43,9 +43,9 @@ body {
   }*/
 }
 
-@media(max-height: 740px) {
+@media (max-height: 740px) {
   #resolution-alert {
-    font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;  
+    font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -224,8 +224,8 @@ body {
 }
 
 /*.list-group-item-short {
-   padding-bottom: 6px !important; 
-   padding-top: 6px !important; 
+   padding-bottom: 6px !important;
+   padding-top: 6px !important;
 }*/
 
 #sidebar-wrapper a.list-group-item.active, #sidebar-wrapper a.list-group-item.active:hover, #sidebar-wrapper a.list-group-item.active:focus {
@@ -282,7 +282,7 @@ body {
 
 .right-sticky {
   cursor: pointer;
-  width: 25px; 
+  width: 25px;
   height: 35px;
   background-color: #354052;
   position: absolute;
@@ -348,7 +348,7 @@ body {
   font-weight: 400;
   line-height: 1.42857143;
   color: #333;
-  white-space: nowrap;  
+  white-space: nowrap;
 }
 
 .cogmap-dropdown:hover,
@@ -711,7 +711,7 @@ li.list-group-item.other-active {
 
 .vis-filter-univar {
   max-height: 440px;
-  overflow: auto;  
+  overflow: auto;
 }
 
 .filter-list-name {
@@ -749,12 +749,12 @@ li.list-group-item.other-active {
 
 .vis-filter-bivar {
   max-height: 210px;
-  overflow: auto;  
+  overflow: auto;
 }
 
 .vis-filter-multivar {
   max-height: 396px;
-  overflow: auto;  
+  overflow: auto;
 }
 
 #btn-multivar {
@@ -901,7 +901,7 @@ td.select-column.active {
 }
 
 .control-label {
-  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;  
+  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
   margin-bottom: 0px;
   font-size: 15px;
 }
@@ -963,10 +963,10 @@ td.select-column.active {
 
 #add-related-display-selection {
   max-height: 167px;
-  overflow-y: auto;  
+  overflow-y: auto;
 }
 
-#editor { 
+#editor {
   position: relative;
   border: 1px;
   top: 0;
@@ -986,7 +986,7 @@ td.select-column.active {
 
 
 #resolution-alert {
-  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;  
+  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
   position: absolute;
   top: 10px;
   left: 10px;
@@ -1023,7 +1023,7 @@ button#btn-cog-table-reset.btn.btn-danger {
 
 .cog-table-var-select-list {
   max-height: 396px;
-  overflow: auto;  
+  overflow: auto;
 }
 
 
@@ -1033,7 +1033,7 @@ button#btn-cog-table-reset.btn.btn-danger {
 }
 
 .cog-table td {
-  text-align: right;  
+  text-align: right;
   min-width: 100px;
   white-space: nowrap;
 }
@@ -1051,7 +1051,7 @@ button#btn-cog-table-reset.btn.btn-danger {
 }
 
 .column-filter {
-  text-align: right; 
+  text-align: right;
   width: 100%;
 }
 
@@ -1078,11 +1078,11 @@ button#btn-cog-table-reset.btn.btn-danger {
 }
 
 #cog-table-pagination .pagination {
-  margin: 0 !important;  
+  margin: 0 !important;
 }
 
 #cog-table-pagination a {
-  color: #888 !important;  
+  color: #888 !important;
 }
 
 
@@ -1200,7 +1200,7 @@ circle.univar-points {
 }
 
 .bar-labels {
-  pointer-events: none;  
+  pointer-events: none;
 }
 
 /*.unifilter-bar:hover {
@@ -1355,7 +1355,7 @@ text.axis-label {
   height: 6px;
   width: 6px;
   border: 1px solid #89B;
-  background: #9AC; 
+  background: #9AC;
   opacity: 0.8;
 }
 
@@ -1371,7 +1371,7 @@ text.axis-label {
 .NW, .SW {
   left: 0px;
 }
-.SE, .NW {   
+.SE, .NW {
   cursor: nw-resize;
 }
 .SW, .NE {
