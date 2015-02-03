@@ -277,8 +277,11 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
       if(is.null(curDat))
          warning("data for key ", curRows$panelKey, " could not be found.")
 
-      env <- list2env(cdo$relatedData)
-      environment(cdo$panelFn) <- env
+      if(!is.null(cdo$relatedData)) {
+         env <- list2env(cdo$relatedData)
+      } else {
+         env <- environment(cdo$panelFn)
+      }
 
       panelContent <- eval(expression({
          lapply(seq_along(curDat), function(i) {
