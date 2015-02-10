@@ -9,6 +9,7 @@ FEATURES / CHANGES
 BUG FIXES
 
 - fix `makeDisplay()` so that temporary vdb folder is removed when no longer needed
+- fix 'checkDisplayPath()` so that backup vdb files are copied properly on Windows
 
 Version 0.8.0.6
 ---------------------------------------------------------------------
