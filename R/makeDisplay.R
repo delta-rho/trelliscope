@@ -317,10 +317,17 @@ makeDisplay <- function(
       # get display prefix (and move old display to backup if it already exists)
       displayPrefix <- file.path(vdbPrefix, "displays", group, name)
       checkDisplayPath(displayPrefix, verbose)
+
+      # Move newly created vdb files to the display folder
       renameVerify <- file.rename(dir(tempPrefix, full.names = TRUE), file.path(displayPrefix, dir(tempPrefix)))
 
       if(!all(renameVerify)) {
          stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
+      }
+
+      # Remove the temporary directory that contained the vdb objects
+      if(unlink(tempPrefix, recursive = TRUE)) {
+         warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
       }
 
 
