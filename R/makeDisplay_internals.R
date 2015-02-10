@@ -36,8 +36,10 @@ validateNameGroup <- function(name, group) {
 
 ## internal
 validateCogFn <- function(dat, cogFn, verbose = FALSE) {
+    
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF = FALSE)
+   
    ex <- applyCogFn(cogFn, kvExample(dat), getAttribute(dat, "conn"))
 
    # if(!is.list(ex))
@@ -46,11 +48,12 @@ validateCogFn <- function(dat, cogFn, verbose = FALSE) {
    #    stop("Each cognostic must have class 'cog' - please make sure you are specifying: var = cog(...)")
 
    exdf <- cog2df(ex)
-   if(nrow(exdf) > 1)
-      stop("'cogFn' must return something that can be coerced into a 1-row data.frame", call. = FALSE)
+
    if(verbose)
       message("ok")
-   ex
+   
+   return(ex)
+   
 }
 
 getPanelFnType <- function(panelEx) {
