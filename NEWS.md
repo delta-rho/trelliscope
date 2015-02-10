@@ -4,7 +4,7 @@ Version 0.8.0.7
 FEATURES / CHANGES
 
 - improve documentation of the `cogFn` argument of `makeDisplay()`
-- improve error handling in cog2df() when `cogFn` does not return an object coerceable to a 1-row data frame
+- improve error handling in `cog2df()` when `cogFn` does not return an object coerceable to a 1-row data frame
 
 BUG FIXES
 
