@@ -28,7 +28,7 @@ converted to underscores).  Defaults to "common"}
 
 \item{lims}{either an object of class "trsLims" as obtained from \code{\link{setLims}} or a list with elements x, y, and prepanelFn, that specify how to apply \code{\link{prepanel}} and \code{\link{setLims}}}
 
-\item{cogFn}{a function that produces a single row of a data frame where each column is a cognostic feature .  The function should takes one argument, which will be the current split of the data being passed to it.  Useful to test with cogFn(divExample(dat))}
+\item{cogFn}{a function that returns a named list, where each element of the list is a cognostic feature (with length 1). This list must be coerceable to a 1-row data frame. The function should take one argument, which will be the current split of the data being passed to it.  Useful to test with \code{cogFn(divExample(dat))}}
 
 \item{state}{if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)}
 

@@ -36,8 +36,10 @@ validateNameGroup <- function(name, group) {
 
 ## internal
 validateCogFn <- function(dat, cogFn, verbose = FALSE) {
+    
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF = FALSE)
+   
    ex <- applyCogFn(cogFn, kvExample(dat), getAttribute(dat, "conn"))
 
    # if(!is.list(ex))
@@ -46,11 +48,12 @@ validateCogFn <- function(dat, cogFn, verbose = FALSE) {
    #    stop("Each cognostic must have class 'cog' - please make sure you are specifying: var = cog(...)")
 
    exdf <- cog2df(ex)
-   if(nrow(exdf) > 1)
-      stop("'cogFn' must return something that can be coerced into a 1-row data.frame", call. = FALSE)
+
    if(verbose)
       message("ok")
-   ex
+   
+   return(ex)
+   
 }
 
 getPanelFnType <- function(panelEx) {
@@ -118,16 +121,32 @@ validateLims <- function(lims, data, panelFn, verbose) {
 
 ## internal
 checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
+    
    if(file.exists(displayPrefix)) {
+
       bakFile <- paste(displayPrefix, "_bak", sep = "")
+
       message(paste("* Display exists... backing up previous to", bakFile))
+
       if(file.exists(bakFile)) {
          message("* Removing previous backup plot directory")
          unlink(bakFile, recursive = TRUE)
       }
-      file.rename(displayPrefix, bakFile)
+
+      # Create the bakup directory
+      dir.create(bakFile, recursive = TRUE)
+
+      # Move the files (one by one to accomodate Windows)
+      renameVerify <- file.rename(dir(displayPrefix, full.names = TRUE), file.path(bakFile, dir(displayPrefix)))
+
+      # Verify the file renaming
+      if(!all(renameVerify)) {
+         warning("Backup files for display were not successfully moved to '", bakFile, "'", call. = FALSE)
+      }
+
+   } else {
+     dir.create(displayPrefix, recursive = TRUE)
    }
-   dir.create(displayPrefix, recursive = TRUE)
 }
 
 ## internal
