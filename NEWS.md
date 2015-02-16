@@ -1,21 +1,10 @@
-Version 0.8.0.7
+Version 0.8.0.8
 ---------------------------------------------------------------------
 
 FEATURES / CHANGES
 
 - improve documentation of the `cogFn` argument of `makeDisplay()`
 - improve error handling in `cog2df()` when `cogFn` does not return an object coerceable to a 1-row data frame
-
-BUG FIXES
-
-- fix `makeDisplay()` so that temporary vdb folder is removed when no longer needed
-- fix 'checkDisplayPath()` so that backup vdb files are copied properly on Windows
-
-Version 0.8.0.6
----------------------------------------------------------------------
-
-FEATURES / CHANGES
-
 - improve various aspects of the documentation of `makeDisplay()`
 - add validation for name and group arguments in `makeDisplay()` and `addDisplay()`
 - add ability to include spaces in name and group arguments in `makeDisplay()` and `addDisplay()`
@@ -32,6 +21,8 @@ BUG FIXES
 - fix `makePNG()` to deal with "Date" class axis limits for lattice
 - fix `addDispay()` to output the proper type of displayObject
 - fix bugs in viewer dealing with panel labels and panel dimensions
+- fix `makeDisplay()` so that temporary vdb folder is removed when no longer needed
+- fix 'checkDisplayPath()` so that backup vdb files are copied properly on Windows
 
 Version 0.8.0
 ---------------------------------------------------------------------

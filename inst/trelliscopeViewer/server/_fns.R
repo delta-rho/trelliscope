@@ -278,28 +278,24 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
          warning("data for key ", curRows$panelKey, " could not be found.")
 
       if(!is.null(cdo$relatedData)) {
-         env <- list2env(cdo$relatedData)
-      } else {
-         env <- environment(cdo$panelFn)
+         environment(cdo$panelFn) <- list2env(cdo$relatedData, parent = .GlobalEnv)
       }
 
-      panelContent <- eval(expression({
-         lapply(seq_along(curDat), function(i) {
-            x <- curDat[[i]]
-            res <- try({
-               list(
-                  html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
-                  data = list(
-                     id = paste("#display-panel-table-", i, sep = ""),
-                     spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
-                  )
+      panelContent <- lapply(seq_along(curDat), function(i) {
+         x <- curDat[[i]]
+         res <- try({
+            list(
+               html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
+               data = list(
+                  id = paste("#display-panel-table-", i, sep = ""),
+                  spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
                )
-            })
-            if(inherits(res, "try-error"))
-               res <- NULL
-            res
+            )
          })
-      }), envir = env)
+         if(inherits(res, "try-error"))
+            res <- NULL
+         res
+      })
    }
    panelContent
 }
