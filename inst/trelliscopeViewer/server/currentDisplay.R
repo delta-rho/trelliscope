@@ -76,6 +76,7 @@ currentDisplay <- reactive({
       }
       # could set up environment here instead of when panelFn is evaluated
       # in getPanels()
+
       if(is.null(cdo$cogDistns))
          cdo$cogDistns <- trelliscope:::getCogDistns(cdo$cogDatConn)
 

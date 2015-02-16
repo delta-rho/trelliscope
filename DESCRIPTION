@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.0.7
-Date: 2015-02-10
+Version: 0.8.0.8
+Date: 2015-02-16
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <rhafen@gmail.com>
 Description: Trelliscope provides a way to create, organize, and view
