@@ -35,8 +35,9 @@ if(length(ind) > 0) {
    displayListDF <- displayListDF[-ind,]
 }
 
+source("server/_fns.R", local = TRUE)
+
 shinyServer(function(input, output, session) {
-   source("server/_fns.R")
    source("server/currentDisplay.R", local = TRUE)
    source("server/visualFilters.R", local = TRUE)
    source("server/cogState.R", local = TRUE)

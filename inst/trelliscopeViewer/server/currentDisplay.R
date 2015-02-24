@@ -1,5 +1,5 @@
 ## functions that get template data in proper form
-source("server/currentDisplayData.R")
+source("server/currentDisplayData.R", local = TRUE)
 
 ## list of displays to select from for current vdb
 output$displayListOutput <- renderDataLite({
