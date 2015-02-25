@@ -16,8 +16,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab trelliscope\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 0.8.0.8\cr
-##' Date: \tab 2015-02-16\cr
+##' Version: \tab 0.8.0.9\cr
+##' Date: \tab 2015-02-25\cr
 ##' License: \tab BSD_3_clause + file LICENSE\cr
 ##' Maintainer: \tab Ryan Hafen \email{rhafen@@gmail.com}\cr}
 ##'

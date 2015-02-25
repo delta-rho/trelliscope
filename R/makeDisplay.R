@@ -23,6 +23,7 @@ if(getRversion() >= "2.15.1") {
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
+#' @param keySig a user-defined key signature (string - see details)
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
@@ -30,6 +31,8 @@ if(getRversion() >= "2.15.1") {
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 #'
 #' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+#'
+#' \code{keySig} does not generally need to be specified.  It is useful to specify when creating multiple displays that you would like to be treated as related displays, so that you can view them side by side.  Two displays are determined to be related when their key signatures, typically computed as a md5 hash of the complete collection of keys, match.  Sometimes two displays will have data where the keys match for a significant portion of subsets, but not all.  Manually specifying the same \code{keySig} for each can ensure that they will be treated as related displays.
 #'
 #' @author Ryan Hafen
 #'
@@ -55,6 +58,7 @@ makeDisplay <- function(
    output = NULL,
    conn = getOption("vdbConn"),
    verbose = TRUE,
+   keySig = NULL,
    params = NULL,
    packages = NULL,
    control = NULL
@@ -248,7 +252,14 @@ makeDisplay <- function(
    cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
 
    # get panelKey "signature"
-   keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
+   if(is.null(keySig)) {
+      if(!is.character(keySig)) {
+         message("User-defined 'keySig' is not a string - converting it to one...")
+         keySig <- digest(keySig)
+      }
+   } else {
+      keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
+   }
 
    modTime <- Sys.time()
 

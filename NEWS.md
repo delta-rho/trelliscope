@@ -1,4 +1,4 @@
-Version 0.8.0.8
+Version 0.8.0.9
 ---------------------------------------------------------------------
 
 FEATURES / CHANGES
@@ -12,6 +12,7 @@ FEATURES / CHANGES
 - remove strict dependency on scagnostics package
 - add better error handling / messaging dealing with viewing, adding, and removing displays
 - add CDN override for rCharts js libraries to allow rCharts to show up properly on shinyapps.io
+- add manual specification of key signature so similar divisions can be treated as related displays in the viewer
 
 BUG FIXES
 
@@ -23,6 +24,7 @@ BUG FIXES
 - fix bugs in viewer dealing with panel labels and panel dimensions
 - fix `makeDisplay()` so that temporary vdb folder is removed when no longer needed
 - fix 'checkDisplayPath()` so that backup vdb files are copied properly on Windows
+- fix bug that caused viewer functions to show up in global environment
 
 Version 0.8.0
 ---------------------------------------------------------------------

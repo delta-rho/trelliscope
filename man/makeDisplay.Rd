@@ -8,7 +8,8 @@ makeDisplay(data, name, group = "common", desc = "", height = 500,
   width = 500, panelFn = NULL, lims = list(x = "free", y = "free",
   prepanelFn = NULL), cogFn = NULL, state = NULL, preRender = FALSE,
   cogConn = dfCogConn(), output = NULL, conn = getOption("vdbConn"),
-  verbose = TRUE, params = NULL, packages = NULL, control = NULL)
+  verbose = TRUE, keySig = NULL, params = NULL, packages = NULL,
+  control = NULL)
 }
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}
@@ -42,6 +43,8 @@ converted to underscores).  Defaults to "common"}
 
 \item{verbose}{print status messages?}
 
+\item{keySig}{a user-defined key signature (string - see details)}
+
 \item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
 
 \item{packages}{a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)}
@@ -55,6 +58,8 @@ Create a trelliscope display and add it to a visualization database (VDB)
 Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 
 Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+
+\code{keySig} does not generally need to be specified.  It is useful to specify when creating multiple displays that you would like to be treated as related displays, so that you can view them side by side.  Two displays are determined to be related when their key signatures, typically computed as a md5 hash of the complete collection of keys, match.  Sometimes two displays will have data where the keys match for a significant portion of subsets, but not all.  Manually specifying the same \code{keySig} for each can ensure that they will be treated as related displays.
 }
 \examples{
 # see docs
