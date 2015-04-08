@@ -139,7 +139,7 @@ makeDisplay <- function(
          cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
          collect("TRS___panelkey", cogRes[[i]]$panelKey) # to build key signature
       }
-      cogEmit(cogConn, cogRes, conn, group, name)
+      cogEmit(cogConn, cogRes, collect, conn, group, name)
    })
 
    # rbind the results
@@ -178,43 +178,7 @@ makeDisplay <- function(
       width       = width
    )
 
-   # if the package isn't loaded, need to pass other functions as well
-   # (assuming that they are defined in the global environment instead)
-   # (debugging and updating the package is a lot easier when just
-   # sourcing the files at each change rather than building each time)
-   # if(! "package:trelliscope" %in% search()) {
-   #    message("* ---- running dev version - sending trelliscope functions to mr job")
-   parList <- c(parList, list(
-      kvApply = kvApply,
-      applyCogFn = applyCogFn,
-      getSplitVars = getSplitVars,
-      getBsvs = getBsvs,
-      makePNG = makePNG,
-      encodePNG = encodePNG,
-      cogEmit = cogEmit,
-      cogEmit.dfCogConn = cogEmit.dfCogConn,
-      # cogEmit.mongoCogConn = cogEmit.mongoCogConn,
-      cogCollect = cogCollect,
-      cogCollect.dfCogConn = cogCollect.dfCogConn,
-      # cogCollect.mongoCogConn = cogCollect.mongoCogConn,
-      cog = cog,
-      cogScagnostics = cogScagnostics,
-      as.cogGeo = as.cogGeo,
-      as.cogRel = as.cogRel,
-      as.cogHier = as.cogHier,
-      as.cogHref = as.cogHref,
-      cogMean = cogMean,
-      cogRange = cogRange,
-      cog2df = cog2df,
-      trsCurLim = trsCurLim,
-      trsCurXLim = trsCurXLim,
-      trsCurYLim = trsCurYLim
-   ))
-
-   packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "data.table")
-   # } else {
-   #    packages <- c(packages, "trelliscope")
-   # }
+   packages <- c(packages, "trelliscope")
 
    panelGlobals <- drGetGlobals(panelFn)
    cogGlobals <- drGetGlobals(cogFn)
@@ -252,7 +216,7 @@ makeDisplay <- function(
    cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
 
    # get panelKey "signature"
-   if(is.null(keySig)) {
+   if(!is.null(keySig)) {
       if(!is.character(keySig)) {
          message("User-defined 'keySig' is not a string - converting it to one...")
          keySig <- digest(keySig)
@@ -341,11 +305,63 @@ makeDisplay <- function(
          warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
       }
 
-
    }
 
    return(invisible(displayObj))
 }
+
+updateDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), ...) {
+   args <- list(...)
+   nms <- names(args)
+
+   updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
+
+   notup <- setdiff(nms, updateable)
+   if(length(notup) > 0) {
+      message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
+   }
+
+   disp <- getDisplay(name, group, conn)
+
+   noPreRend <- c("panelFn", "width", "height")
+   if(disp$preRender) {
+      if(nms %in% noPreRend)
+         message("note: preRender is TRUE, so the following cannot be set: ",
+            paste(noPreRend, collapse = ", "))
+      nms <- setdiff(nms, noPreRend)
+   }
+
+   for(cur in c("desc", "width", "height", "keySig")) {
+      if(cur %in% nms)
+         disp[[cur]] <- args[[cur]]
+   }
+
+   if("panelFn" %in% nms) {
+      # panelGlobals <- drGetGlobals(args$panelFn)
+      # cogGlobals <- drGetGlobals(cogFn)
+      # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
+      # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+   }
+
+   displayObj <- disp
+   # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+
+   updateDisplayList(list(
+      group = disp$group,
+      name = disp$name,
+      desc = disp$desc,
+      n = disp$n,
+      panelFnType = disp$panelFnType,
+      preRender = disp$preRender,
+      dataClass = tail(class(disp$panelDataSource), 1),
+      cogClass = class(disp$cogDatConn)[1],
+      height = disp$height,
+      width = disp$width,
+      updated = Sys.time(),
+      keySig = disp$keySig
+   ), conn)
+}
+
 
 
 ## remove all _bak directories
@@ -357,4 +373,5 @@ cleanupDisplays <- function(conn = getOption("vdbConn")) {
       unlink(f, recursive = TRUE)
    }
 }
+
 

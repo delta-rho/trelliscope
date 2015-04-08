@@ -164,24 +164,24 @@ prepanel <- function(
          collect(reduce.key, res)
       }
    )
-   
+
    parList <- list(
       prepanelFn = prepanelFn,
       prepanelFnIsTrellis = prepanelFnIsTrellis,
       prepanelFnIsGgplot = prepanelFnIsGgplot,
       doBanking = doBanking
    )
-   packages <- NULL
-   
+   packages <- c("digest", "data.table")
+
    if(! "package:trelliscope" %in% search()) {
       # parList <- c(parList, list(
       # ))
-      
-      packages <- c(packages, "lattice", "ggplot2", "data.table")
+
+      packages <- c(packages, "lattice", "ggplot2")
    } else {
       packages <- c(packages, "trelliscope")
    }
-   
+
    # suppressMessages(capture.output(
    jobRes <- mrExec(
       data,
@@ -348,7 +348,7 @@ setLims <- function(lims, x = "same", y = "same", xQuant = c(0,1), yQuant = c(0,
             dat$min <- as.numeric(dat$min)
          }
       }
-      
+
       # TODO: if character and not "free" then set limits
       # to all levels of the variable, if known
       if(type == "sliced" && datClass != "character") {
