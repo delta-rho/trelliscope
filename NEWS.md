@@ -1,8 +1,9 @@
-Version 0.8.0.9
+Version 0.8.1
 ---------------------------------------------------------------------
 
 FEATURES / CHANGES
 
+- add initial support for htmlwidgets as panel functions!
 - improve documentation of the `cogFn` argument of `makeDisplay()`
 - improve error handling in `cog2df()` when `cogFn` does not return an object coerceable to a 1-row data frame
 - improve various aspects of the documentation of `makeDisplay()`
@@ -16,6 +17,8 @@ FEATURES / CHANGES
 
 BUG FIXES
 
+- fix bug when a cognostic isn't wrapped with `cog()`
+- fix bug with functions environments when running on Hadoop
 - fix trelliscope viewer to use `relatedData` for `panelFn` in its own environment
 - fix `makeDisplay()` to correctly launch trelliscope views on Windows
 - fix `vdbConn()` to properly retrieve VDB name from previous connection
