@@ -34,7 +34,7 @@ cogPre.dfCogConn <- function(cogConn, conn, group, name, ...) {
 }
 
 #' @export
-cogEmit.dfCogConn <- function(cogConn, data, ...) {
+cogEmit.dfCogConn <- function(cogConn, data, collect, ...) {
    collect("TRS___cog", do.call(rbind, lapply(data, cog2df)))
 }
 
@@ -77,11 +77,11 @@ getCogData.data.frame <- function(x, rowIdx, colIdx, ...) {
 #' @export
 oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE, ...) {
    filterIndex <- seq_len(cogNrow(cogDF))
-   
+
    if(!is.null(flt)) {
       logMsg("Updating cognostic filter index", verbose = verbose)
       flt <- processFilterInput(flt)
-      
+
       for(i in seq_along(flt)) {
          cur <- flt[[i]]
          if(cur[1] == "from") {
@@ -97,7 +97,7 @@ oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose =
          filterIndex <- intersect(filterIndex, newIndex)
       }
    }
-   
+
    # before ordering, perform any filters
    logMsg("Updating cognostic sort index", verbose = verbose)
    cogDF <- cogDF[filterIndex,, drop = FALSE]
@@ -145,9 +145,9 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
    # TODO: make number of quantiles configurable
    dat <- cogDF[[name]]
    dat <- dat[!is.na(dat)]
-   
+
    res <- list()
-   
+
    if("hist" %in% type) {
       if(length(dat) == 0) {
          res[["hist"]] <- data.frame(xdat = c(0, 1), ydat = c(0, 0))
@@ -156,7 +156,7 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
          res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))
       }
    }
-   
+
    if("quant" %in% type) {
       n <- length(dat)
       if(length(dat) == 0) {

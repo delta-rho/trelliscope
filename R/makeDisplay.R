@@ -23,6 +23,7 @@ if(getRversion() >= "2.15.1") {
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param verbose print status messages?
+#' @param keySig a user-defined key signature (string - see details)
 #' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
@@ -30,6 +31,8 @@ if(getRversion() >= "2.15.1") {
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 #'
 #' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+#'
+#' \code{keySig} does not generally need to be specified.  It is useful to specify when creating multiple displays that you would like to be treated as related displays, so that you can view them side by side.  Two displays are determined to be related when their key signatures, typically computed as a md5 hash of the complete collection of keys, match.  Sometimes two displays will have data where the keys match for a significant portion of subsets, but not all.  Manually specifying the same \code{keySig} for each can ensure that they will be treated as related displays.
 #'
 #' @author Ryan Hafen
 #'
@@ -55,6 +58,7 @@ makeDisplay <- function(
    output = NULL,
    conn = getOption("vdbConn"),
    verbose = TRUE,
+   keySig = NULL,
    params = NULL,
    packages = NULL,
    control = NULL
@@ -135,7 +139,7 @@ makeDisplay <- function(
          cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
          collect("TRS___panelkey", cogRes[[i]]$panelKey) # to build key signature
       }
-      cogEmit(cogConn, cogRes, conn, group, name)
+      cogEmit(cogConn, cogRes, collect, conn, group, name)
    })
 
    # rbind the results
@@ -174,43 +178,7 @@ makeDisplay <- function(
       width       = width
    )
 
-   # if the package isn't loaded, need to pass other functions as well
-   # (assuming that they are defined in the global environment instead)
-   # (debugging and updating the package is a lot easier when just
-   # sourcing the files at each change rather than building each time)
-   # if(! "package:trelliscope" %in% search()) {
-   #    message("* ---- running dev version - sending trelliscope functions to mr job")
-   parList <- c(parList, list(
-      kvApply = kvApply,
-      applyCogFn = applyCogFn,
-      getSplitVars = getSplitVars,
-      getBsvs = getBsvs,
-      makePNG = makePNG,
-      encodePNG = encodePNG,
-      cogEmit = cogEmit,
-      cogEmit.dfCogConn = cogEmit.dfCogConn,
-      # cogEmit.mongoCogConn = cogEmit.mongoCogConn,
-      cogCollect = cogCollect,
-      cogCollect.dfCogConn = cogCollect.dfCogConn,
-      # cogCollect.mongoCogConn = cogCollect.mongoCogConn,
-      cog = cog,
-      cogScagnostics = cogScagnostics,
-      as.cogGeo = as.cogGeo,
-      as.cogRel = as.cogRel,
-      as.cogHier = as.cogHier,
-      as.cogHref = as.cogHref,
-      cogMean = cogMean,
-      cogRange = cogRange,
-      cog2df = cog2df,
-      trsCurLim = trsCurLim,
-      trsCurXLim = trsCurXLim,
-      trsCurYLim = trsCurYLim
-   ))
-
-   packages <- c(packages, "lattice", "ggplot2", "digest", "base64enc", "data.table")
-   # } else {
-   #    packages <- c(packages, "trelliscope")
-   # }
+   packages <- c(packages, "trelliscope")
 
    panelGlobals <- drGetGlobals(panelFn)
    cogGlobals <- drGetGlobals(cogFn)
@@ -248,7 +216,14 @@ makeDisplay <- function(
    cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
 
    # get panelKey "signature"
-   keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
+   if(!is.null(keySig)) {
+      if(!is.character(keySig)) {
+         message("User-defined 'keySig' is not a string - converting it to one...")
+         keySig <- digest(keySig)
+      }
+   } else {
+      keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
+   }
 
    modTime <- Sys.time()
 
@@ -330,11 +305,63 @@ makeDisplay <- function(
          warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
       }
 
-
    }
 
    return(invisible(displayObj))
 }
+
+updateDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), ...) {
+   args <- list(...)
+   nms <- names(args)
+
+   updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
+
+   notup <- setdiff(nms, updateable)
+   if(length(notup) > 0) {
+      message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
+   }
+
+   disp <- getDisplay(name, group, conn)
+
+   noPreRend <- c("panelFn", "width", "height")
+   if(disp$preRender) {
+      if(nms %in% noPreRend)
+         message("note: preRender is TRUE, so the following cannot be set: ",
+            paste(noPreRend, collapse = ", "))
+      nms <- setdiff(nms, noPreRend)
+   }
+
+   for(cur in c("desc", "width", "height", "keySig")) {
+      if(cur %in% nms)
+         disp[[cur]] <- args[[cur]]
+   }
+
+   if("panelFn" %in% nms) {
+      # panelGlobals <- drGetGlobals(args$panelFn)
+      # cogGlobals <- drGetGlobals(cogFn)
+      # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
+      # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+   }
+
+   displayObj <- disp
+   # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+
+   updateDisplayList(list(
+      group = disp$group,
+      name = disp$name,
+      desc = disp$desc,
+      n = disp$n,
+      panelFnType = disp$panelFnType,
+      preRender = disp$preRender,
+      dataClass = tail(class(disp$panelDataSource), 1),
+      cogClass = class(disp$cogDatConn)[1],
+      height = disp$height,
+      width = disp$width,
+      updated = Sys.time(),
+      keySig = disp$keySig
+   ), conn)
+}
+
 
 
 ## remove all _bak directories
@@ -346,4 +373,5 @@ cleanupDisplays <- function(conn = getOption("vdbConn")) {
       unlink(f, recursive = TRUE)
    }
 }
+
 

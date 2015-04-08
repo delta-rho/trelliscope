@@ -66,7 +66,7 @@ cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defAct
 #' @param label label of the href
 #' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
 #' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -78,39 +78,39 @@ cogHref <- function(x, label = "link", desc = "link", group = "common", target =
 
 
 #' DisplayHref Cognostic
-#' 
+#'
 #' Create href that points to another trelliscope display with optional state
-#' 
+#'
 #' @param displayName the name of the display
 #' @param displayGroup the group the display belongs to
 #' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
 #' @param label label of the href
 #' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
 #' @param desc,group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
-#' 
+#'
 #' @return a hash string
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{validateState}}, \code{\link{cogHref}}
 #' @export
 cogDisplayHref <- function(displayName, displayGroup = "common", state = NULL, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE) {
-   
+
    state <- validateState(state, displayName, displayGroup)
    x <- makeStateHash(state, displayName, displayGroup)
-   
+
    cog(paste("<a href=\"#", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable)
 }
 
 
 #' Compute Scagnostics
-#' 
+#'
 #' Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
-#' 
+#'
 #' @param x vector of the x-axis data for a scatterplot
 #' @param y vector of the y-axis data for a scatterplot
 #' @param group,defLabel,defActive,filterable arguments passed to \code{\link{cog}}
-#' 
+#'
 #' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
@@ -157,9 +157,9 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 }
 
 #' Create a Cognostics Object
-#' 
+#'
 #' Create a cognostics object.  To be used inside of the function passed to the \code{cogFn} argument of \code{\link{makeDisplay}} for each cognostics value to be computed for each subset.
-#' 
+#'
 #' @param val a scalar value (numeric, characer, date, etc.)
 #' @param desc a description for this cognostic value
 #' @param group optional categorization of the cognostic for organizational purposes
@@ -167,18 +167,18 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 #' @param defLabel should this cognostic be used as a panel label in the viewer by default?
 #' @param defActive should this cognostic be active (available for sort / filter / sample) by default?
 #' @param filterable should this cognostic be filterable?  Default is \code{TRUE}.  It can be useful to set this to \code{FALSE} if the cognostic is categorical with many unique values and is only desired to be used as a panel label.
-#' 
+#'
 #' @return object of class "cog"
-#' 
+#'
 #' @details Different types of cognostics can be specified through the \code{type} argument that will affect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
-#' 
+#'
 #' @author Ryan Hafen
-#' 
+#'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}
 #'
 #' @export
 cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel = FALSE, defActive = TRUE, filterable = TRUE) {
-   
+
    cogTypes <- list(
       key      = as.character,
       integer  = as.integer  ,
@@ -191,22 +191,22 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
       hier     = as.cogHier  ,
       href     = as.cogHref
    )
-   
+
    types <- names(cogTypes)
-   
+
    if(!is.null(type)) {
       if(!type %in% types)
          stop("Invalid cognostics type: ", type)
-      
+
       val <- try(cogTypes[[type]](val))
       if(inherits(val, "try-error"))
          val <- NA
    } else { # try to infer type
       if(is.factor(val))
          val <- as.character(val)
-      
+
       if(is.character(val)) {
-         type <- "factor"         
+         type <- "factor"
       } else if(is.numeric(val)) {
          type <- "numeric"
       } else if(inherits(val, "Date")) {
@@ -228,7 +228,7 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
       filterable = filterable
    )
    attr(val, "cogAttrs") <- cogAttrs
-   
+
    class(val) <- c("cog", class(val))
    val
 }
@@ -276,7 +276,7 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
    }
    if(!is.null(cogFn))
       res <- c(res, kvApply(cogFn, kvSubset))
-   
+
    res
 }
 
@@ -284,16 +284,16 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
 
 ## some special cognostics, such as relations, need to be concatenated to a comma-separated string if we are storing them as a data.frame
 cog2df <- function(x) {
-    
+
    # TODO: when class(x[[i]]) == "cogRel", first concatenate
    # data.frame(as.list(c(panelKey = x$panelKey, x$splitVars, x$bsv, x$cog)), stringsAsFactors = FALSE)
 
-   # Try to coerce to data frame.  
+   # Try to coerce to data frame.
    out <- try(data.frame(x, stringsAsFactors = FALSE), silent = TRUE)
 
    # Assume it doesn't fail
    fail <- FALSE
-   
+
    # If the try() doesn't fail, test the number of rows
    if(!inherits(out, "try-error")) {
       if(nrow(out) != 1) {
@@ -313,11 +313,11 @@ cog2df <- function(x) {
 
       # This trick allows us to print the 'x' after the stop is issued
       tryCatch(stop(e), finally = eval(expression({print(x); cat(final)})))
-       
-   } 
+
+   }
 
    return(out)
-   
+
 }
 
 as.cogGeo <- function(x) {
@@ -358,15 +358,17 @@ cogFlatten <- function(x) {
 getCogInfo <- function(x, df = TRUE) {
    nms <- names(x)
    res <- do.call(rbind, lapply(seq_along(x), function(i) {
+      if(!inherits(x[[i]], "cog"))
+         x[[i]] <- cog(x[[i]])
       tmp <- attr(x[[i]], "cogAttrs")
       data.frame(name = nms[i], tmp, stringsAsFactors = FALSE)
    }))
-   
+
    class(res) <- c("cogInfo", "data.frame")
    res
 }
 
-# gets distribution of 
+# gets distribution of
 getCogDistns <- function(x, cogInfo) {
    cogInfo <- subset(cogInfo, type != "panelKey")
    res <- lapply(seq_len(nrow(cogInfo)), function(i) {
