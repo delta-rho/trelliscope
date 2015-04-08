@@ -284,32 +284,28 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
       panelContent <- lapply(seq_along(curDat), function(i) {
          x <- curDat[[i]]
          res <- try({
-            list(
-               html = renderPanelHtml(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio),
-               data = list(
-                  id = paste("#display-panel-table-", i, sep = ""),
-                  spec = renderPanelData(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
-               )
-            )
+            getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
          })
          if(inherits(res, "try-error"))
             res <- NULL
+         res$id <- paste("#display-panel-table-", i, sep = "")
+
          res
       })
    }
    panelContent
 }
 
-renderPanelHtml <- function(panelFn, ...)
-   UseMethod("renderPanelHtml", panelFn)
+getPanelContent <- function(panelFn, ...)
+   UseMethod("getPanelContent", panelFn)
 
-renderPanelHtml.rplotFn <- function(panelFn, ...)
-   renderPanelHtml.trellisFn(panelFn, ...)
+getPanelContent.rplotFn <- function(panelFn, ...)
+   getPanelContent.trellisFn(panelFn, ...)
 
-renderPanelHtml.ggplotFn <- function(panelFn, ...)
-   renderPanelHtml.trellisFn(panelFn, ...)
+getPanelContent.ggplotFn <- function(panelFn, ...)
+   getPanelContent.trellisFn(panelFn, ...)
 
-renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
    tmpfile <- tempfile()
    on.exit(rm(tmpfile))
 
@@ -323,15 +319,25 @@ renderPanelHtml.trellisFn <- function(panelFn, x, width, height, origWidth, lims
       lims = lims,
       pixelratio = pixelratio
    )
-   paste("<img src=\"", encodePNG(tmpfile),
+   html <- paste("<img src=\"", encodePNG(tmpfile),
       "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
+
+   list(html = html, deps = "", spec = "")
 }
 
-renderPanelHtml.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-   ""
+getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+
+   p <- kvApply(panelFn, x)
+   p <- set_options(p, width = width, height = height)
+
+   list(
+      html = "",
+      deps = "",
+      spec = getVegaSpec(p)
+   )
 }
 
-renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
 
    p <- kvApply(panelFn, x)
    p$set(width = width, height = height)
@@ -353,44 +359,54 @@ renderPanelHtml.rChartsFn <- function(panelFn, x, width, height, origWidth, lims
       p[ind[1]] <- "<style>iframe.rChart{ width: 100%; height: 100%;}</style>"
    }
 
-   paste(c(
+   html <- paste(c(
       sprintf("<div style='width:%dpx; height:%dpx'>", as.integer(width), as.integer(height)),
       p,
       "</div>"
    ), collapse = "\n")
+
+   list(html = html, deps = "", spec = "")
 }
 
-renderPanelData <- function(panelFn, ...)
-   UseMethod("renderPanelData", panelFn)
-
-renderPanelData.rplotFn <- function(panelFn, ...) {
-   ""
-}
-
-renderPanelData.trellisFn <- function(panelFn, ...) {
-   ""
-}
-
-renderPanelData.ggplotFn <- function(panelFn, ...) {
-   ""
-}
-
-renderPanelData.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-   # plotXLim <- tmp$x.limits
-   # plotYLim <- tmp$y.limits
-   # curXLim <- trsCurXLim(lims, x, plotXLim)
-   # curYLim <- trsCurYLim(lims, x, plotYLim)
+getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
    p <- kvApply(panelFn, x)
-   p <- set_options(p, width = width, height = height)
+   p$width <- width
+   p$height <- height
+   w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
+   d <- attr(w, "html_dependencies")
+   d <- lapply(d, function(el) {
+      class(el) <- "list"
+      # copy script and css and set $src$href
+      # also set a flag so we dont render dependency every time?
+      depDir <- paste("widgetassets/", el$name, "-", el$version, sep = "")
+      assetDir <- file.path("www", depDir)
 
-   getVegaSpec(p)
+      if(!file.exists(assetDir))
+         dir.create(assetDir, recursive = TRUE)
+
+      if(!is.null(el$script)) {
+         if(!file.exists(file.path(assetDir, el$script)))
+            file.copy(file.path(el$src$file, el$script), assetDir)
+         el$src$href <- depDir
+      } else {
+         el$script <- jsonlite:::as.scalar(NA)
+      }
+      if(!is.null(el$stylesheet)) {
+         if(!file.exists(file.path(assetDir, el$stylesheet)))
+            file.copy(file.path(el$src$file, el$stylesheet), assetDir)
+         el$src$href <- depDir
+      } else {
+         el$stylesheet <- jsonlite:::as.scalar(NA)
+      }
+      el
+   })
+   # browser()
+   list(
+      html = as.character(w),
+      deps = d,
+      spec = ""
+   )
 }
-
-renderPanelData.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-   # TODO: javascript library dependency
-   ""
-}
-
 
 getVegaSpec <- function(x) {
    spec <- ggvis:::as.vega(x)

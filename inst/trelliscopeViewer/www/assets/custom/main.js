@@ -56,12 +56,12 @@ function debounce(fn, delay) {
    };
 }
 
-// if (typeof console  != "undefined") 
+// if (typeof console  != "undefined")
 //     if (typeof console.log != 'undefined')
 //         console.olog = console.log;
 //     else
 //         console.olog = function() {};
-// 
+//
 // console.log = function(message) {
 //     console.olog(message);
 //     $('#error-log').append('<p>' + message + '</p>');
@@ -79,7 +79,7 @@ $(window).resize(function() {
 $(window).bind('resizeEnd', function() {
    // recompute the panel preview layout after window resize
    // TODO: if that control panel is open, only change it there
-   
+
    // if related displays are selected, recompute there
    // instead of panel layout
    if($(".related-display-select.active").length > 0) {
@@ -88,7 +88,7 @@ $(window).bind('resizeEnd', function() {
    } else {
       panelLayoutPreview(parseInt($("#panel-rows").val()), parseInt($("#panel-cols").val()), $(".panel-labels-select.active").length);
       $("#panel-rows").trigger("change");
-      panelLayoutOutputApplyButton();      
+      panelLayoutOutputApplyButton();
    }
 });
 
@@ -97,8 +97,8 @@ $(document).keydown(function(e) {
    // only want right and left to work when no panels are open
    var slidePanel = $(".slide-panel.slide-left");
    var modals = $(".modal:visible");
-   
-   if($(document.activeElement).attr("id") != "curPanelPageInput" 
+
+   if($(document.activeElement).attr("id") != "curPanelPageInput"
       && slidePanel.length == 0 && modals.length == 0) {
       switch(e.keyCode) {
          case 37: // left
@@ -183,7 +183,7 @@ function pageForward() {
 function pageBack() {
    var curPage = parseInt($("#curPanelPageInput").val());
    var by = parseInt($("#skip-button-value").html().replace("x", ""));
-   
+
    if(curPage - by >= 1) {
       $("#curPanelPageInput").val(curPage - by);
       $("#curPanelPageInput").trigger("change");
@@ -308,7 +308,7 @@ function cogBreadcrumbOutputPostRender() {
       delete sortData[$(this).data("name")];
       $("#sortStateInput").trigger("change");
    });
-   
+
    // open Table Sort / Filter control if main part of sort button clicked
    $(".sort-breadcrumb.cog-state-edit").click(function() {
       if(!$("#cog-table-sort-filter").hasClass("slide-left"))
@@ -363,7 +363,7 @@ function panelPageNavOutputPostRender() {
    $("#pageRightButton").click(function() {
       pageForward();
    });
-   
+
    // when page input is changed, fire up spinner
    $("#curPanelPageInput").change(function() {
       var target = document.getElementById("panelTableSpinner");
@@ -371,7 +371,7 @@ function panelPageNavOutputPostRender() {
       // setTimeout(function(){ panelSpinner.spin(target); }, 500);
       panelSpinner.spin(target);
    });
-   
+
    // $("#curPanelPageInput").bind("keydown", function(e) {
    //    console.log(e.keyCode);
    //    if(e.keyCode == 37 || e.keyCode == 39) {
@@ -391,7 +391,7 @@ function panelTableContentOutputPostRender(data) {
    // stop spinner
    var target = document.getElementById("panelTableSpinner");
    panelSpinner.stop(target);
-   
+
    // stop display load spinner too (in case it's spinning)
    var target = document.getElementById("displayLoadSpinner");
    if(displayLoadSpinner.el) {
@@ -399,14 +399,14 @@ function panelTableContentOutputPostRender(data) {
       // if it is spinning, open display modal is open
       $("#openModal").modal("hide");
    }
-   
+
    // this is a hack right now
    // when panels contain scripts that need to be executed
    // calling jQuery's html() runs those scripts
    // $(".panel-image-wrapper").each(function() {
    //    $(this).html($(this).html());
    // });
-   
+
    // if it is not a static image expect vega spec in .data
    // console.log(data[0][0].panel_content.length);
    // console.log(data);
@@ -414,11 +414,12 @@ function panelTableContentOutputPostRender(data) {
       for (var i = 0; i < data.length; i++) {
          for (var j = 0; j < data[i].length; j++) {
             data[i][j].panel_content.forEach(function(pc) {
-               if(pc.data.spec) {
-                  if(pc.data.spec[0] != "") {
+               console.log(pc);
+               if(pc.spec) {
+                  if(pc.spec[0] != "") {
                      var curID = pc.data.id[0];
                      try {
-                        var spec = JSON.parse(pc.data.spec);
+                        var spec = JSON.parse(pc.spec);
                      } catch (e) {
                         console.log(e);
                         return;
@@ -426,23 +427,28 @@ function panelTableContentOutputPostRender(data) {
                      $(curID).data("spec", spec);
                      // console.log(curID);
                      // console.log($(curID));
-                     // vg.parse.spec($(curID).data("spec"), function(chart) {   
-                     vg.parse.spec(spec, function(chart) {   
+                     // vg.parse.spec($(curID).data("spec"), function(chart) {
+                     vg.parse.spec(spec, function(chart) {
                         var ch = chart({el:curID});
                         var w = ch.width();
                         var h = ch.height();
-                        ch.update(); 
+                        ch.update();
                         var pd = ch.padding();
                         ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
                         ch.update();
                      });
-                  }                  
+                  }
+               }
+               if(pc.deps) {
+                  console.log("hi");
+                  Shiny.renderDependencies(pc.deps);
+                  HTMLWidgets.staticRender();
                }
             });
          }
       };
    }
-   
+
    // make width of cog name column uniform across
    // TODO: compute this as part of panel labels up front and save it with exposed state
    var maxCogNameWidth = 0;
@@ -465,7 +471,7 @@ $(document).ready(function() {
       e.preventDefault()
       $(this).tab("show")
    });
-   
+
    // render outer templates
    var outerRender = $.getJSON("templateData.json", function(json) {
       var masterTemplate = document.getElementById("controls-master-template").innerHTML;
@@ -475,7 +481,7 @@ $(document).ready(function() {
          document.getElementById(key).innerHTML = output;
       });
    })
-   
+
    .complete(function() {
       // register bindings for newly created elements
       masterControlPostRender();
@@ -508,7 +514,7 @@ $(document).ready(function() {
          } catch (e) {
           // do nothing
          }
-         
+
          if(appHash == "") {
             $("#openModal").modal("show");
          } else {
@@ -517,7 +523,7 @@ $(document).ready(function() {
          }
       }
    });
-   
+
    $(".right-sticky").click(function() {
       $(".right-panel").toggleClass("right-slide");
       $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")

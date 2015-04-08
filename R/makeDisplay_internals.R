@@ -15,11 +15,11 @@ validateVdbConn <- function(conn, mustHaveDisplays = FALSE) {
 
 ## internal
 validateNameGroup <- function(name, group) {
-    
+
    # If spaces are present in name or group, fill them with underscores
    name <- gsub("\\ ", "_", name)
    group <- gsub("\\ ", "_", group)
-   
+
    # check name and group
    if(grepl("[^a-zA-Z0-9_\\.]", name)) {
       stop("Argument 'name' must contain only numbers, letters, spaces, or the symbols '.' or '_'")
@@ -31,15 +31,15 @@ validateNameGroup <- function(name, group) {
    # Send back the updated name and group into the calling function
    assign("name", name, envir = parent.frame())
    assign("group", group, envir = parent.frame())
-   
+
 }
 
 ## internal
 validateCogFn <- function(dat, cogFn, verbose = FALSE) {
-    
+
    if(verbose)
       message("* Testing cognostics function on a subset ... ", appendLF = FALSE)
-   
+
    ex <- applyCogFn(cogFn, kvExample(dat), getAttribute(dat, "conn"))
 
    # if(!is.list(ex))
@@ -51,9 +51,9 @@ validateCogFn <- function(dat, cogFn, verbose = FALSE) {
 
    if(verbose)
       message("ok")
-   
+
    return(ex)
-   
+
 }
 
 getPanelFnType <- function(panelEx) {
@@ -68,10 +68,12 @@ getPanelFnType <- function(panelEx) {
       panelFnType <- "ggvisFn"
    } else if(inherits(panelEx, "rCharts")) {
       panelFnType <- "rChartsFn"
+   } else if(inherits(panelEx, "htmlwidget")) {
+      panelFnType <- "htmlwidgetFn"
    }
    if(is.null(panelFnType))
       stop("Unsupported panel function.  If panel function uses base R commands, be sure to include 'return(NULL)' at the end of the function definition.", call. = FALSE)
-   
+
    panelFnType
 }
 
@@ -121,7 +123,7 @@ validateLims <- function(lims, data, panelFn, verbose) {
 
 ## internal
 checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
-    
+
    if(file.exists(displayPrefix)) {
 
       bakFile <- paste(displayPrefix, "_bak", sep = "")
@@ -183,7 +185,7 @@ updateDisplayList <- function(argList, conn) {
 # creates low-resolution thumbnail
 makeThumb <- function(inFile, outFile, height, width) {
    img <- png::readPNG(inFile)
-   
+
    png(filename = outFile, height = height, width = width)
       par(mar = c(0,0,0,0), xaxs = "i", yaxs = "i", ann = FALSE)
       plot(1:2, type = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "")

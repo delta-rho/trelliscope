@@ -1,4 +1,6 @@
 library(shiny, warn.conflicts = FALSE)
+# htmlwidgets not required unless panel function is one
+suppressWarnings(require(htmlwidgets, warn.conflicts = FALSE))
 library(jsonlite, warn.conflicts = FALSE)
 
 connFile <- "conn.Rdata"

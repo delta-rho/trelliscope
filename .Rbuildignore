@@ -12,3 +12,4 @@ _ignore
 \.sublime\-
 \.Rapp\.history
 package.json
+inst/trelliscopeViewer/www/widgetassets/*
