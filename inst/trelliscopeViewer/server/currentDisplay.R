@@ -82,7 +82,8 @@ currentDisplay <- reactive({
 
       logMsg("Getting default state...")
 
-      cdo$state$labels <- sld$labels
+      if(!is.null(sld$labels))
+         cdo$state$labels <- sld$labels
       if(is.null(cdo$state$labels)) {
          defaultLabels <- cdo$cogInfo$name[cdo$cogInfo$defLabel]
          class(defaultLabels) <- c(class(defaultLabels), "labelsState")
