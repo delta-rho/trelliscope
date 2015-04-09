@@ -102,31 +102,4 @@ print.qtrellis <- function(x, ...) {
 #     figure() %>%
 #       ly_points(time, medListPriceSqft, data = x, hover = medListPriceSqft))
 
-#' Convert dplyr grouped_df to ddf
-#'
-#' @param x a grouped_df object from dplyr
-#' @examples
-#' \dontrun{
-#' library(dplyr)
-#' bySpecies <- iris %>%
-#'   group_by(Species) %>%
-#'   to_ddf()
-#' }
-#' @export
-to_ddf <- function(x) {
-  if(!inherits(x, "grouped_df"))
-    stop("to_ddf currently only operates on grouped dplyr tbls")
-
-  tmp <- do(x, kv = list("key", data.frame(.)))
-  n <- length(tmp)
-  keys <- data.frame(lapply(tmp[1:(n-1)], as.character), stringsAsFactors = FALSE)
-  keynms <- matrix(apply(keys, 1, function(x) paste(colnames(keys), x, sep = "=")), nrow = n - 1)
-  keynms <- apply(keynms, 2, function(x) paste(x, collapse = "|"))
-  for(ii in seq_along(tmp$kv)) {
-    tmp$kv[[ii]][[1]] <- keynms[ii]
-    attr(tmp$kv[[ii]][[2]], "split") <- keys[ii,,drop = FALSE]
-  }
-
-  ddf(tmp$kv)
-}
 

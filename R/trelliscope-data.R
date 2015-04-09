@@ -129,13 +129,3 @@ NULL
 NULL
 
 
-#' Pipe data
-#'
-#' @importFrom magrittr %>%
-#' @name %>%
-#' @rdname pipe
-#' @export
-#' @param lhs a data object
-#' @param rhs a function to apply to the data
-NULL
-
