@@ -18,8 +18,8 @@ function renderTemplate(objId, data, templateId) {
    } else {
       console.log("Warning: could not find template for id=" + templateId + "-template")
    }
-   
-   // if there is a post-render function (useful for binding events 
+
+   // if there is a post-render function (useful for binding events
    // to newly-renedered content), execute it
    var pr = $(outObj).data("post-render");
    if(pr) {
@@ -51,16 +51,16 @@ $.extend(templateOutputBinding, {
       data = JSON.parse(data);
       if(data) {
          var objId = $(el).attr("id");
-         
+
          // if(objId == "cogTableControlsOutput")
          //    console.log(data);
          // if(objId == "panelTableContentOutput") {
          //    console.log(data[0]);
          //    console.log(sizeof(data[0][0].panel_content));
          // }
-         
+
          // console.log("Updated tempate data for element ID " + objId + "; " + sizeof(data) + " bytes");
-         
+
          // console.log(objId);
          // console.log(data);
          var templateId = $(el).data("template-id");
@@ -69,7 +69,7 @@ $.extend(templateOutputBinding, {
          // console.log("Rendering template '" + templateId + "' to element '" + objId + "'");
          Shiny.unbindAll(el);
          renderTemplate(objId, data, templateId);
-         Shiny.bindAll(el);         
+         Shiny.bindAll(el);
       } else {
          // if there is no data, empty the element
          $(el).html("");
@@ -89,20 +89,20 @@ $.extend(d3outputBinding, {
          data = JSON.parse(data);
          // console.log(data);
          var functionName = $(el).data("d3-fn");
-         
+
          try {
             window[functionName](data, $(el).attr("id"));
          } catch (e) {
             console.log(e);
             return;
          }
-         
+
          var callbackName = $(el).data("callback");
          if(callbackName) {
             if(window[callbackName])
                window[callbackName]();
          }
-         
+
          // stop a spinner, if there is one...
          var spinner = $(el).data("spinner");
          if(spinner) {
@@ -122,7 +122,7 @@ $.extend(myShinyDataInputBinding, {
    },
    getValue: function(el) {
       // console.log("Updated data for element ID " + $(el).attr("id") + "; " + sizeof($(el).data("myShinyData")) + " bytes");
-      
+
       // console.log($(el).attr("id"));
       // console.log($(el).data("myShinyData"));
       return $(el).data("myShinyData");
@@ -150,7 +150,7 @@ $.extend(dataOutputBinding, {
    renderValue: function(el, data) {
       data = JSON.parse(data);
       $(el).data("myShinyData", data);
-      
+
       var callbackName = $(el).data("callback");
       if(callbackName) {
          if(window[callbackName])
@@ -175,9 +175,9 @@ $.extend(displaySelectInputBinding, {
          return null;
       } else {
          var res = $(row).data();
-         
+
          var state = $("#exposedStateDataOutput").data("myShinyData");
-         
+
          // if it is the same display as before, don't do anything
          if(state) {
             if(state.name == res.name && state.group == res.group) {
@@ -185,21 +185,21 @@ $.extend(displaySelectInputBinding, {
                return(res);
             }
          }
-         
+
          // remove all related displays
          if($(".related-display-select.active").length > 0) {
             $(".related-display-select.active").click();
             relatedDisplayListOutputApplyButton();
          }
-         
+
          // reset panel labels
          $("#panelLabelStateInput").data("myShinyData", null);
          $("#panelLabelStateInput").trigger("change");
-         
+
          // reset sorting
          $("#sortStateInput").data("myShinyData", null);
          $("#sortStateInput").trigger("change");
-         
+
          // reset filtering
          $("#filterStateInput").data("myShinyData", null);
          $("#filterStateInput").trigger("change");
@@ -207,9 +207,9 @@ $.extend(displaySelectInputBinding, {
          // reset active cognostics
          $("#activeCogStateInput").data("myShinyData", null);
          $("#activeCogStateInput").trigger("change");
-         
+
          console.log("Opened display: name=" + res.name + ", group=" + res.group);
-         
+
          // run spinner
          var target = document.getElementById("displayLoadSpinner");
          displayLoadSpinner.stop(target);

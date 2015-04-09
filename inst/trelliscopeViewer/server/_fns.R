@@ -385,8 +385,12 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, l
          dir.create(assetDir, recursive = TRUE)
 
       if(!is.null(el$script)) {
-         if(!file.exists(file.path(assetDir, el$script)))
-            file.copy(file.path(el$src$file, el$script), assetDir)
+         ff1 <- file.path(assetDir, el$script)
+         ff2 <- file.path(el$src$file, el$script)
+         for(ii in seq_along(ff1)) {
+            if(!file.exists(ff1[ii]))
+               file.copy(ff2[ii], assetDir)
+         }
          el$src$href <- depDir
       } else {
          el$script <- jsonlite:::as.scalar(NA)

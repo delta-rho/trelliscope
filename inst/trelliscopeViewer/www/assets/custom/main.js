@@ -440,7 +440,6 @@ function panelTableContentOutputPostRender(data) {
                   }
                }
                if(pc.deps) {
-                  console.log("hi");
                   Shiny.renderDependencies(pc.deps);
                   HTMLWidgets.staticRender();
                }
