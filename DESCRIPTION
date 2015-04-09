@@ -1,7 +1,7 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.1
+Version: 0.8.2
 Date: 2015-04-07
 Author: Ryan Hafen
 Maintainer: Ryan Hafen <rhafen@gmail.com>
@@ -39,6 +39,7 @@ Imports:
     png
 Suggests:
     Cairo,
+    dplyr,
     testthat (>= 0.8.1),
     roxygen2 (>= 4.0.0),
     scagnostics,

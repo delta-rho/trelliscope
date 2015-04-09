@@ -257,7 +257,7 @@ makeDisplay <- function(
    class(displayObj) <- "displayObj"
 
    if(!is.null(state))
-      displayObj$state <- validateState(name, group, state, displayObj)
+      displayObj$state <- validateState(state, name, group, displayObj)
 
    save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
 
