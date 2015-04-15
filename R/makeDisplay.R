@@ -187,6 +187,9 @@ makeDisplay <- function(
 
    globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
 
+   if(length(params) > 0)
+      globalVarList <- c(globalVarList, params)
+
    if(length(globalVarList) > 0) {
       # don't want duplicates
       nms <- names(globalVarList)
@@ -195,9 +198,6 @@ makeDisplay <- function(
       nms <- names(parList)
       parList <- parList[which(!duplicated(nms))]
    }
-
-   if(length(params) > 0)
-      parList <- c(parList, params)
 
    jobRes <- mrExec(data,
       map      = map,
