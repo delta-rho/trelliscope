@@ -35,7 +35,7 @@ test_that("makeDisplay works", {
       lims = list(x = "same", y = "free")
    )
 
-   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield", "displayObj.Rdata")))
+   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield_gv", "displayObj.Rdata")))
 })
 
 test_that("global variable exists", {
