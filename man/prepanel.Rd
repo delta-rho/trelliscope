@@ -4,12 +4,17 @@
 \alias{prepanel}
 \title{Prepanel Function for Trelliscope Displays}
 \usage{
-prepanel(data, prepanelFn = NULL, control = NULL, verbose = TRUE)
+prepanel(data, prepanelFn = NULL, params = NULL, packages = NULL,
+  control = NULL, verbose = TRUE)
 }
 \arguments{
 \item{data}{an object of class "localDiv" or "rhData"}
 
 \item{prepanelFn}{a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.}
+
+\item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
+
+\item{packages}{a vector of R package names that contain functions used in \code{prepanelFn} (most should be taken care of automatically such that this is rarely necessary to specify)}
 
 \item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}}
 

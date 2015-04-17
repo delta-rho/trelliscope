@@ -1,5 +1,4 @@
 context("Simple display")
-require(trelliscope)
 
 vdbPath <- file.path(tempdir(), "vdb")
 
@@ -36,19 +35,4 @@ test_that("makeDisplay works", {
 
    expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield", "displayObj.Rdata")))
 })
-
-bySite <- convert(bySite, localDiskConn(file.path(tempdir(), "bySite"), autoYes = TRUE))
-
-test_that("makeDisplay works", {
-   makeDisplay(bySite,
-      name = "variety_vs_yield2",
-      desc = "test display with barley data",
-      panelFn = pf, cogFn = cf,
-      width = 400, height = 400,
-      lims = list(x = "same", y = "free")
-   )
-
-   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield2", "displayObj.Rdata")))
-})
-
 
