@@ -77,7 +77,7 @@ getPanelFnType <- function(panelEx) {
    panelFnType
 }
 
-validateLims <- function(lims, data, panelFn, verbose) {
+validateLims <- function(lims, data, panelFn, params = NULL, packages = NULL, verbose) {
    # if the user specified limits, no need to compute lims
    # otherwise, we need to call prepanel on the data
    if(is.null(lims)) {
@@ -110,7 +110,7 @@ validateLims <- function(lims, data, panelFn, verbose) {
          } else {
             prepanelFn <- lims[["prepanelFn"]]
          }
-         pre <- prepanel(data, prepanelFn = prepanelFn)
+         pre <- prepanel(data, prepanelFn = prepanelFn, params = params, packages = packages)
          lims <- setLims(pre, x = xLimType, y = yLimType)
       } else {
          if(verbose)

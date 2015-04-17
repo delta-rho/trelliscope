@@ -119,7 +119,7 @@ makeDisplay <- function(
 
    panelFnType <- getPanelFnType(panelEx)
    class(panelFn) <- c("function", panelFnType)
-   lims <- validateLims(lims, data, panelFn, verbose)
+   lims <- validateLims(lims, data, panelFn, params, packages, verbose)
 
    cogPre(cogConn, conn, group, name)
 
@@ -178,26 +178,21 @@ makeDisplay <- function(
       width       = width
    )
 
-   packages <- c(packages, "trelliscope")
-
    panelGlobals <- drGetGlobals(panelFn)
    cogGlobals <- drGetGlobals(cogFn)
 
+   packages <- c(packages, "trelliscope")
    packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
 
    globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
 
    if(length(params) > 0)
-      globalVarList <- c(globalVarList, params)
+      for(pnm in names(params))
+         globalVarList[[pnm]] <- params[[pnm]]
 
-   if(length(globalVarList) > 0) {
-      # don't want duplicates
-      nms <- names(globalVarList)
-      globalVarList <- globalVarList[which(!duplicated(nms))]
-      parList <- c(parList, globalVarList)
-      nms <- names(parList)
-      parList <- parList[which(!duplicated(nms))]
-   }
+   parList <- c(parList, globalVarList)
+   nms <- names(parList)
+   parList <- parList[which(!duplicated(nms))]
 
    jobRes <- mrExec(data,
       map      = map,

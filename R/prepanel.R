@@ -10,6 +10,8 @@ if(getRversion() >= "2.15.1") {
 #' @param data an object of class "localDiv" or "rhData"
 #' @param prepanelFn a prepanel function that returns a list specifying \code{xlim} and \code{ylim} for determining axis limits, and optionally \code{dx} and \code{dy} for determining aspect ratio (used to define slopes of line segments used for banking computations).  prepanelFn can also be a panelFn (see \code{\link{makeDisplay}}) that returns either an object of class "trellis" or "ggplot", since xlim and ylim can be determined from these.
 #' @param verbose print status messages?
+#' @param params a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
+#' @param packages a vector of R package names that contain functions used in \code{prepanelFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link{rhipeControl}} and \code{\link{localDiskControl}}
 #'
 #' @return object of class "trsPre".  This is a list of the x and y axis ranges for each split, along with the aspect ratio banking value if \code{dx} and \code{dy} are supplied in \code{prepanelFn}.  Can be used with \code{\link{plot.trsPre}} and \code{\link{setLims}}.
@@ -44,6 +46,8 @@ if(getRversion() >= "2.15.1") {
 prepanel <- function(
    data,
    prepanelFn = NULL,
+   params = NULL,
+   packages = NULL,
    control = NULL,
    verbose = TRUE
 ) {
@@ -171,16 +175,19 @@ prepanel <- function(
       prepanelFnIsGgplot = prepanelFnIsGgplot,
       doBanking = doBanking
    )
-   packages <- c("digest", "data.table")
+   packages <- c("digest", "data.table", "trelliscope")
+   prepanelGlobals <- drGetGlobals(prepanelFn)
 
-   if(! "package:trelliscope" %in% search()) {
-      # parList <- c(parList, list(
-      # ))
+   packages <- unique(c(packages, prepanelGlobals$packages))
+   globalVarList <- prepanelGlobals$vars
 
-      packages <- c(packages, "lattice", "ggplot2")
-   } else {
-      packages <- c(packages, "trelliscope")
-   }
+   if(length(params) > 0)
+      for(pnm in names(params))
+         globalVarList[[pnm]] <- params[[pnm]]
+
+   parList <- c(parList, globalVarList)
+   nms <- names(parList)
+   parList <- parList[which(!duplicated(nms))]
 
    # suppressMessages(capture.output(
    jobRes <- mrExec(

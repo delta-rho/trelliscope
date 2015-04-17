@@ -1,6 +1,7 @@
-Version 0.8.2
+Version 0.8.2.1
 ---------------------------------------------------------------------
 
+- update handling of global variables
 - add experimental `qtrellis()` function for quick generation of trelliscope displays
 - fix bug in adding default state in `makeDisplay()`
 
