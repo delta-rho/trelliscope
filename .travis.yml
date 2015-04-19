@@ -12,7 +12,7 @@ before_install:
 install:
   - #INSTALL R TESTING
   -
-  - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics
+  - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics magrittr dplyr testthat roxygen2
   # - ./travis-tool.sh r_install rmongodb
   -
   - ./travis-tool.sh install_github tesseradata/datadr rstudio/shinyapps
