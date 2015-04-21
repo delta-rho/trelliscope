@@ -36,3 +36,21 @@ test_that("makeDisplay works", {
    expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield", "displayObj.Rdata")))
 })
 
+
+# test_that("makeDisplay works with RHIPE", {
+#    library(Rhipe)
+#    rhinit()
+
+#    bySiteRh <- convert(bySite, hdfsConn("/tmp/bySite", autoYes = TRUE))
+#    bySiteRh <- makeExtractable(bySiteRh)
+#    makeDisplay(bySiteRh,
+#       name = "variety_vs_yield_rh",
+#       desc = "test display with barley data",
+#       panelFn = pf, cogFn = cf,
+#       width = 400, height = 400,
+#       lims = list(x = "same", y = "free")
+#    )
+
+#    expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield_rh", "displayObj.Rdata")))
+# })
+
