@@ -231,6 +231,7 @@ makeDisplay <- function(
    # some back ends (like RHIPE) might need to store environment variables
    # so that R knows how to talk to the back end
    envs <- NULL
+
    if(inherits(panelDataSource, "kvHDFS")) {
       envs <- Sys.getenv()
       envs <- as.list(envs[grepl("HADOOP", names(envs))])
