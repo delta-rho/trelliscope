@@ -1,6 +1,8 @@
-Version 0.8.2.1
+Version 0.8.2.2
 ---------------------------------------------------------------------
 
+- fix problem with loading RHIPE on viewer server
+- fix problem with filter due to js error
 - update handling of global variables
 - add experimental `qtrellis()` function for quick generation of trelliscope displays
 - fix bug in adding default state in `makeDisplay()`
