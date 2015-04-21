@@ -322,7 +322,7 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims
    html <- paste("<img src=\"", encodePNG(tmpfile),
       "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
 
-   list(html = html, deps = "", spec = "")
+   list(html = html, deps = NULL, spec = "")
 }
 
 getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
@@ -332,7 +332,7 @@ getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, 
 
    list(
       html = "",
-      deps = "",
+      deps = NULL,
       spec = getVegaSpec(p)
    )
 }
@@ -365,7 +365,7 @@ getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims
       "</div>"
    ), collapse = "\n")
 
-   list(html = html, deps = "", spec = "")
+   list(html = html, deps = NULL, spec = "")
 }
 
 getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
