@@ -228,6 +228,14 @@ makeDisplay <- function(
    cogInfo <- getCogInfo(cogEx)
    cogDistns <- getCogDistns(cogDatConn, cogInfo)
 
+   # some back ends (like RHIPE) might need to store environment variables
+   # so that R knows how to talk to the back end
+   envs <- NULL
+   if(inherits(displayObj$panelDataSource, "kvHDFS")) {
+      envs <- Sys.getenv()
+      envs <- as.list(envs[grepl("HADOOP", names(envs))])
+   }
+
    displayObj <- list(
       name = name,
       group = group,
@@ -247,7 +255,8 @@ makeDisplay <- function(
       width = width,
       lims = lims,
       relatedData = globalVarList,
-      relatedPackages = packages
+      relatedPackages = packages,
+      envs = envs
    )
    class(displayObj) <- "displayObj"
 
