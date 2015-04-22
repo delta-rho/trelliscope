@@ -439,7 +439,7 @@ function panelTableContentOutputPostRender(data) {
                      });
                   }
                }
-               if(pc.deps) {
+               if(pc.deps.length) {
                   Shiny.renderDependencies(pc.deps);
                   HTMLWidgets.staticRender();
                }

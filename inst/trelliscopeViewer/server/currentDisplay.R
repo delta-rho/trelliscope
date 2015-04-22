@@ -68,6 +68,16 @@ currentDisplay <- reactive({
       cdo <- do.call(getDisplay, sld[c("name", "group")])
       logMsg("Display loaded")
 
+      # handle RHIPE
+      if(inherits(cdo$panelDataSource, "kvHDFS")) {
+         if(!isNamespaceLoaded("Rhipe")) {
+            if(!is.null(cdo$envs))
+              try(do.call(Sys.setenv, cdo$envs))
+            library(Rhipe)
+            rhinit()
+         }
+      }
+
       # load required packages
       if(!is.null(cdo$relatedPackages)) {
          logMsg("Loading packages: ", paste(cdo$relatedPackages, collapse = ", "))
