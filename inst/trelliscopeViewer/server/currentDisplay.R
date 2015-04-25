@@ -75,7 +75,6 @@ currentDisplay <- reactive({
               try(do.call(Sys.setenv, cdo$envs))
             # hacky way to make sure shinyapps doesn't try to find Rhipe
             eval(parse(text = paste0("libra", "ry(", "Rhipe)")))
-            library(Rhipe)
             rhinit()
          }
       }
