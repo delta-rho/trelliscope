@@ -19,14 +19,14 @@ Removes whitespace surrounding a trellis plot.  Ideal for \code{\link{makeDispla
 \examples{
 \dontrun{
 xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
-   par.settings=noMargins()
+  par.settings=noMargins()
 )
 
 # with additional par.settings...
 xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
-   par.settings=noMargins(
-      list(plot.symbol=list(col="black"))
-   )
+  par.settings=noMargins(
+    list(plot.symbol=list(col="black"))
+  )
 )
 }
 }

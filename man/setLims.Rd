@@ -40,10 +40,10 @@ A character string that determines how axis limits are calculated for each panel
 \dontrun{
 irisSplit <- divide(iris, "Species")
 irisPreFn <- function(x) {
-   list(
-      xlim = range(x$Sepal.Length),
-      ylim = range(x$Sepal.Width)
-   )
+  list(
+    xlim = range(x$Sepal.Length),
+    ylim = range(x$Sepal.Width)
+  )
 }
 irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
 irisLims <- setLims(irisPre, x = "same", y = "sliced")

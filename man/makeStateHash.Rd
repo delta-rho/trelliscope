@@ -21,14 +21,14 @@ Make a URL hash out of cognostics state information
 }
 \examples{
 x <- list(
-   sort = list(state = "desc", county = "asc"),
-   filter = list(
-      county = list(regex = "Bent"),
-      state = list(select = "WA"),
-      meanList = list(from = 0, to = 1)
-   ),
-   layout = list(nrow = 2, ncol = 4),
-   labels = c("county", "state")
+  sort = list(state = "desc", county = "asc"),
+  filter = list(
+    county = list(regex = "Bent"),
+    state = list(select = "WA"),
+    meanList = list(from = 0, to = 1)
+  ),
+  layout = list(nrow = 2, ncol = 4),
+  labels = c("county", "state")
 )
 makeStateHash(validateState(x))
 }
