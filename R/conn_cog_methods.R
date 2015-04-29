@@ -9,7 +9,7 @@
 #' @export
 #' @rdname mr-methods
 cogPre <- function(cogConn, conn, group, name, ...)
-   UseMethod("cogPre")
+  UseMethod("cogPre")
 
 # in the map, how to emit records
 #' Methods Used in MapReduce for makeDisplay
@@ -17,7 +17,7 @@ cogPre <- function(cogConn, conn, group, name, ...)
 #' @export
 #' @rdname mr-methods
 cogEmit <- function(cogConn, ...)
-   UseMethod("cogEmit")
+  UseMethod("cogEmit")
 
 # in the reduce, how to collate results
 #' Methods Used in MapReduce for makeDisplay
@@ -25,7 +25,7 @@ cogEmit <- function(cogConn, ...)
 #' @export
 #' @rdname mr-methods
 cogCollect <- function(cogConn, ...)
-   UseMethod("cogCollect")
+  UseMethod("cogCollect")
 
 # after mr job, final steps
 #' Methods Used in MapReduce for makeDisplay
@@ -33,7 +33,7 @@ cogCollect <- function(cogConn, ...)
 #' @export
 #' @rdname mr-methods
 cogFinal <- function(cogConn, ...)
-   UseMethod("cogFinal")
+  UseMethod("cogFinal")
 
 ############################################################################
 ### cogDatConn methods
@@ -54,36 +54,36 @@ cogFinal <- function(cogConn, ...)
 #' @export
 #' @rdname cogConn-methods
 cogNcol <- function(x, ...)
-   UseMethod("cogNcol")
+  UseMethod("cogNcol")
 
 #' @export
 #' @rdname cogConn-methods
 cogNrow <- function(x, ...)
-   UseMethod("cogNrow")
+  UseMethod("cogNrow")
 
 #' @export
 #' @rdname cogConn-methods
 cogNames <- function(x, ...)
-   UseMethod("cogNames")
+  UseMethod("cogNames")
 
 #' @export
 #' @rdname cogConn-methods
 getCogData <- function(x, rowIdx, colIdx, ...)
-   UseMethod("getCogData")
+  UseMethod("getCogData")
 
 #' @export
 #' @rdname cogConn-methods
 oldGetCurCogDat <- function(cogDF, flt, ordering, colIndex, verbose, ...)
-   UseMethod("oldGetCurCogDat")
+  UseMethod("oldGetCurCogDat")
 
 ### for cogDistns
 
 getCogQuantPlotData <- function(x, ...) {
-   UseMethod("getCogQuantPlotData", x)
+  UseMethod("getCogQuantPlotData", x)
 }
 
 getCogCatPlotData <- function(x, ...) {
-   UseMethod("getCogCatPlotData", x)
+  UseMethod("getCogCatPlotData", x)
 }
 
 
@@ -92,21 +92,21 @@ getCogCatPlotData <- function(x, ...) {
 ############################################################################
 
 processFilterInput <- function(flt) {
-   # flt is a vector of 3-tuples - (filter type, filter column, filter value)
-   # see getColumFilterInputs in table.js
+  # flt is a vector of 3-tuples - (filter type, filter column, filter value)
+  # see getColumFilterInputs in table.js
 
-   n <- length(flt)
-   if(n == 0 || !((n %% 3) == 0)) {
-      ind <- NULL
-   } else {
-      # get index for filters that are NULL
-      ind <- which(!sapply(flt[seq(3, n, by = 3)], function(x) is.null(x) | x==""))
-   }
-   # remove those ones
-   if(length(ind) == 0) {
-      flt <- NULL
-   } else {
-      flt <- lapply(ind, function(x) flt[((x - 1)*3 + 1):(x*3)])
-   }
-   flt
+  n <- length(flt)
+  if(n == 0 || !((n %% 3) == 0)) {
+    ind <- NULL
+  } else {
+    # get index for filters that are NULL
+    ind <- which(!sapply(flt[seq(3, n, by = 3)], function(x) is.null(x) | x == ""))
+  }
+  # remove those ones
+  if(length(ind) == 0) {
+    flt <- NULL
+  } else {
+    flt <- lapply(ind, function(x) flt[((x - 1)*3 + 1):(x*3)])
+  }
+  flt
 }

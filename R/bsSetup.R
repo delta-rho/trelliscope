@@ -25,12 +25,12 @@ bsSetup <- function(
 ) {
 
 if(!is.null(css)) {
-   cssPath <- file.path("assets/css/", css)
-   if(!file.exists(cssPath))
-      stop("File", cssPath, "does not exist")
-   cssString <- paste("<link rel='stylesheet' type='text/css' href='", css, "'>", sep="")
+  cssPath <- file.path("assets/css/", css)
+  if(!file.exists(cssPath))
+    stop("File", cssPath, "does not exist")
+  cssString <- paste("<link rel='stylesheet' type='text/css' href='", css, "'>", sep="")
 } else {
-   cssString <- ""
+  cssString <- ""
 }
 
 # TODO: add javascript as well
@@ -49,35 +49,35 @@ preTOC <- paste("<!DOCTYPE html>
 		<script type='text/javascript' src='assets/js/notebook.js'></script>
 		<script type='text/javascript' src='assets/js/bootstrap.min.js'></script>
 
-	   <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css'>
-	   <link rel='stylesheet' type='text/css' href='assets/css/sidenav.css'>", cssString, "
+	  <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css'>
+	  <link rel='stylesheet' type='text/css' href='assets/css/sidenav.css'>", cssString, "
 
-      <link rel='stylesheet' href='assets/css/highlight/tomorrow.css'>
-      <script src='assets/js/highlight.pack.js'></script>
-      <script>hljs.initHighlightingOnLoad();</script>
+    <link rel='stylesheet' href='assets/css/highlight/tomorrow.css'>
+    <script src='assets/js/highlight.pack.js'></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
-      <script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/2.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
+    <script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/2.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>
 
 	<script type='text/javascript'>
 
 	$(document).ready(function() {
-	   tocOff = function() {
-	      $('#sidebar').hide()
-	      $('#content').removeClass('span9').addClass('span12')
-	      $('#content').css('margin-left', 0)
-	   }
-	   tocOn = function() {
-	      $('#sidebar').show()
-	      $('#content').removeClass('span12').addClass('span9')
-	      $('#content').css('margin-left', '21px')
-	   }
+	  tocOff = function() {
+	    $('#sidebar').hide()
+	    $('#content').removeClass('span9').addClass('span12')
+	    $('#content').css('margin-left', 0)
+	  }
+	  tocOn = function() {
+	    $('#sidebar').show()
+	    $('#content').removeClass('span12').addClass('span9')
+	    $('#content').css('margin-left', '21px')
+	  }
 		", ifelse(toc, "", "tocOff()"), "
 
 		if(document.URL.match('file:///') == null) {
-         $('.sslShiny').hide();
-      } else {
-         $('.ssShiny').hide();
-      }
+      $('.sslShiny').hide();
+    } else {
+      $('.ssShiny').hide();
+    }
 
 	});
 	</script>
@@ -85,37 +85,37 @@ preTOC <- paste("<!DOCTYPE html>
 	</head>
 	<body data-spy='scroll' data-offset='50' data-target='.sidebar-nav'>
 	<div class='navbar navbar-fixed-top'>
-	   <div class='navbar-inner'>
-	     <div class='container-fluid'>
-	       <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
-	         <span class='icon-bar'></span>
-	         <span class='icon-bar'></span>
-	         <span class='icon-bar'></span>
-	       </a>
-	       <a class='brand' href='#'>", title, "</a>
-          <div class='nav-collapse'>
-             <ul class='nav'>
-             <li class='mynavheadertext'>
-             <a href='#'><i class='icon-home'></i> Home</a>
-             </li>
-             <li class='dropdown mynavheadertext'>
-             <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon-list'></i> Pages <b class='caret'></b></a>
-             <ul class='dropdown-menu'>
-             ", pagesStr, "
-             </ul>
-             </li>
-             </ul>
-          </div>
-	     </div>
-	   </div>
+	  <div class='navbar-inner'>
+	    <div class='container-fluid'>
+	     <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+	      <span class='icon-bar'></span>
+	      <span class='icon-bar'></span>
+	      <span class='icon-bar'></span>
+	     </a>
+	     <a class='brand' href='#'>", title, "</a>
+       <div class='nav-collapse'>
+         <ul class='nav'>
+         <li class='mynavheadertext'>
+         <a href='#'><i class='icon-home'></i> Home</a>
+         </li>
+         <li class='dropdown mynavheadertext'>
+         <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon-list'></i> Pages <b class='caret'></b></a>
+         <ul class='dropdown-menu'>
+         ", pagesStr, "
+         </ul>
+         </li>
+         </ul>
+       </div>
+	    </div>
+	  </div>
 	 </div>
 
 	 <div class='container-fluid'>
-	   <div class='row-fluid'>
-	     <div class='span3' id='sidebar'>
-	       <div class='well sidebar-nav sidebar-nav-fixed'>
-	         <ul class='nav nav-list'>
-	           <li class='nav-header'>Table of Contents</li>
+	  <div class='row-fluid'>
+	    <div class='span3' id='sidebar'>
+	     <div class='well sidebar-nav sidebar-nav-fixed'>
+	      <ul class='nav nav-list'>
+	        <li class='nav-header'>Table of Contents</li>
 
 ", sep=""
 )
@@ -137,7 +137,7 @@ postContent <- paste("
   <hr>
 
   <footer class='footer'>
-    <p>&copy; ", author, " ", format(Sys.time(), "%Y"), ".</p>
+   <p>&copy; ", author, " ", format(Sys.time(), "%Y"), ".</p>
   </footer>
 
 </div><!--/.fluid-container-->

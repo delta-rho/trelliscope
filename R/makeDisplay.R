@@ -43,340 +43,340 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @export
 makeDisplay <- function(
-   data,
-   name,
-   group = "common",
-   desc = "",
-   height = 500,
-   width = 500,
-   panelFn = NULL, # function to be applied to each split,
-   lims = list(x = "free", y = "free", prepanelFn = NULL),
-   cogFn = NULL,
-   state = NULL,
-   preRender = FALSE,
-   cogConn = dfCogConn(),
-   output = NULL,
-   conn = getOption("vdbConn"),
-   verbose = TRUE,
-   keySig = NULL,
-   params = NULL,
-   packages = NULL,
-   control = NULL
+  data,
+  name,
+  group = "common",
+  desc = "",
+  height = 500,
+  width = 500,
+  panelFn = NULL, # function to be applied to each split,
+  lims = list(x = "free", y = "free", prepanelFn = NULL),
+  cogFn = NULL,
+  state = NULL,
+  preRender = FALSE,
+  cogConn = dfCogConn(),
+  output = NULL,
+  conn = getOption("vdbConn"),
+  verbose = TRUE,
+  keySig = NULL,
+  params = NULL,
+  packages = NULL,
+  control = NULL
 ) {
-   validateVdbConn(conn)
+  validateVdbConn(conn)
 
-   validateNameGroup(name, group)
+  validateNameGroup(name, group)
 
-   if(!inherits(data, "ddo")) {
-      stop("Input data must be an object of class 'ddo'")
-   }
+  if(!inherits(data, "ddo")) {
+    stop("Input data must be an object of class 'ddo'")
+  }
 
-   if(!preRender && !hasExtractableKV(data)) {
-      if(!inherits(data, "kvLocalDisk"))
-         stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender == FALSE.  Try calling makeExtractable() on the data.")
-   }
+  if(!preRender && !hasExtractableKV(data)) {
+    if(!inherits(data, "kvLocalDisk"))
+      stop("Subsets of this data cannot be extracted by key -- cannot create display using preRender == FALSE.  Try calling makeExtractable() on the data.")
+  }
 
-   vdbPrefix <- conn$path
+  vdbPrefix <- conn$path
 
-   # temporary location for display
-   tempPrefix <- tempfile()
-   dir.create(tempPrefix)
+  # temporary location for display
+  tempPrefix <- tempfile()
+  dir.create(tempPrefix)
 
-   dataConn <- getAttribute(data, "conn")
+  dataConn <- getAttribute(data, "conn")
 
-   # if no cognostics connection was specified, use cogDatConn
-   if(is.null(cogConn))
-      cogConn <- dfCogConn()
+  # if no cognostics connection was specified, use cogDatConn
+  if(is.null(cogConn))
+    cogConn <- dfCogConn()
 
-   if(!inherits(cogConn, "cogConn"))
-      stop("Argument 'cogConn' not valid")
+  if(!inherits(cogConn, "cogConn"))
+    stop("Argument 'cogConn' not valid")
 
-   # if pre-rendering images and no output is specified
-   # then store on disk in the VDB directory
-   if(preRender) {
-      if(is.null(output)) {
-         output <- localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE)
-      } else if(!inherits(output, "kvConnection")) {
-         stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output = NULL when pre-rendering.")
+  # if pre-rendering images and no output is specified
+  # then store on disk in the VDB directory
+  if(preRender) {
+    if(is.null(output)) {
+      output <- localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE)
+    } else if(!inherits(output, "kvConnection")) {
+      stop("You are pre-rendering panels, but did not specify a valid 'output' location for these.  It is best to leave output = NULL when pre-rendering.")
+    }
+  } else {
+    if(inherits(data, "kvMemory")) {
+      # if an in-memory data set is too large we want to put it on disk
+      if(object.size(data) > 50 * 1024^2)
+        data <- convert(data, localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
+    }
+
+    panelDataSource <- data
+  }
+
+  if(verbose) message("* Validating 'panelFn'...")
+  panelEx <- kvApply(panelFn, kvExample(data))
+
+  cogEx <- validateCogFn(data, cogFn, verbose)
+
+  if(is.null(desc) || is.na(desc))
+    desc <- "(no description)"
+
+  panelFnType <- getPanelFnType(panelEx)
+  class(panelFn) <- c("function", panelFnType)
+  lims <- validateLims(lims, data, panelFn, params, packages, verbose)
+
+  cogPre(cogConn, conn, group, name)
+
+  ## set up a mr job -- this job simply applies the
+  ## cognostics (and panel if preRender = TRUE) to each subset
+  map <- expression({
+    cogRes <- list()
+    for(i in seq_along(map.keys)) {
+      # make plot if you need to
+      if(preRender) {
+        ff <- tempfile()
+        makePNG(dat = list(map.keys[[i]], map.values[[i]]),
+          panelFn = panelFn, file = ff, width = width,
+          height = height, lims = lims)
+        collect(map.keys[[i]], encodePNG(ff))
       }
-   } else {
-      if(inherits(data, "kvMemory")) {
-         # if an in-memory data set is too large we want to put it on disk
-         if(object.size(data) > 50 * 1024^2)
-            data <- convert(data, localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
+      cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
+      collect("TRS___panelkey", cogRes[[i]]$panelKey) # to build key signature
+    }
+    cogEmit(cogConn, cogRes, collect, conn, group, name)
+  })
+
+  # rbind the results
+  reduce <- expression(
+    pre = {
+      res <- NULL
+    },
+    reduce = {
+      if(reduce.key == "TRS___cog") {
+        res <- cogCollect(cogConn, res, reduce.values, conn, group, name)
+      } else if(reduce.key == "TRS___panelkey") {
+        res <- sort(c(res, do.call(c, reduce.values)))
+        res <- c(head(res, 100), tail(res, 100))
+      } else {
+        collect(reduce.key, reduce.values)
       }
-
-      panelDataSource <- data
-   }
-
-   if(verbose) message("* Validating 'panelFn'...")
-   panelEx <- kvApply(panelFn, kvExample(data))
-
-   cogEx <- validateCogFn(data, cogFn, verbose)
-
-   if(is.null(desc) || is.na(desc))
-      desc <- "(no description)"
-
-   panelFnType <- getPanelFnType(panelEx)
-   class(panelFn) <- c("function", panelFnType)
-   lims <- validateLims(lims, data, panelFn, params, packages, verbose)
-
-   cogPre(cogConn, conn, group, name)
-
-   ## set up a mr job -- this job simply applies the
-   ## cognostics (and panel if preRender = TRUE) to each subset
-   map <- expression({
-      cogRes <- list()
-      for(i in seq_along(map.keys)) {
-         # make plot if you need to
-         if(preRender) {
-            ff <- tempfile()
-            makePNG(dat = list(map.keys[[i]], map.values[[i]]),
-               panelFn = panelFn, file = ff, width = width,
-               height = height, lims = lims)
-            collect(map.keys[[i]], encodePNG(ff))
-         }
-         cogRes[[i]] <- applyCogFn(cogFn, list(map.keys[[i]], map.values[[i]]), dataConn)
-         collect("TRS___panelkey", cogRes[[i]]$panelKey) # to build key signature
+    },
+    post = {
+      if(reduce.key %in% c("TRS___cog", "TRS___panelkey")) {
+        collect(reduce.key, res)
       }
-      cogEmit(cogConn, cogRes, collect, conn, group, name)
-   })
+    }
+  )
 
-   # rbind the results
-   reduce <- expression(
-      pre = {
-         res <- NULL
-      },
-      reduce = {
-         if(reduce.key == "TRS___cog") {
-            res <- cogCollect(cogConn, res, reduce.values, conn, group, name)
-         } else if(reduce.key == "TRS___panelkey") {
-            res <- sort(c(res, do.call(c, reduce.values)))
-            res <- c(head(res, 100), tail(res, 100))
-         } else {
-            collect(reduce.key, reduce.values)
-         }
-      },
-      post = {
-         if(reduce.key %in% c("TRS___cog", "TRS___panelkey")) {
-            collect(reduce.key, res)
-         }
-      }
-   )
+  parList <- list(
+    dataConn   = dataConn,
+    group     = group,
+    name      = name,
+    preRender  = preRender,
+    cogConn    = cogConn,
+    panelFn    = panelFn,
+    cogFn     = cogFn,
+    lims      = lims,
+    conn      = conn,
+    height    = height,
+    width     = width
+  )
 
-   parList <- list(
-      dataConn    = dataConn,
-      group       = group,
-      name        = name,
-      preRender   = preRender,
-      cogConn     = cogConn,
-      panelFn     = panelFn,
-      cogFn       = cogFn,
-      lims        = lims,
-      conn        = conn,
-      height      = height,
-      width       = width
-   )
+  panelGlobals <- drGetGlobals(panelFn)
+  cogGlobals <- drGetGlobals(cogFn)
 
-   panelGlobals <- drGetGlobals(panelFn)
-   cogGlobals <- drGetGlobals(cogFn)
+  packages <- c(packages, "trelliscope")
+  packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
 
-   packages <- c(packages, "trelliscope")
-   packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
+  globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
 
-   globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+  if(length(params) > 0)
+    for(pnm in names(params))
+      globalVarList[[pnm]] <- params[[pnm]]
 
-   if(length(params) > 0)
-      for(pnm in names(params))
-         globalVarList[[pnm]] <- params[[pnm]]
+  parList <- c(parList, globalVarList)
+  nms <- names(parList)
+  parList <- parList[which(!duplicated(nms))]
 
-   parList <- c(parList, globalVarList)
-   nms <- names(parList)
-   parList <- parList[which(!duplicated(nms))]
+  jobRes <- mrExec(data,
+    map    = map,
+    reduce  = reduce,
+    output  = output,
+    control  = control,
+    params  = parList,
+    packages = packages
+  )
 
-   jobRes <- mrExec(data,
-      map      = map,
-      reduce   = reduce,
-      output   = output,
-      control  = control,
-      params   = parList,
-      packages = packages
-   )
+  tryRes <- try({
+  if(preRender)
+    panelDataSource <- jobRes
 
-   tryRes <- try({
-   if(preRender)
-      panelDataSource <- jobRes
+  # read in cognostics
+  cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
 
-   # read in cognostics
-   cogDatConn <- cogFinal(cogConn, jobRes, conn, group, name, cogEx)
+  # get panelKey "signature"
+  if(!is.null(keySig)) {
+    if(!is.character(keySig)) {
+      message("User-defined 'keySig' is not a string - converting it to one...")
+      keySig <- digest(keySig)
+    }
+  } else {
+    keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
+  }
 
-   # get panelKey "signature"
-   if(!is.null(keySig)) {
-      if(!is.character(keySig)) {
-         message("User-defined 'keySig' is not a string - converting it to one...")
-         keySig <- digest(keySig)
-      }
-   } else {
-      keySig <- digest(jobRes[["TRS___panelkey"]][[2]])
-   }
+  modTime <- Sys.time()
 
-   modTime <- Sys.time()
+  if(verbose)
+    message("* Storing display object...")
 
-   if(verbose)
-      message("* Storing display object...")
+  cogInfo <- getCogInfo(cogEx)
+  cogDistns <- getCogDistns(cogDatConn, cogInfo)
 
-   cogInfo <- getCogInfo(cogEx)
-   cogDistns <- getCogDistns(cogDatConn, cogInfo)
+  # some back ends (like RHIPE) might need to store environment variables
+  # so that R knows how to talk to the back end
+  envs <- NULL
 
-   # some back ends (like RHIPE) might need to store environment variables
-   # so that R knows how to talk to the back end
-   envs <- NULL
+  if(inherits(panelDataSource, "kvHDFS")) {
+    envs <- Sys.getenv()
+    envs <- as.list(envs[grepl("HADOOP", names(envs))])
+  }
 
-   if(inherits(panelDataSource, "kvHDFS")) {
-      envs <- Sys.getenv()
-      envs <- as.list(envs[grepl("HADOOP", names(envs))])
-   }
+  displayObj <- list(
+    name = name,
+    group = group,
+    desc = desc,
+    preRender = preRender,
+    panelFn = panelFn,
+    panelFnType = panelFnType,
+    panelDataSource = panelDataSource,
+    cogFn = cogFn,
+    n = getAttribute(data, "nDiv"),
+    cogDatConn = cogDatConn,
+    cogInfo = cogInfo,
+    cogDistns = cogDistns,
+    updated = modTime,
+    keySig = keySig,
+    height = height,
+    width = width,
+    lims = lims,
+    relatedData = globalVarList,
+    relatedPackages = packages,
+    envs = envs
+  )
+  class(displayObj) <- "displayObj"
 
-   displayObj <- list(
-      name = name,
+  if(!is.null(state))
+    displayObj$state <- validateState(state, name, group, displayObj)
+
+  save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+
+  # make thumbnail
+  message("* Plotting thumbnail...")
+  suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
+  # small thumbnail
+  makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
+  })
+
+  if(inherits(tryRes, "try-error")) {
+    stop("The above error(s) occurred after making the display.", call. = FALSE)
+  } else {
+    if(verbose)
+      message("* Updating displayList...")
+
+    updateDisplayList(list(
       group = group,
+      name = name,
       desc = desc,
-      preRender = preRender,
-      panelFn = panelFn,
-      panelFnType = panelFnType,
-      panelDataSource = panelDataSource,
-      cogFn = cogFn,
       n = getAttribute(data, "nDiv"),
-      cogDatConn = cogDatConn,
-      cogInfo = cogInfo,
-      cogDistns = cogDistns,
-      updated = modTime,
-      keySig = keySig,
+      panelFnType = panelFnType,
+      preRender = preRender,
+      dataClass = tail(class(data), 1),
+      cogClass = class(cogConn)[1],
       height = height,
       width = width,
-      lims = lims,
-      relatedData = globalVarList,
-      relatedPackages = packages,
-      envs = envs
-   )
-   class(displayObj) <- "displayObj"
+      updated = modTime,
+      keySig = keySig
+    ), conn)
 
-   if(!is.null(state))
-      displayObj$state <- validateState(state, name, group, displayObj)
+    # get display prefix (and move old display to backup if it already exists)
+    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
+    checkDisplayPath(displayPrefix, verbose)
 
-   save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+    # Move newly created vdb files to the display folder
+    renameVerify <- file.rename(dir(tempPrefix, full.names = TRUE), file.path(displayPrefix, dir(tempPrefix)))
 
-   # make thumbnail
-   message("* Plotting thumbnail...")
-   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
-   # small thumbnail
-   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
-   })
+    if(!all(renameVerify)) {
+      stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
+    }
 
-   if(inherits(tryRes, "try-error")) {
-      stop("The above error(s) occurred after making the display.", call. = FALSE)
-   } else {
-      if(verbose)
-         message("* Updating displayList...")
+    # Remove the temporary directory that contained the vdb objects
+    if(unlink(tempPrefix, recursive = TRUE)) {
+      warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
+    }
 
-      updateDisplayList(list(
-         group = group,
-         name = name,
-         desc = desc,
-         n = getAttribute(data, "nDiv"),
-         panelFnType = panelFnType,
-         preRender = preRender,
-         dataClass = tail(class(data), 1),
-         cogClass = class(cogConn)[1],
-         height = height,
-         width = width,
-         updated = modTime,
-         keySig = keySig
-      ), conn)
+  }
 
-      # get display prefix (and move old display to backup if it already exists)
-      displayPrefix <- file.path(vdbPrefix, "displays", group, name)
-      checkDisplayPath(displayPrefix, verbose)
-
-      # Move newly created vdb files to the display folder
-      renameVerify <- file.rename(dir(tempPrefix, full.names = TRUE), file.path(displayPrefix, dir(tempPrefix)))
-
-      if(!all(renameVerify)) {
-         stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
-      }
-
-      # Remove the temporary directory that contained the vdb objects
-      if(unlink(tempPrefix, recursive = TRUE)) {
-         warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
-      }
-
-   }
-
-   return(invisible(displayObj))
+  return(invisible(displayObj))
 }
 
 updateDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), ...) {
-   args <- list(...)
-   nms <- names(args)
+  args <- list(...)
+  nms <- names(args)
 
-   updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
+  updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
 
-   notup <- setdiff(nms, updateable)
-   if(length(notup) > 0) {
-      message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
-   }
+  notup <- setdiff(nms, updateable)
+  if(length(notup) > 0) {
+    message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
+  }
 
-   disp <- getDisplay(name, group, conn)
+  disp <- getDisplay(name, group, conn)
 
-   noPreRend <- c("panelFn", "width", "height")
-   if(disp$preRender) {
-      if(nms %in% noPreRend)
-         message("note: preRender is TRUE, so the following cannot be set: ",
-            paste(noPreRend, collapse = ", "))
-      nms <- setdiff(nms, noPreRend)
-   }
+  noPreRend <- c("panelFn", "width", "height")
+  if(disp$preRender) {
+    if(nms %in% noPreRend)
+      message("note: preRender is TRUE, so the following cannot be set: ",
+        paste(noPreRend, collapse = ", "))
+    nms <- setdiff(nms, noPreRend)
+  }
 
-   for(cur in c("desc", "width", "height", "keySig")) {
-      if(cur %in% nms)
-         disp[[cur]] <- args[[cur]]
-   }
+  for(cur in c("desc", "width", "height", "keySig")) {
+    if(cur %in% nms)
+      disp[[cur]] <- args[[cur]]
+  }
 
-   if("panelFn" %in% nms) {
-      # panelGlobals <- drGetGlobals(args$panelFn)
-      # cogGlobals <- drGetGlobals(cogFn)
-      # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
-      # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
-   }
+  if("panelFn" %in% nms) {
+    # panelGlobals <- drGetGlobals(args$panelFn)
+    # cogGlobals <- drGetGlobals(cogFn)
+    # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
+    # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+  }
 
-   displayObj <- disp
-   # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+  displayObj <- disp
+  # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
 
-   updateDisplayList(list(
-      group = disp$group,
-      name = disp$name,
-      desc = disp$desc,
-      n = disp$n,
-      panelFnType = disp$panelFnType,
-      preRender = disp$preRender,
-      dataClass = tail(class(disp$panelDataSource), 1),
-      cogClass = class(disp$cogDatConn)[1],
-      height = disp$height,
-      width = disp$width,
-      updated = Sys.time(),
-      keySig = disp$keySig
-   ), conn)
+  updateDisplayList(list(
+    group = disp$group,
+    name = disp$name,
+    desc = disp$desc,
+    n = disp$n,
+    panelFnType = disp$panelFnType,
+    preRender = disp$preRender,
+    dataClass = tail(class(disp$panelDataSource), 1),
+    cogClass = class(disp$cogDatConn)[1],
+    height = disp$height,
+    width = disp$width,
+    updated = Sys.time(),
+    keySig = disp$keySig
+  ), conn)
 }
 
 
 
 ## remove all _bak directories
 cleanupDisplays <- function(conn = getOption("vdbConn")) {
-   validateVdbConn(conn)
+  validateVdbConn(conn)
 
-   ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
-   for(f in ff) {
-      unlink(f, recursive = TRUE)
-   }
+  ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
+  for(f in ff) {
+    unlink(f, recursive = TRUE)
+  }
 }
 
 
