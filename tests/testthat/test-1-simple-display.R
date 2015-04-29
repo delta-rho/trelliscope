@@ -47,9 +47,6 @@ library(Rhipe)
 rhinit()
 
 test_that("makeDisplay works with RHIPE", {
-   library(Rhipe)
-   rhinit()
-
    try(rhdel("/tmp/test_bySite"), silent = TRUE)
 
    bySiteRh <- convert(bySite, hdfsConn("/tmp/test_bySite", autoYes = TRUE))
