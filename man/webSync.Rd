@@ -28,6 +28,6 @@ This requires rsync to be installed on your machine.  If you are syncing via ssh
 Ryan Hafen
 }
 \seealso{
-\code{\link{typeset}}, \code{\link{webConn}}, \code{\link{syncLocalData}}
+\code{\link{webConn}}, \code{\link{syncLocalData}}
 }
 

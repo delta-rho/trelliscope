@@ -70,21 +70,22 @@ prepanel <- function(
   if(inherits(p, "trellis")) {
     prepanelFnIsTrellis <- TRUE
     if(verbose)
-      message("Using 'trellis' panelFn to determine limits... dx and dy will not be computed.")
+      message("Using 'trellis' panelFn to determine limits...")
     doBanking <- FALSE
   } else if(inherits(p, "ggplot")) {
     prepanelFnIsGgplot <- TRUE
     if(verbose)
-      message("Using 'ggplot' panelFn to determine limits... dx and dy will not be computed.")
+      message("Using 'ggplot' panelFn to determine limits...")
     doBanking <- FALSE
   } else {
     if(is.null(p$xlim) || is.null(p$ylim))
       stop("'prepanelFn' must either return an object of class 'trellis' or 'ggplot' or return a list with elements 'xlim' and 'ylim'.")
-    if(is.null(p$dx) || is.null(p$dy)) {
-      if(verbose)
-        message("dx or dy (or both) were not specified - not computing banking.")
-      doBanking <- FALSE
-    }
+    doBanking <- FALSE
+    # if(is.null(p$dx) || is.null(p$dy)) {
+    #   if(verbose)
+    #     message("dx or dy (or both) were not specified - not computing banking.")
+    #   doBanking <- FALSE
+    # }
   }
 
   map <- expression({

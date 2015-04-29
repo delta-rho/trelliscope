@@ -16,7 +16,7 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{typeset}}, \code{\link{webConn}}, \code{\link{syncLocalData}}
+#' @seealso \code{\link{webConn}}, \code{\link{syncLocalData}}
 #'
 #' @export
 webSync <- function(
