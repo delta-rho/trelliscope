@@ -1,6 +1,9 @@
-Version 0.8.2.2
+Version 0.8.2.3
 ---------------------------------------------------------------------
 
+- remove notebook functions (to be replaced by rmarkdown embedding functions)
+- add RHIPE tests
+- update formatting
 - fix problem with loading RHIPE on viewer server
 - fix problem with filter due to js error
 - update handling of global variables
