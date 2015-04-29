@@ -24,22 +24,22 @@ Validate state parameters for a Trelliscope display
 \details{
 Trelliscope allows you to specify either a default state in \code{\link{makeDisplay}} or specify the state of the display when you call \code{\link{view}}.  Aspects of the display that can be controlled with the state include:
 \itemize{
-  \item labels a vector of names of cognostics to be shown as labels underneath each panel.  If not specified, the default is to show labels for any of the splitting variables that created the partition of the data being plotted.
-  \item layout a list with optional elements \code{nrow}, \code{ncol}, and \code{arrange}.  \code{nrow} and \code{ncol} specify the arrangement of the panels into rows and columns (\code{nrow = 1} and \code{ncol = 1} are defaults), and \code{arrange} can be either "row" or "col" and specified whether to sort the panels by row or by column ("row" is default)
-  \item sort a named list where each name corresponds to a cognostic name and the value is either "asc" or "desc" for sorting in ascending or descending order.  The order in which sorting is applied to each variable is according to the order of the variables specified.
-  \item filter a named list where each name corresponds to a cognostic name and the value is a specification of either "regex" or "select" for categorical variables, or a range, "from" and "to", for quantitative variables.  For a "regex", a simple regular expression string is specified, and the filter finds all matches for the regular expression against the variable.  For "select" a vector of strings is specified, and all exact matches are returned.  For the range filter, all values of the specified variable within the range "from" and "to" are returned.  If either "from" or "to" are omitted, they are treated as \code{-Inf} and \code{Inf} respectively.
+ \item labels a vector of names of cognostics to be shown as labels underneath each panel.  If not specified, the default is to show labels for any of the splitting variables that created the partition of the data being plotted.
+ \item layout a list with optional elements \code{nrow}, \code{ncol}, and \code{arrange}.  \code{nrow} and \code{ncol} specify the arrangement of the panels into rows and columns (\code{nrow = 1} and \code{ncol = 1} are defaults), and \code{arrange} can be either "row" or "col" and specified whether to sort the panels by row or by column ("row" is default)
+ \item sort a named list where each name corresponds to a cognostic name and the value is either "asc" or "desc" for sorting in ascending or descending order.  The order in which sorting is applied to each variable is according to the order of the variables specified.
+ \item filter a named list where each name corresponds to a cognostic name and the value is a specification of either "regex" or "select" for categorical variables, or a range, "from" and "to", for quantitative variables.  For a "regex", a simple regular expression string is specified, and the filter finds all matches for the regular expression against the variable.  For "select" a vector of strings is specified, and all exact matches are returned.  For the range filter, all values of the specified variable within the range "from" and "to" are returned.  If either "from" or "to" are omitted, they are treated as \code{-Inf} and \code{Inf} respectively.
 }
 }
 \examples{
 state <- list(
-   sort = list(state = "desc", county = "asc"),
-   filter = list(
-      county = list(regex = "Ben"),
-      state = list(select = c("OR", "WA")),
-      meanList = list(from = 50, to = 150)
-   ),
-   layout = list(nrow = 2, ncol = 4),
-   labels = c("county", "state")
+  sort = list(state = "desc", county = "asc"),
+  filter = list(
+    county = list(regex = "Ben"),
+    state = list(select = c("OR", "WA")),
+    meanList = list(from = 50, to = 150)
+  ),
+  layout = list(nrow = 2, ncol = 4),
+  labels = c("county", "state")
 )
 validateState(state)
 }
