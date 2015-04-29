@@ -70,6 +70,7 @@ currentDisplay <- reactive({
 
       # handle RHIPE
       if(inherits(cdo$panelDataSource, "kvHDFS")) {
+         if(!"Rhipe" %in% loadedNamespaces())
          if(!isNamespaceLoaded("Rhipe")) {
             if(!is.null(cdo$envs))
               try(do.call(Sys.setenv, cdo$envs))
