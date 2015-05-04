@@ -66,7 +66,7 @@ prepanel <- function(
 
   if(verbose)
     message("Testing 'prepanelFn' on a subset...")
-  p <- kvApply(prepanelFn, kvExample(data))
+  p <- kvApply(kvExample(data), prepanelFn)$value
   if(inherits(p, "trellis")) {
     prepanelFnIsTrellis <- TRUE
     if(verbose)
@@ -98,7 +98,7 @@ prepanel <- function(
         # temporarily remove axis padding
         curOption <- lattice.getOption("axis.padding")$numeric
         lattice.options(axis.padding = list(numeric = 0))
-        p <- kvApply(prepanelFn, list(k, r))
+        p <- kvApply(list(k, r), prepanelFn)$value
         if(all(is.na(p$panel.args[[1]]$x)) || all(is.na(p$panel.args[[1]]$y))) {
           xr <- c(NA, NA)
           yr <- c(NA, NA)
@@ -115,7 +115,7 @@ prepanel <- function(
         # a$panel$ranges[[1]]$x.range
         # a$panel$ranges[[1]]$y.range
       } else if(prepanelFnIsGgplot) {
-        p <- kvApply(prepanelFn, list(k, r))
+        p <- kvApply(list(k, r), prepanelFn)$value
         gglims <- try(ggplot_build(p)$panel$ranges, silent = TRUE)
 
         if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
@@ -126,7 +126,7 @@ prepanel <- function(
           yr <- c(NA, NA)
         }
       } else {
-        pre <- kvApply(prepanelFn, list(k, r))
+        pre <- kvApply(list(k, r), prepanelFn)$value
         xr <- pre$xlim
         yr <- pre$ylim
 

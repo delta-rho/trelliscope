@@ -42,6 +42,7 @@ if(getRversion() >= "2.15.1") {
 #' # see docs
 #'
 #' @export
+#' @importFrom digest digest
 makeDisplay <- function(
   data,
   name,
@@ -110,7 +111,7 @@ makeDisplay <- function(
   }
 
   if(verbose) message("* Validating 'panelFn'...")
-  panelEx <- kvApply(panelFn, kvExample(data))
+  panelEx <- kvApply(kvExample(data), panelFn)$value
 
   cogEx <- validateCogFn(data, cogFn, verbose)
 

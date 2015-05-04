@@ -50,7 +50,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
       eval(dat)
     } else {
       # plot objects such as trellis or lattice
-      tmp <- kvApply(panelFn, dat)
+      tmp <- kvApply(dat, panelFn)$value
 
       if(!is.null(lims)) {
         if(inherits(tmp, "trellis")) {

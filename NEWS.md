@@ -1,6 +1,7 @@
-Version 0.8.2.3
+Version 0.8.2.4
 ---------------------------------------------------------------------
 
+- update to be compatible with datadr `kvApply()` changes
 - remove notebook functions (to be replaced by rmarkdown embedding functions)
 - add RHIPE tests
 - update formatting
