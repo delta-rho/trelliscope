@@ -19,6 +19,7 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @export
 #' @importFrom shiny runApp
+#' @import hexbin fastICA jsonlite
 view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = 8100L) {
 
   port <- as.integer(port)

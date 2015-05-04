@@ -28,15 +28,12 @@ Depends:
     ggplot2
 Imports:
     data.table,
-    grid,
     base64enc,
-    knitr,
-    markdown,
     shiny (>= 0.10.0),
     digest,
-    hexbin,
     jsonlite,
     fastICA,
+    hexbin,
     png
 Suggests:
     Cairo,

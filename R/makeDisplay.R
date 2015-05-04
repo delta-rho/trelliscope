@@ -43,6 +43,7 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @export
 #' @importFrom digest digest
+#' @importFrom data.table rbindlist
 makeDisplay <- function(
   data,
   name,

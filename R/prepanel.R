@@ -43,6 +43,7 @@ if(getRversion() >= "2.15.1") {
 #' plot(irisPre)#' }
 #'
 #' @export
+#' @importFrom data.table rbindlist
 prepanel <- function(
   data,
   prepanelFn = NULL,
