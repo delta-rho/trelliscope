@@ -42,6 +42,8 @@ if(getRversion() >= "2.15.1") {
 #' # see docs
 #'
 #' @export
+#' @importFrom digest digest
+#' @importFrom data.table rbindlist
 makeDisplay <- function(
   data,
   name,
@@ -110,7 +112,7 @@ makeDisplay <- function(
   }
 
   if(verbose) message("* Validating 'panelFn'...")
-  panelEx <- kvApply(panelFn, kvExample(data))
+  panelEx <- kvApply(kvExample(data), panelFn)$value
 
   cogEx <- validateCogFn(data, cogFn, verbose)
 

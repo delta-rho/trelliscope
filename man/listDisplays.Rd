@@ -16,6 +16,6 @@ List displays in a VDB.
 Ryan Hafen
 }
 \seealso{
-\code{\link{makeDisplay}}, \code{\link{addDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
+\code{\link{makeDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
 }
 

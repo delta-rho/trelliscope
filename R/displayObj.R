@@ -154,7 +154,7 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{makeDisplay}}, \code{\link{addDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
+#' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
 #' @export
 listDisplays <- function(conn = getOption("vdbConn")) {
   validateVdbConn(conn, mustHaveDisplays = TRUE)

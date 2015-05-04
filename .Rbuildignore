@@ -13,3 +13,4 @@ _ignore
 \.Rapp\.history
 package.json
 inst/trelliscopeViewer/www/widgetassets/*
+rhipe-java*.log

@@ -3,13 +3,13 @@
 \docType{data}
 \name{batting}
 \alias{batting}
-\title{Batting Title TODO}
+\title{Batting Data}
 \format{A data frame with 1406 rows and 22 variables}
 \usage{
 data(batting)
 }
 \description{
-Batting details TODO
+Batting data
 }
 \details{
 \itemize{

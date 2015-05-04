@@ -43,6 +43,7 @@ if(getRversion() >= "2.15.1") {
 #' plot(irisPre)#' }
 #'
 #' @export
+#' @importFrom data.table rbindlist
 prepanel <- function(
   data,
   prepanelFn = NULL,
@@ -66,25 +67,26 @@ prepanel <- function(
 
   if(verbose)
     message("Testing 'prepanelFn' on a subset...")
-  p <- kvApply(prepanelFn, kvExample(data))
+  p <- kvApply(kvExample(data), prepanelFn)$value
   if(inherits(p, "trellis")) {
     prepanelFnIsTrellis <- TRUE
     if(verbose)
-      message("Using 'trellis' panelFn to determine limits... dx and dy will not be computed.")
+      message("Using 'trellis' panelFn to determine limits...")
     doBanking <- FALSE
   } else if(inherits(p, "ggplot")) {
     prepanelFnIsGgplot <- TRUE
     if(verbose)
-      message("Using 'ggplot' panelFn to determine limits... dx and dy will not be computed.")
+      message("Using 'ggplot' panelFn to determine limits...")
     doBanking <- FALSE
   } else {
     if(is.null(p$xlim) || is.null(p$ylim))
       stop("'prepanelFn' must either return an object of class 'trellis' or 'ggplot' or return a list with elements 'xlim' and 'ylim'.")
-    if(is.null(p$dx) || is.null(p$dy)) {
-      if(verbose)
-        message("dx or dy (or both) were not specified - not computing banking.")
-      doBanking <- FALSE
-    }
+    doBanking <- FALSE
+    # if(is.null(p$dx) || is.null(p$dy)) {
+    #   if(verbose)
+    #     message("dx or dy (or both) were not specified - not computing banking.")
+    #   doBanking <- FALSE
+    # }
   }
 
   map <- expression({
@@ -97,7 +99,7 @@ prepanel <- function(
         # temporarily remove axis padding
         curOption <- lattice.getOption("axis.padding")$numeric
         lattice.options(axis.padding = list(numeric = 0))
-        p <- kvApply(prepanelFn, list(k, r))
+        p <- kvApply(list(k, r), prepanelFn)$value
         if(all(is.na(p$panel.args[[1]]$x)) || all(is.na(p$panel.args[[1]]$y))) {
           xr <- c(NA, NA)
           yr <- c(NA, NA)
@@ -114,7 +116,7 @@ prepanel <- function(
         # a$panel$ranges[[1]]$x.range
         # a$panel$ranges[[1]]$y.range
       } else if(prepanelFnIsGgplot) {
-        p <- kvApply(prepanelFn, list(k, r))
+        p <- kvApply(list(k, r), prepanelFn)$value
         gglims <- try(ggplot_build(p)$panel$ranges, silent = TRUE)
 
         if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
@@ -125,7 +127,7 @@ prepanel <- function(
           yr <- c(NA, NA)
         }
       } else {
-        pre <- kvApply(prepanelFn, list(k, r))
+        pre <- kvApply(list(k, r), prepanelFn)$value
         xr <- pre$xlim
         yr <- pre$ylim
 

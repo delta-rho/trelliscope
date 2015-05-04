@@ -275,7 +275,7 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
     }
   }
   if(!is.null(cogFn))
-    res <- c(res, kvApply(cogFn, kvSubset))
+    res <- c(res, kvApply(kvSubset, cogFn)$value)
 
   res
 }

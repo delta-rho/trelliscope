@@ -3,13 +3,13 @@
 \docType{data}
 \name{airplane}
 \alias{airplane}
-\title{Airplane TODO}
+\title{Airplane Data}
 \format{A data frame with 1479 rows and 47 variables}
 \usage{
 data(airplane)
 }
 \description{
-Airplane details TODO
+Airplane data
 }
 \details{
 \itemize{

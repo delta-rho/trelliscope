@@ -327,7 +327,7 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims
 
 getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
 
-  p <- kvApply(panelFn, x)
+  p <- kvApply(x, panelFn)$value
   p <- set_options(p, width = width, height = height)
 
   list(
@@ -339,7 +339,7 @@ getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, 
 
 getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
 
-  p <- kvApply(panelFn, x)
+  p <- kvApply(x, panelFn)$value
   p$set(width = width, height = height)
   # paste(capture.output(p$print()), collapse = '\n')
 
@@ -369,7 +369,7 @@ getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims
 }
 
 getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-  p <- kvApply(panelFn, x)
+  p <- kvApply(x, panelFn)$value
   p$width <- width
   p$height <- height
   w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
