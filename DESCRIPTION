@@ -21,9 +21,8 @@ BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
-    R (>= 2.15.1),
     base,
-    datadr (>= 0.7.3),
+    datadr (>= 0.7.5.7),
     lattice (>= 0.20-23),
     ggplot2
 Imports:
