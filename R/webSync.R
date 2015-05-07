@@ -168,7 +168,7 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
 #'
 #' Deploy VDB to shinyapps.io
 #'
-#' @param vdbConn VDB connection settings
+#' @param vdbConn A vdbConn object containing the VDB connection settings
 #' @param appName name of application (app will be available at https://[account].shinyapps.io/[appName]/) - if not supplied, will use the name of VDB connection
 #' @param account passed to \code{shinyapps::configureApp}
 #' @param redeploy passed to \code{shinyapps::configureApp}
@@ -188,17 +188,43 @@ deployToShinyApps <- function(
   appName = NULL, account = NULL, redeploy = TRUE,
   size = NULL, instances = NULL, quiet = FALSE) {
 
+  # Verify shinyapps package is installed
   if (!requireNamespace("shinyapps", quietly = TRUE)) {
     stop("The 'shinyapps' package is needed for this function to work. Please install it. (see here: http://shiny.rstudio.com/articles/shinyapps.html)",
       call. = FALSE)
   }
 
+  # Check arguments
+  stopifnot(inherits(vdbConn, "vdbConn"),
+            is.logical(redeploy),
+            is.logical(quiet))
+
+  # Get the appName
   if(is.null(appName)) {
     if(!is.null(vdbConn$name)) {
       appName <- vdbConn$name
     } else {
       stop("Must either supply 'appName' or set the name of your VDB in vdbConn()")
     }
+  }
+
+  # Checks for the appName
+  stopifnot(is.character(appName))
+            
+  # Substitute spaces with hyphens
+  if(grepl("\\ ", appName)) {
+    message("*** Spaces in 'appName' will be replaced with hyphens")
+    appName <- gsub("\\ ", "-", appName)      
+  }
+
+  # Verify appName has at least 4 characters, per the error message returned by shinyapps::deployApp()
+  if(nchar(appName) < 4) {
+    stop("'appName' must be at least four characters")
+  }
+
+  # Check for reserved characters, per the error message returned by shinyapps::deployApp()
+  if(grepl("[^-a-zA-Z0-9_]", appName)) {
+    stop("'appName' may only contain letters, numbers, hyphens, and underscores")
   }
 
   message("*** Copying latest viewer to vdb directory...")
