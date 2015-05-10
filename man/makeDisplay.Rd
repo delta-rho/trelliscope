@@ -45,7 +45,7 @@ converted to underscores).  Defaults to "common"}
 
 \item{keySig}{a user-defined key signature (string - see details)}
 
-\item{params}{a named list of parameters external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
+\item{params}{a named list of objects external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)}
 
 \item{packages}{a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)}
 

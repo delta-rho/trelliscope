@@ -1,14 +1,27 @@
+Version 0.8.2.5
+---------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- Documentation edits and argument checks added to `deployToShinyApps()` and `vdbConn()`
+- Documentation edits to `makeDisplay()`
+
 Version 0.8.2.4
 ---------------------------------------------------------------------
+
+FEATURES / CHANGES
 
 - update to be compatible with datadr `kvApply()` changes
 - remove notebook functions (to be replaced by rmarkdown embedding functions)
 - add RHIPE tests
 - update formatting
-- fix problem with loading RHIPE on viewer server
-- fix problem with filter due to js error
 - update handling of global variables
 - add experimental `qtrellis()` function for quick generation of trelliscope displays
+
+BUG FIXES
+
+- fix problem with loading RHIPE on viewer server
+- fix problem with filter due to js error
 - fix bug in adding default state in `makeDisplay()`
 
 Version 0.8.1
