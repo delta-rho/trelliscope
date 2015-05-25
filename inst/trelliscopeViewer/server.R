@@ -45,4 +45,6 @@ shinyServer(function(input, output, session) {
   source("server/cogState.R", local = TRUE)
   source("server/cogTable.R", local = TRUE)
   source("server/panelTable.R", local = TRUE)
+  source("server/misc.R", local = TRUE)
 })
+

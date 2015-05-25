@@ -13,6 +13,12 @@ function d3footPlot(data) {
 
   var name = data.name;
   var type = data.type;
+  // if(typeof data.log === 'undefined') {
+  //   var log = "NA"
+  // } else {
+  //   var log = data.log[0];
+  // }
+
   var plotType = data.plotType;
 
   var barClass = type == "numeric" ? "ct-bar-num" : "ct-bar-char";

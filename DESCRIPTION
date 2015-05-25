@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.2.4
-Date: 2015-05-04
+Version: 0.8.3
+Date: 2015-05-21
 Authors@R: person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre"))
 Maintainer: Ryan Hafen <rhafen@gmail.com>
 Description: Trelliscope provides a way to create, organize, and view
@@ -28,7 +28,7 @@ Depends:
 Imports:
     data.table,
     base64enc,
-    shiny (>= 0.10.0),
+    shiny (>= 0.12.0),
     digest,
     jsonlite,
     fastICA,

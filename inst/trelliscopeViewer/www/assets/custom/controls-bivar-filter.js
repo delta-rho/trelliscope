@@ -31,6 +31,8 @@ bivarFilterLocalSave = function() {
   // save current filter extent to filterData
   var xVar = $("#bivar-x-filter-select li.active").data("name");
   var yVar = $("#bivar-y-filter-select li.active").data("name");
+  var xLog = $("#bivar-x-filter-select li.active").data("log");
+  var yLog = $("#bivar-y-filter-select li.active").data("log");
 
   var filterData = $("#bivarFilterState").data("filterData");
 
@@ -38,18 +40,39 @@ bivarFilterLocalSave = function() {
     if(!filterData)
       filterData = {};
 
+      // if(!curBrush.empty()) {
+      //   var filter = curBrush.extent();
+      //   if(log !== "") {
+      //     filter[0] = Math.pow(log, filter[0]);
+      //     filter[1] = Math.pow(log, filter[1]);
+      //   }
+      //   if(!filterData[varName])
+
+
     var brush = bivarFilterPlotBrush.extent();
     if(xVar) {
       if(!filterData[xVar])
         filterData[xVar]= {};
-      filterData[xVar]["from"] = brush[0][0];
-      filterData[xVar]["to"] = brush[1][0];
+      // **log**
+      if(xLog !== "") {
+        filterData[xVar]["from"] = Math.pow(xLog, brush[0][0]);
+        filterData[xVar]["to"] = Math.pow(xLog, brush[1][0]);
+      } else {
+        filterData[xVar]["from"] = brush[0][0];
+        filterData[xVar]["to"] = brush[1][0];
+      }
     }
     if(yVar) {
       if(!filterData[yVar])
         filterData[yVar]= {};
-      filterData[yVar]["from"] = brush[0][1];
-      filterData[yVar]["to"] = brush[1][1];
+      // **log**
+      if(yLog !== "") {
+        filterData[yVar]["from"] = Math.pow(yLog, brush[0][1]);
+        filterData[yVar]["to"] = Math.pow(yLog, brush[1][1]);
+      } else {
+        filterData[yVar]["from"] = brush[0][1];
+        filterData[yVar]["to"] = brush[1][1];
+      }
     }
   } else {
     // console.log("no brush")
@@ -65,53 +88,76 @@ bivarFilterLocalSave = function() {
 
 bivarFilterLocalLoad = function() {
   // load current filter extent for selected bivariate x and y vars
-  xVar = $("#bivar-x-filter-select li.active").data("name");
-  yVar = $("#bivar-y-filter-select li.active").data("name");
+  var xVar = $("#bivar-x-filter-select li.active").data("name");
+  var yVar = $("#bivar-y-filter-select li.active").data("name");
+  var xLog = $("#bivar-x-filter-select li.active").data("log");
+  var yLog = $("#bivar-y-filter-select li.active").data("log");
 
   var xDomain = bivarFilterPlotX.domain();
   var yDomain = bivarFilterPlotY.domain();
-
   if(xVar || yVar) {
     var filterData = $("#bivarFilterState").data("filterData");
     if(!filterData)
       filterData = {};
 
+    var xFilter;
     if(xVar) {
+      var xFrom = xDomain[0];
+      var xTo = xDomain[1];
       var xf = filterData[xVar];
       if(xf) {
-        if(xf.from == undefined)
-          xf.from = xDomain[0];
-        if(xf.to == undefined)
-          xf.to = xDomain[1];
-        xf = [xf.from, xf.to];
+        if(xf.from !== undefined) {
+          xFrom = xf.from;
+          if(xLog !== "") {
+           xFrom = Math.log(xFrom) / Math.log(xLog);
+          }
+        }
+        if(xf.to !== undefined) {
+          xTo = xf.to;
+          if(xLog !== "") {
+           xTo = Math.log(xTo) / Math.log(xLog);
+          }
+        }
       }
+      xFilter = [xFrom, xTo];
     }
+    var yFilter;
     if(yVar) {
+      var yFrom = yDomain[0];
+      var yTo = yDomain[1];
       var yf = filterData[yVar];
       if(yf) {
-        if(yf.from == undefined)
-          yf.from = yDomain[0];
-        if(yf.to == undefined)
-          yf.to = yDomain[1];
-        yf = [yf.from, yf.to];
+        if(yf.from !== undefined) {
+          yFrom = yf.from;
+          if(yLog !== "") {
+           yFrom = Math.log(yFrom) / Math.log(yLog);
+          }
+        }
+        if(yf.to !== undefined) {
+          yTo = yf.to;
+          if(yLog !== "") {
+           yTo = Math.log(yTo) / Math.log(yLog);
+          }
+        }
       }
+      yFilter = [yFrom, yTo];
     }
-    if(yf || xf) {
-      if(!yf)
-        yf = yDomain;
-      if(!xf)
-        xf = xDomain;
+    if(yFilter || xFilter) {
+      if(!yFilter)
+        yFilter = yDomain;
+      if(!xFilter)
+        xFilter = xDomain;
 
       // if both x and y fill the domain, don't brush
-      yFill = (yf[1] - yf[0]) > (yDomain[1] - yDomain[0]) / 1.01;
-      xFill = (xf[1] - xf[0]) > (xDomain[1] - xDomain[0]) / 1.01;
+      yFill = (yFilter[1] - yFilter[0]) > (yDomain[1] - yDomain[0]) / 1.01;
+      xFill = (xFilter[1] - xFilter[0]) > (xDomain[1] - xDomain[0]) / 1.01;
       xFill = false;
       yFill = false;
 
       if(!(xFill && yFill)) {
         // console.log("brushing!");
         // set the filter on the screen
-        var res = [[xf[0], yf[0]], [xf[1], yf[1]]];
+        var res = [[xFilter[0], yFilter[0]], [xFilter[1], yFilter[1]]];
       } else {
         bivarFilterPlotBrush.clear();
         var res = bivarFilterPlotBrush.extent()

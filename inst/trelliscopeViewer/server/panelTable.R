@@ -78,7 +78,7 @@ output$panelTableContentOutput <- renderDataLite({
         lapply(idxList, function(rw) {
           lapply(rw, function(i) {
             if(i + idxStart - 1 > idxEnd) {
-              curPanelContent <- dummyPanel(w, h)
+              curPanelContent <- list(html = dummyPanel(w, h), deps = "", spec = "")
               cogData <- dummyCog(labelVars)
             } else {
               curPanelContent <- panelContent[[i]]

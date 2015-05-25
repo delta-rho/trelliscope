@@ -1,6 +1,22 @@
-Version 0.8.2.4
+
+Version 0.8.3
 ---------------------------------------------------------------------
 
+- small tweaks for shiny 0.12 compatibility
+- viewer: remove qunit testing in anticipation of moving to something like rdom
+- viewer: fill in blank panels with empty image
+- viewer: add "display info" panel
+- viewer: add `sessionInfo()` to "about" modal
+- viewer: add intro to "about" modal
+- viewer: remove unused / not yet complete UI elements
+- viewer: add UI visual cues for modals
+- fix so specific quantiles are used instead of all data for univariate quantile plots when number of points is too large
+- viewer: reduce panel label font size as number of rows increases
+- viewer: add subtle hotkey underline hints to sidebar nav
+- viewer: use dplyr for faster cognostics table sort operations (becomes useful when number of panels is in hundreds of thousands)
+- add `mdDesc` argument to `makeDisplay()` to provide a more in-depth description of the display
+- add some webshot / phantomjs scripts for screenshots
+- add `log` attribute to cogInfo which will cause the log of the variable to be taken when used in univariate and bivariate filters
 - update to be compatible with datadr `kvApply()` changes
 - remove notebook functions (to be replaced by rmarkdown embedding functions)
 - add RHIPE tests

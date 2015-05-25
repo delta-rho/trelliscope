@@ -7,23 +7,23 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
-    
+
     <title>Trelliscope Viewer</title>
-    
+
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link href="assets/bootstrap-select/bootstrap-select.css" rel="stylesheet">
-    
+
     <!-- Custom styles -->
     <link href="assets/custom/custom.css" rel="stylesheet">
   	<link href="assets/icons/style.css" rel="stylesheet">
-    
+
     <script type="text/javascript" src="assets/jquery/jquery.js" ></script>
     <script type="text/javascript" src="assets/jquery.event.drag/jquery.event.drag-2.2.js" ></script>
     <script type="text/javascript" src="assets/mustache/mustache.js" ></script>
     <script type="text/javascript" src="assets/custom/related-layout.js"></script>
-    <script src="assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script src="assets/ace/ace.js" type="text/javascript" charset="utf-8"></script> -->
     <script src="assets/svgeezy/svgeezy.min.js"></script>
     <script>
       svgeezy.init(false, 'png');
@@ -31,10 +31,12 @@
     <script src="assets/spin/spin.js"></script>
     <script src="assets/bootstrap-select/bootstrap-select.js"></script>
     <script src="assets/sizeof/sizeof.js"></script>
-    
+
+    <script type="text/javascript" src="assets/marked/marked.js"></script>
+
     <script src="assets/d3/d3.min.js"></script>
     <script src="assets/d3/vega.min.js"></script>
-    
+
     <script src="assets/custom/d3footPlot.js"></script>
     <script src="assets/custom/d3uniFilter.js"></script>
     <script src="assets/custom/d3biFilter.js"></script>
@@ -47,23 +49,6 @@
     <script src="assets/custom/controls-panel-labels.js"></script>
     <script src="assets/custom/controls-panel-layout.js"></script>
     <script src="assets/custom/main.js"></script>
-
-    <!-- shiny -->
-    <script src="shared/shiny.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
-    <script src="assets/custom/shiny-trelliscope-io.js" type="text/javascript"></script>
-
-
-
-    <!-- Testing -->
-      <link rel="stylesheet" href="/assets/tests/qunit/qunit.css">
-      <script src="/assets/tests/qunit/qunit.js"></script>
-      <!-- Include the source code -->
-      <script src="/assets/tests/MyLib.js"></script>
-
-      <!-- Include the test suite(s) -->
-      <script src="/assets/tests/MyLib.test.js"></script>
-
 
   </head>
   <body>
@@ -81,7 +66,6 @@
           <a class="navbar-brand" href="javascript:">Trelliscope Viewer</a>
           <div class="left-icons">
             <ul>
-              <a data-toggle="modal" data-target="#displayInfoModal" href="javascript:"><li><i class="icon-file-info"></i></li></a>
               <span id="headerDisplayNameOutput" class="shiny-text-output"></span>
             </ul>
           </div>
@@ -89,9 +73,9 @@
           </div>
           <div class="right-icons">
             <ul>
-              <a data-toggle="modal" data-target="#userModal" href="javascript:"><li><i class="icon-user"></i></li></a>
-              <a data-toggle="modal" data-target="#openModal" href="javascript:"><li><i class="icon-folder-open"></i></li></a>
-              <a data-toggle="modal" data-target="#aboutModal" href="javascript:"><li><i class="icon-info-circle"></i></li></a>
+              <!-- <a data-toggle="modal" data-target="#userModal" href="javascript:"><li><i class="icon-user"></i></li></a> -->
+              <a id="aboutModalButton" data-toggle="modal" data-target="#aboutModal" href=""><li><i class="icon-info-circle"></i></li></a>
+              <a id="openModalButton" data-toggle="modal" data-target="#openModal" href=""><li><i class="icon-folder-open"></i></li></a>
             </ul>
           </div>
         </div>
@@ -106,59 +90,65 @@
             <img src="assets/images/logo.svg">
           </div>
           <div class="list-group list-group-sidebar">
+            <span class="list-group-header"></span>
+            <a href="javascript:" class="list-group-item" data-divlink="display-information" id="display-info-nav-link">
+              <i class="icon-file-info"></i>
+              <span class="list-group-text"><span class="hotkey">D</span>isplay Information</span>
+            </a>
             <a href="javascript:" class="list-group-item active list-group-item-primary list-group-item-short">
             <span class="list-group-header">View Options</span>
             </a>
             <a href="javascript:" class="list-group-item" data-divlink="panel-layout" id="panel-layout-nav-link">
               <i class="icon-th"></i>
-              <span class="list-group-text">Panel Layout</span>
+              <span class="list-group-text"><span class="hotkey">P</span>anel Layout</span>
             </a>
-            <a href="javascript:" class="list-group-item" data-divlink="panel-function" id="panel-function-nav-link">
+            <!-- <a href="javascript:" class="list-group-item" data-divlink="panel-function" id="panel-function-nav-link">
               <i class="icon-panel-edit"></i>
               <span class="list-group-text">Panel Function</span>
-            </a>
+            </a> -->
             <a href="javascript:" class="list-group-item" data-divlink="panel-labels" id="panel-labels-nav-link">
                <!-- data-action="panelLabelListSetFromExposedState"> -->
               <i class="icon-cog-list"></i>
-              <span class="list-group-text">Panel Labels</span>
+              <span class="list-group-text">Panel <span class="hotkey">L</span>abels</span>
             </a>
             <a href="javascript:" class="list-group-item last-item" data-divlink="add-related-display" id="add-related-display-nav-link" data-action="showRelatedLayoutControls">
               <i class="icon-plus-square-o"></i>
-              <span class="list-group-text">&nbsp;Related Displays</span>
+              <span class="list-group-text">&nbsp;<span class="hotkey">R</span>elated Displays</span>
             </a>
             <a href="javascript:" class="list-group-item active list-group-item-primary list-group-item-short">
               <span class="list-group-header">Cognostics</span>
             </a>
-            <a href="javascript:" class="list-group-item" data-divlink="active-cog" id="active-cog-nav-link">
-               <!-- data-action="cogTableSetFromExposedState"> -->
-              <i class="icon-active-cog"></i>
-              <span class="list-group-text">Active Cognostics</span>
-            </a>
             <a href="javascript:" class="list-group-item" data-divlink="cog-table-sort-filter" id="cog-table-sort-filter-nav-link">
                <!-- data-action="cogTableSetFromExposedState"> -->
               <i class="icon-sort-filter"></i>
-              <span class="list-group-text">Table Sort / Filter</span>
+              <span class="list-group-text"><span class="hotkey">T</span>able Sort / Filter</span>
             </a>
             <a href="javascript:" class="list-group-item" data-divlink="univar-filter" id="univar-filter-nav-link">
                <!-- data-action="univarFilterSetFromExposedState"> -->
               <i class="icon-bars"></i>
-              <span class="list-group-text">Univariate Filter</span>
+              <span class="list-group-text"><span class="hotkey">U</span>nivariate Filter</span>
             </a>
             <a href="javascript:" class="list-group-item" data-divlink="bivar-filter" id="bivar-filter-nav-link">
                <!-- data-action="bivarFilterSetFromExposedState"> -->
               <i class="icon-stats"></i>
-              <span class="list-group-text">Bivariate Filter</span>
+              <span class="list-group-text"><span class="hotkey">B</span>ivariate Filter</span>
             </a>
-            <a href="javascript:" class="list-group-item" data-divlink="multivar-filter" id="multivar-filter-nav-link">
+            <!-- <a href="javascript:" class="list-group-item" data-divlink="multivar-filter" id="multivar-filter-nav-link">
               <i class="icon-multivar"></i>
-              <span class="list-group-text">Multivariate Filter</span>
-            </a>
-            <a href="javascript:" class="list-group-item last-item" data-divlink="sample-panels" id="sample-panels-nav-link">
+              <span class="list-group-text"><span class="hotkey"></span><span class="hotkey">M</span>ultivariate Filter</span>
+            </a> -->
+            <!-- <a href="javascript:" class="list-group-item" data-divlink="sample-panels" id="sample-panels-nav-link">
               <i class="icon-sample"></i>
               <span class="list-group-text">Sample</span>
+            </a> -->
+            <a href="javascript:" class="list-group-item last-item" data-divlink="active-cog" id="active-cog-nav-link">
+               <!-- data-action="cogTableSetFromExposedState"> -->
+              <i class="icon-active-cog"></i>
+              <span class="list-group-text"><span class="hotkey">A</span>ctive Cognostics</span>
             </a>
           </div>
         </div>
+        <div id="display-information"   class="slide-panel panel panel-default"></div>
         <div id="panel-layout"          class="slide-panel panel panel-default"></div>
         <div id="panel-function"        class="slide-panel panel panel-default"></div>
         <div id="panel-labels"          class="slide-panel panel panel-default"></div>
@@ -202,14 +192,14 @@
          </div>
       </div>
     </div>
-  
+
   <!-- Modal -->
-  <div class="modal fade" id="displayInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myUModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
-          <h4 class="modal-title" id="myModalLabel">Information About Current Display</h4>
+          <h4 class="modal-title" id="myUModalLabel">Login / Sign Up</h4>
         </div>
         <div class="modal-body">
           Coming soon...
@@ -223,32 +213,13 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
-          <h4 class="modal-title" id="myModalLabel">Login / Sign Up</h4>
-        </div>
-        <div class="modal-body">
-          Coming soon...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <!-- <button type="button" class="btn btn-primary">Login</button> -->
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="myOModalLabel" aria-hidden="true">
     <div id="displayLoadSpinner"></div>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
-          <h4 class="modal-title" id="myModalLabel">Open a New Display</h4>
+          <h4 class="modal-title" id="myOModalLabel">Open a Display</h4>
         </div>
         <div class="modal-body">
           <div id="displayListOutput" class="shiny-template-output"></div>
@@ -260,65 +231,80 @@
     </div>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myAModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
-          <h4 class="modal-title" id="myModalLabel">Trelliscope Viewer Information</h4>
+          <h3 class="modal-title" id="myAModalLabel">Trelliscope Viewer</h3>
         </div>
         <div class="modal-body">
           <ul class="nav nav-tabs" role="tablist" id="infoTab">
-            <li class="active"><a href="#abouttrelliscope" role="tab" data-toggle="tab" class="info-tab-label">About Trelliscope</a></li>
+            <li class="active"><a href="#abouttrelliscope" role="tab" data-toggle="tab" class="info-tab-label">About</a></li>
             <li><a href="#hotkeys" role="tab" data-toggle="tab" class="info-tab-label">Hotkeys</a></li>
-            <li><a href="#viewerlog" role="tab" data-toggle="tab" class="info-tab-label">Viewer Log</a></li>
+            <li><a href="#sessionInfo" role="tab" data-toggle="tab" class="info-tab-label">Session Info</a></li>
+            <li><a href="#credits" role="tab" data-toggle="tab" class="info-tab-label">Credits</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="abouttrelliscope">
-              <h4>Powered by <a href="http://www.rstudio.com/shiny/">Shiny</a> and several other open-source projects</h4>
+              <h3>What is Trelliscope?</h3>
+              <p>Trelliscope is a visualization tool that provides interactive exploration of large collections of plots.  Trelliscope enables detailed, flexible visualization of large data sets by partitioning data into subsets, applying a plot method to each subset to create a <emph>panel</emph>, and then allowing the analyst to interactively view the panels.  Interaction is provided by the ability to sort and filter the panels based on metrics computed for each subset that describe behaviors of interest.  These metrics are called <emph>cognostics</emph></p>
+              <p>Those familiar with Trellis Display, faceting in ggplot, or Tufte's small multiples can simply think of Trelliscope as a mechanism for scalable, interactive Trellis display.</p>
+              <h3>How to use the Trelliscope Viewer</h3>
+              <p>In this viewer you will find one or more Trelliscope displays that have been created for you to view.  You can click the folder icon in the top right corner (or press "o" on your keyboard) to bring up a list of displays to choose from to open.  Click on the display you are interested viewing.  </p><p>Once you have opened a display, one or more of the panels of the display will appear on the screen.  You can use the control panels on the left to manipulate how the panels are displayed.  The "View Options" control panels allow you to specify how many panels are shown in the window at a time, the labels to show underneath each panel, and which (if any) related displays to view concurrently with the current display.  The "Cognostics" control panels provide several modes of sorting and filtering the panels based on cognostics that have been computed for the display being viewed.  Each individual control panel has a help icon you can click to get more information.
+            </div>
+            <div class="tab-pane" id="credits">
+              <h4>Powered by <a href="http://www.rstudio.com/shiny/" target="_blank">Shiny</a> and several other open-source projects</h4>
               <ul>
                 <li>
-                  <a href="http://getbootstrap.com">Twitter bootstrap</a>
+                  <a href="http://getbootstrap.com" target="_blank">Twitter bootstrap</a>
                 </li>
                 <li>
-                  <a href="http://mustache.github.io">mustache</a>
+                  <a href="http://mustache.github.io" target="_blank">mustache</a>
                 </li>
                 <li>
-                  <a href="http://jquery.com">jquery</a>
+                  <a href="http://jquery.com" target="_blank">jquery</a>
                 </li>
                 <li>
-                  <a href="http://d3js.org">d3.js</a>
+                  <a href="http://d3js.org" target="_blank">d3.js</a>
                 </li>
-                <li>
+                <!-- <li>
                   <a href="http://ace.c9.io">Ace editor</a>
+                </li> -->
+                <li>
+                  <a href="http://icomoon.io" target="_blank">icomoon</a>
                 </li>
                 <li>
-                  <a href="http://icomoon.io">icomoon</a>
+                  <a href="http://fgnass.github.io/spin.js/" target="_blank">spin.js</a>
                 </li>
                 <li>
-                  <a href="http://fgnass.github.io/spin.js/">spin.js</a>
+                  <a href="http://benhowdle.im/svgeezy/" target="_blank">svgeezy</a>
                 </li>
                 <li>
-                  <a href="http://benhowdle.im/svgeezy/">svgeezy</a>
+                  <a href="http://threedubmedia.com/code/event/drag" target="_blank">jquery.event.drag</a>
                 </li>
                 <li>
-                  <a href="http://threedubmedia.com/code/event/drag">jquery.event.drag</a>
+                  <a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">bootstrap-select</a>
                 </li>
                 <li>
-                  <a href="http://silviomoreto.github.io/bootstrap-select/">bootstrap-select</a>
+                  <a href="https://github.com/chjj/marked" target="_blank">marked</a>
                 </li>
               </ul>
-              <p>Designed and written by 
-                <a href="https://github.com/hafen">Ryan Hafen</a>, 
-                Initial UX design consulting from Ira Blossom
+              <p>Designed and written by
+                <a href="https://github.com/hafen" target="_blank">Ryan Hafen</a>
+                (<a href="https://twitter.com/hafenstats" target="_blank">@hafenstats</a>),
+                with contributions from many others including Iris Blossom, Lisa Bramer, Trenton Pulsipher, Barret Schloerke, Landon Sego, and Amanda White.
                 </p>
-              <p>Contribute, browse, report issues, request features on 
-                <a href="https://github.com/hafen/trelliscope">github</a>
+                <!-- <p>Funding sources</p> -->
+              <p>Contribute, browse, report issues, request features on
+                <a href="https://github.com/hafen/trelliscope" target="_blank">github</a>.
               </p>
-                <p>Click 
-                    <a href="http://tesseradata.org/docs-trelliscope/">here</a>
-                    for a tutorial
-                </p>
+              <p>This is part of a larger project,
+              <a href="http://tessera.io" target="_blank">Tessera</a>.
+              <p>Click
+                  <a href="http://tesseradata.org/docs-trelliscope/" target="_blank">here</a>
+                  for a tutorial on how to create Trelliscope displays.
+              </p>
             </div>
             <div class="tab-pane" id="hotkeys">
               <div id="hotkey-container">
@@ -328,45 +314,47 @@
                     <li><code>left</code>&nbsp;&nbsp; Page back</li>
                     <li><code>right</code>&nbsp;&nbsp; Page forward</li>
                   </ul>
-              
+
                   <h4>Modal windows</h4>
                   <ul class="hotkey-list">
                     <li><code>o</code> Open "Open New Display" modal</li>
                     <li><code>i</code> Open "Info" modal</li>
                   </ul>
-              
+
                   <h4>Inside a modal window</h4>
                   <ul class="hotkey-list">
                     <li><code>esc</code> Close modal</li>
                   </ul>
                 </div>
-              
+
                 <div id="hotkey-left-column" class="hotkey-column">
                   <h4>Control panels</h4>
                   <ul class="hotkey-list">
-                    <li><code>l</code> Open "Panel Layout"</li>
-                    <li><code>f</code> Open "Panel Function"</li>
-                    <li><code>e</code> Open "Panel Labels"</li>
+                    <li><code>d</code> Open "Display Information"</li>
+                    <li><code>p</code> Open "Panel Layout"</li>
+                    <!-- <li><code>f</code> Open "Panel Function"</li> -->
+                    <li><code>l</code> Open "Panel Labels"</li>
                     <li><code>r</code> Open "Related Displays"</li>
-                    <li><code>a</code> Open "Active Cognostics"</li>
                     <li><code>t</code> Open "Table Sort / Filter"</li>
                     <li><code>u</code> Open "Univariate Filter"</li>
                     <li><code>b</code> Open "Bivariate Filter"</li>
-                    <li><code>m</code> Open "Multivariate Filter"</li>
-                    <li><code>s</code> Open "Sample"</li>
+                    <!-- <li><code>m</code> Open "Multivariate Filter"</li> -->
+                    <li><code>a</code> Open "Active Cognostics"</li>
+                    <!-- <li><code>s</code> Open "Sample"</li> -->
                   </ul>
-              
+
                   <h4>Inside a control panel</h4>
                   <ul class="hotkey-list">
-                    <li><code>esc</code> "Canel" button</li>
+                    <li><code>esc</code> "Cancel" button</li>
                     <li><code>enter</code> "Apply" button</li>
                   </ul>
                 </div>
                 <div class="clear"></div>
               </div>
             </div>
-            <div class="tab-pane" id="viewerlog">
-              <div id="error-log"></div>
+            <div class="tab-pane" id="sessionInfo">
+              <h4>Information from shiny server R session:</h4>
+              <pre id="sessionInfoOutput" class="shiny-text-output"></pre>
             </div>
           </div>
         </div>
@@ -419,7 +407,7 @@
     <div class="handle SW"></div>
     <div class="handle SE"></div>
   </div>
-  
+
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -448,11 +436,53 @@
   <div class="panel-footer">
     <div class="pull-left control-footer">{{footer}}</div>
     <div class="pull-right">
+      {{#cancel_button}}
       <button type="button" class="btn btn-default btn-panel-close" data-action="{{body_id}}CancelButton">Cancel</button>
+      {{/cancel_button}}
+      {{#apply_button}}
       <button type="button" class="btn btn-primary btn-panel-apply" data-action="{{body_id}}ApplyButton">Apply</button>
+      {{/apply_button}}
+      {{#close_button}}
+      <button type="button" class="btn btn-default btn-panel-close" data-action="{{body_id}}CancelButton">Close</button>
+      {{/close_button}}
     </div>
   </div>
 </script>
+
+
+<!-- display information template -->
+<script id="displayInformationOutput-template" type="text/html">
+<div class="panel-body-wrapper panel-body-wrapper-scroll">
+  <div id="md-desc">
+  {{md_desc}}
+  </div>
+  <h1>Display Attributes</h1>
+    <ul>
+      {{#attrs}}
+      <li><strong>{{name}}</strong>: {{val}}</li>
+      {{/attrs}}
+    </ul>
+  <h1>Cognostics</h1>
+    <p>To help you navigate the panels, the following cognostics have been computed:</p>
+    <ul>
+      {{#cogs}}
+      <li><strong>{{name}}</strong>: {{desc}}</li>
+      {{/cogs}}
+    </ul>
+  <h1>Data</h1>
+    <p>The input data source is a {{ddo_ddf}}</p>
+    <p>One subset of the data looks like this:</p>
+    <pre><code>
+{{subset}}
+    </code></pre>
+  <h1>Panel Function</h1>
+    The R code that generates each panel ({{panel_pre}}):
+    <pre><code>
+{{panel}}
+    </code></pre>
+</div>
+</script>
+
 
 <!-- panel layout template -->
 <script id="panelLayoutOutput-template" type="text/html">
@@ -472,7 +502,7 @@
         </div>
       </div>
     </div>
-    <div class="well">
+    <!-- <div class="well">
       <p class="control-label">Fixed Per Page</p>
       <div class="btn-group">
         <button type="button" class="btn btn-default layout-dropdown" disabled>&nbsp;</button>
@@ -495,7 +525,7 @@
           <li><a href="javascript:">Var1<span class="badge pull-right">42</span></a></a></li>
         </ul>
       </div>
-    </div>
+    </div> -->
     <p class="control-label">Panel Arrangement</p>
     <div id="panel-layout-toggle">
       <div class="btn-group" id="panelArrangement">
@@ -514,11 +544,12 @@
 
 
 <!-- panel function template -->
-<script id="panelFunctionOutput-template" type="text/html">
+<!-- <script id="panelFunctionOutput-template" type="text/html">
   <div class="panel-body-wrapper">
     <div id="editor">{{code}}</div>
   </div>
-</script>
+</script> -->
+
 
 <!-- panel labels template -->
 <script id="panelLabelListOutput-template" type="text/html">
@@ -575,7 +606,7 @@
           <tr>
             <td>
               <strong>
-                <span style="color: #39b3d7;">{{group}}</span> / 
+                <span style="color: #39b3d7;">{{group}}</span> /
                 <span style="color: #d9534f;">{{name}}</span>
               </strong>: {{desc}}<br/>
               <span style="color: #888;"><em>{{n}} panels, pre-rendered={{preRender}}, data storage={{dataClass}}, updated: {{updated}}</em></span>
@@ -635,7 +666,7 @@
   <thead>
   <tr id="cogColumnSortInput" class="shiny-my-data-input">
     {{#cogInfo}}
-    <th data-variable="{{name}}" data-type="{{type}}" id="cog-table-th-{{name}}">{{name}} 
+    <th data-variable="{{name}}" data-type="{{type}}" id="cog-table-th-{{name}}">{{name}}
       <span class="cog-table-sort-span">
         <i id="cog-table-sort-icon-{{name}}" class="icon-unsorted"></i>
       </span>
@@ -768,7 +799,7 @@
       <div class="vis-filter-univar" id="univarFilterState">
         <ul class="list-group filter-select shiny-my-data-input" id="univarFilterSelect">
           {{#cogs}}
-          <li class="list-group-item" data-name="{{name}}" data-type="{{type}}" title="{{desc}}" id="univar-var-{{name}}">
+          <li class="list-group-item" data-name="{{name}}" data-type="{{type}}" data-log="{{log}}" title="{{desc}}" id="univar-var-{{name}}">
             <div class="uni-filter-var-name filter-list-name">{{name}}</div>
             <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
           {{/cogs}}
@@ -803,7 +834,7 @@
         <div class="vis-filter-bivar" id="bivarFilterState">
           <ul class="list-group filter-select" id="bivar-y-filter-select">
             {{#cogs}}
-            <li class="list-group-item" data-name="{{name}}" title="{{desc}}" id="bivar-y-{{name}}">
+            <li class="list-group-item" title="{{desc}}" id="bivar-y-{{name}}" data-name="{{name}}" data-log="{{log}}">
               <div class="bi-filter-y-name filter-list-name">{{name}}</div>
               <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
             </li>
@@ -816,7 +847,7 @@
         <div class="vis-filter-bivar">
           <ul class="list-group filter-select" id="bivar-x-filter-select">
             {{#cogs}}
-            <li class="list-group-item" title="{{desc}}" id="bivar-x-{{name}}" data-name="{{name}}">
+            <li class="list-group-item" title="{{desc}}" id="bivar-x-{{name}}" data-name="{{name}}" data-log="{{log}}">
               <div class="bi-filter-x-name filter-list-name">{{name}}</div>
               <span class="right-icon"><i class="icon-filter hidden"></i></span></li>
             {{/cogs}}
@@ -835,7 +866,7 @@
       <div class="btn-group" id="bivarPlotType" data-action="updateBivarPlot">
         <button type="button" class="btn btn-info mc-toggle active">Scatter</button>
         <button type="button" class="btn btn-default mc-toggle">Hexbin</button>
-        <button type="button" class="btn btn-default mc-toggle" disabled>Map</button>
+        <!-- <button type="button" class="btn btn-default mc-toggle" disabled>Map</button> -->
       </div>
     </div>
   </div>
@@ -1004,7 +1035,7 @@
           <td>
             <table class="table-condensed table-striped panel-cog-table">
               {{#cogs}}
-              <tr>
+              <tr class="panel-label-row">
                 <td class = "cog-name-td">
                   <strong>{{cog_name}}</strong>
                 </td>
@@ -1035,6 +1066,11 @@
   {{/rows}}
 </table>
 </script>
+
+<!-- shiny -->
+<script src="shared/shiny.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
+<script src="assets/custom/shiny-trelliscope-io.js" type="text/javascript"></script>
 
   </body>
 </html>

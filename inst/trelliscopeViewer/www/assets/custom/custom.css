@@ -43,7 +43,7 @@ body {
   }*/
 }
 
-@media (max-height: 740px) {
+@media (max-height: 725px) {
   #resolution-alert {
     font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
     position: absolute;
@@ -229,7 +229,7 @@ body {
 }*/
 
 #sidebar-wrapper a.list-group-item.active, #sidebar-wrapper a.list-group-item.active:hover, #sidebar-wrapper a.list-group-item.active:focus {
-  border-top: 3px solid #293241;
+  border-top: 3px solid #2D384A;
   background-color: transparent;
   border-left: none;
   border-right: none;
@@ -542,6 +542,7 @@ Sliding Panel
   font-size: 18px;
   font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
   line-height: 50px;
+  margin-left: 17px;
 }
 
 
@@ -672,11 +673,24 @@ li.list-group-item.other-active {
   color: white;
 }
 
-.left-icons ul a:hover li {
+.right-icons ul a.hovered li {
   background-color: #15a4fa;
   color: white;
 }
 
+/*.left-icons ul a:hover li {
+  background-color: #15a4fa;
+  color: white;
+}
+*/
+
+.hotkey {
+  border-bottom: 1px solid rgba(188, 196, 210, 0.2);
+}
+
+a.list-group-item.selected span.hotkey {
+  border-bottom: none;
+}
 
 /*Custom Graph Container
 ----------------------------------*/
@@ -954,6 +968,10 @@ td.select-column.active {
   width: 780px;
   max-height: 500px;
   margin: 0 auto;
+}
+
+.panel-body-wrapper-scroll {
+  overflow-y: auto;
 }
 
 #active-cog-selection {
@@ -1378,6 +1396,11 @@ text.axis-label {
   cursor: ne-resize;
 }
 
+a#display-info-nav-link.list-group-item {
+  border-top: 3px solid #2D384A;
+  margin-top: 25px;
+  height: 42px;
+}
 
 /*
 ----------------------------------*/

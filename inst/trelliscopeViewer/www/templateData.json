@@ -1,4 +1,21 @@
 {
+	"display-information" : {
+		"icon" : [
+			"icon-file-info"
+		],
+		"panel_header" : [
+			"Display Information"
+		],
+		"panel_description" : [
+			"Information about this display and the data it is based on."
+		],
+		"body_id" : [
+			"displayInformationOutput"
+		],
+		"apply_button" : false,
+		"cancel_button" : false,
+		"close_button" : true
+	},
 	"panel-layout" : {
 		"icon" : [
 			"icon-th"
@@ -7,14 +24,13 @@
 			"Panel Layout"
 		],
 		"panel_description" : [
-			"Specify the arrangement of the panels on each page by entering the number of rows and columns of panels per page.  Future functionality for fixing / varying levels of cognostics per page to come."
+			"Specify the arrangement of the panels on each page by entering the number of rows and columns of panels per page."
 		],
 		"body_id" : [
 			"panelLayoutOutput"
 		],
-		"apply_button" : [
-			"panelLayoutApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"panel-function" : {
 		"icon" : [
@@ -29,9 +45,8 @@
 		"body_id" : [
 			"panelFunctionOutput"
 		],
-		"apply_button" : [
-			"panelFunctionApplyButton"
-		],
+		"apply_button" : true,
+		"cancel_button" : true,
 		"footer" : [
 			"Note: this feature is currently disabled - panels will not update when you click 'Apply'..."
 		]
@@ -44,14 +59,13 @@
 			"Panel Labels"
 		],
 		"panel_description" : [
-			"Specify which cognostics to view underneath each panel. <br/>Select cognostics to view by clicking and/or dragging the 'Show' column."
+			"Specify which cognostics to view as labels underneath each panel. <br/>Select cognostics to view by clicking and/or dragging the 'Show' column."
 		],
 		"body_id" : [
 			"panelLabelListOutput"
 		],
-		"apply_button" : [
-			"panelLabelListApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"add-related-display" : {
 		"icon" : [
@@ -66,9 +80,8 @@
 		"body_id" : [
 			"relatedDisplayListOutput"
 		],
-		"apply_button" : [
-			"relatedDisplayListApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"active-cog" : {
 		"icon" : [
@@ -83,9 +96,8 @@
 		"body_id" : [
 			"activeCogListOutput"
 		],
-		"apply_button" : [
-			"activeCogListApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"cog-table-sort-filter" : {
 		"icon" : [
@@ -100,9 +112,8 @@
 		"body_id" : [
 			"cogTableControlsOutput"
 		],
-		"apply_button" : [
-			"cogTableControlsApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"univar-filter" : {
 		"icon" : [
@@ -117,9 +128,8 @@
 		"body_id" : [
 			"cogUniFilterControlsOutput"
 		],
-		"apply_button" : [
-			"cogUniFilterControlsApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"bivar-filter" : {
 		"icon" : [
@@ -129,14 +139,13 @@
 			"Visual Bivariate Filter"
 		],
 		"panel_description" : [
-			"Filter panels based on pairs of cognostics through an interactive scatterplot.  <br/>Currently only quantitative variables are supported."
+			"Filter panels based on pairs of cognostics through an interactive scatterplot.  <br/>Only quantitative variables are supported."
 		],
 		"body_id" : [
 			"cogBiFilterControlsOutput"
 		],
-		"apply_button" : [
-			"cogBiFilterControlsApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	},
 	"multivar-filter" : {
 		"icon" : [
@@ -151,9 +160,8 @@
 		"body_id" : [
 			"cogMultiFilterControlsOutput"
 		],
-		"apply_button" : [
-			"cogMultiFilterControlsApplyButton"
-		],
+		"apply_button" : true,
+		"cancel_button" : true,
 		"footer" : [
 			"Note: this interactive filter is not yet bound to the back-end - panels will not update when you click 'Apply'..."
 		]
@@ -171,8 +179,7 @@
 		"body_id" : [
 			"cogSampleControlsOutput"
 		],
-		"updateButton" : [
-			"cogSampleControlsApplyButton"
-		]
+		"apply_button" : true,
+		"cancel_button" : true
 	}
 }
