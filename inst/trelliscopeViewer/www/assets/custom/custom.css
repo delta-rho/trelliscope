@@ -1404,3 +1404,21 @@ a#display-info-nav-link.list-group-item {
 
 /*
 ----------------------------------*/
+
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-button {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
