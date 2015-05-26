@@ -2,7 +2,7 @@
 Version 0.8.3
 ---------------------------------------------------------------------
 
-- small tweaks for shiny 0.12 compatibility
+- small tweaks to serialization, etc. for shiny 0.12 compatibility
 - viewer: remove qunit testing in anticipation of moving to something like rdom
 - viewer: fill in blank panels with empty image
 - viewer: add "display info" panel
