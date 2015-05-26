@@ -121,12 +121,12 @@ function d3bivar(data, id) {
   var xLog = data.xLog[0];
   var yLog = data.yLog[0];
   // **log**
-  // if(xLog !== null) {
-  //   data.xlab = "log base " + xLog + " " + data.xlab;
-  // }
-  // if(yLog !== null) {
-  //   data.ylab = "log base " + yLog + " " + data.ylab;
-  // }
+  if(xLog !== null) {
+    data.xlab = "log base " + xLog + " " + data.xlab;
+  }
+  if(yLog !== null) {
+    data.ylab = "log base " + yLog + " " + data.ylab;
+  }
 
   $("#" + id).html("");
   $("#" + id).append("<div id=\"" + id + "Range\" class=\"filterRange\"></div>");

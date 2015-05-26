@@ -60,7 +60,7 @@ function d3univar(data, id) {
   var log = data.log[0];
   var plotType = data.plotType[0];
   var xlab = data.name[0];
-  if(log !== "NA") {
+  if(log !== null) {
     xlab = "log base " + log + " " + xlab;
   }
   var ylab = "Frequency";
@@ -68,7 +68,7 @@ function d3univar(data, id) {
   if(plotType == "quant") {
     ylab = data.name[0];
     // **log**
-    if(log !== "NA") {
+    if(log !== null) {
       ylab = "log base " + log + " " + ylab;
     }
     xlab = "f-value";
