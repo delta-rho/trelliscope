@@ -49,7 +49,11 @@ displayInformationOutputData <- function(x) {
     if(length(formals(panelFn)) > 1)
       panel_pre <- "this function takes the key and value of each subset key-value pair as its arguments"
 
-    return(list(md_desc = x$cdo$mdDesc, attrs = unname(attrs), cogs = cogs, ddo_ddf = ddo_ddf, subset = sbst, panel = code, panel_pre = panel_pre))
+    md_desc <- x$cdo$mdDesc
+    if(is.null(md_desc))
+      md_desc <- ""
+
+    return(list(md_desc = md_desc, attrs = unname(attrs), cogs = cogs, ddo_ddf = ddo_ddf, subset = sbst, panel = code, panel_pre = panel_pre))
   }
 }
 
