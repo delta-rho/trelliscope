@@ -31,7 +31,7 @@ function relatedLayout() {
   // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->8
   // and on line-height of 1.2
   var cogHeightArr = [26, 24, 22, 19];
-  var cogHeight = cogHeightArr[Math.min(nRow - 1, 3)];
+  var cogHeight = cogHeightArr[0]; // can only have single row
   var nCog = $(".panel-labels-select.active").length; // number of cogs to show
   // extra padding beyond what is plotted
   // these remain fixed while width and height can change
@@ -118,7 +118,6 @@ function relatedLayout() {
     }
     areaDiff[i] = totArea - runningTotal;
   }
-
   var curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
 
   // make all boxes inactive and hide them all
