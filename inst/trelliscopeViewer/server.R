@@ -1,4 +1,5 @@
 library(shiny, warn.conflicts = FALSE)
+library(dplyr)
 # htmlwidgets not required unless panel function is one
 suppressWarnings(require(htmlwidgets, warn.conflicts = FALSE))
 library(jsonlite, warn.conflicts = FALSE)
