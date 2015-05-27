@@ -408,52 +408,18 @@ function panelTableContentOutputPostRender(data) {
     $("#openModal").modal("hide");
   }
 
-  // this is a hack right now
-  // when panels contain scripts that need to be executed
-  // calling jQuery's html() runs those scripts
-  // $(".panel-image-wrapper").each(function() {
-  //   $(this).html($(this).html());
-  // });
-
-  // if it is not a static image expect vega spec in .data
-  // console.log(data[0][0].panel_content.length);
-  // console.log(data);
-  if(data[0][0].panel_content[0].data != "") {
-    for (var i = 0; i < data.length; i++) {
-      for (var j = 0; j < data[i].length; j++) {
-        data[i][j].panel_content.forEach(function(pc) {
-          // console.log(pc);
-          if(pc.spec) {
-            if(pc.spec[0] != "") {
-              var curID = pc.data.id[0];
-              try {
-                var spec = JSON.parse(pc.spec);
-              } catch (e) {
-                console.log(e);
-                return;
-              }
-              $(curID).data("spec", spec);
-              // console.log(curID);
-              // console.log($(curID));
-              // vg.parse.spec($(curID).data("spec"), function(chart) {
-              vg.parse.spec(spec, function(chart) {
-                var ch = chart({el:curID});
-                var w = ch.width();
-                var h = ch.height();
-                ch.update();
-                var pd = ch.padding();
-                ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
-                ch.update();
-              });
-            }
-          }
-          if(pc.deps[0] !== "") {
-            Shiny.renderDependencies(pc.deps);
-            HTMLWidgets.staticRender();
-          }
-        });
-      }
-    };
+  // if it is not a raster image expect an htmlwidget
+  var pc = data[0][0].panel_content[0];
+  if(pc.class[0] == "htmlwidget") {
+    console.log(pc.deps)
+    Shiny.renderDependencies(pc.deps);
+    try {
+      HTMLWidgets.staticRender();
+    } catch(err) {
+      console.log(err.message);
+    }
+    if(pc.scale[0] != "")
+      $(".html-widget-static-bound").zoomscale(pc.scale[0]);
   }
 
   // make width of cog name column uniform across
@@ -562,3 +528,32 @@ $(document).ready(function() {
   });
 });
 
+// for scaling down htmlwidget panels when there are many on a page
+$.fn.zoomscale = function(x) {
+  if(!$(this).filter(':visible').length && x != 1) return $(this);
+  if(!$(this).parent().hasClass('scaleContainer')){
+    $(this).wrap($('<div class="scaleContainer">').css('position','relative'));
+    $(this).data({
+        'originalWidth': $(this).width(),
+        'originalHeight': $(this).height()});
+  }
+  $(this).css({
+    'transform': 'scale('+x+')',
+    '-ms-transform': 'scale('+x+')',
+    '-moz-transform': 'scale('+x+')',
+    '-webkit-transform': 'scale('+x+')',
+    'transform-origin': 'right bottom',
+    '-ms-transform-origin': 'right bottom',
+    '-moz-transform-origin': 'right bottom',
+    '-webkit-transform-origin': 'right bottom',
+    'position': 'absolute',
+    'bottom': '0',
+    'right': '0',
+  });
+  if(x == 1)
+    $(this).unwrap().css('position','static'); else
+      $(this).parent()
+        .width($(this).data('originalWidth')*x)
+        .height($(this).data('originalHeight')*x);
+  return $(this);
+};

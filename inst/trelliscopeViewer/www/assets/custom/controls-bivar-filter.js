@@ -148,13 +148,7 @@ bivarFilterLocalLoad = function() {
       if(!xFilter)
         xFilter = xDomain;
 
-      // if both x and y fill the domain, don't brush
-      yFill = (yFilter[1] - yFilter[0]) > (yDomain[1] - yDomain[0]) / 1.01;
-      xFill = (xFilter[1] - xFilter[0]) > (xDomain[1] - xDomain[0]) / 1.01;
-      xFill = false;
-      yFill = false;
-
-      if(!(xFill && yFill)) {
+      if(xf || yf) {
         // console.log("brushing!");
         // set the filter on the screen
         var res = [[xFilter[0], yFilter[0]], [xFilter[1], yFilter[1]]];

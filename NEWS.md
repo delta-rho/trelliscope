@@ -2,6 +2,9 @@
 Version 0.8.3
 ---------------------------------------------------------------------
 
+- for htmlwidget panels, allow option to scale with "zoom" css instead of trying to resize
+- add ability to make thumbnails for htmlwidgets
+- remove rCharts and ggvis functionality in favor of clean support for htmlwidgets
 - small tweaks to serialization, etc. for shiny 0.12 compatibility
 - viewer: remove qunit testing in anticipation of moving to something like rdom
 - viewer: fill in blank panels with empty image

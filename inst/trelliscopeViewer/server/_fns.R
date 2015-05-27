@@ -328,7 +328,7 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
     panelContent <- lapply(seq_along(curDat), function(i) {
       x <- curDat[[i]]
       res <- try({
-        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$height, cdo$lims, pixelratio)
       })
       if(inherits(res, "try-error"))
         res <- NULL
@@ -349,7 +349,7 @@ getPanelContent.rplotFn <- function(panelFn, ...)
 getPanelContent.ggplotFn <- function(panelFn, ...)
   getPanelContent.trellisFn(panelFn, ...)
 
-getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
   tmpfile <- tempfile()
   on.exit(rm(tmpfile))
 
@@ -366,56 +366,33 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims
   html <- paste("<img src=\"", encodePNG(tmpfile),
     "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
 
-  list(html = html, deps = "", spec = "")
+  list(html = html, class = "raster")
 }
 
-getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-
+getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
   p <- kvApply(x, panelFn)$value
-  p <- set_options(p, width = width, height = height)
+  scaleUp <- p$scale_up
+  scaleDown <- p$scale_down
+  if(is.null(scaleUp))
+    scaleUp <- FALSE
+  # default if not explicitly specified is to scale down
+  if(is.null(scaleDown))
+    scaleDown <- TRUE
 
-  list(
-    html = "",
-    deps = "",
-    spec = getVegaSpec(p)
-  )
-}
-
-getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-
-  p <- kvApply(x, panelFn)$value
-  p$set(width = width, height = height)
-  # paste(capture.output(p$print()), collapse = '\n')
-
-  # override the cdn settings that ship with rCharts
-  # as some aren't available over https
-  # which is used by shinyapps.io
-  cdnPath <- file.path(system.file(package = "trelliscope"),
-    "rChartsCdnOverride",
-    tolower(class(p))[1])
-  if(file.exists(file.path(cdnPath, "config.yml")))
-    p$LIB$url <- cdnPath
-
-  p <- capture.output(p$show('iframesrc', cdn = TRUE))
-
-  ind <- which(grepl("iframe\\.rChart", p))
-  if(length(ind) > 0) {
-    p[ind[1]] <- "<style>iframe.rChart{ width: 100%; height: 100%;}</style>"
+  if(scaleUp && width > origWidth) {
+    p$width <- origWidth
+    p$height <- origHeight
+    scale <- width / origWidth
+  } else if(scaleDown && width < origWidth) {
+    p$width <- origWidth
+    p$height <- origHeight
+    scale <- width / origWidth
+  } else {
+    p$width <- width
+    p$height <- height
+    scale <- ""
   }
 
-  html <- paste(c(
-    sprintf("<div style='width:%dpx; height:%dpx'>", as.integer(width), as.integer(height)),
-    p,
-    "</div>"
-  ), collapse = "\n")
-
-  list(html = html, deps = "", spec = "")
-}
-
-getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-  p <- kvApply(x, panelFn)$value
-  p$width <- width
-  p$height <- height
   w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
   d <- attr(w, "html_dependencies")
   d <- lapply(d, function(el) {
@@ -448,43 +425,13 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, l
     }
     el
   })
-  # browser()
+
   list(
     html = as.character(w),
+    class = "htmlwidget",
     deps = d,
-    spec = ""
+    scale = scale
   )
 }
 
-getVegaSpec <- function(x) {
-  spec <- ggvis:::as.vega(x)
-  RJSONIO::toJSON(spec)
-}
-
-
-# makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
-#
-#   if(capabilities("aqua")) {
-#     pngfun <- png
-#   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
-#     pngfun <- CairoPNG
-#   } else {
-#     pngfun <- png
-#   }
-#
-#   pngfun(filename = filename,
-#     width = width * pixelratio,
-#     height = height * pixelratio,
-#     res = res * pixelratio,
-#     pointsize = basePointSize * width / origWidth)
-#
-#   dv <- dev.cur()
-#
-#   tryCatch(func(), finally = dev.off(dv))
-# }
-#
-# require(fastICA)
-#
-#
-# makeBivarJSON(ic$S[,1], ic$S[,2], xlab="IC 1", ylab="IC 2")
 

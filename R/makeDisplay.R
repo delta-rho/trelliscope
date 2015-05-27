@@ -283,6 +283,8 @@ makeDisplay <- function(
 
   # make thumbnail
   message("* Plotting thumbnail...")
+  if(inherits(panelEx, "htmlwidget"))
+    widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
   # small thumbnail
   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)

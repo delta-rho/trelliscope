@@ -64,10 +64,6 @@ getPanelFnType <- function(panelEx) {
     panelFnType <- "trellisFn"
   } else if(inherits(panelEx, "ggplot")) {
     panelFnType <- "ggplotFn"
-  } else if(inherits(panelEx, "ggvis")) {
-    panelFnType <- "ggvisFn"
-  } else if(inherits(panelEx, "rCharts")) {
-    panelFnType <- "rChartsFn"
   } else if(inherits(panelEx, "htmlwidget")) {
     panelFnType <- "htmlwidgetFn"
   }
