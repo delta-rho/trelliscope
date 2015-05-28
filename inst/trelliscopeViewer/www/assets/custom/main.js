@@ -393,6 +393,14 @@ function cogMapOutputPostRender() {
 
 function displayInformationOutputPostRender(data) {
   $("#md-desc").html(marked($("#md-desc").html()));
+  try {
+    renderMathInElement(document.getElementById("display-information"));
+  } catch(err) {
+    console.log(err.message);
+  }
+  $("#display-information table").each(function() {
+    $(this).addClass("table table-condensed table-bordered");
+  });
 }
 
 function panelTableContentOutputPostRender(data) {

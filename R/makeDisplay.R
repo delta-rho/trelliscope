@@ -101,6 +101,7 @@ makeDisplay <- function(
         mdDesc <- paste(readLines(mdDesc), collapse = "\n")
       } else {
         warning("Could not find file ", mdDesc)
+        mdDesc <- ""
       }
     }
   }

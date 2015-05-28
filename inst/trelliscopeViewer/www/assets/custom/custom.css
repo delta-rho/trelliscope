@@ -974,6 +974,10 @@ td.select-column.active {
   overflow-y: auto;
 }
 
+.panel-body-wrapper-displayinfo {
+  padding-right: 20px;
+}
+
 #active-cog-selection {
   max-height: 450px;
   overflow-y: auto;
@@ -1400,6 +1404,11 @@ a#display-info-nav-link.list-group-item {
   border-top: 3px solid #2D384A;
   margin-top: 25px;
   height: 42px;
+}
+
+th {
+  font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
+  font-weight: normal !important;
 }
 
 /*

@@ -33,6 +33,9 @@
     <script src="assets/sizeof/sizeof.js"></script>
 
     <script type="text/javascript" src="assets/marked/marked.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/contrib/auto-render.min.js"></script>
 
     <script src="assets/d3/d3.min.js"></script>
 
@@ -451,7 +454,7 @@
 
 <!-- display information template -->
 <script id="displayInformationOutput-template" type="text/html">
-<div class="panel-body-wrapper panel-body-wrapper-scroll">
+<div class="panel-body-wrapper panel-body-wrapper-scroll panel-body-wrapper-displayinfo">
   <div id="md-desc">
   {{{md_desc}}}
   </div>
