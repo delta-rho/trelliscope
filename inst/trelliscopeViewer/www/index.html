@@ -455,26 +455,26 @@
   <div id="md-desc">
   {{md_desc}}
   </div>
-  <h1>Display Attributes</h1>
+  <h2>Display Attributes</h2>
     <ul>
       {{#attrs}}
       <li><strong>{{name}}</strong>: {{val}}</li>
       {{/attrs}}
     </ul>
-  <h1>Cognostics</h1>
+  <h2>Cognostics</h2>
     <p>To help you navigate the panels, the following cognostics have been computed:</p>
     <ul>
       {{#cogs}}
       <li><strong>{{name}}</strong>: {{desc}}</li>
       {{/cogs}}
     </ul>
-  <h1>Data</h1>
+  <h2>Data</h2>
     <p>The input data source is a {{ddo_ddf}}</p>
     <p>One subset of the data looks like this:</p>
     <pre><code>
 {{subset}}
     </code></pre>
-  <h1>Panel Function</h1>
+  <h2>Panel Function</h2>
     The R code that generates each panel ({{panel_pre}}):
     <pre><code>
 {{panel}}
