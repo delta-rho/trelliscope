@@ -206,19 +206,9 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
   } else { # try to infer type
     if(is.factor(val))
       val <- as.character(val)
-
-    if(is.character(val)) {
-      type <- "factor"
-    } else if(is.numeric(val)) {
-      type <- "numeric"
-    } else if(inherits(val, "Date")) {
-      type <- "date"
-    } else if(inherits(val, "POSIXct")) {
-      type <- "time"
-    } else {
+    type <- inferCogType(val)
+    if(is.na(type))
       val <- NA
-      type <- NA
-    }
   }
 
   if(is.null(log))
@@ -245,6 +235,21 @@ cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel =
 
   class(val) <- c("cog", class(val))
   val
+}
+
+inferCogType <- function(val) {
+  if(is.factor(val) || is.character(val)) {
+    type <- "factor"
+  } else if(is.numeric(val)) {
+    type <- "numeric"
+  } else if(inherits(val, "Date")) {
+    type <- "date"
+  } else if(inherits(val, "POSIXct")) {
+    type <- "time"
+  } else {
+    type <- NA
+  }
+  type
 }
 
 #' @export

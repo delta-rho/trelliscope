@@ -685,7 +685,7 @@ li.list-group-item.other-active {
 */
 
 .hotkey {
-  border-bottom: 1px solid rgba(188, 196, 210, 0.2);
+  border-bottom: 1px solid rgba(188, 196, 210, 0.4);
 }
 
 a.list-group-item.selected span.hotkey {
@@ -1408,6 +1408,7 @@ a#display-info-nav-link.list-group-item {
 
 ::-webkit-scrollbar {
   width: 7px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {

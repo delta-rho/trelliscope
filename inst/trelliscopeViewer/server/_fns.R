@@ -116,41 +116,44 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
 
   curInfo <- cd$cdo$cogDistns[[name]]
 
-  if(!is.na(curInfo$type)) {
-    if(curInfo$type == "numeric") {
-      if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
-        tmp <- curInfo$marginal[[plotType]]
-      } else {
-        tmp <- trelliscope:::getCogQuantPlotData(cd$curCogDF, name, plotType, cogInfo = cd$cdo$cogInfo)
-      }
-      if(plotType == "hist") {
-        delta <- diff(tmp$xdat[1:2])
-        logPrefix <- ""
-        if(!is.null(curInfo$log))
-          if(!is.na(curInfo$log))
-            logPrefix <- paste0(curInfo$log, "^")
-        tmp$label <- paste("(", logPrefix, tmp$xdat, ",", logPrefix, tmp$xdat + delta, "]", sep = "")
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
-        # add random normal to make sure it triggers even when it
-        # doesn't change - this is to ensure spinner will get replaced
-      } else {
-        names(tmp)[1:2] <- c("x", "y")
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
-      }
-    } else { # bar chart
-      if(distType == "marginal") {
-        tmp <- curInfo$marginal
-      } else {
-        tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
-      }
-      if(is.data.frame(tmp)) {
-        if(nrow(tmp) > maxLevels)
-          return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
-        tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-        names(tmp)[which(names(tmp) == "Freq")] <- "ydat"
-        tmp$xdat <- seq_len(nrow(tmp))
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = ifelse(calledFromFooter, 1, rnorm(1))))
-      }
+  if(is.null(curInfo))
+    return(list(name = name))
+  if(is.na(curInfo$type))
+    return(list(name = name))
+
+  if(curInfo$type == "numeric") {
+    if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
+      tmp <- curInfo$marginal[[plotType]]
+    } else {
+      tmp <- trelliscope:::getCogQuantPlotData(cd$curCogDF, name, plotType, cogInfo = cd$cdo$cogInfo)
+    }
+    if(plotType == "hist") {
+      delta <- diff(tmp$xdat[1:2])
+      logPrefix <- ""
+      if(!is.null(curInfo$log))
+        if(!is.na(curInfo$log))
+          logPrefix <- paste0(curInfo$log, "^")
+      tmp$label <- paste("(", logPrefix, tmp$xdat, ",", logPrefix, tmp$xdat + delta, "]", sep = "")
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
+      # add random normal to make sure it triggers even when it
+      # doesn't change - this is to ensure spinner will get replaced
+    } else {
+      names(tmp)[1:2] <- c("x", "y")
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
+    }
+  } else { # bar chart
+    if(distType == "marginal") {
+      tmp <- curInfo$marginal
+    } else {
+      tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
+    }
+    if(is.data.frame(tmp)) {
+      if(nrow(tmp) > maxLevels)
+        return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
+      tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
+      names(tmp)[which(names(tmp) == "Freq")] <- "ydat"
+      tmp$xdat <- seq_len(nrow(tmp))
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = ifelse(calledFromFooter, 1, rnorm(1))))
     }
   }
   return(list(name = name))

@@ -96,6 +96,8 @@ function d3univar(data, id) {
   var filter;
   if(activeVar) {
     var filterData = $("#univarFilterState").data("filterData");
+    if(!filterData)
+      filterData = {};
     var varName = activeVar.data("name");
     if(filterData[varName]) {
       var filterFrom = NaN;

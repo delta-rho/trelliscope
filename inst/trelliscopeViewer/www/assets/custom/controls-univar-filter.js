@@ -88,6 +88,9 @@ univarFilterLocalLoad = function() {
   activeVar = $("#univarFilterSelect li.active");
   if(activeVar) {
     var filterData = $("#univarFilterState").data("filterData");
+    if(!filterData)
+      filterData = {};
+
     var varName = activeVar.data("name");
 
     var filterFrom = null;

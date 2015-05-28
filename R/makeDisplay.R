@@ -240,6 +240,12 @@ makeDisplay <- function(
     message("* Storing display object...")
 
   cogInfo <- getCogInfo(cogEx)
+  cogInfo <- getCogInfo(cogDatConn)
+  # if type couldn't be inferred then get it from the whole cog data frame
+  ind <- which(is.na(cogInfo$type))
+  for(ii in ind)
+    cogInfo$type[ii] <- inferCogType(cogDatConn[[ii]])
+
   cogDistns <- getCogDistns(cogDatConn, cogInfo)
 
   # some back ends (like RHIPE) might need to store environment variables
