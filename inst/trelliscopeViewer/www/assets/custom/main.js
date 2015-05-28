@@ -411,7 +411,7 @@ function panelTableContentOutputPostRender(data) {
   // if it is not a raster image expect an htmlwidget
   var pc = data[0][0].panel_content[0];
   if(pc.class[0] == "htmlwidget") {
-    console.log(pc.deps)
+    // console.log(pc.deps)
     Shiny.renderDependencies(pc.deps);
     try {
       HTMLWidgets.staticRender();
