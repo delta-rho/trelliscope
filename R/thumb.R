@@ -3,6 +3,7 @@
 #' @param p htmlwidget object
 #' @param thumbPath where to save thumbnail file
 #' @export
+#' @importFrom htmlwidgets saveWidget
 widgetThumbnail <- function(p, thumbPath) {
   phantom <- findPhantom()
   thumbPath <- path.expand(thumbPath)
@@ -10,22 +11,26 @@ widgetThumbnail <- function(p, thumbPath) {
   if(phantom == "") {
     message("** phantomjs dependency could not be found - thumbnail cannot be generated (run phantomInstall() for details)")
   } else {
-    ff <- tempfile(fileext = ".html")
-    ffjs <- tempfile(fileext = ".js")
+    res <- try({
+      ff <- tempfile(fileext = ".html")
+      ffjs <- tempfile(fileext = ".js")
 
-    # don't want any padding
-    p$sizingPolicy$padding <- 0
-    suppressMessages(saveWidget(p, ff))
+      # don't want any padding
+      p$sizingPolicy$padding <- 0
+      suppressMessages(saveWidget(p, ff))
 
-    js <- paste0("var page = require('webpage').create();
+      js <- paste0("var page = require('webpage').create();
 page.open('file://", ff, "', function() {
   window.setTimeout(function () {
     page.render('", thumbPath, "');
     phantom.exit();
   }, 500);
 });")
-    cat(js, file = ffjs)
-    system2(phantom, ffjs)
+      cat(js, file = ffjs)
+      system2(phantom, ffjs)
+    })
+    if(inherits(res, "try-error"))
+      message("** could not create htmlwidget thumbnail...")
 
     # system(paste("open ", ffjs))
     # system(paste("open ", dirname(ffjs)))
