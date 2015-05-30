@@ -1,19 +1,38 @@
 
 #' Connect to a VDB
 #'
-#' Connect to a visualization catabase
+#' Connect to a new or existing visualization database
+#'
+#' Connecting to a VDB is required prior to calling \code{\link{makeDisplay}} or \code{\link{view}}.
 #'
 #' @param path The path on the local file system where the directory for the VDB is located
-#' @param name the name for the VDB (if null, uses the name of the parent directory)
+#' 
+#' @param name A character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
+#' the previous name is used.  If the VDB exists and a string is provided for \code{name}, the name is overwritten.
+#' The primary purpose of the \code{name} argument is to facilitate deploying the trelliscope display as a Shiny app.
+#' See the \code{appName} argument of \code{\link{deployToShinyApps}}
+#' 
 #' @param autoYes should questions to proceed with directory creation operations be automatically answered with "yes"?
-#' @param verbose logical - print messages about what is being done
+#' 
+#' @param verbose should messages be printed about what is being done?
 #'
 #' @author Ryan Hafen
 #'
+#' @return An object of class \code{vdbConn} that contains the path and name of the VDB. This object is also assigned
+#' to the \code{vdbConn} option, and can be retrieved via \code{getOption("vdbConn")}
+#' 
 #' @export
-vdbConn <- function(path, name = NULL,
-  autoYes = FALSE, verbose = TRUE) {
+vdbConn <- function(path, name = NULL, autoYes = FALSE, verbose = TRUE) {
 
+  # Check arguments
+  if(!is.null(name)) {
+    stopifnot(is.character(name),
+              length(name) == 1)
+  }
+  stopifnot(is.character(path),
+            is.logical(autoYes),
+            is.logical(verbose))
+  
   connPath <- file.path(path, "conn.Rdata")
 
   # get VDB name, if saved
@@ -46,6 +65,7 @@ vdbConn <- function(path, name = NULL,
   if(!all(c("displays", "notebook") %in% ff))
     stop(paste(path, "is not a valid VDB directory"))
 
+  # Create the connection object
   conn <- structure(list(
       path = path,
       name = name
@@ -69,6 +89,7 @@ print.vdbConn <- function(x, ...) {
 
 ## internal
 vdbInit <- function(path, autoYes, verbose) {
+    
   if(!file.exists(path)) {
     if(autoYes) {
       ans <- "y"

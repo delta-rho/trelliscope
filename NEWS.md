@@ -1,4 +1,3 @@
-
 Version 0.8.3
 ---------------------------------------------------------------------
 
@@ -24,10 +23,10 @@ Version 0.8.3
 - remove notebook functions (to be replaced by rmarkdown embedding functions)
 - add RHIPE tests
 - update formatting
-- fix problem with loading RHIPE on viewer server
-- fix problem with filter due to js error
 - update handling of global variables
 - add experimental `qtrellis()` function for quick generation of trelliscope displays
+- fix problem with loading RHIPE on viewer server
+- fix problem with filter due to js error
 - fix bug in adding default state in `makeDisplay()`
 
 Version 0.8.1

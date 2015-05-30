@@ -9,14 +9,24 @@ vdbConn(path, name = NULL, autoYes = FALSE, verbose = TRUE)
 \arguments{
 \item{path}{The path on the local file system where the directory for the VDB is located}
 
-\item{name}{the name for the VDB (if null, uses the name of the parent directory)}
+\item{name}{A character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
+the previous name is used.  If the VDB exists and a string is provided for \code{name}, the name is overwritten.
+The primary purpose of the \code{name} argument is to facilitate deploying the trelliscope display as a Shiny app.
+See the \code{appName} argument of \code{\link{deployToShinyApps}}}
 
 \item{autoYes}{should questions to proceed with directory creation operations be automatically answered with "yes"?}
 
-\item{verbose}{logical - print messages about what is being done}
+\item{verbose}{should messages be printed about what is being done?}
+}
+\value{
+An object of class \code{vdbConn} that contains the path and name of the VDB. This object is also assigned
+to the \code{vdbConn} option, and can be retrieved via \code{getOption("vdbConn")}
 }
 \description{
-Connect to a visualization catabase
+Connect to a new or existing visualization database
+}
+\details{
+Connecting to a VDB is required prior to calling \code{\link{makeDisplay}} or \code{\link{view}}.
 }
 \author{
 Ryan Hafen

@@ -9,7 +9,7 @@ deployToShinyApps(vdbConn = getOption("vdbConn"), appName = NULL,
   quiet = FALSE)
 }
 \arguments{
-\item{vdbConn}{VDB connection settings}
+\item{vdbConn}{A vdbConn object containing the VDB connection settings}
 
 \item{appName}{name of application (app will be available at https://[account].shinyapps.io/[appName]/) - if not supplied, will use the name of VDB connection}
 
