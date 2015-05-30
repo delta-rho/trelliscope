@@ -1,8 +1,8 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.2.5
-Date: 2015-05-06
+Version: 0.8.3
+Date: 2015-05-29
 Authors@R: person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre"))
 Maintainer: Ryan Hafen <rhafen@gmail.com>
 Description: Trelliscope provides a way to create, organize, and view
@@ -21,15 +21,15 @@ BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE
 LazyData: yes
 Depends:
-    R (>= 2.15.1),
     base,
-    datadr (>= 0.7.3),
+    datadr (>= 0.7.5.7),
     lattice (>= 0.20-23),
     ggplot2
 Imports:
     data.table,
     base64enc,
-    shiny (>= 0.10.0),
+    shiny (>= 0.12.0),
+    htmlwidgets (>= 0.4.0),
     digest,
     jsonlite,
     fastICA,

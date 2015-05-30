@@ -18,6 +18,45 @@ displayListOutputData <- function(dl) {
 # to make outputs unique when a display is changed
 # (we want to trigger everything to change when a display is changed)
 
+displayInformationOutputData <- function(x) {
+  if(!is.null(x$cdo)) {
+    ds <- x$cdo$panelDataSource
+
+    attrs <- list()
+    attrs$name <- list(name = "Group/Name", val = paste(x$cdo$group, "/", x$cdo$name))
+    if(!is.null(x$cdo$desc))
+      attrs$desc <- list(name = "Description", val = x$cdo$desc)
+    attrs$n <- list(name = "Number of panels", val = x$cdo$n)
+    attrs$up <- list(name = "Last updated", val = x$cdo$updated)
+    attrs$conn <- list(name = "Data source type",
+      val = capture.output(print(getAttribute(ds, "conn"))))
+
+    cogs <- x$cdo$cogInfo[,c("name", "desc")]
+
+    if(inherits(ds, "ddf")) {
+      sbst <- capture.output(print(ds[[1]]))
+      ddo_ddf <- "distributed data frame (ddf)"
+    } else {
+      sbst <- capture.output(str(ds[[1]]))
+      ddo_ddf <- "distributed data object (ddo)"
+    }
+    sbst <- paste(sbst, collapse = "\n")
+    panelFn <- x$cdo$panelFn
+    class(panelFn) <- NULL
+    code <- paste(capture.output(dump("panelFn", ""))[-1], collapse="\n")
+
+    panel_pre <- "this function takes the value of each subset key-value pair as its argument"
+    if(length(formals(panelFn)) > 1)
+      panel_pre <- "this function takes the key and value of each subset key-value pair as its arguments"
+
+    md_desc <- x$cdo$mdDesc
+    if(is.null(md_desc))
+      md_desc <- ""
+
+    return(list(md_desc = md_desc, attrs = unname(attrs), cogs = cogs, ddo_ddf = ddo_ddf, subset = sbst, panel = code, panel_pre = panel_pre))
+  }
+}
+
 panelLayoutOutputData <- function(x) {
   if(!is.null(x$cdo)) {
     panelLayout <- x$cdo$state$layout
@@ -40,13 +79,13 @@ panelLayoutOutputData <- function(x) {
   }
 }
 
-panelFunctionOutputData <- function(x) {
-  if(!is.null(x$cdo)) {
-    panelFn <- x$cdo$panelFn
-    list(code = paste(capture.output(dump("panelFn", "")), collapse="\n"),
-      cdName = x$cdo$name, cdGroup = x$cdo$group)
-  }
-}
+# panelFunctionOutputData <- function(x) {
+#   if(!is.null(x$cdo)) {
+#     panelFn <- x$cdo$panelFn
+#     list(code = paste(capture.output(dump("panelFn", "")), collapse="\n"),
+#       cdName = x$cdo$name, cdGroup = x$cdo$group)
+#   }
+# }
 
 panelLabelListOutputData <- function(x) {
   if(!is.null(x$cdo)) {

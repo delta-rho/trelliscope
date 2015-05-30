@@ -57,12 +57,20 @@ var d3univarYbrush = d3.svg.brush()
 
 function d3univar(data, id) {
 
+  var log = data.log[0];
   var plotType = data.plotType[0];
   var xlab = data.name[0];
+  if(log !== null) {
+    xlab = "log base " + log + " " + xlab;
+  }
   var ylab = "Frequency";
   var yAxisOffset = -45;
   if(plotType == "quant") {
     ylab = data.name[0];
+    // **log**
+    if(log !== null) {
+      ylab = "log base " + log + " " + ylab;
+    }
     xlab = "f-value";
   } else if(plotType == "bar") {
     ylab = data.name[0];
@@ -91,7 +99,21 @@ function d3univar(data, id) {
     if(!filterData)
       filterData = {};
     var varName = activeVar.data("name");
-    filter = filterData[varName];
+    if(filterData[varName]) {
+      var filterFrom = NaN;
+      var filterTo = NaN;
+      var theFilter = filterData[varName];
+      if(theFilter.from)
+        filterFrom = theFilter.from;
+      if(theFilter.to)
+        filterTo = theFilter.to;
+      filter = {from: filterFrom, to: filterTo};
+      // **log**
+      if(filter && log !== "NA") {
+        filter.to = Math.log(filter.to) / Math.log(log);
+        filter.from = Math.log(filter.from) / Math.log(log);
+      }
+    }
   }
 
   if(plotType == "hist") {
@@ -102,8 +124,18 @@ function d3univar(data, id) {
     xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
 
     if(filter != undefined) {
+      if(isNaN(filter.from)) {
+        filter.from = xrange[0];
+      }
+      if(isNaN(filter.to)) {
+        filter.to = xrange[1];
+      }
+
       xrange[0] = Math.min(xrange[0], filter.from);
       xrange[1] = Math.max(xrange[1], filter.to);
+      var rdelta = xrange[1] - xrange[0];
+      xrange[0] = xrange[0] - 0.3 * rdelta;
+      xrange[1] = xrange[1] + 0.3 * rdelta;
     }
 
     d3univarX.domain(xrange);
@@ -135,8 +167,18 @@ function d3univar(data, id) {
     yrange[1] = yrange[1] + (yrange[1] - yrange[0]) * 0.07;
 
     if(filter != undefined) {
+      if(isNaN(filter.from)) {
+        filter.from = yrange[0];
+      }
+      if(isNaN(filter.to)) {
+        filter.to = yrange[1];
+      }
+
       yrange[0] = Math.min(yrange[0], filter.from);
       yrange[1] = Math.max(yrange[1], filter.to);
+      var rdelta = yrange[1] - yrange[0];
+      yrange[0] = yrange[0] - 0.3 * rdelta;
+      yrange[1] = yrange[1] + 0.3 * rdelta;
     }
 
     d3univarX.domain(xrange);

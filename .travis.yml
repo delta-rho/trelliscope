@@ -1,76 +1,22 @@
-# Sample .travis.yml for R projects.
-#
-# See README.md for instructions, or for more configuration options,
-# see the wiki:
-#   https://github.com/craigcitro/r-travis/wiki
+language: c
+
+env:
+  global:
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-
 install:
-  - #INSTALL R TESTING
-  -
   - ./travis-tool.sh r_binary_install lattice base64enc knitr markdown shiny digest codetools hexbin ggplot2 jsonlite fastICA scagnostics magrittr dplyr testthat roxygen2
-  # - ./travis-tool.sh r_install rmongodb
-  -
   - ./travis-tool.sh install_github tesseradata/datadr rstudio/shinyapps
-  -
-  - ls *
-  -
-  - # install RHIPE
-  # - ## install protobuf
-  # - wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
-  # - tar -xzf protobuf-2.4.1.tar.gz
-  # - mkdir protobuf_install
-  # - PROTOBUF_DIR="`pwd`/protobuf_install"
-  # - PATH="$PATH:PROTOBUF_DIR/bin"
-  # - PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PROTOBUF_DIR/lib/pkgconfig"
-  # - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PROTOBUF_DIR/lib"
-  # - cd protobuf-2.4.1
-  # - ./configure --prefix="$PROTOBUF_DIR"
-  # - make
-  # - make install
-  # - cd ../
-  # - ls protobuf_install
-  # - ls protobuf_install/*
-  # - ls protobuf_install/*/*
-  # - ## install rhipe
-  # - ./travis-tool.sh install_github tesseradata/RHIPE/code/R@v0.73
-  -
   - ./travis-tool.sh install_deps
-  -
-  - #INSTALL NODE TESTING
-  -
 
-  - npm install
-  -
-  - ls *
+script: ./travis-tool.sh run_tests
 
-
-
-script:
-  - ./travis-tool.sh run_tests
-  # -
-  # - R --vanilla < z_grunt_test/grunt_server.R &
-  # - R_PID=$!
-  # - echo "$R_PID"
-  # - sleep 30 # let server load
-  # -
-  # - npm test
-  # -
-  # - kill "$R_PID"
-
-
-after_failure:
+on_failure:
   - ./travis-tool.sh dump_logs
-# after_script:
-#   - ./travis-tool.sh dump_logs
-
-language: node_js
-node_js:
-  - "0.10"
 
 branches:
   only:
@@ -79,5 +25,7 @@ branches:
 
 notifications:
   email:
+    recipients:
+    - rhafen@gmail.com
     on_success: change
     on_failure: change

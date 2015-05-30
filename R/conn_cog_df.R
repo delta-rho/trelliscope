@@ -74,77 +74,19 @@ getCogData.data.frame <- function(x, rowIdx, colIdx, ...) {
   x[rowIdx, colIdx, drop = FALSE]
 }
 
-#' @export
-oldGetCurCogDat.data.frame <- function(cogDF, flt, ordering, colIndex, verbose = FALSE, ...) {
-  filterIndex <- seq_len(cogNrow(cogDF))
-
-  if(!is.null(flt)) {
-    logMsg("Updating cognostic filter index", verbose = verbose)
-    flt <- processFilterInput(flt)
-
-    for(i in seq_along(flt)) {
-      cur <- flt[[i]]
-      if(cur[1] == "from") {
-        newIndex <- which(cogDF[,colIndex][[as.integer(cur[2])]] >= as.numeric(cur[3]))
-      } else if(cur[1] == "to") {
-        newIndex <- which(cogDF[,colIndex][[as.integer(cur[2])]] <= as.numeric(cur[3]))
-      } else if(cur[1] == "regex") {
-        # browser()
-        newIndex <- try(which(grepl(cur[3], cogDF[,colIndex][[as.integer(cur[2])]])))
-        if(inherits(newIndex, "try-error"))
-          newIndex <- seq_len(cogNrow(cogDF))
-      }
-      filterIndex <- intersect(filterIndex, newIndex)
-    }
-  }
-
-  # before ordering, perform any filters
-  logMsg("Updating cognostic sort index", verbose = verbose)
-  cogDF <- cogDF[filterIndex,, drop = FALSE]
-  orderIndex <- seq_len(cogNrow(cogDF))
-  # browser()
-  # need to know which columns are visible so we are sorting the right column
-  # get sort order and sort the table
-  if(!is.null(ordering)) {
-    if(any(ordering != 0)) {
-      # if we are only sorting by one column
-      # TODO: use data.table here for faster sorting
-      if(sum(abs(ordering)) == 1) {
-        ind <- which(abs(ordering) == 1)
-        orderIndex <- order(cogDF[,colIndex[ind],drop = FALSE], decreasing = ifelse(ordering[ind] < 0, TRUE, FALSE))
-        # if(ordering[ind] < 0) {
-        #   orderIndex <- rev(cogDFOrd[,ind])
-        # } else {
-        #   orderIndex <- cogDFOrd[,ind]
-        # }
-      } else {
-        nonZero <- which(ordering != 0)
-        colOrder <- ordering[nonZero]
-        orderCols <- nonZero[order(abs(colOrder))]
-        orderSign <- sign(ordering)[orderCols]
-        orderCols <- lapply(seq_along(orderCols), function(i) {
-          if(orderSign[i] < 0) {
-            return(-xtfrm(cogDF[,colIndex[orderCols[i]], drop = FALSE]))
-          } else {
-            return(cogDF[,colIndex[orderCols[i]], drop = FALSE])
-          }
-        })
-        orderIndex <- do.call(order, orderCols)
-      }
-    }
-  }
-  # orderIndex <- filterIndex[orderIndex]
-  logMsg("Retrieving sorted and filtered cognostics data", verbose = verbose)
-  return(cogDF[orderIndex,,drop = FALSE])
-}
-
 
 #' @export
-getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = NULL) {
+getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = NULL, cogInfo = NULL) {
   # TODO: add logic about number of breaks
   # TODO: make number of quantiles configurable
   dat <- cogDF[[name]]
   dat <- dat[!is.na(dat)]
+  # handle log if specified
+  if(!is.null(cogInfo$log)) {
+    lg <- cogInfo[cogInfo$name == name, "log"]
+    if(!is.na(lg))
+      dat <- log(dat, base = lg)
+  }
 
   res <- list()
 
@@ -163,10 +105,10 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
       res[["quant"]] <- data.frame(f = c(0, 1), q = c(0, 0))
     } else {
       # get quantiles
-      if(length(n) <= 1000) {
+      if(n <= 200) {
         qnt <- data.frame(f = seq(0, 1, length = n), q = sort(dat))
       } else {
-        sq <- seq(0, 1, length = 1000)
+        sq <- seq(0, 1, length = 200)
         qnt <- data.frame(f = sq, q = quantile(dat, sq))
       }
       res[["quant"]] <- qnt
@@ -187,7 +129,7 @@ getCogCatPlotData.data.frame <- function(cogDF, name, filter = NULL) {
   dat[is.na(dat)] <- "--missing--"
   n <- length(unique(dat))
   freq <- NULL
-  if(n <= 5000) {
+  if(n <= 1000) {
     freq <- data.frame(xtabs(~ dat))
     names(freq)[1] <- "label"
     freq <- freq[order(freq$Freq, freq$label),]

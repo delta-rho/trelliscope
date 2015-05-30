@@ -65,24 +65,19 @@ output$panelTableContentOutput <- renderDataLite({
 
         logMsg("Rendering panel for keys ", paste(curRows$panelKey, collapse = ","))
 
-        # panelContent should be a list:
-        # - html
-        # - vega
-
         panelContent <- getPanels(cd$cdo,
           width = w,
           height = h,
           curRows = curRows,
           pixelratio = session$clientData$pixelratio)
-        # browser()
+
         lapply(idxList, function(rw) {
           lapply(rw, function(i) {
             if(i + idxStart - 1 > idxEnd) {
-              curPanelContent <- dummyPanel(w, h)
+              curPanelContent <- list(html = dummyPanel(w, h), class = "raster")
               cogData <- dummyCog(labelVars)
             } else {
               curPanelContent <- panelContent[[i]]
-              # browser()
               tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
               if(is.null(labelVars)) {
                 cogData <- NULL
@@ -90,7 +85,7 @@ output$panelTableContentOutput <- renderDataLite({
                 cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
               }
             }
-            # browser()
+
             list(
               i = i,
               html_wrap_start = "",
@@ -137,7 +132,7 @@ output$panelTableContentOutput <- renderDataLite({
       })
 
       names(curPanelContent) <- NULL
-      # browser()
+
       list(list(list(
         i = 1,
         html_wrap_start = paste("<div style=\"width: ",

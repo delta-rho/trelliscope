@@ -19,6 +19,7 @@ function bivarFilterPlotBrushFn() {
     correspXvar.find("i").addClass("hidden");
     $("#bivar-y-filter-select li.active i").addClass("hidden");
   } else {
+    // console.log(curBrush[0][0]);
     $("#bivarFilterPlotRange").html("x: " + prec(curBrush[0][0]) + " to " + prec(curBrush[1][0]) + " </br> y: " + prec(curBrush[0][1]) + " to " + prec(curBrush[1][1]) + "");
 
     // // show filter icon if brush is legitimate
@@ -117,6 +118,16 @@ function d3bivar(data, id) {
 
   // var data = { "data" : [ { "x" : 30.2, "y" : 8.23, "r" : 0.89 }, { "x" : 25.51, "y" : 9.03, "r" : 0.89 }, { "x" : 43.95, "y" : 11.81, "r" : 0.89 }, { "x" : 29.53, "y" : 12.2, "r" : 0.89 }, { "x" : 41.6, "y" : 13, "r" : 0.89 }, { "x" : 29.19, "y" : 14.98, "r" : 0.89 }, { "x" : 20.81, "y" : 17.76, "r" : 0.89 }, { "x" : 35.57, "y" : 18.55, "r" : 0.89 }, { "x" : 54.68, "y" : 18.95, "r" : 0.89 }, { "x" : 29.19, "y" : 21.33, "r" : 0.89 }, { "x" : 31.21, "y" : 21.33, "r" : 0.89 }, { "x" : 41.94, "y" : 24.51, "r" : 0.89 } ], "plotType" : [ "hexbin" ], "xlab" : [ "meanYield" ], "ylab" : [ "range" ], "shape" : [ 0.72 ], "hexx" : [ 0.34, 0.34, 0, -0.34, -0.34, 0 ], "hexy" : [ 0.13, -0.13, -0.26, -0.13, 0.13, 0.26 ] };
 
+  var xLog = data.xLog[0];
+  var yLog = data.yLog[0];
+  // **log**
+  if(xLog !== null) {
+    data.xlab = "log base " + xLog + " " + data.xlab;
+  }
+  if(yLog !== null) {
+    data.ylab = "log base " + yLog + " " + data.ylab;
+  }
+
   $("#" + id).html("");
   $("#" + id).append("<div id=\"" + id + "Range\" class=\"filterRange\"></div>");
 
@@ -126,40 +137,68 @@ function d3bivar(data, id) {
     .append("g")
      .attr("transform", "translate(" + bivarFilterPlotMargin.left + "," + bivarFilterPlotMargin.top + ")");
 
-  var filterData = $("#univarFilterState").data("filterData");
-  if(!filterData)
-    filterData = {};
-
-  var xFilter;
+  var xFrom = null;
+  var xTo = null;
   activeXvar = $("#bivar-x-filter-select li.active");
   if(activeXvar) {
-    var varName = activeXvar.data("name");
-    xFilter = filterData[varName];
+    var filterData = $("#univarFilterState").data("filterData");
+    if(filterData) {
+      var varName = activeXvar.data("name");
+      if(filterData[varName]) {
+        xFrom = filterData[varName].from;
+        xTo = filterData[varName].to;
+        // **log**
+        if(xLog !== null) {
+          xFrom = Math.log(xFrom) / Math.log(xLog);
+          xTo = Math.log(xTo) / Math.log(xLog);
+        }
+      }
+    }
   }
 
-  var yFilter;
+  var yFrom = null;
+  var yTo = null;
   activeYvar = $("#bivar-y-filter-select li.active");
   if(activeYvar) {
-    var varName = activeYvar.data("name");
-    yFilter = filterData[varName];
+    var filterData = $("#univarFilterState").data("filterData");
+    if(filterData) {
+      var varName = activeYvar.data("name");
+      if(filterData[varName]) {
+        yFrom = filterData[varName].from;
+        yTo = filterData[varName].to;
+        // **log**
+        // if(yLog !== null) {
+        //   yFrom = Math.log(yFrom) / Math.log(yLog);
+        //   yTo = Math.log(yTo) / Math.log(yLog);
+        // }
+      }
+    }
   }
 
   var xrange = d3.extent(data.data.map(function(d) { return d.x; }));
   xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.07;
   xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
 
-  if(xFilter) {
-    xrange[0] = Math.min(xrange[0], xFilter.from);
-    xrange[1] = Math.max(xrange[1], xFilter.to);
+  if(xFrom) {
+    xrange[0] = Math.min(xrange[0], xFrom);
+    xrange[0] = xrange[0] - 0.1 * (xrange[1] - xrange[0]);
+  }
+  if(xTo) {
+    xrange[1] = Math.max(xrange[1], xTo);
+    xrange[1] = xrange[1] + 0.1 * (xrange[1] - xrange[0]);
   }
 
   var yrange = d3.extent(data.data.map(function(d) { return d.y; }));
   yrange[0] = yrange[0] - (yrange[1] - yrange[0]) * 0.07;
   yrange[1] = yrange[1] + (yrange[1] - yrange[0]) * 0.07;
 
-  if(yFilter) {
-    yrange[0] = Math.min(yrange[0], yFilter.from);
-    yrange[1] = Math.max(yrange[1], yFilter.to);
+  if(yFrom) {
+    yrange[0] = Math.min(yrange[0], yFrom);
+    yrange[0] = yrange[0] - 0.1 * (yrange[1] - yrange[0]);
+  }
+  if(yTo) {
+    yrange[1] = Math.max(yrange[1], yTo);
+    yrange[1] = yrange[1] + 0.1 * (yrange[1] - yrange[0]);
   }
 
   window[id + "X"].domain(xrange);

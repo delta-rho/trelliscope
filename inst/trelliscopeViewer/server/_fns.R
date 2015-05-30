@@ -13,6 +13,19 @@ renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NU
   }
 }
 
+# renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) {
+#   if (!is.null(func)) {
+#     shinyDeprecated(msg="renderDateLite: argument 'func' is deprecated. Please use 'expr' instead.")
+#   } else {
+#     installExprFunction(expr, "func", env, quoted)
+#   }
+
+#   markRenderFunction(NULL, function() {
+#     value <- func()
+#     return(value)
+#   })
+# }
+
 renderData <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) {
   if (!is.null(func)) {
     shinyDeprecated(msg = "renderTemplate: argument 'func' is deprecated. Please use 'expr' instead.")
@@ -24,7 +37,7 @@ renderData <- function(expr, env = parent.frame(), quoted = FALSE, func = NULL) 
     # jsonlite handles data frames the way we want
     res <- func()
     if(!is.null(res))
-      return(RJSONIO::toJSON(res))
+      return(shiny:::toJSON(res))
   }
 }
 
@@ -98,39 +111,49 @@ getUnivarPlotDat <- function(cd, name, distType = "marginal", plotType = "hist",
   if(plotType == "quantile")
     plotType <- "quant"
 
+  if(length(name) == 0)
+    return(list(name = name))
+
   curInfo <- cd$cdo$cogDistns[[name]]
 
-  if(!is.na(curInfo$type)) {
-    if(curInfo$type == "numeric") {
-      if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
-        tmp <- curInfo$marginal[[plotType]]
-      } else {
-        tmp <- trelliscope:::getCogQuantPlotData(cd$curCogDF, name, plotType)
-      }
-      if(plotType == "hist") {
-        delta <- diff(tmp$xdat[1:2])
-        tmp$label <- paste("(", tmp$xdat, ",", tmp$xdat + delta, "]", sep = "")
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1))))
-        # add random normal to make sure it triggers even when it
-        # doesn't change - this is to ensure spinner will get replaced
-      } else {
-        names(tmp)[1:2] <- c("x", "y")
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1))))
-      }
-    } else { # bar chart
-      if(distType == "marginal") {
-        tmp <- curInfo$marginal
-      } else {
-        tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
-      }
-      if(is.data.frame(tmp)) {
-        if(nrow(tmp) > maxLevels)
-          return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
-        tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
-        names(tmp)[which(names(tmp) == "Freq")] <- "ydat"
-        tmp$xdat <- seq_len(nrow(tmp))
-        return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = ifelse(calledFromFooter, 1, rnorm(1))))
-      }
+  if(is.null(curInfo))
+    return(list(name = name))
+  if(is.na(curInfo$type))
+    return(list(name = name))
+
+  if(curInfo$type == "numeric") {
+    if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
+      tmp <- curInfo$marginal[[plotType]]
+    } else {
+      tmp <- trelliscope:::getCogQuantPlotData(cd$curCogDF, name, plotType, cogInfo = cd$cdo$cogInfo)
+    }
+    if(plotType == "hist") {
+      delta <- diff(tmp$xdat[1:2])
+      logPrefix <- ""
+      if(!is.null(curInfo$log))
+        if(!is.na(curInfo$log))
+          logPrefix <- paste0(curInfo$log, "^")
+      tmp$label <- paste("(", logPrefix, tmp$xdat, ",", logPrefix, tmp$xdat + delta, "]", sep = "")
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
+      # add random normal to make sure it triggers even when it
+      # doesn't change - this is to ensure spinner will get replaced
+    } else {
+      names(tmp)[1:2] <- c("x", "y")
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = plotType, id = ifelse(calledFromFooter, 1, rnorm(1)), log = curInfo$log))
+    }
+  } else { # bar chart
+    if(distType == "marginal") {
+      tmp <- curInfo$marginal
+    } else {
+      tmp <- trelliscope:::getCogCatPlotData(cd$curCogDF, name, plotType)$freq
+    }
+    if(is.data.frame(tmp)) {
+      if(nrow(tmp) > maxLevels)
+        return(list(name = name, id = ifelse(calledFromFooter, 1, rnorm(1))))
+      tmp <- rbind(tmp, data.frame(label = "", Freq = 0, stringsAsFactors = FALSE))
+      names(tmp)[which(names(tmp) == "Freq")] <- "ydat"
+      tmp$xdat <- seq_len(nrow(tmp))
+      return(list(name = name, type = curInfo$type, data = tmp, plotType = "bar", id = ifelse(calledFromFooter, 1, rnorm(1))))
     }
   }
   return(list(name = name))
@@ -142,19 +165,22 @@ getCogScatterPlotData <- function(x, ...)
 getCogHexbinPlotData <- function(x, ...)
   UseMethod("getCogHexbinPlotData", x)
 
-getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar) {
+getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar, xTrans = identity, yTrans = identity, xLog = NULL, yLog = NULL) {
   idx <- complete.cases(cogDF[,c(xVar, yVar)])
   list(
-    data = data.frame(x = cogDF[idx,xVar], y = cogDF[idx,yVar]),
+    data = data.frame(x = xTrans(cogDF[idx,xVar]), y = yTrans(cogDF[idx,yVar])),
     plotType = "scatter",
     xlab = xVar,
-    ylab = yVar
+    ylab = yVar,
+    xLog = xLog,
+    yLog = yLog
   )
 }
 
-getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30) {
+getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30, xTrans = xTrans, yTrans = yTrans, xLog = NULL, yLog = NULL) {
   require(hexbin)
-  dat <- hexbin:::hexbin(cogDF[,xVar], cogDF[,yVar], shape = shape, xbin = xbin)
+  idx <- complete.cases(cogDF[,c(xVar, yVar)])
+  dat <- hexbin:::hexbin(xTrans(cogDF[idx,xVar]), yTrans(cogDF[idx,yVar]), shape = shape, xbin = xbin)
   style <- "lattice"
   minarea <- 0.05
   maxarea <- 0.8
@@ -207,22 +233,43 @@ getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape
     ylab = yVar,
     shape = shape,
     hexx = hexC$x,
-    hexy = hexC$y
+    hexy = hexC$y,
+    xLog = xLog,
+    yLog = yLog
   )
 }
 
 getBivarPlotDat <- function(cd, xVar, yVar, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
+
+  # deal with log
+  xRow <- cd$cdo$cogInfo[cd$cdo$cogInfo$name == xVar,,drop=FALSE]
+  yRow <- cd$cdo$cogInfo[cd$cdo$cogInfo$name == yVar,,drop=FALSE]
+  xTrans <- identity; xLog = NA
+  if(!is.null(xRow$log)) {
+    if(!is.na(xRow$log)) {
+      xTrans <- function(x) log(x, xRow$log)
+      xLog <- xRow$log
+    }
+  }
+  yTrans <- identity; yLog = NA
+  if(!is.null(yRow$log)) {
+    if(!is.na(yRow$log)) {
+      yTrans <- function(x) log(x, yRow$log)
+      yLog <- yRow$log
+    }
+  }
+
   if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
     if(plotType == "scatter") {
-      getCogScatterPlotData(cd$cdo$cogDatConn, xVar, yVar)
+      getCogScatterPlotData(cd$cdo$cogDatConn, xVar, yVar, xTrans = xTrans, yTrans = yTrans, xLog = xLog, yLog = yLog)
     } else {
-      getCogHexbinPlotData(cd$cdo$cogDatConn, xVar, yVar, shape, xbin)
+      getCogHexbinPlotData(cd$cdo$cogDatConn, xVar, yVar, shape, xbin, xTrans = xTrans, yTrans = yTrans, xLog = xLog, yLog = yLog)
     }
   } else {
     if(plotType == "scatter") {
-      getCogScatterPlotData(cd$curCogDF, xVar, yVar)
+      getCogScatterPlotData(cd$curCogDF, xVar, yVar, xTrans = xTrans, yTrans = yTrans, xLog = xLog, yLog = yLog)
     } else {
-      getCogHexbinPlotData(cd$curCogDF, xVar, yVar, shape, xbin)
+      getCogHexbinPlotData(cd$curCogDF, xVar, yVar, shape, xbin, xTrans = xTrans, yTrans = yTrans, xLog = xLog, yLog = yLog)
     }
   }
 }
@@ -284,7 +331,7 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
     panelContent <- lapply(seq_along(curDat), function(i) {
       x <- curDat[[i]]
       res <- try({
-        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$lims, pixelratio)
+        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$height, cdo$lims, pixelratio)
       })
       if(inherits(res, "try-error"))
         res <- NULL
@@ -305,7 +352,7 @@ getPanelContent.rplotFn <- function(panelFn, ...)
 getPanelContent.ggplotFn <- function(panelFn, ...)
   getPanelContent.trellisFn(panelFn, ...)
 
-getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
+getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
   tmpfile <- tempfile()
   on.exit(rm(tmpfile))
 
@@ -322,56 +369,33 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, lims
   html <- paste("<img src=\"", encodePNG(tmpfile),
     "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
 
-  list(html = html, deps = NULL, spec = "")
+  list(html = html, class = "raster")
 }
 
-getPanelContent.ggvisFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-
+getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
   p <- kvApply(x, panelFn)$value
-  p <- set_options(p, width = width, height = height)
+  scaleUp <- p$scale_up
+  scaleDown <- p$scale_down
+  if(is.null(scaleUp))
+    scaleUp <- FALSE
+  # default if not explicitly specified is to scale down
+  if(is.null(scaleDown))
+    scaleDown <- TRUE
 
-  list(
-    html = "",
-    deps = NULL,
-    spec = getVegaSpec(p)
-  )
-}
-
-getPanelContent.rChartsFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-
-  p <- kvApply(x, panelFn)$value
-  p$set(width = width, height = height)
-  # paste(capture.output(p$print()), collapse = '\n')
-
-  # override the cdn settings that ship with rCharts
-  # as some aren't available over https
-  # which is used by shinyapps.io
-  cdnPath <- file.path(system.file(package = "trelliscope"),
-    "rChartsCdnOverride",
-    tolower(class(p))[1])
-  if(file.exists(file.path(cdnPath, "config.yml")))
-    p$LIB$url <- cdnPath
-
-  p <- capture.output(p$show('iframesrc', cdn = TRUE))
-
-  ind <- which(grepl("iframe\\.rChart", p))
-  if(length(ind) > 0) {
-    p[ind[1]] <- "<style>iframe.rChart{ width: 100%; height: 100%;}</style>"
+  if(scaleUp && width > origWidth) {
+    p$width <- origWidth
+    p$height <- origHeight
+    scale <- width / origWidth
+  } else if(scaleDown && width < origWidth) {
+    p$width <- origWidth
+    p$height <- origHeight
+    scale <- width / origWidth
+  } else {
+    p$width <- width
+    p$height <- height
+    scale <- ""
   }
 
-  html <- paste(c(
-    sprintf("<div style='width:%dpx; height:%dpx'>", as.integer(width), as.integer(height)),
-    p,
-    "</div>"
-  ), collapse = "\n")
-
-  list(html = html, deps = NULL, spec = "")
-}
-
-getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, lims, pixelratio) {
-  p <- kvApply(x, panelFn)$value
-  p$width <- width
-  p$height <- height
   w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
   d <- attr(w, "html_dependencies")
   d <- lapply(d, function(el) {
@@ -404,43 +428,13 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, l
     }
     el
   })
-  # browser()
+
   list(
     html = as.character(w),
+    class = "htmlwidget",
     deps = d,
-    spec = ""
+    scale = scale
   )
 }
 
-getVegaSpec <- function(x) {
-  spec <- ggvis:::as.vega(x)
-  RJSONIO::toJSON(spec)
-}
-
-
-# makePanel.rGraphics <- function(filename, func, width = 400, height = 400, origWidth = 400, origHeight = 400, pixelratio = 1, res = 72, basePointSize = 12) {
-#
-#   if(capabilities("aqua")) {
-#     pngfun <- png
-#   } else if (suppressWarnings(suppressMessages(require("Cairo")))) {
-#     pngfun <- CairoPNG
-#   } else {
-#     pngfun <- png
-#   }
-#
-#   pngfun(filename = filename,
-#     width = width * pixelratio,
-#     height = height * pixelratio,
-#     res = res * pixelratio,
-#     pointsize = basePointSize * width / origWidth)
-#
-#   dv <- dev.cur()
-#
-#   tryCatch(func(), finally = dev.off(dv))
-# }
-#
-# require(fastICA)
-#
-#
-# makeBivarJSON(ic$S[,1], ic$S[,2], xlab="IC 1", ylab="IC 2")
 

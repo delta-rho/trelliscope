@@ -71,11 +71,6 @@ cogNames <- function(x, ...)
 getCogData <- function(x, rowIdx, colIdx, ...)
   UseMethod("getCogData")
 
-#' @export
-#' @rdname cogConn-methods
-oldGetCurCogDat <- function(cogDF, flt, ordering, colIndex, verbose, ...)
-  UseMethod("oldGetCurCogDat")
-
 ### for cogDistns
 
 getCogQuantPlotData <- function(x, ...) {

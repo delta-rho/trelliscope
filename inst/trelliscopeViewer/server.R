@@ -1,4 +1,5 @@
 library(shiny, warn.conflicts = FALSE)
+library(dplyr)
 # htmlwidgets not required unless panel function is one
 suppressWarnings(require(htmlwidgets, warn.conflicts = FALSE))
 library(jsonlite, warn.conflicts = FALSE)
@@ -45,4 +46,6 @@ shinyServer(function(input, output, session) {
   source("server/cogState.R", local = TRUE)
   source("server/cogTable.R", local = TRUE)
   source("server/panelTable.R", local = TRUE)
+  source("server/misc.R", local = TRUE)
 })
+

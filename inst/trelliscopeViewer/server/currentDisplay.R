@@ -70,8 +70,7 @@ currentDisplay <- reactive({
 
     # handle RHIPE
     if(inherits(cdo$panelDataSource, "kvHDFS")) {
-      if(!"Rhipe" %in% loadedNamespaces())
-      if(!isNamespaceLoaded("Rhipe")) {
+      if(!"Rhipe" %in% loadedNamespaces()) {
         if(!is.null(cdo$envs))
           try(do.call(Sys.setenv, cdo$envs))
         # hacky way to make sure shinyapps doesn't try to find Rhipe
@@ -129,13 +128,17 @@ currentDisplay <- reactive({
 
 ## initial UI template outputs dependent on selected display
 
+output$displayInformationOutput <- renderDataLite({
+  displayInformationOutputData(currentDisplay())
+})
+
 output$panelLayoutOutput <- renderDataLite({
   panelLayoutOutputData(currentDisplay())
 })
 
-output$panelFunctionOutput <- renderDataLite({
-  panelFunctionOutputData(currentDisplay())
-})
+# output$panelFunctionOutput <- renderDataLite({
+#   panelFunctionOutputData(currentDisplay())
+# })
 
 output$panelLabelListOutput <- renderDataLite({
   panelLabelListOutputData(currentDisplay())
@@ -150,6 +153,7 @@ output$activeCogListOutput <- renderDataLite({
 })
 
 output$cogTableControlsOutput <- renderDataLite({
+  # browser()
   cogTableControlsOutputData(currentDisplay())
 })
 

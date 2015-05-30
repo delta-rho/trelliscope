@@ -12,6 +12,7 @@ if(getRversion() >= "2.15.1") {
 #' @param group the group the display belongs to, where displays are organized into groups (no special characters, spaces are
 #' converted to underscores).  Defaults to "common"
 #' @param desc a description of the display (used in the viewer and in notebooks)
+#' @param mdDesc an optional longer-form description of the display and data, which can be text or can be a path to a markdown file or file with html snippets.  The description will appear in the "Display Information" panel in the Trelliscope viewer.
 #' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param panelFn a function that produces a plot and takes one argument, which will be the current split of the data being passed to it.  It is recommended that you first test \code{panelFn} on a single key-value pair using \code{panelFn(data[[1]][[2]])}. This function must return either an object of class "ggplot", "trellis", or return "NULL" (for base plot commands)
@@ -49,6 +50,7 @@ makeDisplay <- function(
   name,
   group = "common",
   desc = "",
+  mdDesc = NULL,
   height = 500,
   width = 500,
   panelFn = NULL, # function to be applied to each split,
@@ -92,6 +94,17 @@ makeDisplay <- function(
 
   if(!inherits(cogConn, "cogConn"))
     stop("Argument 'cogConn' not valid")
+
+  if(!is.null(mdDesc)) {
+    if(grepl("\\.md$|\\.html$", mdDesc)) {
+      if(file.exists(mdDesc)) {
+        mdDesc <- paste(readLines(mdDesc), collapse = "\n")
+      } else {
+        warning("Could not find file ", mdDesc)
+        mdDesc <- ""
+      }
+    }
+  }
 
   # if pre-rendering images and no output is specified
   # then store on disk in the VDB directory
@@ -228,6 +241,12 @@ makeDisplay <- function(
     message("* Storing display object...")
 
   cogInfo <- getCogInfo(cogEx)
+  cogInfo <- getCogInfo(cogDatConn)
+  # if type couldn't be inferred then get it from the whole cog data frame
+  ind <- which(is.na(cogInfo$type))
+  for(ii in ind)
+    cogInfo$type[ii] <- inferCogType(cogDatConn[[ii]])
+
   cogDistns <- getCogDistns(cogDatConn, cogInfo)
 
   # some back ends (like RHIPE) might need to store environment variables
@@ -243,6 +262,7 @@ makeDisplay <- function(
     name = name,
     group = group,
     desc = desc,
+    mdDesc = mdDesc,
     preRender = preRender,
     panelFn = panelFn,
     panelFnType = panelFnType,
@@ -270,6 +290,8 @@ makeDisplay <- function(
 
   # make thumbnail
   message("* Plotting thumbnail...")
+  if(inherits(panelEx, "htmlwidget"))
+    widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
   suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
   # small thumbnail
   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)

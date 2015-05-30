@@ -9,7 +9,7 @@ function renderTemplate(objId, data, templateId) {
     if(outObj) {
       var templ = tmplObj.innerHTML;
       var output = Mustache.render(templ, data);
-      // if(templateId == "panelTableContentOutput-template")
+      // if(templateId == "cogTableControlsOutput-template")
       //   console.log(output);
       outObj.innerHTML = output;
     } else {
@@ -48,7 +48,7 @@ $.extend(templateOutputBinding, {
     return $(scope).find(".shiny-template-output");
   },
   renderValue: function(el, data) {
-    data = JSON.parse(data);
+    // data = JSON.parse(data);
     if(data) {
       var objId = $(el).attr("id");
 
@@ -86,7 +86,7 @@ $.extend(d3outputBinding, {
   },
   renderValue: function(el, data) {
     if(data) {
-      data = JSON.parse(data);
+      // data = JSON.parse(data);
       // console.log(data);
       var functionName = $(el).data("d3-fn");
 
@@ -148,7 +148,10 @@ $.extend(dataOutputBinding, {
     return $(scope).find(".shiny-my-data-output");
   },
   renderValue: function(el, data) {
-    data = JSON.parse(data);
+    // console.log(el);
+    // console.log(data);
+
+    // data = JSON.parse(data);
     $(el).data("myShinyData", data);
 
     var callbackName = $(el).data("callback");

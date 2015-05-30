@@ -1,0 +1,3 @@
+output$sessionInfoOutput <- renderPrint({
+  sessionInfo()
+})

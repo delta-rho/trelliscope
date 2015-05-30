@@ -39,6 +39,7 @@ univarFilterLocalSave = function() {
       filterData = {};
 
     var varName = activeVar.data("name");
+    var log = activeVar.data("log");
 
     if(activeVar.data("type") == "numeric") {
       if($("#univarPlotType button.histogram-button").hasClass("active")) {
@@ -48,11 +49,19 @@ univarFilterLocalSave = function() {
       }
 
       if(!curBrush.empty()) {
-        var filter = curBrush.extent();
+        var filterBrush = curBrush.extent();
+        var filterFrom = null;
+        var filterTo = null;
+        // **log**
+        filterFrom = filterBrush[0];
+        filterTo = filterBrush[1];
+        if(log !== "") {
+          filterFrom = Math.pow(log, filterFrom);
+          filterTo = Math.pow(log, filterTo);
+        }
         if(!filterData[varName])
           filterData[varName] = {};
-        filterData[varName] = { from: filter[0], to: filter[1]};
-        // console.log(filterData);
+        filterData[varName] = { from: filterFrom, to: filterTo};
       } else {
         // remove the element
         delete filterData[varName];
@@ -81,20 +90,35 @@ univarFilterLocalLoad = function() {
     var filterData = $("#univarFilterState").data("filterData");
     if(!filterData)
       filterData = {};
+
     var varName = activeVar.data("name");
-    var filter = filterData[varName];
+
+    var filterFrom = null;
+    var filterTo = null;
+    if(filterData[varName]) {
+      filterFrom = filterData[varName].from;
+      filterTo = filterData[varName].to;
+    }
+    // filter = {from: theFilter.from, to: theFilter.to};
+    var log = activeVar.data("log");
     // console.log(filter);
 
     if(activeVar.data("type") == "numeric") {
       // filter is stored as {from: , to:} - make it array
       if($("#univarPlotType button.histogram-button").hasClass("active")) {
-        if(filter) {
+        if(filterData[varName]) {
           var dm = d3univarX.domain();
-          if(filter.from == undefined)
-            filter.from = dm[0];
-          if(filter.to == undefined)
-            filter.to = dm[1];
-          filter = [filter.from, filter.to];
+          if(filterFrom == undefined) {
+            filterFrom = dm[0];
+          } else if(log !== "") {
+            filterFrom = Math.log(filterFrom) / Math.log(log);
+          }
+          if(filterTo == undefined) {
+            filterTo = dm[1];
+          } else if(log !== "") {
+            filterTo = Math.log(filterTo) / Math.log(log);
+          }
+          var filter = [filterFrom, filterTo];
           d3.select("#univarFilterPlot")
             .select(".brush")
             .call(d3univarXbrush.extent(filter));
@@ -106,8 +130,19 @@ univarFilterLocalLoad = function() {
           d3univarXbrushFn();
         }
       } else { // quantile
-        if(filter) {
-          filter = [filter.from, filter.to];
+        if(filterData[varName]) {
+          var dm = d3univarY.domain();
+          if(filterFrom == undefined) {
+            filterFrom = dm[0];
+          } else if(log !== "") {
+            filterFrom = Math.log(filterFrom) / Math.log(log);
+          }
+          if(filterTo == undefined) {
+            filterTo = dm[1];
+          } else if(log !== "") {
+            filterTo = Math.log(filterTo) / Math.log(log);
+          }
+          var filter = [filterFrom, filterTo];
           d3.select("#univarFilterPlot")
             .select(".brush")
             .call(d3univarYbrush.extent(filter));

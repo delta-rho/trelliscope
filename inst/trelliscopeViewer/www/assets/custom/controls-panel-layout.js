@@ -101,7 +101,11 @@ function getPanelDims(nRow, nCol, nCog) {
   var panelAspect = $("#panel-layout-data").data("panelAspect");
   if(panelAspect) {
     var tPad = 3; // padding on either side of the panel
-    var cogHeight = 30; // height of a row of cog output
+    // height of row of cog label depends on number of rows
+    // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->8
+    // and on line-height of 1.2
+    var cogHeightArr = [26, 24, 22, 19];
+    var cogHeight = cogHeightArr[Math.min(nRow - 1, 3)];
     // var nCog = $(".panel-labels-select.active").length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change

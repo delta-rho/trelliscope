@@ -126,6 +126,7 @@ cdoExposedCogState <- reactive({
   cdo
 })
 
+## want scalars as json scalars so use renderData instead of renderDataLite
 output$exposedStateDataOutput <- renderData({
   cdo <- cdoExposedCogState()
   # if(!is.null(cdo$state))

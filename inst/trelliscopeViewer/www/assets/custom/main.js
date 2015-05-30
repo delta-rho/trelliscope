@@ -109,15 +109,19 @@ $(document).keydown(function(e) {
         pageForward();
         return false;
         break;
-      case 76: // l
+      case 68: // d
+        $("#display-info-nav-link").click();
+        return false;
+        break;
+      case 80: // p
         $("#panel-layout-nav-link").click();
         return false;
         break;
-      case 70: // f
-        $("#panel-function-nav-link").click();
-        return false;
-        break;
-      case 69: // e
+      // case 70: // f
+      //   $("#panel-function-nav-link").click();
+      //   return false;
+      //   break;
+      case 76: // l
         $("#panel-labels-nav-link").click();
         return false;
         break;
@@ -162,9 +166,9 @@ $(document).keydown(function(e) {
     if(e.keyCode == 27) // escape
       slidePanel.find("button.btn-panel-close").click();
     if(e.keyCode == 13) { //enter
-      // don't want enter to do anything inside editor
-      if(slidePanel.attr("id") != "panel-function")
-        slidePanel.find("button.btn-panel-apply").click();
+      // // don't want enter to do anything inside editor
+      // if(slidePanel.attr("id") != "panel-function")
+      slidePanel.find("button.btn-panel-apply").click();
     }
   }
 });
@@ -268,14 +272,14 @@ function masterControlPostRender() {
   });
 }
 
-// initialize code editor
-function panelFunctionOutputPostRender() {
-  var editor = ace.edit("editor");
-  editor.setTheme("ace/theme/tomorrow");
-  editor.getSession().setTabSize(3);
-  editor.getSession().setUseSoftTabs(true);
-  editor.getSession().setMode("ace/mode/r");
-}
+// // initialize code editor
+// function panelFunctionOutputPostRender() {
+//   var editor = ace.edit("editor");
+//   editor.setTheme("ace/theme/tomorrow");
+//   editor.getSession().setTabSize(3);
+//   editor.getSession().setUseSoftTabs(true);
+//   editor.getSession().setMode("ace/mode/r");
+// }
 
 function updateControlsExposedState() {
   univarFilterSetFromExposedState();
@@ -387,6 +391,18 @@ function cogMapOutputPostRender() {
   })
 }
 
+function displayInformationOutputPostRender(data) {
+  $("#md-desc").html(marked($("#md-desc").html()));
+  try {
+    renderMathInElement(document.getElementById("display-information"));
+  } catch(err) {
+    console.log(err.message);
+  }
+  $("#display-information table").each(function() {
+    $(this).addClass("table table-condensed table-bordered");
+  });
+}
+
 function panelTableContentOutputPostRender(data) {
   // stop spinner
   var target = document.getElementById("panelTableSpinner");
@@ -400,52 +416,18 @@ function panelTableContentOutputPostRender(data) {
     $("#openModal").modal("hide");
   }
 
-  // this is a hack right now
-  // when panels contain scripts that need to be executed
-  // calling jQuery's html() runs those scripts
-  // $(".panel-image-wrapper").each(function() {
-  //   $(this).html($(this).html());
-  // });
-
-  // if it is not a static image expect vega spec in .data
-  // console.log(data[0][0].panel_content.length);
-  // console.log(data);
-  if(data[0][0].panel_content[0].data != "") {
-    for (var i = 0; i < data.length; i++) {
-      for (var j = 0; j < data[i].length; j++) {
-        data[i][j].panel_content.forEach(function(pc) {
-          console.log(pc);
-          if(pc.spec) {
-            if(pc.spec[0] != "") {
-              var curID = pc.data.id[0];
-              try {
-                var spec = JSON.parse(pc.spec);
-              } catch (e) {
-                console.log(e);
-                return;
-              }
-              $(curID).data("spec", spec);
-              // console.log(curID);
-              // console.log($(curID));
-              // vg.parse.spec($(curID).data("spec"), function(chart) {
-              vg.parse.spec(spec, function(chart) {
-                var ch = chart({el:curID});
-                var w = ch.width();
-                var h = ch.height();
-                ch.update();
-                var pd = ch.padding();
-                ch.width(w - pd.left - pd.right).height(h - pd.top - pd.bottom);
-                ch.update();
-              });
-            }
-          }
-          if(pc.deps.length) {
-            Shiny.renderDependencies(pc.deps);
-            HTMLWidgets.staticRender();
-          }
-        });
-      }
-    };
+  // if it is not a raster image expect an htmlwidget
+  var pc = data[0][0].panel_content[0];
+  if(pc.class[0] == "htmlwidget") {
+    // console.log(pc.deps)
+    Shiny.renderDependencies(pc.deps);
+    try {
+      HTMLWidgets.staticRender();
+    } catch(err) {
+      console.log(err.message);
+    }
+    if(pc.scale[0] != "")
+      $(".html-widget-static-bound").zoomscale(pc.scale[0]);
   }
 
   // make width of cog name column uniform across
@@ -462,6 +444,16 @@ function panelTableContentOutputPostRender(data) {
   var totWidth = $("#panel-layout-data").data("panelDims").w;
   $(".cog-value-td").width(totWidth - maxCogNameWidth - 21);
   // $(".panel-cog-table").width(totWidth);
+
+  // change font size of cog labels depending on how many rows
+  // 1 row -> 14
+  // 2 rows -> 12
+  // 3 rows -> 10
+  // 4+ rows -> 8
+  var font_size = [14, 12, 10, 8];
+  var n_rows = Math.min(data.length - 1, 3);
+  $(".panel-label-row").css("line-height", "1.2");
+  $(".panel-label-row").css("font-size", font_size[n_rows] + "px");
 }
 
 
@@ -508,8 +500,7 @@ $(document).ready(function() {
     } else {
       console.log("Running in shiny mode...")
       try {
-        Shiny.unbindAll();
-        Shiny.bindAll()
+        Shiny.bindAll();
       } catch (e) {
        // do nothing
       }
@@ -527,5 +518,50 @@ $(document).ready(function() {
     $(".right-panel").toggleClass("right-slide");
     $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")
   });
+
+  $('#aboutModal').on('show.bs.modal', function (e) {
+    $("#aboutModalButton").addClass("hovered");
+  });
+
+  $('#openModal').on('show.bs.modal', function (e) {
+    $("#openModalButton").addClass("hovered");
+  });
+
+  $('#aboutModal').on('hide.bs.modal', function (e) {
+    $("#aboutModalButton").removeClass("hovered");
+  });
+
+  $('#openModal').on('hide.bs.modal', function (e) {
+    $("#openModalButton").removeClass("hovered");
+  });
 });
 
+// for scaling down htmlwidget panels when there are many on a page
+$.fn.zoomscale = function(x) {
+  if(!$(this).filter(':visible').length && x != 1) return $(this);
+  if(!$(this).parent().hasClass('scaleContainer')){
+    $(this).wrap($('<div class="scaleContainer">').css('position','relative'));
+    $(this).data({
+        'originalWidth': $(this).width(),
+        'originalHeight': $(this).height()});
+  }
+  $(this).css({
+    'transform': 'scale('+x+')',
+    '-ms-transform': 'scale('+x+')',
+    '-moz-transform': 'scale('+x+')',
+    '-webkit-transform': 'scale('+x+')',
+    'transform-origin': 'right bottom',
+    '-ms-transform-origin': 'right bottom',
+    '-moz-transform-origin': 'right bottom',
+    '-webkit-transform-origin': 'right bottom',
+    'position': 'absolute',
+    'bottom': '0',
+    'right': '0',
+  });
+  if(x == 1)
+    $(this).unwrap().css('position','static'); else
+      $(this).parent()
+        .width($(this).data('originalWidth')*x)
+        .height($(this).data('originalHeight')*x);
+  return $(this);
+};
