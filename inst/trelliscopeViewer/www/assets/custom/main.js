@@ -534,6 +534,12 @@ $(document).ready(function() {
   $('#openModal').on('hide.bs.modal', function (e) {
     $("#openModalButton").removeClass("hovered");
   });
+
+  $('.info-tab-label').click(function (e) {
+    $('.tab-pane').removeClass('active');
+    $('#' + $(this).data('tabname')).addClass('active')
+  })
+
 });
 
 // for scaling down htmlwidget panels when there are many on a page

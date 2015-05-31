@@ -237,76 +237,43 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-times"></i></button>
           <h3 class="modal-title" id="myAModalLabel">Trelliscope Viewer</h3>
         </div>
         <div class="modal-body">
           <ul class="nav nav-tabs" role="tablist" id="infoTab">
-            <li class="active"><a href="#abouttrelliscope" role="tab" data-toggle="tab" class="info-tab-label">About</a></li>
-            <li><a href="#hotkeys" role="tab" data-toggle="tab" class="info-tab-label">Hotkeys</a></li>
-            <li><a href="#sessionInfo" role="tab" data-toggle="tab" class="info-tab-label">Session Info</a></li>
-            <li><a href="#credits" role="tab" data-toggle="tab" class="info-tab-label">Credits</a></li>
+            <li class="active"><a href="" data-tabname="abouttrelliscope" class="info-tab-label">About</a></li>
+            <li><a href="" data-tabname="hotkeys" class="info-tab-label">Hotkeys</a></li>
+            <li><a href="" data-tabname="sessionInfo" class="info-tab-label">Session Info</a></li>
+            <li><a href="" data-tabname="credits" class="info-tab-label">Credits</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="abouttrelliscope">
               <h3>What is Trelliscope?</h3>
-              <p>Trelliscope is a visualization tool that provides interactive exploration of large collections of plots.  Trelliscope enables detailed, flexible visualization of large data sets by partitioning data into subsets, applying a plot method to each subset to create a <emph>panel</emph>, and then allowing the analyst to interactively view the panels.  Interaction is provided by the ability to sort and filter the panels based on metrics computed for each subset that describe behaviors of interest.  These metrics are called <emph>cognostics</emph></p>
+              <p>Trelliscope is a visualization tool that provides interactive exploration of large collections of plots. Trelliscope enables detailed, flexible visualization of large data sets by partitioning data into subsets, applying a plot method to each subset to create a <em>panel</em>, and then allowing the analyst to interactively view the panels. Interaction is provided by the ability to sort and filter the panels based on metrics computed for each subset that describe behaviors of interest. These metrics are called <em>cognostics</em></p>
               <p>Those familiar with Trellis Display, faceting in ggplot, or Tufte's small multiples can simply think of Trelliscope as a mechanism for scalable, interactive Trellis display.</p>
               <h3>How to use the Trelliscope Viewer</h3>
-              <p>In this viewer you will find one or more Trelliscope displays that have been created for you to view.  You can click the folder icon in the top right corner (or press "o" on your keyboard) to bring up a list of displays to choose from to open.  Click on the display you are interested viewing.  </p><p>Once you have opened a display, one or more of the panels of the display will appear on the screen.  You can use the control panels on the left to manipulate how the panels are displayed.  The "View Options" control panels allow you to specify how many panels are shown in the window at a time, the labels to show underneath each panel, and which (if any) related displays to view concurrently with the current display.  The "Cognostics" control panels provide several modes of sorting and filtering the panels based on cognostics that have been computed for the display being viewed.  Each individual control panel will soon have a help icon you can click to get more information.
+              <p>In this viewer you will find one or more Trelliscope displays that have been created for you to view. You can click the folder icon in the top right corner (or press "o" on your keyboard) to bring up a list of displays to choose from to open. Click on the display you are interested viewing.</p>
+              <p>Once you have opened a display, one or more of the panels of the display will appear on the screen. You can use the control panels on the left to manipulate how the panels are displayed. The "View Options" control panels allow you to specify how many panels are shown in the window at a time, the labels to show underneath each panel, and which (if any) related displays to view concurrently with the current display. The "Cognostics" controlpanels provide several modes of sorting and filtering the panels based on cognostics that have been computed for the display being viewed. Each individual control panel will soon have a help icon you can click to get more information.</p>
             </div>
             <div class="tab-pane" id="credits">
               <h4>Powered by <a href="http://www.rstudio.com/shiny/" target="_blank">Shiny</a> and several other open-source projects</h4>
               <ul>
-                <li>
-                  <a href="http://getbootstrap.com" target="_blank">Twitter bootstrap</a>
-                </li>
-                <li>
-                  <a href="http://mustache.github.io" target="_blank">mustache</a>
-                </li>
-                <li>
-                  <a href="http://jquery.com" target="_blank">jquery</a>
-                </li>
-                <li>
-                  <a href="http://d3js.org" target="_blank">d3.js</a>
-                </li>
-                <!-- <li>
-                  <a href="http://ace.c9.io">Ace editor</a>
-                </li> -->
-                <li>
-                  <a href="http://icomoon.io" target="_blank">icomoon</a>
-                </li>
-                <li>
-                  <a href="http://fgnass.github.io/spin.js/" target="_blank">spin.js</a>
-                </li>
-                <li>
-                  <a href="http://benhowdle.im/svgeezy/" target="_blank">svgeezy</a>
-                </li>
-                <li>
-                  <a href="http://threedubmedia.com/code/event/drag" target="_blank">jquery.event.drag</a>
-                </li>
-                <li>
-                  <a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">bootstrap-select</a>
-                </li>
-                <li>
-                  <a href="https://github.com/chjj/marked" target="_blank">marked</a>
-                </li>
+                <li><a href="http://getbootstrap.com" target="_blank">Twitter bootstrap</a></li>
+                <li><a href="http://mustache.github.io" target="_blank">mustache</a></li>
+                <li><a href="http://jquery.com" target="_blank">jquery</a></li>
+                <li><a href="http://d3js.org" target="_blank">d3.js</a></li>
+                <li><a href="http://icomoon.io" target="_blank">icomoon</a></li>
+                <li><a href="http://fgnass.github.io/spin.js/" target="_blank">spin.js</a></li>
+                <li><a href="http://benhowdle.im/svgeezy/" target="_blank">svgeezy</a></li>
+                <li><a href="http://threedubmedia.com/code/event/drag" target=
+                "_blank">jquery.event.drag</a></li>
+                <li><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">bootstrap-select</a></li>
+                <li><a href="https://github.com/chjj/marked" target="_blank">marked</a></li>
               </ul>
-              <p>Designed and written by
-                <a href="https://github.com/hafen" target="_blank">Ryan Hafen</a>
-                (<a href="https://twitter.com/hafenstats" target="_blank">@hafenstats</a>),
-                with contributions from many others including Iris Blossom, Lisa Bramer, Trenton Pulsipher, Barret Schloerke, Landon Sego, and Amanda White.
-                </p>
-                <!-- <p>Funding sources</p> -->
-              <p>Contribute, browse, report issues, request features on
-                <a href="https://github.com/hafen/trelliscope" target="_blank">github</a>.
-              </p>
-              <p>This is part of a larger project,
-              <a href="http://tessera.io" target="_blank">Tessera</a>.
-              <p>Click
-                  <a href="http://tesseradata.org/docs-trelliscope/" target="_blank">here</a>
-                  for a tutorial on how to create Trelliscope displays.
-              </p>
+              <p>Designed and written by <a href="https://github.com/hafen" target="_blank">Ryan Hafen</a> (<a href="https://twitter.com/hafenstats" target="_blank">@hafenstats</a>), with contributions from many others including Iris Blossom, Lisa Bramer, Trenton Pulsipher, Barret Schloerke, Landon Sego, and Amanda White.</p>
+              <p>Contribute, browse, report issues, request features on <a href="https://github.com/hafen/trelliscope" target="_blank">github</a>.</p>
+              <p>This is part of a larger project, <a href="http://tessera.io" target="_blank">Tessera</a>.</p>
+              <p>Click <a href="http://tesseradata.org/docs-trelliscope/" target="_blank">here</a> for a tutorial on how to create Trelliscope displays.</p>
             </div>
             <div class="tab-pane" id="hotkeys">
               <div id="hotkey-container">
@@ -316,35 +283,28 @@
                     <li><code>left</code>&nbsp;&nbsp; Page back</li>
                     <li><code>right</code>&nbsp;&nbsp; Page forward</li>
                   </ul>
-
                   <h4>Modal windows</h4>
                   <ul class="hotkey-list">
                     <li><code>o</code> Open "Open New Display" modal</li>
                     <li><code>i</code> Open "Info" modal</li>
                   </ul>
-
                   <h4>Inside a modal window</h4>
                   <ul class="hotkey-list">
                     <li><code>esc</code> Close modal</li>
                   </ul>
                 </div>
-
                 <div id="hotkey-left-column" class="hotkey-column">
                   <h4>Control panels</h4>
                   <ul class="hotkey-list">
                     <li><code>d</code> Open "Display Information"</li>
                     <li><code>p</code> Open "Panel Layout"</li>
-                    <!-- <li><code>f</code> Open "Panel Function"</li> -->
                     <li><code>l</code> Open "Panel Labels"</li>
                     <li><code>r</code> Open "Related Displays"</li>
                     <li><code>t</code> Open "Table Sort / Filter"</li>
                     <li><code>u</code> Open "Univariate Filter"</li>
                     <li><code>b</code> Open "Bivariate Filter"</li>
-                    <!-- <li><code>m</code> Open "Multivariate Filter"</li> -->
                     <li><code>a</code> Open "Active Cognostics"</li>
-                    <!-- <li><code>s</code> Open "Sample"</li> -->
                   </ul>
-
                   <h4>Inside a control panel</h4>
                   <ul class="hotkey-list">
                     <li><code>esc</code> "Cancel" button</li>
