@@ -2,14 +2,25 @@
 
 # number of pages available for cog table
 cogTableNpages <- reactive({
-  n <- nrow(cogTableCurrentData())
+  n <- try(nrow(cogTableCurrentData()))
+  if(inherits(n, "try-error"))
+    n <- 0
+
   if(!is.null(n))
     ceiling(n / 10)
 })
 
+
 # outputs total number of pages available for cog table
 output$cogTableNpagesOutput <- renderText({
   cogTableNpages()
+})
+
+output$cogNrow <- renderDataLite({
+  n <- try(nrow(cogTableCurrentData()))
+  if(inherits(n, "try-error"))
+    n <- 0
+  n
 })
 
 # outputs current page number for cognostics table
@@ -22,9 +33,14 @@ output$cogTableCurPageOutput <- renderText({
   }
 })
 
+
+
 # outputs text indicating index of records currently being viewed in cog table
 output$cogTableInfoOutput <- renderText({
-  n <- nrow(cogTableCurrentData())
+  n <- try(nrow(cogTableCurrentData()))
+  if(inherits(n, "try-error"))
+    n <- 0
+
   pg <- input$cogTablePaginationInput
   if(!is.null(n)) {
     if(!is.null(pg)) {

@@ -9,7 +9,7 @@ renderDataLite <- function(expr, env = parent.frame(), quoted = FALSE, func = NU
     # jsonlite handles data frames the way we want
     res <- func()
     if(!is.null(res))
-      return(jsonlite::toJSON(res))
+      return(jsonlite::toJSON(res, na = "string"))
   }
 }
 
@@ -179,8 +179,13 @@ getCogScatterPlotData.data.frame <- function(cogDF, xVar, yVar, xTrans = identit
 
 getCogHexbinPlotData.data.frame <- function(cogDF, xVar, yVar = 370 / 515, shape, xbin = 30, xTrans = xTrans, yTrans = yTrans, xLog = NULL, yLog = NULL) {
   require(hexbin)
-  idx <- complete.cases(cogDF[,c(xVar, yVar)])
-  dat <- hexbin:::hexbin(xTrans(cogDF[idx,xVar]), yTrans(cogDF[idx,yVar]), shape = shape, xbin = xbin)
+  dd <- data.frame(x = xTrans(cogDF[,xVar]), y = yTrans(cogDF[,yVar]))
+  idx <- complete.cases(dd) & !is.infinite(dd$x) & !is.infinite(dd$y)
+
+  dat <- try(hexbin:::hexbin(dd$x[idx], dd$y[idx], shape = shape, xbin = xbin), silent = TRUE)
+  if(inherits(dat, "try-error"))
+    return(NULL)
+
   style <- "lattice"
   minarea <- 0.05
   maxarea <- 0.8

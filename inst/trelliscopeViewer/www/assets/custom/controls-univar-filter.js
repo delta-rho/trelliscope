@@ -55,7 +55,7 @@ univarFilterLocalSave = function() {
         // **log**
         filterFrom = filterBrush[0];
         filterTo = filterBrush[1];
-        if(log !== "") {
+        if(log !== "NA") {
           filterFrom = Math.pow(log, filterFrom);
           filterTo = Math.pow(log, filterTo);
         }
@@ -110,12 +110,12 @@ univarFilterLocalLoad = function() {
           var dm = d3univarX.domain();
           if(filterFrom == undefined) {
             filterFrom = dm[0];
-          } else if(log !== "") {
+          } else if(log !== "NA") {
             filterFrom = Math.log(filterFrom) / Math.log(log);
           }
           if(filterTo == undefined) {
             filterTo = dm[1];
-          } else if(log !== "") {
+          } else if(log !== "NA") {
             filterTo = Math.log(filterTo) / Math.log(log);
           }
           var filter = [filterFrom, filterTo];
@@ -134,12 +134,12 @@ univarFilterLocalLoad = function() {
           var dm = d3univarY.domain();
           if(filterFrom == undefined) {
             filterFrom = dm[0];
-          } else if(log !== "") {
+          } else if(log !== "NA") {
             filterFrom = Math.log(filterFrom) / Math.log(log);
           }
           if(filterTo == undefined) {
             filterTo = dm[1];
-          } else if(log !== "") {
+          } else if(log !== "NA") {
             filterTo = Math.log(filterTo) / Math.log(log);
           }
           var filter = [filterFrom, filterTo];

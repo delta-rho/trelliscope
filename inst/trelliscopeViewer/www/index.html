@@ -188,6 +188,7 @@
       <div id="appHashInput" class="shiny-my-data-input"></div>
       <div id="appHashOutput" class="shiny-apphash-output"></div>
       <div id="exposedStateDataOutput" data-callback="updateControlsExposedState" class="shiny-my-data-output"></div>
+      <div id="cogNrow" data-callback="updateCogNrow" class="shiny-my-data-output"></div>
       <div id="panelDimInput" class="shiny-my-data-input"></div>
       <div class="container">
          <div class="pull-left shiny-template-output" id="cogBreadcrumbOutput" data-post-render="cogBreadcrumbOutputPostRender">
@@ -826,8 +827,8 @@
     </div>
     <div id="bivar-type-toggle">
       <div class="btn-group" id="bivarPlotType" data-action="updateBivarPlot">
-        <button type="button" class="btn btn-info mc-toggle active">Scatter</button>
-        <button type="button" class="btn btn-default mc-toggle">Hexbin</button>
+        <button id="bivar-scatter-btn" type="button" class="btn btn-info mc-toggle active">Scatter</button>
+        <button id="bivar-hexbin-btn" type="button" class="btn btn-default mc-toggle">Hexbin</button>
         <!-- <button type="button" class="btn btn-default mc-toggle" disabled>Map</button> -->
       </div>
     </div>

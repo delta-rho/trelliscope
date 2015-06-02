@@ -421,6 +421,7 @@ function panelTableContentOutputPostRender(data) {
   if(pc.class[0] == "htmlwidget") {
     // console.log(pc.deps)
     Shiny.renderDependencies(pc.deps);
+
     try {
       HTMLWidgets.staticRender();
     } catch(err) {
@@ -455,6 +456,18 @@ function panelTableContentOutputPostRender(data) {
   $(".panel-label-row").css("line-height", "1.2");
   $(".panel-label-row").css("font-size", font_size[n_rows] + "px");
 }
+
+// $.getScriptCached = function(url, callback, cache) {
+//   $.ajax({
+//     type: "GET",
+//     url: url,
+//     success: callback,
+//     dataType: "script",
+//     cache: true
+//   });
+// };
+// filename.split('.').pop();
+// http://stackoverflow.com/questions/22736281/dynamic-ajax-promise-chain-with-jquery
 
 
 $(document).ready(function() {
