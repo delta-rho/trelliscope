@@ -76,7 +76,7 @@ cogHref <- function(x, label = "link", desc = "link", group = "common", target =
   if(is.null(target)) {
     targetString <- ""
   } else {
-    targetString <- paste(" target=\"", target, "\"")
+    targetString <- paste0(" target=\"", target, "\"")
   }
   cog(paste("<a href=\"", x, "\"", targetString, ">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
 }
