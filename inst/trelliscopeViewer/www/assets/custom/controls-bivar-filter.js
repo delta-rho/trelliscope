@@ -274,7 +274,7 @@ function cogBiFilterControlsOutputPostRender() {
     if($("#bivar-x-filter-select li.active, #bivar-y-filter-select li.active").length == 2) {
 
       // if there are too many panels, force hexbin
-      if($("#cogNrow").data("myShinyData")[0] > 10) {
+      if($("#cogNrow").data("myShinyData")[0] > 2000) {
         $("#bivar-scatter-btn").addClass("disabled");
         $("#bivar-hexbin-btn").click();
       } else {
