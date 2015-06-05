@@ -44,13 +44,15 @@ phantomInstall <- function() {
 
 # similar to webshot
 findPhantom <- function() {
-  phantom <- if(Sys.which("phantomjs") == "") {
-    if(identical(.Platform$OS.type, "windows")) {
-      Sys.which(file.path(Sys.getenv("APPDATA"), "npm", "phantomjs.cmd"))
-    }
-  } else {
-    Sys.which("phantomjs")
-  }
+    
+  phantom <- Sys.which("phantomjs")
 
+  if(Sys.which("phantomjs") == "") {
+    if(identical(.Platform$OS.type, "windows")) {
+      phantom <- Sys.which(file.path(Sys.getenv("APPDATA"), "npm", "phantomjs.cmd"))
+    }
+  }
+  
   phantom
+  
 }
