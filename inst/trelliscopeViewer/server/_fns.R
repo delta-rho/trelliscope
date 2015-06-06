@@ -422,14 +422,14 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, o
       }
       el$src$href <- depDir
     } else {
-      el$script <- jsonlite:::as.scalar(NA)
+      el$script <- NULL
     }
     if(!is.null(el$stylesheet)) {
       if(!file.exists(file.path(assetDir, el$stylesheet)))
         file.copy(file.path(el$src$file, el$stylesheet), assetDir)
       el$src$href <- depDir
     } else {
-      el$stylesheet <- jsonlite:::as.scalar(NA)
+      el$stylesheet <- NULL
     }
     el
   })
