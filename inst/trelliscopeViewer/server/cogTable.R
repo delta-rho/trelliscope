@@ -146,7 +146,7 @@ getCurCogDat <- function(x, state) {
     varDesc <- sapply(srt, function(x) x$dir == "desc")
     varOrderStr <- paste0(ifelse(varDesc, "desc(", ""), names(varDesc), ifelse(varDesc, ")", ""))
 
-    orderIndex <- (x %>% mutate(trs_idx = 1:n()) %>% arrange_(.dots = varOrderStr) %>% select(trs_idx))[[1]]
+    orderIndex <- (x %>% dplyr::mutate(trs_idx = 1:n()) %>% dplyr::arrange_(.dots = varOrderStr) %>% dplyr::select(trs_idx))[[1]]
 
     # if(length(srt) == 1) {
     #   orderIndex <- order(x[, srtNm, drop = FALSE], decreasing = srt[[1]]$dir == "desc")
