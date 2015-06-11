@@ -3,13 +3,19 @@
 # number of pages available for cog table
 cogTableNpages <- reactive({
   n <- nrow(cogTableCurrentData())
+
   if(!is.null(n))
     ceiling(n / 10)
 })
 
+
 # outputs total number of pages available for cog table
 output$cogTableNpagesOutput <- renderText({
   cogTableNpages()
+})
+
+output$cogNrow <- renderDataLite({
+  nrow(cogTableCurrentData())
 })
 
 # outputs current page number for cognostics table
@@ -22,9 +28,14 @@ output$cogTableCurPageOutput <- renderText({
   }
 })
 
+
+
 # outputs text indicating index of records currently being viewed in cog table
 output$cogTableInfoOutput <- renderText({
   n <- nrow(cogTableCurrentData())
+  if(inherits(n, "try-error"))
+    n <- 0
+
   pg <- input$cogTablePaginationInput
   if(!is.null(n)) {
     if(!is.null(pg)) {
@@ -118,6 +129,9 @@ getCurCogDat <- function(x, state) {
   }
 
   x <- x[filterIndex,, drop = FALSE]
+  if(length(filterIndex) == 0)
+    return(x[filterIndex,,drop = FALSE])
+
   orderIndex <- seq_len(cogNrow(x))
 
   if(length(state$sort) > 0) {
@@ -130,7 +144,7 @@ getCurCogDat <- function(x, state) {
     varDesc <- sapply(srt, function(x) x$dir == "desc")
     varOrderStr <- paste0(ifelse(varDesc, "desc(", ""), names(varDesc), ifelse(varDesc, ")", ""))
 
-    orderIndex <- (x %>% mutate(trs_idx = 1:n()) %>% arrange_(.dots = varOrderStr) %>% select(trs_idx))[[1]]
+    orderIndex <- (x %>% dplyr::mutate(trs_idx = 1:n()) %>% dplyr::arrange_(.dots = varOrderStr) %>% dplyr::select(trs_idx))[[1]]
 
     # if(length(srt) == 1) {
     #   orderIndex <- order(x[, srtNm, drop = FALSE], decreasing = srt[[1]]$dir == "desc")

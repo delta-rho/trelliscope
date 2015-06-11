@@ -42,7 +42,7 @@ bivarFilterLocalSave = function() {
 
       // if(!curBrush.empty()) {
       //   var filter = curBrush.extent();
-      //   if(log !== "") {
+      //   if(log !== "NA") {
       //     filter[0] = Math.pow(log, filter[0]);
       //     filter[1] = Math.pow(log, filter[1]);
       //   }
@@ -54,7 +54,7 @@ bivarFilterLocalSave = function() {
       if(!filterData[xVar])
         filterData[xVar]= {};
       // **log**
-      if(xLog !== "") {
+      if(xLog !== "NA") {
         filterData[xVar]["from"] = Math.pow(xLog, brush[0][0]);
         filterData[xVar]["to"] = Math.pow(xLog, brush[1][0]);
       } else {
@@ -66,7 +66,7 @@ bivarFilterLocalSave = function() {
       if(!filterData[yVar])
         filterData[yVar]= {};
       // **log**
-      if(yLog !== "") {
+      if(yLog !== "NA") {
         filterData[yVar]["from"] = Math.pow(yLog, brush[0][1]);
         filterData[yVar]["to"] = Math.pow(yLog, brush[1][1]);
       } else {
@@ -108,13 +108,13 @@ bivarFilterLocalLoad = function() {
       if(xf) {
         if(xf.from !== undefined) {
           xFrom = xf.from;
-          if(xLog !== "") {
+          if(xLog !== "NA") {
            xFrom = Math.log(xFrom) / Math.log(xLog);
           }
         }
         if(xf.to !== undefined) {
           xTo = xf.to;
-          if(xLog !== "") {
+          if(xLog !== "NA") {
            xTo = Math.log(xTo) / Math.log(xLog);
           }
         }
@@ -129,13 +129,13 @@ bivarFilterLocalLoad = function() {
       if(yf) {
         if(yf.from !== undefined) {
           yFrom = yf.from;
-          if(yLog !== "") {
+          if(yLog !== "NA") {
            yFrom = Math.log(yFrom) / Math.log(yLog);
           }
         }
         if(yf.to !== undefined) {
           yTo = yf.to;
-          if(yLog !== "") {
+          if(yLog !== "NA") {
            yTo = Math.log(yTo) / Math.log(yLog);
           }
         }
@@ -272,6 +272,15 @@ function cogBiFilterControlsOutputPostRender() {
 
     // if x and y lists have something selected, make the plot
     if($("#bivar-x-filter-select li.active, #bivar-y-filter-select li.active").length == 2) {
+
+      // if there are too many panels, force hexbin
+      if($("#cogNrow").data("myShinyData")[0] > 2000) {
+        $("#bivar-scatter-btn").addClass("disabled");
+        $("#bivar-hexbin-btn").click();
+      } else {
+        $("#bivar-scatter-btn").removeClass("disabled");
+      }
+
       // remove gray background and restart spinner
       $("#bivarFilterPlot").addClass("not");
       var target = document.getElementById("bivarFilterPlot");
@@ -283,3 +292,16 @@ function cogBiFilterControlsOutputPostRender() {
     updateBivarPlot();
   });
 }
+
+// function updateCogNrow() {
+//   alert($("#cogNrow").data("myShinyData")[0]);
+//   asdfasdf;
+//   if($("#cogNrow").data("myShinyData")[0] > 10) {
+//     $("#bivar-scatter-btn").addClass("disabled");
+//     $("#bivar-hexbin-btn").click();
+//   } else {
+//     $("#bivar-scatter-btn").removeClass("disabled");
+//     $("#bivar-scatter-btn").click();
+//   }
+// }
+

@@ -121,10 +121,10 @@ function d3bivar(data, id) {
   var xLog = data.xLog[0];
   var yLog = data.yLog[0];
   // **log**
-  if(xLog !== null) {
+  if(xLog !== "NA") {
     data.xlab = "log base " + xLog + " " + data.xlab;
   }
-  if(yLog !== null) {
+  if(yLog !== "NA") {
     data.ylab = "log base " + yLog + " " + data.ylab;
   }
 
@@ -148,7 +148,7 @@ function d3bivar(data, id) {
         xFrom = filterData[varName].from;
         xTo = filterData[varName].to;
         // **log**
-        if(xLog !== null) {
+        if(xLog !== "NA") {
           xFrom = Math.log(xFrom) / Math.log(xLog);
           xTo = Math.log(xTo) / Math.log(xLog);
         }
@@ -167,10 +167,10 @@ function d3bivar(data, id) {
         yFrom = filterData[varName].from;
         yTo = filterData[varName].to;
         // **log**
-        // if(yLog !== null) {
-        //   yFrom = Math.log(yFrom) / Math.log(yLog);
-        //   yTo = Math.log(yTo) / Math.log(yLog);
-        // }
+        if(yLog !== "NA") {
+          yFrom = Math.log(yFrom) / Math.log(yLog);
+          yTo = Math.log(yTo) / Math.log(yLog);
+        }
       }
     }
   }

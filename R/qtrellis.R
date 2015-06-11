@@ -69,7 +69,7 @@ qtrellis_ <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), 
 
   args$data <- x
   args$panelFn <- panel
-  args$cog <- cog
+  args$cogFn <- cog
 
   if(!is.null(layout)) {
     if(!is.null(args$state)) {

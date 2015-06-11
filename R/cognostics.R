@@ -73,7 +73,12 @@ cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defAct
 #' cogHref("www.google.com")
 #' @export
 cogHref <- function(x, label = "link", desc = "link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE, sortable = TRUE, log = FALSE) {
-  cog(paste("<a href=\"", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
+  if(is.null(target)) {
+    targetString <- ""
+  } else {
+    targetString <- paste0(" target=\"", target, "\"")
+  }
+  cog(paste("<a href=\"", x, "\"", targetString, ">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
 }
 
 
