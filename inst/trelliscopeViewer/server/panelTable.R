@@ -120,11 +120,14 @@ output$panelTableContentOutput <- renderDataLite({
           curDisp <- cd$cdo$relatedDisplayObjects[[dispKey]]
         }
 
-        tmp <- getPanels(curDisp,
+        tmp <- try(getPanels(curDisp,
           width = a$width, # + 4
           height = a$height, # - 4
           curRows = curRows,
-          pixelratio = session$clientData$pixelratio)[[1]]
+          pixelratio = session$clientData$pixelratio)[[1]],
+        silent = TRUE)
+        if(inherits(tmp, "try-error"))
+          tmp <- list(html = paste0("<div style='background-color: #efefef; width: ", a$width, "px; height: ", a$height, "px'></div>"))
 
         tmp$data$id <- paste("#rel-disp-div-", i, sep = "")
         tmp$html <- paste("<div style=\"position: absolute; top: ", a$top, "px; left: ", a$left, "px;\" id=\"rel-disp-div-", i, "\">", tmp$html, "</div>", sep = "")
