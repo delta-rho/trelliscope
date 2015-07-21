@@ -2,9 +2,10 @@
 #'
 #' @param p htmlwidget object
 #' @param thumbPath where to save thumbnail file
+#' @param timeout how many milliseconds to wait until plot is rendered
 #' @export
 #' @importFrom htmlwidgets saveWidget
-widgetThumbnail <- function(p, thumbPath) {
+widgetThumbnail <- function(p, thumbPath, timeout = 500) {
   phantom <- findPhantom()
   thumbPath <- path.expand(thumbPath)
 
@@ -17,14 +18,14 @@ widgetThumbnail <- function(p, thumbPath) {
 
       # don't want any padding
       p$sizingPolicy$padding <- 0
-      suppressMessages(saveWidget(p, ff))
+      suppressMessages(saveWidget(p, ff, selfcontained = FALSE))
 
       js <- paste0("var page = require('webpage').create();
 page.open('file://", ff, "', function() {
   window.setTimeout(function () {
     page.render('", thumbPath, "');
     phantom.exit();
-  }, 500);
+  }, ", timeout, ");
 });")
       cat(js, file = ffjs)
       system2(phantom, ffjs)
@@ -44,7 +45,7 @@ phantomInstall <- function() {
 
 # similar to webshot
 findPhantom <- function() {
-    
+
   phantom <- Sys.which("phantomjs")
 
   if(Sys.which("phantomjs") == "") {
@@ -52,7 +53,7 @@ findPhantom <- function() {
       phantom <- Sys.which(file.path(Sys.getenv("APPDATA"), "npm", "phantomjs.cmd"))
     }
   }
-  
+
   phantom
-  
+
 }
