@@ -331,6 +331,12 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
 
     if(!is.null(cdo$relatedData)) {
       environment(cdo$panelFn) <- list2env(cdo$relatedData, parent = .GlobalEnv)
+      pfe <- environment(cdo$panelFn)
+      vars <- ls(envir = pfe)
+      for(vr in vars) {
+        if(is.function(pfe[[vr]]))
+          environment(pfe[[vr]]) <- pfe
+      }
     }
 
     panelContent <- lapply(seq_along(curDat), function(i) {
