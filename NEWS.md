@@ -1,8 +1,11 @@
-Version 0.8.4
+Version 0.8.3.2
 ---------------------------------------------------------------------
 
-- Make namespace explicit for dplyr calls
-- Fix typo in qtrellis
+- fix environment handling with relatedData functions
+- show blank div if no related display
+- add timeout to widgetThumbnail
+- make namespace explicit for dplyr calls
+- fix typo in qtrellis
 
 Version 0.8.3
 ---------------------------------------------------------------------
