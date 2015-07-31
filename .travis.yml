@@ -23,8 +23,6 @@ r_binary_packages:
   - roxygen2
 
 r_github_packages:
-  - hadley/httr
-  - install_github
   - tesseradata/datadr
   - rstudio/shinyapps
 
