@@ -210,11 +210,11 @@ deployToShinyApps <- function(
 
   # Checks for the appName
   stopifnot(is.character(appName))
-            
+
   # Substitute spaces with hyphens
   if(grepl("\\ ", appName)) {
     message("*** Spaces in 'appName' will be replaced with hyphens")
-    appName <- gsub("\\ ", "-", appName)      
+    appName <- gsub("\\ ", "-", appName)
   }
 
   # Verify appName has at least 4 characters, per the error message returned by shinyapps::deployApp()
@@ -247,6 +247,17 @@ deployToShinyApps <- function(
 
   message("*** Syncing local data...")
   syncLocalData(vdbConn)
+
+  # if there is a data directory, tar it up
+  wd <- getwd()
+  setwd(vdbConn$path)
+  on.exit(setwd(wd))
+
+  if(file.exists("data")) {
+    utils::tar("data.tar", files = "data")
+    if(file.exists("data.tar"))
+      unlink("data", recursive = TRUE)
+  }
 
   vdbDir <- vdbConn$path
   load(file.path(vdbDir, "displays", "_displayList.Rdata"))

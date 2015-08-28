@@ -38,6 +38,13 @@ if(length(ind) > 0) {
   displayListDF <- displayListDF[-ind,]
 }
 
+# untar data if there is any
+dataTar <- file.path(vdbPrefix, "data.tar")
+if(file.exists(dataTar)) {
+  utils::untar(dataTar, exdir = vdbPrefix)
+  unlink(dataTar)
+}
+
 source("server/_fns.R", local = TRUE)
 
 shinyServer(function(input, output, session) {
