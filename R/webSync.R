@@ -251,7 +251,11 @@ deployToShinyApps <- function(
   # if there is a data directory, tar it up
   wd <- getwd()
   setwd(vdbConn$path)
-  on.exit(setwd(wd))
+  on.exit({
+    if(file.exists("data.tar"))
+      utils::untar("data.tar")
+    setwd(wd)
+  })
 
   if(file.exists("data")) {
     utils::tar("data.tar", files = "data")
@@ -281,5 +285,6 @@ deployToShinyApps <- function(
 
   message("*** Deploying app...\n")
   shinyapps::deployApp(vdbDir, appName = appName, account = account)
+
 }
 
