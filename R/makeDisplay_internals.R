@@ -131,11 +131,11 @@ checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
       unlink(bakFile, recursive = TRUE)
     }
 
-    # Create the bakup directory
+    # create the bakup directory
     dir.create(bakFile, recursive = TRUE)
 
-    # Move the files (one by one to accomodate Windows)
-    renameVerify <- file.rename(dir(displayPrefix, full.names = TRUE), file.path(bakFile, dir(displayPrefix)))
+    # move the files (one by one to accomodate Windows)
+    renameVerify <- file.copy(list.files(displayPrefix, full.names = TRUE), file.path(bakFile, list.files(displayPrefix)))
 
     # Verify the file renaming
     if(!all(renameVerify)) {

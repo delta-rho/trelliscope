@@ -323,9 +323,9 @@ makeDisplay <- function(
     checkDisplayPath(displayPrefix, verbose)
 
     # Move newly created vdb files to the display folder
-    renameVerify <- file.rename(dir(tempPrefix, full.names = TRUE), file.path(displayPrefix, dir(tempPrefix)))
+    copyVerify <- file.copy(list.files(tempPrefix, full.names = TRUE), file.path(displayPrefix, list.files(tempPrefix)))
 
-    if(!all(renameVerify)) {
+    if(!all(copyVerify)) {
       stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
     }
 
