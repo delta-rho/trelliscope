@@ -5,7 +5,7 @@
 #' @param timeout how many milliseconds to wait until plot is rendered
 #' @export
 #' @importFrom htmlwidgets saveWidget
-widgetThumbnail <- function(p, thumbPath, timeout = 500) {
+widgetThumbnail <- function(p, thumbPath, timeout = 1500) {
   phantom <- findPhantom()
   thumbPath <- path.expand(thumbPath)
 
