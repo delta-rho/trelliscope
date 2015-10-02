@@ -134,17 +134,22 @@ checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
     # create the bakup directory
     dir.create(bakFile, recursive = TRUE)
 
-    # move the files (one by one to accomodate Windows)
-    renameVerify <- file.copy(list.files(displayPrefix, full.names = TRUE), file.path(bakFile, list.files(displayPrefix)))
+    fromFiles <- list.files(displayPrefix, full.names = TRUE, recursive = TRUE)
+    toFiles <- file.path(bakFile, list.files(displayPrefix, recursive = TRUE))
+    upath <- unique(dirname(toFiles))
+    for(up in upath)
+      suppressWarnings(dir.create(up, recursive = TRUE))
+    copyVerify <- file.copy(fromFiles, toFiles)
 
     # Verify the file renaming
-    if(!all(renameVerify)) {
+    if(!all(copyVerify)) {
       warning("Backup files for display were not successfully moved to '", bakFile, "'", call. = FALSE)
+    } else {
+      unlink(displayPrefix, recursive = TRUE)
     }
-
-  } else {
-    dir.create(displayPrefix, recursive = TRUE)
   }
+
+  dir.create(displayPrefix, recursive = TRUE)
 }
 
 ## internal

@@ -290,9 +290,11 @@ makeDisplay <- function(
 
   # make thumbnail
   message("* Plotting thumbnail...")
-  if(inherits(panelEx, "htmlwidget"))
+  if(inherits(panelEx, "htmlwidget")) {
     widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
-  suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
+  } else {
+    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
+  }
   # small thumbnail
   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
   })
@@ -322,14 +324,18 @@ makeDisplay <- function(
     displayPrefix <- file.path(vdbPrefix, "displays", group, name)
     checkDisplayPath(displayPrefix, verbose)
 
-    # Move newly created vdb files to the display folder
-    copyVerify <- file.copy(list.files(tempPrefix, full.names = TRUE), file.path(displayPrefix, list.files(tempPrefix)))
+    # move newly created vdb files to the display folder
+    fromFiles <- list.files(tempPrefix, full.names = TRUE, recursive = TRUE)
+    toFiles <- file.path(displayPrefix, list.files(tempPrefix, recursive = TRUE))
+    upath <- unique(dirname(toFiles))
+    for(up in upath)
+      suppressWarnings(dir.create(up, recursive = TRUE))
+    copyVerify <- file.copy(fromFiles, toFiles)
 
-    if(!all(copyVerify)) {
+    if(!all(copyVerify))
       stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
-    }
 
-    # Remove the temporary directory that contained the vdb objects
+    # remove the temporary directory that contained the vdb objects
     if(unlink(tempPrefix, recursive = TRUE)) {
       warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
     }
