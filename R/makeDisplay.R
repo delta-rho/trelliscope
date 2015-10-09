@@ -325,14 +325,9 @@ makeDisplay <- function(
     checkDisplayPath(displayPrefix, verbose)
 
     # move newly created vdb files to the display folder
-    fromFiles <- list.files(tempPrefix, full.names = TRUE, recursive = TRUE)
-    toFiles <- file.path(displayPrefix, list.files(tempPrefix, recursive = TRUE))
-    upath <- unique(dirname(toFiles))
-    for(up in upath)
-      suppressWarnings(dir.create(up, recursive = TRUE))
-    copyVerify <- file.copy(fromFiles, toFiles)
+    copyVerify <- copy_dir(tempPrefix, displayPrefix)
 
-    if(!all(copyVerify))
+    if(!copyVerify)
       stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
 
     # remove the temporary directory that contained the vdb objects

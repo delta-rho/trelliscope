@@ -131,18 +131,10 @@ checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
       unlink(bakFile, recursive = TRUE)
     }
 
-    # create the bakup directory
-    dir.create(bakFile, recursive = TRUE)
-
-    fromFiles <- list.files(displayPrefix, full.names = TRUE, recursive = TRUE)
-    toFiles <- file.path(bakFile, list.files(displayPrefix, recursive = TRUE))
-    upath <- unique(dirname(toFiles))
-    for(up in upath)
-      suppressWarnings(dir.create(up, recursive = TRUE))
-    copyVerify <- file.copy(fromFiles, toFiles)
+    copyVerify <- copy_dir(displayPrefix, bakFile)
 
     # Verify the file renaming
-    if(!all(copyVerify)) {
+    if(!copyVerify) {
       warning("Backup files for display were not successfully moved to '", bakFile, "'", call. = FALSE)
     } else {
       unlink(displayPrefix, recursive = TRUE)
@@ -228,5 +220,18 @@ encodePNG <- function(plotLoc) {
   bytes <- file.info(plotLoc)$size
   b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))
   paste("data:image/png;base64,", b64, sep = "")
+}
+
+# this seems to be the best cross-platform way to copy directories
+# if to exists it will be deleted
+copy_dir <- function(from, to) {
+  if(file.exists(to))
+    unlink(to, recursive = TRUE)
+  ff <- list.files(from, recursive = TRUE, full.names = TRUE)
+  ff2 <- file.path(to, list.files(from, recursive = TRUE))
+  upath <- unique(dirname(ff2))
+  for(up in upath)
+    suppressWarnings(dir.create(up, recursive = TRUE))
+  all(file.copy(ff, ff2, overwrite = TRUE))
 }
 
