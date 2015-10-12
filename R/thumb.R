@@ -9,6 +9,7 @@ widgetThumbnail <- function(p, thumbPath, timeout = 1500) {
   phantom <- findPhantom()
   thumbPath <- path.expand(thumbPath)
 
+  success <- FALSE
   if(phantom == "") {
     message("** phantomjs dependency could not be found - thumbnail cannot be generated (run phantomInstall() for details)")
   } else {
@@ -30,12 +31,20 @@ page.open('file://", ff, "', function() {
       cat(js, file = ffjs)
       system2(phantom, ffjs)
     })
-    if(inherits(res, "try-error"))
-      message("** could not create htmlwidget thumbnail...")
-
+    if(!inherits(res, "try-error")) {
+      success <- TRUE
+    }
     # system(paste("open ", ffjs))
     # system(paste("open ", dirname(ffjs)))
   }
+
+  if(!success) {
+    message("** could not create htmlwidget thumbnail... creating an empty thumbnail...")
+    png(file = thumbPath)
+    plot(1, 1, type = "n", xlab = "", ylab = "", axes = FALSE)
+    dev.off()
+  }
+
 }
 
 #' @export
