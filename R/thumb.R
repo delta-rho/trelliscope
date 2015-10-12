@@ -34,6 +34,8 @@ page.open('file://", ff, "', function() {
     if(!inherits(res, "try-error")) {
       success <- TRUE
     }
+    if(!file.exists(thumbPath))
+      success <- FALSE
     # system(paste("open ", ffjs))
     # system(paste("open ", dirname(ffjs)))
   }
@@ -44,7 +46,6 @@ page.open('file://", ff, "', function() {
     plot(1, 1, type = "n", xlab = "", ylab = "", axes = FALSE)
     dev.off()
   }
-
 }
 
 #' @export
