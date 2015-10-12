@@ -4,12 +4,14 @@
 \alias{widgetThumbnail}
 \title{Make a thumbnail for an htmlwidget panel}
 \usage{
-widgetThumbnail(p, thumbPath)
+widgetThumbnail(p, thumbPath, timeout = 1500)
 }
 \arguments{
 \item{p}{htmlwidget object}
 
 \item{thumbPath}{where to save thumbnail file}
+
+\item{timeout}{how many milliseconds to wait until plot is rendered}
 }
 \description{
 Make a thumbnail for an htmlwidget panel
