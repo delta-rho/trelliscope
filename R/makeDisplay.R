@@ -11,7 +11,7 @@ if(getRversion() >= "2.15.1") {
 #' @param name the name of the display (no special characters, spaces are converted to underscores)
 #' @param group the group the display belongs to, where displays are organized into groups (no special characters, spaces are
 #' converted to underscores).  Defaults to "common"
-#' @param desc a description of the display (used in the viewer and in notebooks)
+#' @param desc a description of the display (used in the viewer)
 #' @param mdDesc an optional longer-form description of the display and data, which can be text or can be a path to a markdown file or file with html snippets.  The description will appear in the "Display Information" panel in the Trelliscope viewer.
 #' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
@@ -290,9 +290,11 @@ makeDisplay <- function(
 
   # make thumbnail
   message("* Plotting thumbnail...")
-  if(inherits(panelEx, "htmlwidget"))
+  if(inherits(panelEx, "htmlwidget")) {
     widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
-  suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
+  } else {
+    suppressMessages(makePNG(kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
+  }
   # small thumbnail
   makeThumb(file.path(tempPrefix, "thumb.png"), file.path(tempPrefix, "thumb_small.png"), height = 120, width = 120 * width / height)
   })
@@ -322,14 +324,13 @@ makeDisplay <- function(
     displayPrefix <- file.path(vdbPrefix, "displays", group, name)
     checkDisplayPath(displayPrefix, verbose)
 
-    # Move newly created vdb files to the display folder
-    renameVerify <- file.rename(dir(tempPrefix, full.names = TRUE), file.path(displayPrefix, dir(tempPrefix)))
+    # move newly created vdb files to the display folder
+    copyVerify <- copy_dir(tempPrefix, displayPrefix)
 
-    if(!all(renameVerify)) {
+    if(!copyVerify)
       stop("Files needed for building trelliscope display were not correctly moved to '", displayPrefix, "'", call. = FALSE)
-    }
 
-    # Remove the temporary directory that contained the vdb objects
+    # remove the temporary directory that contained the vdb objects
     if(unlink(tempPrefix, recursive = TRUE)) {
       warning("Temporary directory '", tempPrefix, "'\ncontaining trelliscope vdb objects was not removed successfully", call. = FALSE)
     }

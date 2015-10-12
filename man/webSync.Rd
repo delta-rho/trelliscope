@@ -2,7 +2,7 @@
 % Please edit documentation in R/webSync.R
 \name{webSync}
 \alias{webSync}
-\title{Sync VDB and notebook Files to a Web Server}
+\title{Sync VDB Files to a Web Server}
 \usage{
 webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
   fixPermissions = FALSE, verbose = FALSE, rsync = NULL)
@@ -19,7 +19,7 @@ webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
 \item{rsync}{location of rsync binary}
 }
 \description{
-Sync VDB and notebook files to a web server
+Sync VDB files to a web server
 }
 \details{
 This requires rsync to be installed on your machine.  If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.

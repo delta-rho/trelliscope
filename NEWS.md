@@ -1,6 +1,14 @@
-Version 0.8.3.2
+Version 0.8.3.3
 ---------------------------------------------------------------------
 
+- make viewer app files part of app from beginning
+- remove 'notebook' directory requirements
+- fix widgetThumbnail to create empty thumbnail if phantomjs isn't installed
+- update directory copying to be more cross platform friendly
+- fix file copying and backing up
+- update file operations for compatibility
+- increase htmlwidget thumbnail timeout
+- add feature to tar up data files and untar after deploy
 - fix environment handling with relatedData functions
 - show blank div if no related display
 - add timeout to widgetThumbnail

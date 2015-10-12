@@ -19,7 +19,7 @@ makeDisplay(data, name, group = "common", desc = "", mdDesc = NULL,
 \item{group}{the group the display belongs to, where displays are organized into groups (no special characters, spaces are
 converted to underscores).  Defaults to "common"}
 
-\item{desc}{a description of the display (used in the viewer and in notebooks)}
+\item{desc}{a description of the display (used in the viewer)}
 
 \item{mdDesc}{an optional longer-form description of the display and data, which can be text or can be a path to a markdown file or file with html snippets.  The description will appear in the "Display Information" panel in the Trelliscope viewer.}
 

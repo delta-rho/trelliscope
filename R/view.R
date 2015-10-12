@@ -2,7 +2,6 @@ if(getRversion() >= "2.15.1") {
   utils::globalVariables(c(".shinyServerMinVersion"))
 }
 
-
 #' View a Display or Run Shiny Display Viewer
 #'
 #' View a display or run Shiny display viewer
@@ -27,6 +26,8 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
   validateVdbConn(conn, mustHaveDisplays = TRUE)
   vdbPrefix <- conn$path
 	packagePath <- system.file(package = "trelliscope")
+
+  copyViewerFiles(conn)
 
   if(!is.null(name)) {
     displayObj <- getDisplay(name = name, group = group)
@@ -57,11 +58,6 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
   # }
   # make sure that the viewer has the prefix
   options(vdbShinyPrefix = vdbPrefix)
-  # if on dev machine, make the viewer path be the code source directory
-  # (not the package path)
-  shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
-  if(shinyAppPrefix == "")
-    shinyAppPrefix <- file.path(packagePath, "trelliscopeViewer")
 
   if(!is.null(state) || !is.null(name)) {
     state <- c(list(name = name, group = group), validateState(state))
@@ -70,6 +66,23 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
     options("trsCurrentViewState" = NULL)
   }
 
-  runApp(shinyAppPrefix, port = port, launch.browser = openBrowser)
+  runApp(vdbPrefix, port = port, launch.browser = openBrowser)
 }
 
+copyViewerFiles <- function(vdbConn) {
+  shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
+  if(shinyAppPrefix == "")
+    shinyAppPrefix <- file.path(system.file(package = "trelliscope"), "trelliscopeViewer")
+
+  serverLoc <- file.path(vdbConn$path, "server")
+  if(file.exists(serverLoc))
+    unlink(serverLoc, recursive = TRUE)
+
+  wwwLoc <- file.path(vdbConn$path, "www")
+  if(file.exists(wwwLoc))
+    unlink(wwwLoc, recursive = TRUE)
+
+  file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
+  file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
+  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path)
+}

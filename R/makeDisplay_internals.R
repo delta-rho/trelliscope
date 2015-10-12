@@ -131,20 +131,17 @@ checkDisplayPath <- function(displayPrefix, verbose = TRUE) {
       unlink(bakFile, recursive = TRUE)
     }
 
-    # Create the bakup directory
-    dir.create(bakFile, recursive = TRUE)
-
-    # Move the files (one by one to accomodate Windows)
-    renameVerify <- file.rename(dir(displayPrefix, full.names = TRUE), file.path(bakFile, dir(displayPrefix)))
+    copyVerify <- copy_dir(displayPrefix, bakFile)
 
     # Verify the file renaming
-    if(!all(renameVerify)) {
+    if(!copyVerify) {
       warning("Backup files for display were not successfully moved to '", bakFile, "'", call. = FALSE)
+    } else {
+      unlink(displayPrefix, recursive = TRUE)
     }
-
-  } else {
-    dir.create(displayPrefix, recursive = TRUE)
   }
+
+  dir.create(displayPrefix, recursive = TRUE)
 }
 
 ## internal
@@ -223,5 +220,18 @@ encodePNG <- function(plotLoc) {
   bytes <- file.info(plotLoc)$size
   b64 <- base64encode(readBin(plotLoc, "raw", n = bytes))
   paste("data:image/png;base64,", b64, sep = "")
+}
+
+# this seems to be the best cross-platform way to copy directories
+# if to exists it will be deleted
+copy_dir <- function(from, to) {
+  if(file.exists(to))
+    unlink(to, recursive = TRUE)
+  ff <- list.files(from, recursive = TRUE, full.names = TRUE)
+  ff2 <- file.path(to, list.files(from, recursive = TRUE))
+  upath <- unique(dirname(ff2))
+  for(up in upath)
+    suppressWarnings(dir.create(up, recursive = TRUE))
+  all(file.copy(ff, ff2, overwrite = TRUE))
 }
 

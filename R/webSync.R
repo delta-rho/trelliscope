@@ -2,9 +2,9 @@ if(getRversion() >= "2.15.1") {
   utils::globalVariables(c("dataClass"))
 }
 
-#' Sync VDB and notebook Files to a Web Server
+#' Sync VDB Files to a Web Server
 #'
-#' Sync VDB and notebook files to a web server
+#' Sync VDB files to a web server
 #'
 #' @param vdbConn VDB connection settings
 #' @param webConn web connection settings
@@ -36,6 +36,9 @@ webSync <- function(
     message("* webConn has not been set up... attempting default config...")
     webConn <- webConn()
   }
+
+  message("*** Copying latest viewer to vdb directory...")
+  copyViewerFiles(vdbConn)
 
   syncLocalData(vdbConn)
 
@@ -188,18 +191,18 @@ deployToShinyApps <- function(
   appName = NULL, account = NULL, redeploy = TRUE,
   size = NULL, instances = NULL, quiet = FALSE) {
 
-  # Verify shinyapps package is installed
+  # verify shinyapps package is installed
   if (!requireNamespace("shinyapps", quietly = TRUE)) {
     stop("The 'shinyapps' package is needed for this function to work. Please install it. (see here: http://shiny.rstudio.com/articles/shinyapps.html)",
       call. = FALSE)
   }
 
-  # Check arguments
+  # check arguments
   stopifnot(inherits(vdbConn, "vdbConn"),
-            is.logical(redeploy),
-            is.logical(quiet))
+    is.logical(redeploy),
+    is.logical(quiet))
 
-  # Get the appName
+  # get the appName
   if(is.null(appName)) {
     if(!is.null(vdbConn$name)) {
       appName <- vdbConn$name
@@ -208,42 +211,28 @@ deployToShinyApps <- function(
     }
   }
 
-  # Checks for the appName
+  # checks for the appName
   stopifnot(is.character(appName))
 
-  # Substitute spaces with hyphens
+  # substitute spaces with hyphens
   if(grepl("\\ ", appName)) {
     message("*** Spaces in 'appName' will be replaced with hyphens")
     appName <- gsub("\\ ", "-", appName)
   }
 
-  # Verify appName has at least 4 characters, per the error message returned by shinyapps::deployApp()
+  # verify appName has at least 4 characters, per the error message returned by shinyapps::deployApp()
   if(nchar(appName) < 4) {
     stop("'appName' must be at least four characters")
   }
 
-  # Check for reserved characters, per the error message returned by shinyapps::deployApp()
+  # check for reserved characters, per the error message returned by shinyapps::deployApp()
   if(grepl("[^-a-zA-Z0-9_]", appName)) {
     stop("'appName' may only contain letters, numbers, hyphens, and underscores")
   }
 
+  # make sure viewer files are copied
   message("*** Copying latest viewer to vdb directory...")
-
-  shinyAppPrefix <- Sys.getenv("TRELLISCOPE_DEV_APP_PREFIX")
-  if(shinyAppPrefix == "")
-    shinyAppPrefix <- file.path(system.file(package = "trelliscope"), "trelliscopeViewer")
-
-  serverLoc <- file.path(vdbConn$path, "server")
-  if(file.exists(serverLoc))
-    unlink(serverLoc, recursive = TRUE)
-
-  wwwLoc <- file.path(vdbConn$path, "www")
-  if(file.exists(wwwLoc))
-    unlink(wwwLoc, recursive = TRUE)
-
-  file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
-  file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
-  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path)
+  copyViewerFiles(vdbConn)
 
   message("*** Syncing local data...")
   syncLocalData(vdbConn)
