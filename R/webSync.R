@@ -2,9 +2,9 @@ if(getRversion() >= "2.15.1") {
   utils::globalVariables(c("dataClass"))
 }
 
-#' Sync VDB and notebook Files to a Web Server
+#' Sync VDB Files to a Web Server
 #'
-#' Sync VDB and notebook files to a web server
+#' Sync VDB files to a web server
 #'
 #' @param vdbConn VDB connection settings
 #' @param webConn web connection settings

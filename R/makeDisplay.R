@@ -11,7 +11,7 @@ if(getRversion() >= "2.15.1") {
 #' @param name the name of the display (no special characters, spaces are converted to underscores)
 #' @param group the group the display belongs to, where displays are organized into groups (no special characters, spaces are
 #' converted to underscores).  Defaults to "common"
-#' @param desc a description of the display (used in the viewer and in notebooks)
+#' @param desc a description of the display (used in the viewer)
 #' @param mdDesc an optional longer-form description of the display and data, which can be text or can be a path to a markdown file or file with html snippets.  The description will appear in the "Display Information" panel in the Trelliscope viewer.
 #' @param height reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
 #' @param width reference dimensions (in pixels) for each panel (panels will be resized based on available space in the viewer)
