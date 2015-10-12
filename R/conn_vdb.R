@@ -72,6 +72,10 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, verbose = TRUE) {
   ), class = "vdbConn")
   save(conn, file = connPath)
 
+  # copy latest trelliscope viewer files over
+  message("*** Copying latest viewer to vdb directory...")
+  copyViewerFiles(conn)
+
   options(vdbConn = conn)
   return(conn)
 }
