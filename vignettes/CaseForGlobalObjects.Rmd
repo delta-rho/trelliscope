@@ -30,10 +30,10 @@ bareBonesPanel <- function(x)
    plot(x$time, x$medListPriceSqft)
 tmp = tempfile()
 conn = vdbConn(tmp, "tmp",autoYes=TRUE)
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "list_vs_time_barebones",
-   desc    = "List price per square foot vs. time") %>% suppressMessages
+   desc    = "List price per square foot vs. time") 
 ```
 
 ```{r}
@@ -42,11 +42,11 @@ cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
 
 My vdb function used 5.7M of disk space (there is approximately 2M of space used in an empty vdb),  so now suppose I have two panels?
 ```{r, echo=TRUE, message=FALSE}
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "panel 2",
    desc    = "List price per square foot vs. time",
-	conn = conn) %>% suppressMessages
+	conn = conn)
 ```
 ```{r}
 cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
@@ -54,7 +54,7 @@ cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
 I am now up to 7.8M of disk space, but I didn't really add any data to the display database (except I did because it gets duplicated for each panel function).  Suppose instead `housing` was 100 times as large, and I repeat this experiment.  For example,
 ```{r, message=FALSE}
 library(data.table)
-housing100 = lapply(1:3, function(i){
+housing100 = lapply(1:100, function(i){
 		x = housing
 		x$medListPriceSqft = jitter(x$medListPriceSqft)
 		x$medSoldPriceSqft = jitter(x$medSoldPriceSqft)
@@ -62,22 +62,22 @@ housing100 = lapply(1:3, function(i){
 byCounty <- divide(housing100, by = c("county", "state"))
 tmp = tempfile()
 conn = vdbConn(tmp, "tmp",autoYes=TRUE)
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "list_vs_time_barebones",
    desc    = "List price per square foot vs. time",
-   conn = conn) %>% suppressMessages
+   conn = conn)
 ```
 ```{r}
 cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
 ```
 And now if I double the number displays?
 ```{r, message=FALSE}
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "panel_2",
    desc    = "List price per square foot vs. time",
-   conn = conn) %>% suppressMessages
+   conn = conn) 
 ```
 ```{r}
 cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
@@ -90,22 +90,22 @@ byCounty = localDiskConn(tempfile(), autoYes=TRUE)
 byCounty <- divide(housing100, by = c("county", "state"), output=byCounty)
 tmp = tempfile()
 conn = vdbConn(tmp, "tmp",autoYes=TRUE)
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "list_vs_time_barebones",
    desc    = "List price per square foot vs. time",
-   conn = conn) %>% suppressMessages
+   conn = conn) 
 ```
 ```{r}
 cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
 ```
 The vdb is nearly the same size as an empty vdb, and doubling the displays does nothing in particular:
 ```{r, message=FALSE}
-makeDisplay(byCounty,
+ret = makeDisplay(byCounty,
    panelFn = bareBonesPanel,
    name    = "panel_2",
    desc    = "List price per square foot vs. time",
-   conn = conn) %>% suppressMessages
+   conn = conn) 
 ```
 ```{r}
 cat(system(paste("du -sh", tmp), intern=TRUE))  #mac or linux like only
@@ -137,7 +137,7 @@ The idea of a `localDiskConn` DDO for every type of meta-analytic data for a pan
 ## Case 3: What if you need to deploy to shinyapps.io and you have complicated package code?
 
 
-Deploying Trelliscope to shinyapps.io requires that your `panelFn` arguments have no dependence on packages other than those on github or CRAN.  In my case, I had decided to build my work into an R package for proteomics.  If I don't want to also deploy that package publicly,  this essentially means that I need in someway to hack my panelFn dependencies into Trelliscope.  The problem with just sourcing everything into R memory is the auto-detect for the params argument in `makeDisplay` does not auto-detect nested function calls.  This implies that any collaborators for my vdb need to be aware of the extra R code they need to source (if it is the same VDB deployed to shinyapps.io.  It would be better to have a "source" directory in a VDB that was automatically handled by Trelliscope.  I mention this as "Case 3" because while working with the code to build global objects into Trelliscope I also built in sourcing R functions. 
+Deploying Trelliscope to shinyapps.io requires that your `panelFn` arguments have no dependence on packages other than those on github or CRAN.  In my case, I had decided to build my work into an R package for proteomics.  If I don't want to also deploy that package publicly,  this essentially means that I need in someway to hack my panelFn dependencies into Trelliscope.  The problem with just sourcing everything into R memory is the auto-detect for the params argument in `makeDisplay` does not auto-detect nested function calls.  This implies that any collaborators for my vdb need to be aware of the extra R code they need to source. It would be better to have a "source" directory in a VDB that was automatically handled by Trelliscope.  I mention this as "Case 3" because while working with the code to build global objects into Trelliscope, I also built in sourcing R functions. 
 
 
 
@@ -167,7 +167,7 @@ In addition to these changes the `copyViewerFiles` code has been modified to sav
 ## Examples: Saving Globals
 
 Here is a really simple example:
-```{r}
+```{r, message=FALSE, eval=FALSE}
 meta = list()
 meta$color = "blue"
 data(iris)
@@ -175,7 +175,7 @@ div = divide(iris, by="Species")
 panelFn = function(v) plot(v$Sepal.Length, v$Sepal.Width, col = meta$color)
 tmp = tempfile()
 conn = vdbConn(tmp, autoYes=TRUE)
-makeDisplay(div, name ="tmp", panelFn=panelFn, detect.globals=FALSE) %>% suppressMessages
+ret = makeDisplay(div, name ="tmp", panelFn=panelFn, detect.globals=FALSE)
 rm("meta")
 ```
 ```{r, eval=FALSE}
@@ -183,7 +183,7 @@ view(conn=conn)
 ```
 The view doesn't work because meta doesn't exist and we disabled the saving of params with `detect.globals=FALSE`, but we can save the meta objects and the vdb will work again:
 
-```{r}
+```{r, eval=FALSE}
 meta = list()
 meta$color = "blue"
 save(meta, file =globalsFile(conn))
@@ -201,7 +201,7 @@ This was a small example, but it has unlimited potential.  The user is unlocked 
 Suppose instead of global objects I have source files that I want to run before any panel functions. In that case I should use the `copyRSource` function.  Any files ending in `.R` from that directory will be copied to the vdb and sourced when it is loaded. 
 
 For example
-```{r}
+```{r, eval=FALSE}
 rm("meta")
 source_dir = tempfile()
 dir.create(source_dir)
@@ -210,11 +210,11 @@ source(file.path(source_dir, "my_source.R"))
 meta
 ```
 The source file makes the `meta` object, but this R source can do whatever the user wants.  To utilize it we proceed
-```{r}
+```{r, message=FALSE, eval=FALSE}
 tmp = tempfile()
 conn = vdbConn(tmp, autoYes=TRUE)
 copyRSource(source_dir, conn=conn)
-makeDisplay(div, name ="tmp", panelFn=panelFn, detect.globals=FALSE) %>% suppressMessages
+makeDisplay(div, name ="tmp", panelFn=panelFn, detect.globals=FALSE) 
 rm("meta")
 ```
 ```{r, eval=FALSE}

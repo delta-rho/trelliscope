@@ -126,11 +126,11 @@ makeDisplay <- function(
   }
 
   if(verbose) message("* Validating 'panelFn'...")
-  if(!is.null(params) && class(params) == "list"){
-  	environment(panelFn) = list2env(params)
-  	environment(cogFn) = list2env(params)
+  if(!is.null(params) &&  inherits(params,"list")){
+  	environment(panelFn) <- list2env(params)
+  	environment(cogFn) <- list2env(params)
   }
-  panelEx =  kvApply(kvExample(data), panelFn)$value
+  panelEx <-  kvApply(kvExample(data), panelFn)$value
   cogEx <- validateCogFn(data, cogFn, verbose)
 
   if(is.null(desc) || is.na(desc))
