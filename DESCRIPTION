@@ -42,3 +42,4 @@ Suggests:
     roxygen2 (>= 4.0.0),
     scagnostics,
     shinyapps
+RoxygenNote: 5.0.1

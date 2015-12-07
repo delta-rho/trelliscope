@@ -84,5 +84,6 @@ copyViewerFiles <- function(vdbConn) {
 
   file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
   file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
-  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path)
+  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path, overwrite=TRUE)
+  file.copy(file.path(shinyAppPrefix, "global.R"), vdbConn$path, overwrite=TRUE)
 }

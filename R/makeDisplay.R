@@ -28,7 +28,7 @@ if(getRversion() >= "2.15.1") {
 #' @param params a named list of objects external to the input data that are needed in the distributed computing (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
-#'
+#' @param detect.globals  if TRUE params are automatically detected.    (Packages are always auto-detected).
 #' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
 #'
 #' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
@@ -65,7 +65,8 @@ makeDisplay <- function(
   keySig = NULL,
   params = NULL,
   packages = NULL,
-  control = NULL
+  control = NULL,
+  detect.globals = TRUE
 ) {
   validateVdbConn(conn)
 
@@ -125,8 +126,11 @@ makeDisplay <- function(
   }
 
   if(verbose) message("* Validating 'panelFn'...")
-  panelEx <- kvApply(kvExample(data), panelFn)$value
-
+  if(!is.null(params) &&  inherits(params,"list")){
+  	environment(panelFn) <- list2env(params)
+  	environment(cogFn) <- list2env(params)
+  }
+  panelEx <-  kvApply(kvExample(data), panelFn)$value
   cogEx <- validateCogFn(data, cogFn, verbose)
 
   if(is.null(desc) || is.na(desc))
@@ -198,8 +202,9 @@ makeDisplay <- function(
 
   packages <- c(packages, "trelliscope")
   packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
-
-  globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+  globalVarList = list()
+  if(detect.globals)
+  	globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
 
   if(length(params) > 0)
     for(pnm in names(params))
@@ -340,56 +345,92 @@ makeDisplay <- function(
   return(invisible(displayObj))
 }
 
-updateDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), ...) {
-  args <- list(...)
-  nms <- names(args)
+#' Smart Update Display With Mode
+#'
+#' Can be used to automatically make or update display depending on if it exists (avoiding cognostic recalculation).
+#' @param name See makeDisplay
+#' @param group See makeDisplay
+#' @param conn See makeDisplay
+#' @param mode if "update" just tries to update display, if "make" just tries to makeDisplay, and finally if "auto" tries to update and failing that tries to "make".
+#' @param ... parameters updated from makeDisplay which must be in  c("desc", "width", "height", "keySig","lims", "panelFn"). NOTE: panelFn must be the same panelFn type as the original.
+#'
+#' @return Depends on mode
+#' @export
+updateDisplay <- function(name,..., group = "common", conn = getOption("vdbConn"), mode="update") {
+  	#mode = match.arg(mode, c("update", "make","auto"))
+	switch(mode,
+  	update = {
+		  args <- list(...)
+		  nms <- names(args)
+		
+		  updateable <- c("panelFn", "desc", "state", "lims", "width", "height", "keySig")
+		
+		  notup <- setdiff(nms, updateable)
+		  if(length(notup) > 0) {
+		    message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
+		  }
+		
+		  disp <- getDisplay(name, group, conn)
+		
+		  noPreRend <- c("panelFn", "width", "height")
+		  if(disp$preRender) {
+		    if(nms %in% noPreRend)
+		      message("note: preRender is TRUE, so the following cannot be set: ",
+		        paste(noPreRend, collapse = ", "))
+		    nms <- setdiff(nms, noPreRend)
+		  }
+		
+		  for(cur in updateable) {
+		    if(cur %in% nms)
+		      disp[[cur]] <- args[[cur]]
+		      
+		  }
+		
+		  if("panelFn" %in% nms) {
+		    # panelGlobals <- drGetGlobals(args$panelFn)
+		    # cogGlobals <- drGetGlobals(cogFn)
+		    # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
+		    # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
+		   	  panelFnType <- disp$panelFnType
+		   	  panelFn = args$panelFn
+  			  class(panelFn) <- c("function", panelFnType)
+  			  disp$panelFn = panelFn
+		  }
+		
+		  displayObj <- disp
+		  # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
+		 #
+		  updateDisplayList(list(
+		    group = disp$group,
+		    name = disp$name,
+		    desc = disp$desc,
+		    n = disp$n,
+		    panelFnType = disp$panelFnType,
+		    preRender = disp$preRender,
+		    dataClass = tail(class(disp$panelDataSource), 1),
+		    cogClass = class(disp$cogDatConn)[1],
+		    height = disp$height,
+		    width = disp$width,
+		    updated = Sys.time(),
+		    keySig = disp$keySig
+		  ), conn)
+		  vdbPrefix <- conn$path
+		displayObj = disp
+  		save(displayObj,file = file.path(vdbPrefix, "displays", disp$group, disp$name, "displayObj.Rdata"))
 
-  updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
-
-  notup <- setdiff(nms, updateable)
-  if(length(notup) > 0) {
-    message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
-  }
-
-  disp <- getDisplay(name, group, conn)
-
-  noPreRend <- c("panelFn", "width", "height")
-  if(disp$preRender) {
-    if(nms %in% noPreRend)
-      message("note: preRender is TRUE, so the following cannot be set: ",
-        paste(noPreRend, collapse = ", "))
-    nms <- setdiff(nms, noPreRend)
-  }
-
-  for(cur in c("desc", "width", "height", "keySig")) {
-    if(cur %in% nms)
-      disp[[cur]] <- args[[cur]]
-  }
-
-  if("panelFn" %in% nms) {
-    # panelGlobals <- drGetGlobals(args$panelFn)
-    # cogGlobals <- drGetGlobals(cogFn)
-    # packages <- unique(c(packages, panelGlobals$packages, cogGlobals$packages))
-    # globalVarList <- c(panelGlobals$vars, cogGlobals$vars)
-  }
-
-  displayObj <- disp
-  # save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
-
-  updateDisplayList(list(
-    group = disp$group,
-    name = disp$name,
-    desc = disp$desc,
-    n = disp$n,
-    panelFnType = disp$panelFnType,
-    preRender = disp$preRender,
-    dataClass = tail(class(disp$panelDataSource), 1),
-    cogClass = class(disp$cogDatConn)[1],
-    height = disp$height,
-    width = disp$width,
-    updated = Sys.time(),
-    keySig = disp$keySig
-  ), conn)
+  	},
+  	make = {
+  		makeDisplay(name=name, group=group, conn=conn, ...)	
+  	},
+ 	{
+  		tried = try({getDisplay(name, group, conn)}, silent=TRUE)
+  		if(inherits(tried, "try-error")){
+  			return(makeDisplay(name=name, group=group, conn=conn, ...))
+  		}else{
+  			return(updateDisplay(name=name, group=group, conn=conn, mode="update",...))	
+  		}
+  	
+  	})
 }
 
 
@@ -403,5 +444,7 @@ cleanupDisplays <- function(conn = getOption("vdbConn")) {
     unlink(f, recursive = TRUE)
   }
 }
+
+
 
 
