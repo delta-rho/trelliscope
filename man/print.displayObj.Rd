@@ -4,7 +4,7 @@
 \alias{print.displayObj}
 \title{S3method print displayObj}
 \usage{
-\method{print}{displayObj}(x, ...)
+print.displayObj(x, ...)
 }
 \arguments{
 \item{x}{TODO}
