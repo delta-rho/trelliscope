@@ -38,7 +38,7 @@ A character string that determines how axis limits are calculated for each panel
 }
 \examples{
 \dontrun{
-irisSplit <- divide(iris, "Species")
+irisSplit <- datadr::divide(iris, "Species")
 irisPreFn <- function(x) {
   list(
     xlim = range(x$Sepal.Length),

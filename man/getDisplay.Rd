@@ -13,6 +13,9 @@ getDisplay(name, group = NULL, conn = getOption("vdbConn"))
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 }
+\value{
+a display object
+}
 \description{
 Retrieve a display object from a VDB.
 }

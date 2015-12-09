@@ -23,16 +23,6 @@ getCogData(x, rowIdx, colIdx, ...)
 \item{rowIdx}{TODO}
 
 \item{colIdx}{TODO}
-
-\item{cogDF}{TODO}
-
-\item{flt}{TODO}
-
-\item{ordering}{TODO}
-
-\item{colIndex}{TODO}
-
-\item{verbose}{TODO}
 }
 \description{
 Methods for Cognostics Connections

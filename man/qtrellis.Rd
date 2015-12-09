@@ -33,7 +33,7 @@ If you don't have a vdb connection set up (see \code{\link{vdbConn}}), a tempora
 panel <- function(x)
   xyplot(Sepal.Width ~ Sepal.Length, data = x)
 
-p <- divide(iris, by = "Species") \%>\%
+p <- datadr::divide(iris, by = "Species") \%>\%
   qtrellis(panel, layout = c(1, 3))
 p
 

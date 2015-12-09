@@ -37,7 +37,7 @@ This function is also useful for identifying subsets with very large outlying va
 }
 \examples{
 \dontrun{
-irisSplit <- divide(iris, "Species")
+irisSplit <- datadr::divide(iris, "Species")
 irisPreFn <- function(x) {
   list(
     xlim = range(x$Sepal.Length),

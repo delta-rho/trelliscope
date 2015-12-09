@@ -9,7 +9,7 @@ makeDisplay(data, name, group = "common", desc = "", mdDesc = NULL,
   "free", prepanelFn = NULL), cogFn = NULL, state = NULL,
   preRender = FALSE, cogConn = dfCogConn(), output = NULL,
   conn = getOption("vdbConn"), verbose = TRUE, keySig = NULL,
-  params = NULL, packages = NULL, control = NULL, detect.globals = TRUE)
+  params = NULL, packages = NULL, control = NULL, detectGlobals = TRUE)
 }
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}
@@ -53,7 +53,7 @@ converted to underscores).  Defaults to "common"}
 
 \item{control}{parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}}
 
-\item{detect.globals}{if TRUE params are automatically detected.    (Packages are always auto-detected).}
+\item{detectGlobals}{if TRUE params are automatically detected (packages are always auto-detected)}
 }
 \description{
 Create a trelliscope display and add it to a visualization database (VDB)

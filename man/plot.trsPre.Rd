@@ -24,7 +24,7 @@ This function plots the sorted axis ranges for the x and y axis for the case of 
 }
 \examples{
 \dontrun{
-irisSplit <- divide(iris, "Species")
+irisSplit <- datadr::divide(iris, "Species")
 irisPreFn <- function(x) {
   list(
     xlim = range(x$Sepal.Length),
