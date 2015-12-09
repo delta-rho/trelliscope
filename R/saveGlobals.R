@@ -1,72 +1,66 @@
-#---------------------------------------------------------------------------------
-# Author: Jeremiah Rounds
-# Email: jeremiah.rounds@pnnl.gov
-# Time:  Fri Oct 23 15:33:03 2015
-#---------------------------------------------------------------------------------
-
-#' Path to global rdata in Trelliscope viewer.
-#' 
-#' \code{globalsFile} returns an appropriate file name to save to.
-#' Objects in this rdata will be loaded by the server viewer code prior to showing 
-#' displays
+#' Path to VDB global data storage file
 #'
-#' @param conn vdb connection 
+#' Returns an appropriate file name to save VDB-wide globals to for use in Trelliscope displays
 #'
+#' @param conn vdb connection
+#'
+#' @author Jeremiah Rounds
 #' @return character file name
+#' @details Objects in this rdata file will be loaded by the Trelliscope Viewer when the viewer is launched and the data will be available to all displays throughout the viewing session.
 #' @export
 #'
 #' @examples
-#' save(foo, file=globalsPath(conn=conn))
-globalsFile = function(conn=getOption("vdbConn")){
-	validateVdbConn(conn)
-	dir = file.path(conn$path, "data")
-	if(!dir.exists(dir))
-		dir.create(dir)
-	 file = file.path(dir, "globals.Rdata")
-	 return(file)
-	
+#' \dontrun{
+#' save(foo, file = globalsPath())
+#' }
+vdbGlobalsFile <- function(conn = getOption("vdbConn")) {
+  validateVdbConn(conn)
+
+  dir <- file.path(conn$path, "data")
+  if(!dir.exists(dir))
+    dir.create(dir)
+
+  file.path(dir, "globals.Rdata")
 }
 
-
-#' Copy files ending in .R from source directory
+#' Copy files ending in .R from source directory into a VDB-wide global code directory for use in Trelliscope displays
 #'
-#' These R files will be sourced in the global environment of the trelliscope viewer.
+#' These R files will be sourced in the global environment of the Trelliscope Viewer when the viewer is launched and the resulting objects will be available to all displays throughout the viewing session.
 #' Useful for getting custom functions into the global environment.
 #'
-#' @param from_dir directory with R source
+#' @param fromDir directory with R source
 #' @param conn vdb connection
+#'
 #' @author Jeremiah Rounds
-#'
-#'
 #' @examples
-#' copyRSource(".") #copies R files from current directory
+#' \dontrun{
+#' vdbCopyRSource(".") # copies R files from current directory
+#' }
 #'
 #' @export
-copyRSource = function(from_dir, conn=getOption("vdbConn")){
-	validateVdbConn(conn)
-	dir = file.path(conn$path, "data", "R")
-	if(!dir.exists(dir))
-		dir.create(dir, recursive=TRUE)
-	flist <- list.files(from_dir, "*.R$", full.names = TRUE)
-	message("Copying...")
-	#print(flist)
-	ret = file.copy(flist, dir)
-	ret
+vdbCopyRSource <- function(fromDir, conn = getOption("vdbConn")) {
+  validateVdbConn(conn)
+
+  dir <- file.path(conn$path, "data", "R")
+  if(!dir.exists(dir))
+    dir.create(dir, recursive = TRUE)
+
+  flist <- list.files(fromDir, "*.R$", full.names = TRUE)
+
+  message("Copying...")
+  file.copy(flist, dir)
 }
 
-
-#' Check to see if the global data file already exist
-#' 
-#' Does not check to see if any particular data set is in the global file.
-#' 
+#' Check to see if the VDB-wide global data file exists
 #'
 #' @param conn vdb connection
 #'
-#' @return TRUE/FALSE
+#' @author Jeremiah Rounds
+#' @return logical
 #' @export
 #'
 #' @examples
-#' globalsExist()
-globalsExist = function(conn=getOption("vdbConn")){
-	file.exists(file.path(conn$path,	"data","globals.Rdata"))
+#' vdbGlobalsExist()
+vdbGlobalsExist <- function(conn = getOption("vdbConn")) {
+  file.exists(file.path(conn$path,  "data", "globals.Rdata"))
 }
