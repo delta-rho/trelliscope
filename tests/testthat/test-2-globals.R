@@ -5,7 +5,7 @@ vdbConn(vdbPath, autoYes = TRUE)
 
 test_that("find globals", {
   # divide the ddf by the variable "site"
-  bySite <- divide(barley, by = "site")
+  bySite <- datadr::divide(barley, by = "site")
 
   a <- 0
 
@@ -22,7 +22,6 @@ test_that("find globals", {
     list(
       meanYield = cogMean(x$yield + b, desc = "mean yield"),
       range = cogRange(x$yield, desc = "yield range"),
-      # min = min(x$yield),
       min = cog(min(x$yield), desc = "min yield"),
       max = cog(max(x$yield), desc = "min yield")
     )
