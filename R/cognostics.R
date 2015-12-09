@@ -283,14 +283,14 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
     panelKey <- digest(kvSubset[[1]])
   }
   res$panelKey <- cog(panelKey, desc = "panel key", type = "key", group = "panelKey", defActive = TRUE, filterable = FALSE)
-  splitVars <- getSplitVars(kvSubset)
+  splitVars <- datadr::getSplitVars(kvSubset)
   if(!is.null(splitVars)) {
     nms <- names(splitVars)
     for(i in seq_along(splitVars)) {
       res[[nms[i]]] <- cog(splitVars[[i]], desc = "conditioning variable", type = "factor", group="condVar", defLabel = TRUE)
     }
   }
-  bsvs <- getBsvs(kvSubset)
+  bsvs <- datadr::getBsvs(kvSubset)
   if(!is.null(bsvs)) {
     nms <- names(bsvs)
     # TODO: get bsvInfo so we can get bsv description
@@ -299,7 +299,7 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
     }
   }
   if(!is.null(cogFn))
-    res <- c(res, kvApply(kvSubset, cogFn)$value)
+    res <- c(res, datadr::kvApply(kvSubset, cogFn)$value)
 
   res
 }

@@ -45,11 +45,11 @@ cogFinal <- function(cogConn, ...)
 #' @param ... other objects passed onto generic methods
 #' @param rowIdx TODO
 #' @param colIdx TODO
-#' @param cogDF TODO
-#' @param flt TODO
-#' @param ordering TODO
-#' @param colIndex TODO
-#' @param verbose TODO
+# @param cogDF TODO
+# @param flt TODO
+# @param ordering TODO
+# @param colIndex TODO
+# @param verbose TODO
 #' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  They should never need to be used by an analyst.
 #' @export
 #' @rdname cogConn-methods

@@ -22,7 +22,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
   } else {
     pkg <- "Cairo"
     if(suppressWarnings(suppressMessages(require(pkg, character.only = TRUE)))) {
-      pngfun <- CairoPNG
+      pngfun <- Cairo::CairoPNG
     } else {
       pngfun <- png
     }
@@ -50,7 +50,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
       eval(dat)
     } else {
       # plot objects such as trellis or lattice
-      tmp <- kvApply(dat, panelFn)$value
+      tmp <- datadr::kvApply(dat, panelFn)$value
 
       if(!is.null(lims)) {
         if(inherits(tmp, "trellis")) {
@@ -74,10 +74,10 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
             }
           }
         } else if(inherits(tmp, "ggplot")) {
-          theme_set(theme_grey(pointsize))
+          ggplot2::theme_set(ggplot2::theme_grey(pointsize))
           # tmp <- tmp + opts(pointsize = pointsize)
           # this is ugly now - make more robust, etc.
-          ggbuild <- ggplot_build(tmp)
+          ggbuild <- ggplot2::ggplot_build(tmp)
           gglims <- ggbuild$panel$ranges
           if(length(gglims) == 1) {
             plotXLim <- gglims[[1]]$x.range
@@ -87,13 +87,13 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
 
             if(lims$x$type != "free") {
               if(ggbuild$panel$x_scales[[1]]$scale_name == "datetime") {
-                tmp <- tmp + scale_x_datetime(limits = as.POSIXct(curXLim, origin = "1970-01-01"))
+                tmp <- tmp + ggplot2::scale_x_datetime(limits = as.POSIXct(curXLim, origin = "1970-01-01"))
               } else {
-                tmp <- tmp + scale_x_continuous(limits = curXLim)
+                tmp <- tmp + ggplot2::scale_x_continuous(limits = curXLim)
               }
             }
             if(lims$y$type != "free") {
-              tmp <- tmp + scale_y_continuous(limits = curYLim)
+              tmp <- tmp + ggplot2::scale_y_continuous(limits = curYLim)
             }
           }
         }
