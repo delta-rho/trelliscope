@@ -384,7 +384,7 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, orig
 }
 
 getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
-  p <- kvApply(x, panelFn)$value
+  p <- datadr::kvApply(x, panelFn)$value
   scaleUp <- p$scale_up
   scaleDown <- p$scale_down
   if(is.null(scaleUp))

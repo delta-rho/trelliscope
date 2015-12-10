@@ -29,7 +29,7 @@ displayInformationOutputData <- function(x) {
     attrs$n <- list(name = "Number of panels", val = x$cdo$n)
     attrs$up <- list(name = "Last updated", val = x$cdo$updated)
     attrs$conn <- list(name = "Data source type",
-      val = capture.output(print(getAttribute(ds, "conn"))))
+      val = capture.output(print(datadr::getAttribute(ds, "conn"))))
 
     cogs <- x$cdo$cogInfo[,c("name", "desc")]
 

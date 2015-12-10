@@ -40,7 +40,8 @@ validateCogFn <- function(dat, cogFn, verbose = FALSE) {
   if(verbose)
     message("* Testing cognostics function on a subset ... ", appendLF = FALSE)
 
-  ex <- applyCogFn(cogFn, kvExample(dat), getAttribute(dat, "conn"))
+  ex <- applyCogFn(cogFn, datadr::kvExample(dat),
+    datadr::getAttribute(dat, "conn"))
 
   # if(!is.list(ex))
   #   stop("cogFn should return a list")

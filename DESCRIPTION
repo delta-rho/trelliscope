@@ -1,9 +1,12 @@
 Package: trelliscope
 Type: Package
 Title: Trelliscope
-Version: 0.8.3.3
-Date: 2015-10-12
-Authors@R: person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre"))
+Version: 0.9.0
+Date: 2015-12-07
+Authors@R: c(person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre")),
+    person("Jeremiah", "Rounds", role = "ctb"),
+    person("Barret", "Schloerke", role = "ctb"),
+    person("Landon", "Sego", role = "ctb"))
 Maintainer: Ryan Hafen <rhafen@gmail.com>
 Description: Trelliscope provides a way to create, organize, and view
     multi-panel displays, a collection of which is called a visualization
@@ -20,9 +23,11 @@ URL: http://tessera.io/docs-trelliscope
 BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE
 LazyData: yes
+NeedsCompilation: no
 Depends:
+    R (>= 3.0.0),
     base,
-    datadr (>= 0.7.5.7),
+    datadr (>= 0.8.0),
     lattice (>= 0.20-23),
     ggplot2
 Imports:
@@ -38,7 +43,8 @@ Imports:
 Suggests:
     Cairo,
     dplyr,
-    testthat (>= 0.8.1),
-    roxygen2 (>= 4.0.0),
+    testthat (>= 0.11.0),
+    roxygen2 (>= 5.0.1),
     scagnostics,
     shinyapps
+RoxygenNote: 5.0.1

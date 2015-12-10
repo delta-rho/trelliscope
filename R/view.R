@@ -18,7 +18,8 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @export
 #' @importFrom shiny runApp
-#' @import hexbin fastICA jsonlite
+#' @import hexbin fastICA
+#' @importFrom jsonlite toJSON
 view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = 8100L) {
 
   port <- as.integer(port)
@@ -84,5 +85,6 @@ copyViewerFiles <- function(vdbConn) {
 
   file.copy(file.path(shinyAppPrefix, "www"), vdbConn$path, recursive = TRUE)
   file.copy(file.path(shinyAppPrefix, "server"), vdbConn$path, recursive = TRUE)
-  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path)
+  file.copy(file.path(shinyAppPrefix, "server.R"), vdbConn$path, overwrite=TRUE)
+  file.copy(file.path(shinyAppPrefix, "global.R"), vdbConn$path, overwrite=TRUE)
 }

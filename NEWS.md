@@ -1,23 +1,24 @@
-Version 0.8.3.3
+Version 0.9
 ---------------------------------------------------------------------
 
-- make viewer app files part of app from beginning
-- remove 'notebook' directory requirements
-- fix widgetThumbnail to create empty thumbnail if phantomjs isn't installed
-- update directory copying to be more cross platform friendly
-- fix file copying and backing up
-- update file operations for compatibility
-- increase htmlwidget thumbnail timeout
-- add feature to tar up data files and untar after deploy
-- fix environment handling with relatedData functions
-- show blank div if no related display
-- add timeout to widgetThumbnail
-- make namespace explicit for dplyr calls
-- fix typo in qtrellis
+- add support for VDB-wide global data and source code storage (0.9.0)
+- fix issue with multiple column sort in Trelliscope viewer (0.9.0)
+- fix documentation and make imported function usage more obvious (0.9.0)
 
 Version 0.8.3
 ---------------------------------------------------------------------
 
+FEATURES / CHANGES
+
+- make viewer app files part of app from beginning
+- remove 'notebook' directory requirements
+- update directory copying to be more cross platform friendly
+- update file operations for compatibility
+- increase htmlwidget thumbnail timeout
+- add feature to tar up data files and untar after deploy
+- show blank div if no related display
+- add timeout to widgetThumbnail
+- make namespace explicit for dplyr calls
 - for htmlwidget panels, allow option to scale with "zoom" css instead of trying to resize
 - add ability to make thumbnails for htmlwidgets
 - remove rCharts and ggvis functionality in favor of clean support for htmlwidgets
@@ -42,6 +43,13 @@ Version 0.8.3
 - update formatting
 - update handling of global variables
 - add experimental `qtrellis()` function for quick generation of trelliscope displays
+
+BUG FIXES
+
+- fix widgetThumbnail to create empty thumbnail if phantomjs isn't installed
+- fix file copying and backing up
+- fix environment handling with relatedData functions
+- fix typo in qtrellis
 - fix problem with loading RHIPE on viewer server
 - fix problem with filter due to js error
 - fix bug in adding default state in `makeDisplay()`
@@ -101,26 +109,13 @@ BUG FIXES
 - fix bug in label, sort, filter state not resetting on display change
 - fix bug in marginal distribution checking for viewer cog table
 
-Version 0.7.9.1
+Version 0.7.9
 -------------------------------------------------------------------------------
 
 FEATURES / CHANGES
 
 - add experimental support for rCharts panels
 - add experimental support for deploying to shinyapps.io
-
-BUG FIXES
-
-- load packages and related data objects for related displays
-- fix opening new display when current state is showing related displays
-- fix path in webSync for changing app permissions on server
-
-
-Version 0.7.9
--------------------------------------------------------------------------------
-
-FEATURES / CHANGES
-
 - add experimental support for rendering vega specs as panels (currently
   through ggvis, in the future through more general means)
 - don't allow selectpickers in cog table when there are too many levels (slows
@@ -141,6 +136,12 @@ FEATURES / CHANGES
 - add conditional / marginal (renamed to "filtered" / "all") in visual filters
   so that current filter state can be reflected in the visual filter plot
   (previously was just "all")
+
+BUG FIXES
+
+- load packages and related data objects for related displays
+- fix opening new display when current state is showing related displays
+- fix path in webSync for changing app permissions on server
 
 Version 0.7.8
 -------------------------------------------------------------------------------

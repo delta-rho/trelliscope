@@ -42,12 +42,13 @@ page.open('file://", ff, "', function() {
 
   if(!success) {
     message("** could not create htmlwidget thumbnail... creating an empty thumbnail...")
-    png(file = thumbPath)
+    png(filename = thumbPath)
     plot(1, 1, type = "n", xlab = "", ylab = "", axes = FALSE)
     dev.off()
   }
 }
 
+#' Get instructions on how to install phantomjs
 #' @export
 phantomInstall <- function() {
   message("Please visit this page to install phantomjs on your system: http://phantomjs.org/download.html")

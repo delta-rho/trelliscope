@@ -1,4 +1,4 @@
-if(getRversion() >= "2.15.1") {
+ if(getRversion() >= "2.15.1") {
   utils::globalVariables(c("dataClass"))
 }
 
@@ -124,7 +124,7 @@ syncLocalData <- function(vdbConn = getOption("vdbConn"), rsync = NULL) {
 
     locs <- sapply(seq_len(nrow(ldDisp)), function(i) {
       tmp <- getDisplay(ldDisp$name[i], ldDisp$group[i])
-      getAttribute(tmp$panelDataSource, "conn")$loc
+      datadr::getAttribute(tmp$panelDataSource, "conn")$loc
     })
 
     locs <- locs[!grepl(normalizePath(vdbConn$path), locs)]

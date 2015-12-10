@@ -21,6 +21,7 @@ print.displayObj <- function(x, ...) {
 #'
 #' @details If a display is uniquely determined by its name, then group is not required.
 #'
+#' @return a display object
 #' @author Ryan Hafen
 #'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
@@ -32,6 +33,8 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
   load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
   displayInfo <- findDisplay(name = name, group = group, conn = conn)
+  if(is.null(displayInfo))
+    return(NULL)
   vdbPrefix <- conn$path
 
   load(file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name, "displayObj.Rdata"))
@@ -39,16 +42,18 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
   # if it is a local disk connection, the location can change
   # this happens when we move things to a web server
   if(inherits(displayObj$panelDataSource, "kvLocalDisk")) {
-    cn <- getAttribute(displayObj$panelDataSource, "conn")
+    cn <- datadr::getAttribute(displayObj$panelDataSource, "conn")
     if(!file.exists(cn$loc)) {
       tmp <- file.path(conn$path, "displays", displayObj$group, displayObj$name, "panels")
       if(!file.exists(tmp))
         tmp <- file.path(conn$path, "data", basename(cn$loc))
       if(file.exists(tmp)) {
         if(inherits(displayObj$panelDataSource, "ddf")) {
-          displayObj$panelDataSource <- ddf(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
+          displayObj$panelDataSource <- datadr::ddf(datadr::localDiskConn(tmp,
+            reset = TRUE, verbose = FALSE), verbose = FALSE)
         } else {
-          displayObj$panelDataSource <- ddo(localDiskConn(tmp, reset = TRUE, verbose = FALSE), verbose = FALSE)
+          displayObj$panelDataSource <- datadr::ddo(datadr::localDiskConn(tmp,
+            reset = TRUE, verbose = FALSE), verbose = FALSE)
         }
       }
     }
@@ -80,6 +85,8 @@ removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn")
   load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
   displayInfo <- findDisplay(name, group, conn)
+  if(is.null(displayInfo))
+    return(invisible(NULL))
   vdbPrefix <- conn$path
 
   fileLoc <- file.path(vdbPrefix, "displays", displayInfo$group, displayInfo$name)
@@ -118,6 +125,7 @@ removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn")
 
 ## internal
 ## ensures that a display exists and returns its name and group
+# @return a list with the name and group of the display, if found - otherwise NULL
 findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
   load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
@@ -130,15 +138,15 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
   }
 
   if(length(curDisplay) == 0) {
-    stop(paste("The display \"", name, "\"", errStr, " wasn't found.", sep = ""))
-    return(NA)
+    message("The display \"", name, "\"", errStr, " wasn't found.", sep = "")
+    return(NULL)
   } else if (length(curDisplay) > 1) {
     if(is.null(group)) {
-      stop(paste("There is more than one display of name \"", name, "\".  Try specifying a group as well.", sep = ""))
-      return(NA)
+      message("There is more than one display of name \"", name, "\".  Try specifying a group as well.", sep = "")
+      return(NULL)
     } else {
-      stop(paste("There is more than one display of name \"", name, "\" from group \"", group, "\".  This should not be possible"))
-      return(NA)
+      message("There is more than one display of name \"", name, "\" from group \"", group, "\".  This should not be possible")
+      return(NULL)
     }
   } else {
     curDisplay <- displayListDF[curDisplay,]
@@ -202,5 +210,106 @@ listDisplays <- function(conn = getOption("vdbConn")) {
     do.call(sprintf, c(list(fmt = fmtStr), as.list(x)))
   })), collapse = "\n"))
 
+}
+
+#' Update a Display Object
+#'
+#' @param name the name of the display
+#' @param group the group the display belongs to
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param \ldots display parameters to update which must be one of "desc", "width", "height", "keySig", "panelFn", "state" - see \code{\link{makeDisplay}} for details on these parameters.
+#'
+#' @export
+updateDisplay <- function(name, ..., group = "common", conn = getOption("vdbConn")) {
+
+  load(file.path(conn$path, "displays", "_displayList.Rdata"))
+
+  displayInfo <- findDisplay(name = name, group = group, conn = conn)
+  if(is.null(displayInfo)) {
+    message("No display to update")
+    return(invisible(NULL))
+    # message("Creating new display...")
+    # makeDisplay(name = name, group = group, conn = conn, ...)
+  } else {
+    args <- list(...)
+    nms <- names(args)
+
+    updateable <- c("panelFn", "desc", "state", "width", "height", "keySig")
+
+    notup <- setdiff(nms, updateable)
+    if(length(notup) > 0) {
+      message("note: the following attributes cannot be used to update a display and will be ignored: ", paste(notup, collapse = ", "))
+    }
+
+    disp <- getDisplay(name, group, conn)
+
+    noPreRend <- c("panelFn", "width", "height", "lims")
+    if(disp$preRender) {
+      if(nms %in% noPreRend)
+        message("note: preRender is TRUE, so the following cannot be set: ",
+          paste(noPreRend, collapse = ", "))
+      nms <- setdiff(nms, noPreRend)
+    }
+
+    for(cur in setdiff(updateable, "panelFn")) {
+      # TODO: validate each one
+      if(cur %in% nms)
+        disp[[cur]] <- args[[cur]]
+    }
+
+    if("panelFn" %in% nms) {
+      if(is.null(args$detectGlobals)) {
+        getGlobals <- TRUE
+      } else {
+        getGlobals <- as.logical(args$detectGlobals)
+      }
+      if(getGlobals) {
+        panelGlobals <- datadr::drGetGlobals(args$panelFn)
+        disp$relatedPackages <- unique(c(args$packages,
+          panelGlobals$packages, disp$relatedPackages))
+        for(nm in names(c(panelGlobals$vars, args$params))) {
+          disp$relatedData[[nm]] <- panelGlobals$vars[[nm]]
+        }
+      }
+      if(!is.null(args$params) &&  inherits(args$params, "list"))
+        environment(args$panelFn) <- list2env(args$params)
+      panelEx <- datadr::kvApply(datadr::kvExample(disp$panelDataSource),
+        args$panelFn)$value
+      panelFnType <- getPanelFnType(panelEx)
+      class(args$panelFn) <- c("function", panelFnType)
+      disp$panelFn <- args$panelFn
+      # TODO: should also update thumbnail
+    }
+
+    updateDisplayList(list(
+      group = disp$group,
+      name = disp$name,
+      desc = disp$desc,
+      n = disp$n,
+      panelFnType = disp$panelFnType,
+      preRender = disp$preRender,
+      dataClass = tail(class(disp$panelDataSource), 1),
+      cogClass = class(disp$cogDatConn)[1],
+      height = disp$height,
+      width = disp$width,
+      updated = Sys.time(),
+      keySig = disp$keySig
+    ), conn)
+    vdbPrefix <- conn$path
+
+    displayObj <- disp
+    save(displayObj, file = file.path(vdbPrefix, "displays",
+      disp$group, disp$name, "displayObj.Rdata"))
+  }
+}
+
+## remove all _bak directories
+cleanupDisplays <- function(conn = getOption("vdbConn")) {
+  validateVdbConn(conn)
+
+  ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
+  for(f in ff) {
+    unlink(f, recursive = TRUE)
+  }
 }
 

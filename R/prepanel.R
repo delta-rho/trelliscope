@@ -32,7 +32,7 @@ if(getRversion() >= "2.15.1") {
 #'
 #' @examples
 #' \dontrun{
-#' irisSplit <- divide(iris, "Species")
+#' irisSplit <- datadr::divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'   list(
 #'     xlim = range(x$Sepal.Length),
@@ -67,7 +67,7 @@ prepanel <- function(
 
   if(verbose)
     message("Testing 'prepanelFn' on a subset...")
-  p <- kvApply(kvExample(data), prepanelFn)$value
+  p <- datadr::kvApply(datadr::kvExample(data), prepanelFn)$value
   if(inherits(p, "trellis")) {
     prepanelFnIsTrellis <- TRUE
     if(verbose)
@@ -99,7 +99,7 @@ prepanel <- function(
         # temporarily remove axis padding
         curOption <- lattice.getOption("axis.padding")$numeric
         lattice.options(axis.padding = list(numeric = 0))
-        p <- kvApply(list(k, r), prepanelFn)$value
+        p <- datadr::kvApply(list(k, r), prepanelFn)$value
         if(all(is.na(p$panel.args[[1]]$x)) || all(is.na(p$panel.args[[1]]$y))) {
           xr <- c(NA, NA)
           yr <- c(NA, NA)
@@ -116,7 +116,7 @@ prepanel <- function(
         # a$panel$ranges[[1]]$x.range
         # a$panel$ranges[[1]]$y.range
       } else if(prepanelFnIsGgplot) {
-        p <- kvApply(list(k, r), prepanelFn)$value
+        p <- datadr::kvApply(list(k, r), prepanelFn)$value
         gglims <- try(ggplot_build(p)$panel$ranges, silent = TRUE)
 
         if(length(gglims) == 1 && !inherits(gglims, "try-error")) {
@@ -127,7 +127,7 @@ prepanel <- function(
           yr <- c(NA, NA)
         }
       } else {
-        pre <- kvApply(list(k, r), prepanelFn)$value
+        pre <- datadr::kvApply(list(k, r), prepanelFn)$value
         xr <- pre$xlim
         yr <- pre$ylim
 
@@ -178,7 +178,7 @@ prepanel <- function(
     doBanking = doBanking
   )
   packages <- c("digest", "data.table", "trelliscope")
-  prepanelGlobals <- drGetGlobals(prepanelFn)
+  prepanelGlobals <- datadr::drGetGlobals(prepanelFn)
 
   packages <- unique(c(packages, prepanelGlobals$packages))
   globalVarList <- prepanelGlobals$vars
@@ -192,7 +192,7 @@ prepanel <- function(
   parList <- parList[which(!duplicated(nms))]
 
   # suppressMessages(capture.output(
-  jobRes <- mrExec(
+  jobRes <- datadr::mrExec(
     data,
     map = map,
     reduce = reduce,
@@ -229,7 +229,7 @@ prepanel <- function(
 #'
 #' @examples
 #' \dontrun{
-#' irisSplit <- divide(iris, "Species")
+#' irisSplit <- datadr::divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'   list(
 #'     xlim = range(x$Sepal.Length),
@@ -328,7 +328,7 @@ plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, str
 #'
 #' @examples
 #' \dontrun{
-#' irisSplit <- divide(iris, "Species")
+#' irisSplit <- datadr::divide(iris, "Species")
 #' irisPreFn <- function(x) {
 #'   list(
 #'     xlim = range(x$Sepal.Length),

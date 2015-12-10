@@ -8,7 +8,7 @@ context("Simple display")
 vdbPath <- file.path(tempdir(), "vdb")
 
 # divide the ddf by the variable "site"
-bySite <- divide(barley, by = "site")
+bySite <- datadr::divide(barley, by = "site")
 
 # simple dotplot panel function
 pf <- function(x)
@@ -49,7 +49,7 @@ rhinit()
 test_that("makeDisplay works with RHIPE", {
   try(rhdel("/tmp/test_bySite"), silent = TRUE)
 
-  bySiteRh <- convert(bySite, hdfsConn("/tmp/test_bySite", autoYes = TRUE))
+  bySiteRh <- datadr::convert(bySite, hdfsConn("/tmp/test_bySite", autoYes = TRUE))
   bySiteRh <- makeExtractable(bySiteRh)
   makeDisplay(bySiteRh,
     name = "variety_vs_yield_rh",

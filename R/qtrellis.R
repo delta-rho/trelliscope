@@ -17,7 +17,7 @@
 #' panel <- function(x)
 #'   xyplot(Sepal.Width ~ Sepal.Length, data = x)
 #'
-#' p <- divide(iris, by = "Species") %>%
+#' p <- datadr::divide(iris, by = "Species") %>%
 #'   qtrellis(panel, layout = c(1, 3))
 #' p
 #'
@@ -37,7 +37,7 @@ qtrellis <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), c
 
 #' @export
 qtrellis.grouped_df <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), conn = getOption("vdbConn"), ...) {
-  x <- x %>% to_ddf()
+  x <- x %>% datadr::to_ddf()
   qtrellis_(x, panel, cog, by, layout, conn, ...)
 }
 
@@ -48,7 +48,7 @@ qtrellis.ddo <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1
 
 #' @export
 qtrellis.data.frame <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), conn = getOption("vdbConn"), ...) {
-  x <- divide(x, by = by)
+  x <- datadr::divide(x, by = by)
   qtrellis_(x, panel, cog, by, layout, conn, ...)
 }
 
