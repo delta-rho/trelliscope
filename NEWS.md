@@ -1,6 +1,7 @@
 Version 0.9
 ---------------------------------------------------------------------
 
+- fix issue with default layout state being reflected in viewer (0.9.1)
 - add support for VDB-wide global data and source code storage (0.9.0)
 - fix issue with multiple column sort in Trelliscope viewer (0.9.0)
 - fix documentation and make imported function usage more obvious (0.9.0)

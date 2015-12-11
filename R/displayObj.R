@@ -251,10 +251,14 @@ updateDisplay <- function(name, ..., group = "common", conn = getOption("vdbConn
       nms <- setdiff(nms, noPreRend)
     }
 
-    for(cur in setdiff(updateable, "panelFn")) {
+    for(cur in setdiff(updateable, c("panelFn", "state"))) {
       # TODO: validate each one
       if(cur %in% nms)
         disp[[cur]] <- args[[cur]]
+    }
+
+    if("state" %in% nms) {
+      disp$state <- validateState(args$state, name, group, disp)
     }
 
     if("panelFn" %in% nms) {
