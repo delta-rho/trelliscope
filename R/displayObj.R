@@ -220,7 +220,7 @@ listDisplays <- function(conn = getOption("vdbConn")) {
 #' @param \ldots display parameters to update which must be one of "desc", "width", "height", "keySig", "panelFn", "state" - see \code{\link{makeDisplay}} for details on these parameters.
 #'
 #' @export
-updateDisplay <- function(name, ..., group = "common", conn = getOption("vdbConn")) {
+updateDisplay <- function(name, ..., group = NULL, conn = getOption("vdbConn")) {
 
   load(file.path(conn$path, "displays", "_displayList.Rdata"))
 
