@@ -1,6 +1,8 @@
 Version 0.9
 ---------------------------------------------------------------------
 
+- update `view()`` logic for specifying view state (0.9.1)
+- add option to vdbConn to not copy files (0.9.1)
 - fix issue with default layout state being reflected in viewer (0.9.1)
 - add support for VDB-wide global data and source code storage (0.9.0)
 - fix issue with multiple column sort in Trelliscope viewer (0.9.0)
