@@ -4,7 +4,7 @@
 \alias{updateDisplay}
 \title{Update a Display Object}
 \usage{
-updateDisplay(name, ..., group = "common", conn = getOption("vdbConn"))
+updateDisplay(name, ..., group = NULL, conn = getOption("vdbConn"))
 }
 \arguments{
 \item{name}{the name of the display}

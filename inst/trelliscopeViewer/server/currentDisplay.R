@@ -103,7 +103,8 @@ currentDisplay <- reactive({
       cdo$state$labels <- defaultLabels
     }
 
-    cdo$state$layout <- sld$layout
+    if(!is.null(sld$layout))
+      cdo$state$layout <- sld$layout
     if(is.null(cdo$state$layout)) {
       lyt <- list(nrow = 1, ncol = 1, arrange = "row")
       class(lyt) <- c("list", "layoutState")

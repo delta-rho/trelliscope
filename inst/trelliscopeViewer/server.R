@@ -1,8 +1,8 @@
-library(shiny, warn.conflicts = FALSE)
-library(dplyr)
+suppressPackageStartupMessages(library(shiny, warn.conflicts = FALSE))
+suppressPackageStartupMessages(library(dplyr, warn.conflicts = FALSE))
 # htmlwidgets not required unless panel function is one
-suppressWarnings(require(htmlwidgets, warn.conflicts = FALSE))
-library(jsonlite, warn.conflicts = FALSE)
+suppressPackageStartupMessages(suppressWarnings(require(htmlwidgets, warn.conflicts = FALSE)))
+suppressPackageStartupMessages(library(jsonlite, warn.conflicts = FALSE))
 
 connFile <- "conn.Rdata"
 vdbDir <- getwd()
@@ -19,7 +19,7 @@ logMsg <- function(...) {
 
 if(file.exists(connFile)) {
   library(trelliscope) # TODO: check viewer / package versions match
-  vdbConn <- vdbConn(vdbDir)
+  vdbConn <- vdbConn(vdbDir, updateFiles = FALSE)
   vdbPrefix <- vdbConn$path
 } else {
   vdbConn <- getOption("vdbConn")

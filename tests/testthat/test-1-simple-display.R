@@ -35,7 +35,8 @@ test_that("makeDisplay works", {
     desc = "test display with barley data",
     panelFn = pf, cogFn = cf,
     width = 400, height = 400,
-    lims = list(x = "same", y = "free")
+    lims = list(x = "same", y = "free"),
+    state = list(layout = list(nrow = 2, ncol = 3))
   )
 
   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield", "displayObj.Rdata")))

@@ -14,6 +14,7 @@
 #'
 #' @param autoYes should questions to proceed with directory creation operations be automatically answered with "yes"?
 #'
+#' @param updateFiles upon connection, should the Trelliscope viewer app files be updated in the VDB directory?
 #' @param verbose should messages be printed about what is being done?
 #'
 #' @author Ryan Hafen
@@ -22,7 +23,7 @@
 #' to the \code{vdbConn} option, and can be retrieved via \code{getOption("vdbConn")}
 #'
 #' @export
-vdbConn <- function(path, name = NULL, autoYes = FALSE, verbose = TRUE) {
+vdbConn <- function(path, name = NULL, autoYes = FALSE, updateFiles = TRUE, verbose = TRUE) {
 
   # Check arguments
   if(!is.null(name)) {
@@ -73,8 +74,10 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, verbose = TRUE) {
   save(conn, file = connPath)
 
   # copy latest trelliscope viewer files over
-  message("*** Copying latest viewer to vdb directory...")
-  copyViewerFiles(conn)
+  if(updateFiles) {
+    message("*** Copying latest viewer to vdb directory...")
+    copyViewerFiles(conn)
+  }
 
   options(vdbConn = conn)
   return(conn)
