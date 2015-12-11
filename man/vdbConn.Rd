@@ -4,7 +4,8 @@
 \alias{vdbConn}
 \title{Connect to a VDB}
 \usage{
-vdbConn(path, name = NULL, autoYes = FALSE, verbose = TRUE)
+vdbConn(path, name = NULL, autoYes = FALSE, updateFiles = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{path}{The path on the local file system where the directory for the VDB is located}
@@ -15,6 +16,8 @@ The primary purpose of the \code{name} argument is to facilitate deploying the t
 See the \code{appName} argument of \code{\link{deployToShinyApps}}}
 
 \item{autoYes}{should questions to proceed with directory creation operations be automatically answered with "yes"?}
+
+\item{updateFiles}{upon connection, should the Trelliscope viewer app files be updated in the VDB directory?}
 
 \item{verbose}{should messages be printed about what is being done?}
 }
