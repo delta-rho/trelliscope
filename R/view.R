@@ -30,22 +30,8 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
 
   copyViewerFiles(conn)
 
-  if(!is.null(name)) {
-    displayObj <- getDisplay(name = name, group = group)
-    name <- displayObj$name
-    group <- displayObj$group
-
-    # if it's a simple display, just view it in a web browser
-    displayPrefix <- file.path(vdbPrefix, "displays", group, name)
-    load(file.path(displayPrefix, "displayObj.Rdata"))
-    if(is.null(attributes(displayObj$panelDataSource))) {
-      browseURL(file.path(displayPrefix, "thumb.png"))
-      return()
-    }
-  }
-
-  message("attempting to launch shiny vdb viewer...")
-  message("press Ctrl+C or Esc to stop viewer")
+  message("Attempting to launch shiny vdb viewer...")
+  message("Press Ctrl+C or Esc to stop viewer")
 
   # require(shiny)
   # TODO: pass state setting R options instead of using hash
@@ -60,9 +46,24 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
   # make sure that the viewer has the prefix
   options(vdbShinyPrefix = vdbPrefix)
 
-  if(!is.null(state) || !is.null(name)) {
-    state <- c(list(name = name, group = group), validateState(state))
-    options("trsCurrentViewState" = state)
+  if(!is.null(name)) {
+    disp <- findDisplay(name = name, group = group)
+    if(is.null(state)) {
+      state <- disp
+    } else {
+      state <- c(disp, validateState(state))
+    }
+  } else {
+    disp <- NULL
+  }
+
+  if(!is.null(state)) {
+    if(is.null(disp)) {
+      message("Note: a valid display name/group must be supplied when specifying state - state will be ignored...")
+      options("trsCurrentViewState" = NULL)
+    } else {
+      options("trsCurrentViewState" = state)
+    }
   } else {
     options("trsCurrentViewState" = NULL)
   }
