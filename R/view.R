@@ -10,9 +10,7 @@ if(getRversion() >= "2.15.1") {
 #' @param state an optional list of state variables to set the default viewing state for layout, sorting, filtering, and labels (see details)
 #' @param openBrowser should the browser be automatically launched?
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#' @param port what port to use for the viewer
-#'
-#' @details The 'state'
+#' @param port what port to use for the viewer - if not specified, will look for "trelliscopePort" set in R's global options, followed by a search for a system-level environment variable "TRELLISCOPE_PORT".  If none of these are defined, a random port assigned provided by shiny will be used.
 #'
 #' @author Ryan Hafen
 #'
@@ -20,9 +18,10 @@ if(getRversion() >= "2.15.1") {
 #' @importFrom shiny runApp
 #' @import hexbin fastICA
 #' @importFrom jsonlite toJSON
-view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = 8100L) {
+view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = getOption("trelliscopePort")) {
 
-  port <- as.integer(port)
+  if(is.null(port) && nzchar(Sys.getenv("TRELLISCOPE_PORT")))
+    port <- as.integer(Sys.getenv("TRELLISCOPE_PORT"))
 
   validateVdbConn(conn, mustHaveDisplays = TRUE)
   vdbPrefix <- conn$path
