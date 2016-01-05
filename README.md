@@ -6,12 +6,16 @@ Trelliscope is an R package to be used in conjunction with [datadr](https://gith
 
 ## Installation
 
-For simple use, all that is needed for Trelliscope is R.  Trelliscope depends on the `datadr` package.  To install this package from github, do the following from the R console:
+```s
+options(repos = c(tessera = "http://packages.tessera.io", getOption("repos")))
+install.packages("trelliscope")
+```
+
+Alternatively, you can install directly from github:
 
 ```s
-library(devtools)
-install_github("tesseradata/datadr")
-install_github("tesseradata/trelliscope")
+devtools::install_github("tesseradata/datadr")
+devtools::install_github("tesseradata/trelliscope")
 ```
 
 ## Tutorial
