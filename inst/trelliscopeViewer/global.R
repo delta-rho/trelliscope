@@ -26,6 +26,13 @@ sourceAll <- function(dir) {
 
 sourceFiles <- "data/R"
 
+# Function to avoid dependence on R > 3.2
+dir.exists = function (x) {
+        if(file.exists(x) & file.info(x)$isdir){
+        	return(TRUE)
+        }
+		return(FALSE)
+ }
 if(dir.exists(sourceFiles)) {
 	message("Sourcing data/R")
 	sourceAll(sourceFiles)
