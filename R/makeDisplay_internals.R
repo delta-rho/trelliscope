@@ -186,6 +186,9 @@ makeThumb <- function(inFile, outFile, height, width) {
     lim <- par()
     rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
   dev.off()
+
+  if(!file.exists(outFile))
+    file.copy(system.file("thumb_small.png", package = "trelliscope"), outFile)
 }
 
 # ## internal
