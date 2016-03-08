@@ -431,8 +431,12 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, o
       el$script <- NULL
     }
     if(!is.null(el$stylesheet)) {
-      if(!file.exists(file.path(assetDir, el$stylesheet)))
-        file.copy(file.path(el$src$file, el$stylesheet), assetDir)
+      ff1 <- file.path(assetDir, el$stylesheet)
+      ff2 <- file.path(el$src$file, el$stylesheet)
+      for(ii in seq_along(ff1)) {
+        if(!file.exists(ff1[ii]))
+          file.copy(ff2[ii], assetDir)
+      }
       el$src$href <- depDir
     } else {
       el$stylesheet <- NULL
