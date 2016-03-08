@@ -1,7 +1,11 @@
 Version 0.9
 ---------------------------------------------------------------------
 
-- update `view()` port specification to use whatever shiny assigns if NULL
+- fix `dir.exists()` issue (0.9.3)
+- fix potential bug in panel rendering with htmlwidgets (0.9.3)
+- fix issue with copying htmlwidget stylesheet assets (0.9.3)
+- fix potential issue with small thumbnail not getting created (0.9.3)
+- update `view()` port specification to use whatever shiny assigns if NULL (0.9.2)
 - update `view()` logic for specifying view state (0.9.1)
 - add option to vdbConn to not copy files (0.9.1)
 - fix issue with default layout state being reflected in viewer (0.9.1)
