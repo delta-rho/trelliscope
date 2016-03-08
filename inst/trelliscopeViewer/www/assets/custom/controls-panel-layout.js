@@ -200,7 +200,6 @@ function panelLayoutPreview(nRow, nCol, nCog) {
 
   // change the value of pppInput accordingly
   // $("#pppInput").val(nRow * nCol);
-
   // set panel dimensions
   $("#panel-layout-data").data("panelDims", pd);
 

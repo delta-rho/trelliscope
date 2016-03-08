@@ -419,7 +419,7 @@ function panelTableContentOutputPostRender(data) {
   // if it is not a raster image expect an htmlwidget
   var pc = data[0][0].panel_content[0];
   if(pc.class[0] == "htmlwidget") {
-    // console.log(pc.deps)
+    // console.log(pc)
     Shiny.renderDependencies(pc.deps);
 
     try {
@@ -442,7 +442,11 @@ function panelTableContentOutputPostRender(data) {
   });
   $(".cog-name-td").width(maxCogNameWidth - 1);
   // var totWidth = $("#exposedStateDataOutput").data("myShinyData").layout.w;
-  var totWidth = $("#panel-layout-data").data("panelDims").w;
+
+  var totWidth = 100;
+  if($("#panel-layout-data").data("panelDims"))
+    totWidth = $("#panel-layout-data").data("panelDims").w;
+
   $(".cog-value-td").width(totWidth - maxCogNameWidth - 21);
   // $(".panel-cog-table").width(totWidth);
 
