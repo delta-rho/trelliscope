@@ -1,3 +1,5 @@
+library(lattice)
+
 # not all test environments have Hadoop installed
 
 context("Simple globals by hand works for displays")

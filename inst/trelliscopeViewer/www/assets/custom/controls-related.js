@@ -56,7 +56,7 @@ function relatedLayout() {
   var off = $("#related-table-container").offset();
 
   var newLeft = off.left + (780 - previewWidth) / 2;
-  var newTop = off.top + 210 // display list is 200 + 10 padding
+  var newTop = off.top + 210; // display list is 200 + 10 padding
 
   // pre-position things
   $(".rl-layout").css("left", newLeft);
@@ -72,7 +72,7 @@ function relatedLayout() {
   // where the resulting panels fill the most area
 
   var disps = [];
-  var curAspect = $("#panel-layout-data").data("panelAspect")
+  var curAspect = $("#panel-layout-data").data("panelAspect");
   var state = $("#exposedStateDataOutput").data("myShinyData");
 
   var curDisp = {"name": state.name, "group": state.group, "aspect": curAspect};
@@ -94,17 +94,18 @@ function relatedLayout() {
   // find difference between total area and that of laying out
   // panels according to the different grid choices
   var areaDiff = [];
+  var curGrid, nRow, nCol, gridAspect, gridWidth, gridHeight;
   var totArea = previewWidth * previewHeight;
-  for(var i = 0; i < grids.length; i++) {
-    var curGrid = grids[i];
-    var nRow = curGrid[0];
-    var nCol = curGrid[1];
-    var gridAspect = curGrid[1] / curGrid[0] * pageAspect;
-    var gridWidth = previewWidth / nCol;
-    var gridHeight = previewHeight / nRow;
+  for(i = 0; i < grids.length; i++) {
+    curGrid = grids[i];
+    nRow = curGrid[0];
+    nCol = curGrid[1];
+    gridAspect = curGrid[1] / curGrid[0] * pageAspect;
+    gridWidth = previewWidth / nCol;
+    gridHeight = previewHeight / nRow;
     var runningTotal = 0;
     for(var j = 0; j < nRow * nCol; j++) {
-      if(disps[j] != undefined) {
+      if(disps[j] !== undefined) {
         curDispAspect = disps[i].aspect;
         if(gridAspect < curDispAspect) {
           curHeight = gridHeight;
@@ -118,7 +119,7 @@ function relatedLayout() {
     }
     areaDiff[i] = totArea - runningTotal;
   }
-  var curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
+  curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
 
   // make all boxes inactive and hide them all
   $(".related-layout-box").removeClass("active");
@@ -139,16 +140,16 @@ function relatedLayout() {
   // make them appropriate size
   // and give them appropriate labels (group / name)
   // ...
-  var nRow = curGrid[0];
-  var nCol = curGrid[1];
-  var gridAspect = curGrid[1] / curGrid[0] * pageAspect;
-  var gridWidth = previewWidth / nCol;
-  var gridHeight = previewHeight / nRow;
+  nRow = curGrid[0];
+  nCol = curGrid[1];
+  gridAspect = curGrid[1] / curGrid[0] * pageAspect;
+  gridWidth = previewWidth / nCol;
+  gridHeight = previewHeight / nRow;
   var index = 0;
   var curLeft, curTop, curWidth, curHeight;
   for(var row = 0; row < nRow; row++) {
     for(var col = 0; col < nCol; col++) {
-      if(disps[index] != undefined) {
+      if(disps[index] !== undefined) {
         curLeft = newLeft + 1 + col * gridWidth;
         curTop = newTop + 1 + row * gridHeight;
         $("#box" + index).css("left", curLeft);
@@ -227,12 +228,12 @@ function relatedDisplayListOutputApplyButton() {
     panelLayoutOutputApplyButton();
 
     // now disable these
-    $("#panel-rows").prop("disabled", true)
-    $("#panel-cols").prop("disabled", true)
+    $("#panel-rows").prop("disabled", true);
+    $("#panel-cols").prop("disabled", true);
     $("#panel-layout").find(".control-footer").html("Note: in related display mode, only one panel can be shown per page.  Disable related displays to control panel layout.");
   } else {
-    $("#panel-rows").prop("disabled", false)
-    $("#panel-cols").prop("disabled", false)
+    $("#panel-rows").prop("disabled", false);
+    $("#panel-cols").prop("disabled", false);
     $("#panel-layout").find(".control-footer").html("");
   }
 

@@ -1,11 +1,4 @@
-if(getRversion() >= "2.15.1") {
-  utils::globalVariables(c("collect", "logMsg"))
-}
-
-
-############################################################################
-### dfCogConn constructor / methods
-############################################################################
+## dfCogConn constructor / methods
 
 #' Initiate Data Frame Cognostics Connection
 #'

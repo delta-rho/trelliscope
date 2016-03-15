@@ -5,15 +5,16 @@ function panelLayoutOutputApplyButton() {
 
   var arrangement = $("#panelArrangement").find("button.active").data("val");
 
-  if(panelDims != undefined) {
+  if(panelDims !== undefined) {
+    var prevNrow, prevNcol;
     // determine what page to switch to depending on what we changed from
     var prevLayout = $("#panelLayoutStateInput").data("myShinyData");
     if(prevLayout) {
-      var prevNrow = prevLayout.nrow;
-      var prevNcol = prevLayout.ncol;
+      prevNrow = prevLayout.nrow;
+      prevNcol = prevLayout.ncol;
     } else {
-      var prevNrow = 1;
-      var prevNcol = 1;
+      prevNrow = 1;
+      prevNcol = 1;
     }
     var prevPage = $("#curPanelPageInput").val();
 
@@ -55,7 +56,7 @@ function panelLayoutSetFromExposedState() {
 }
 
 function panelLayoutOutputPostRender(data) {
-  $("#panel-layout-data").data("nCog", data.n_panel_labels)
+  $("#panel-layout-data").data("nCog", data.n_panel_labels);
 
   // handle by-row / by-column toggle
   $(".pl-toggle").click(function() {
@@ -190,9 +191,9 @@ function panelLayoutPreview(nRow, nCol, nCog) {
     data.h = previewHeight - 2;
     data.w = Math.round(data.h / pd.allPanelsAspect, 0);
   }
-  data.rows = new Array();
+  data.rows = [];
   for(var i = 0; i < nRow; i++) {
-    data.rows[i] = new Array();
+    data.rows[i] = [];
     for(var j = 0; j < nCol; j++) {
       data.rows[i].push(1);
     }

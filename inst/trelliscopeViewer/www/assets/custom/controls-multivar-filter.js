@@ -32,7 +32,6 @@ function updateMultivarPlot() {
   $("#btn-multivar").prop("disabled", true);
 }
 
-
 function cogMultiFilterControlsOutputPostRender() {
   // for click and drag selection of variables
   $.getScript("assets/custom/selectables-multivar.js");

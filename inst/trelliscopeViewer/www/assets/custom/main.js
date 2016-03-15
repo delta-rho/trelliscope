@@ -98,69 +98,54 @@ $(document).keydown(function(e) {
   var slidePanel = $(".slide-panel.slide-left");
   var modals = $(".modal:visible");
 
-  if($(document.activeElement).attr("id") != "curPanelPageInput"
-    && slidePanel.length == 0 && modals.length == 0) {
+  if($(document.activeElement).attr("id") != "curPanelPageInput" &&
+    slidePanel.length === 0 && modals.length === 0) {
     switch(e.keyCode) {
       case 37: // left
         pageBack();
         return false;
-        break;
       case 39: // right
         pageForward();
         return false;
-        break;
       case 68: // d
         $("#display-info-nav-link").click();
         return false;
-        break;
       case 80: // p
         $("#panel-layout-nav-link").click();
         return false;
-        break;
       // case 70: // f
       //   $("#panel-function-nav-link").click();
       //   return false;
-      //   break;
       case 76: // l
         $("#panel-labels-nav-link").click();
         return false;
-        break;
       case 82: // r
         $("#add-related-display-nav-link").click();
         return false;
-        break;
       case 65: // a
         $("#active-cog-nav-link").click();
         return false;
-        break;
       case 84: // t
         $("#cog-table-sort-filter-nav-link").click();
         return false;
-        break;
       case 85: // u
         $("#univar-filter-nav-link").click();
         return false;
-        break;
       case 66: // b
         $("#bivar-filter-nav-link").click();
         return false;
-        break;
       case 77: // m
         $("#multivar-filter-nav-link").click();
         return false;
-        break;
       case 83: // s
         $("#sample-panels-nav-link").click();
         return false;
-        break;
       case 79: // o
         $("#openModal").modal("show");
         return false;
-        break;
       case 73: // i
         $("#aboutModal").modal("show");
         return false;
-        break;
     }
   } else if(slidePanel.length == 1) {
     if(e.keyCode == 27) // escape
@@ -203,7 +188,7 @@ function pageBeg() {
 function masterControlPostRender() {
   // if any .slide-left divs are open, hide the backdrop, else show
   function toggleBackdrop() {
-    if($(".slide-left").length == 0) {
+    if($(".slide-left").length === 0) {
       $("#control-panel-backdrop").removeClass("bd-visible");
       $("#control-panel-backdrop").addClass("bd-hidden");
     } else {
@@ -388,7 +373,7 @@ function cogMapOutputPostRender() {
   $(".cogmap-dropdown").click(function(e) {
     alert($(this).html());
     $(this).parent(".cogmap-button").html($(this).html());
-  })
+  });
 }
 
 function displayInformationOutputPostRender(data) {
@@ -405,11 +390,12 @@ function displayInformationOutputPostRender(data) {
 
 function panelTableContentOutputPostRender(data) {
   // stop spinner
-  var target = document.getElementById("panelTableSpinner");
+  var target;
+  target = document.getElementById("panelTableSpinner");
   panelSpinner.stop(target);
 
   // stop display load spinner too (in case it's spinning)
-  var target = document.getElementById("displayLoadSpinner");
+  target = document.getElementById("displayLoadSpinner");
   if(displayLoadSpinner.el) {
     displayLoadSpinner.stop(target);
     // if it is spinning, open display modal is open
@@ -427,7 +413,7 @@ function panelTableContentOutputPostRender(data) {
     } catch(err) {
       console.log(err.message);
     }
-    if(pc.scale[0] != "")
+    if(pc.scale[0] !== "")
       $(".html-widget-static-bound").zoomscale(pc.scale[0]);
   }
 
@@ -476,8 +462,8 @@ function panelTableContentOutputPostRender(data) {
 
 $(document).ready(function() {
   $("#infoTab a").click(function (e) {
-    e.preventDefault()
-    $(this).tab("show")
+    e.preventDefault();
+    $(this).tab("show");
   });
 
   // render outer templates
@@ -498,31 +484,31 @@ $(document).ready(function() {
     // then grab some dummy data to fill in the mustache templates
     // this is a very useful way to design outside of shiny
     if(!window.Shiny) {
-      console.log("Running outside of shiny... filling templates with dummy data...")
+      console.log("Running outside of shiny... filling templates with dummy data...");
 
       $.getJSON("dummyData.json", function(json) {
 
-        $.each(json["panels"], function(key, value) {
+        $.each(json.panels, function(key, value) {
           renderTemplate(key, value);
-        })
+        });
 
-        renderTemplate("panelPageNavOutput", json["panelPageNavOutput"]);
-        renderTemplate("cogBreadcrumbOutput", json["cogBreadcrumbOutput"]);
-        renderTemplate("displayListOutput", json["displayListOutput"]);
-        renderTemplate("panelTableContentOutput", json["panelTableContentOutput"]);
+        renderTemplate("panelPageNavOutput", json.panelPageNavOutput);
+        renderTemplate("cogBreadcrumbOutput", json.cogBreadcrumbOutput);
+        renderTemplate("displayListOutput", json.displayListOutput);
+        renderTemplate("panelTableContentOutput", json.panelTableContentOutput);
       })
       .complete(function() {
         $("#headerDisplayNameOutput").html("group / display_name");
       });
     } else {
-      console.log("Running in shiny mode...")
+      console.log("Running in shiny mode...");
       try {
         Shiny.bindAll();
       } catch (e) {
        // do nothing
       }
 
-      if(appHash == "") {
+      if(appHash === "") {
         $("#openModal").modal("show");
       } else {
         $("#appHashInput").data("myShinyData", appHash);
@@ -533,7 +519,7 @@ $(document).ready(function() {
 
   $(".right-sticky").click(function() {
     $(".right-panel").toggleClass("right-slide");
-    $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right")
+    $("#sticky-icon").toggleClass("icon-chevron-left icon-chevron-right");
   });
 
   $('#aboutModal').on('show.bs.modal', function (e) {
@@ -554,8 +540,8 @@ $(document).ready(function() {
 
   $('.info-tab-label').click(function (e) {
     $('.tab-pane').removeClass('active');
-    $('#' + $(this).data('tabname')).addClass('active')
-  })
+    $('#' + $(this).data('tabname')).addClass('active');
+  });
 
 });
 

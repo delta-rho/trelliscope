@@ -44,9 +44,6 @@ function activeCogListOutputApplyButton() {
       $("#cog-table-univar-td-" + curName).addClass("hidden");
       $("#cog-table-col-select-li-" + curName).addClass("hidden").removeClass("nothidden");
     }
-
-
-
   });
 
   // console.log($(".panel-labels-select.active"));

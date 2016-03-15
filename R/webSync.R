@@ -1,7 +1,3 @@
- if(getRversion() >= "2.15.1") {
-  utils::globalVariables(c("dataClass"))
-}
-
 #' Sync VDB Files to a Web Server
 #'
 #' Sync VDB files to a web server

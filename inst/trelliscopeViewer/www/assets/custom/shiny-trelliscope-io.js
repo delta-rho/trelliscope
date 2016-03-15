@@ -13,10 +13,10 @@ function renderTemplate(objId, data, templateId) {
       //   console.log(output);
       outObj.innerHTML = output;
     } else {
-      console.log("Warning: could not find element with id=" + objId + " in which to place rendered template output")
+      console.log("Warning: could not find element with id=" + objId + " in which to place rendered template output");
     }
   } else {
-    console.log("Warning: could not find template for id=" + templateId + "-template")
+    console.log("Warning: could not find template for id=" + templateId + "-template");
   }
 
   // if there is a post-render function (useful for binding events
@@ -174,7 +174,7 @@ $.extend(displaySelectInputBinding, {
   getValue: function(el) {
     var row = $(el).find(".clicked");
     $(row).removeClass("clicked");
-    if($(row).length == 0) {
+    if($(row).length === 0) {
       return null;
     } else {
       var res = $(row).data();

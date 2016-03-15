@@ -52,12 +52,12 @@ updateCogTableSort = function() {
       "numeric" : "icon-sort-numeric-desc",
       "factor" : "icon-sort-alpha-desc"
     }
-  }
+  };
 
   var dirLookup = {
     "icon-sort-up" : "asc",
     "icon-sort-down" : "desc"
-  }
+  };
 
   // put sort order in array
   var sortData = {};
@@ -67,7 +67,7 @@ updateCogTableSort = function() {
     curType = $(this).data("type");
 
     // hide all sort icons in variable list
-    $("#cog-table-col-select-li-" + curVar + " i[class^='icon-sort']").addClass("hidden")
+    $("#cog-table-col-select-li-" + curVar + " i[class^='icon-sort']").addClass("hidden");
 
     if(curEl.attr("class") != "icon-unsorted") {
       // add sort icon for this in variable list
@@ -86,7 +86,7 @@ updateCogTableSort = function() {
   // save sort order to shiny data output element
   $("#cogColumnSortInput").data("myShinyData", sortData);
   $("#cogColumnSortInput").trigger("change");
-}
+};
 
 function cogTableSetFromExposedState() {
 
@@ -120,16 +120,16 @@ function cogTableSetFromExposedState() {
       // fill in input elements
       curTd = $("#cog-filter-td-" + key);
       if(curTd.data("type") == "numeric") {
-        if(value.from != undefined)
+        if(value.from !== undefined)
           curTd.find(".column-filter-from").val(value.from);
-        if(value.to != undefined)
+        if(value.to !== undefined)
           curTd.find(".column-filter-to").val(value.to);
       } else {
         // select categorical values
-        if(value.select != undefined) {
+        if(value.select !== undefined) {
           curTd.find(".column-filter-select").selectpicker("val", value.select);
           curTd.find(".column-filter-select").selectpicker("refresh");
-        } else if(value.regex != undefined) {
+        } else if(value.regex !== undefined) {
           curTd.find(".column-filter-regex").val(value.regex);
         }
       }
@@ -148,7 +148,7 @@ function cogTableSetFromExposedState() {
       var iconLookup = {
         "asc" : "icon-sort-up",
         "desc" : "icon-sort-down"
-      }
+      };
 
       $("#cog-table-sort-icon-" + key).attr("class", iconLookup[value.dir]);
       $("#cog-table-sort-icon-" + key).data("sort-order", value.order);
@@ -164,17 +164,19 @@ updateCogTableFilter = function(el) {
   $("#cogTablePaginationInput").data("myShinyData", 1);
   $("#cogTablePaginationInput").trigger("change");
 
+  var name;
+
   // before we step through each input to get its value
   // take care of currently-changed element
   if(el.hasClass("selectpicker")) {
     // if user is manually picking things, get rid of the regex
     // as it will no longer be valid
-    var name = el.closest("td").data("variable");
+    name = el.closest("td").data("variable");
     $("#text-column-" + name).val("");
   } else if(el.hasClass("column-filter-regex")) {
     // if user is typing regex and there is a select picker
     // then clear the select picker
-    var name = el.closest("td").data("variable");
+    name = el.closest("td").data("variable");
     if(!$("#text-select-" + name).hasClass("disabled")) {
       $("#text-select-" + name).selectpicker("deselectAll");
       $("#text-select-" + name).selectpicker("refresh");
@@ -191,21 +193,21 @@ updateCogTableFilter = function(el) {
       if($(this).hasClass("filter-numeric")) {
         var from = $(this).find(".column-filter-from").val();
         var to = $(this).find(".column-filter-to").val();
-        if(from != "") {
+        if(from !== "") {
           if(!filterData[curVar])
             filterData[curVar] = {};
-          filterData[curVar]["from"] = parseFloat(from);
+          filterData[curVar].from = parseFloat(from);
         }
-        if(to != "") {
+        if(to !== "") {
           if(!filterData[curVar])
             filterData[curVar] = {};
-          filterData[curVar]["to"] = parseFloat(to);
+          filterData[curVar].to = parseFloat(to);
         }
       } else {
         var regex = $(this).find(".column-filter-regex").val();
         var picker = $(this).find(".column-filter-select").selectpicker("val");
         var vals = [];
-        if(regex != "") {
+        if(regex !== "") {
           // only store regex if there is no select picker
           // otherwise, apply it to everything in the picker list
           // and select it if it matches
@@ -221,10 +223,10 @@ updateCogTableFilter = function(el) {
 
             // when nothing is selected, it means show everything
             // except in the case of when a regex leads to nothing being selected
-            if(vals.length == 0) {
+            if(vals.length === 0) {
               if(!filterData[curVar])
                 filterData[curVar] = {};
-              filterData[curVar]["empty"] = true;
+              filterData[curVar].empty = true;
             }
             // set a class on the element so it knows it's being populated
             // by the regex (so we will not fire off our on change trigger)
@@ -235,16 +237,16 @@ updateCogTableFilter = function(el) {
           } else {
             if(!filterData[curVar])
               filterData[curVar] = {};
-            filterData[curVar]["regex"] = regex;
+            filterData[curVar].regex = regex;
           }
         } else if(picker) {
-          var vals = picker;
+          vals = picker;
         }
         if(vals.length > 0) {
           // console.log(vals);
           if(!filterData[curVar])
             filterData[curVar] = {};
-          filterData[curVar]["select"] = vals;
+          filterData[curVar].select = vals;
         }
       }
     }
@@ -261,7 +263,7 @@ updateCogTableFilter = function(el) {
   // save filter data to shiny data output element
   $("#cogColumnFilterInput").data("myShinyData", filterData);
   $("#cogColumnFilterInput").trigger("change");
-}
+};
 
 function cogTableControlsOutputApplyButton() {
   // reset to page one
@@ -298,7 +300,7 @@ function cogTableControlsOutputPostRender(data) {
 
   // make histograms / bar charts in footer
   $.each(data.plotDat, function(index, value) {
-    if(value.data != undefined) {
+    if(value.data !== undefined) {
       try {
         d3footPlot(value);
       } catch (e) {
@@ -359,7 +361,7 @@ function cogTableControlsOutputPostRender(data) {
 
   $(".selectpicker").change(function() {
     if($(this).hasClass("regex-lock")) {
-      $(this).removeClass("regex-lock")
+      $(this).removeClass("regex-lock");
     } else {
       updateCogTableFilter($(this));
     }

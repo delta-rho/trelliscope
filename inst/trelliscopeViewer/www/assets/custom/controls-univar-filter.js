@@ -42,10 +42,11 @@ univarFilterLocalSave = function() {
     var log = activeVar.data("log");
 
     if(activeVar.data("type") == "numeric") {
+      var curBrush;
       if($("#univarPlotType button.histogram-button").hasClass("active")) {
-        var curBrush = d3univarXbrush;
+        curBrush = d3univarXbrush;
       } else {
-        var curBrush = d3univarYbrush;
+        curBrush = d3univarYbrush;
       }
 
       if(!curBrush.empty()) {
@@ -75,14 +76,14 @@ univarFilterLocalSave = function() {
         res.push(d.label);
       });
       if(res.length > 0) {
-        filterData[varName]["select"] = res;
+        filterData[varName].select = res;
       } else {
         delete filterData[varName];
       }
     }
     $("#univarFilterState").data("filterData", filterData);
   }
-}
+};
 
 univarFilterLocalLoad = function() {
   activeVar = $("#univarFilterSelect li.active");
@@ -103,22 +104,25 @@ univarFilterLocalLoad = function() {
     var log = activeVar.data("log");
     // console.log(filter);
 
+    var dm;
+    var filter;
+
     if(activeVar.data("type") == "numeric") {
       // filter is stored as {from: , to:} - make it array
       if($("#univarPlotType button.histogram-button").hasClass("active")) {
         if(filterData[varName]) {
-          var dm = d3univarX.domain();
-          if(filterFrom == undefined) {
+          dm = d3univarX.domain();
+          if(filterFrom === undefined) {
             filterFrom = dm[0];
           } else if(log !== "NA") {
             filterFrom = Math.log(filterFrom) / Math.log(log);
           }
-          if(filterTo == undefined) {
+          if(filterTo === undefined) {
             filterTo = dm[1];
           } else if(log !== "NA") {
             filterTo = Math.log(filterTo) / Math.log(log);
           }
-          var filter = [filterFrom, filterTo];
+          filter = [filterFrom, filterTo];
           d3.select("#univarFilterPlot")
             .select(".brush")
             .call(d3univarXbrush.extent(filter));
@@ -130,19 +134,20 @@ univarFilterLocalLoad = function() {
           d3univarXbrushFn();
         }
       } else { // quantile
+        var dm;
         if(filterData[varName]) {
-          var dm = d3univarY.domain();
-          if(filterFrom == undefined) {
+          dm = d3univarY.domain();
+          if(filterFrom === undefined) {
             filterFrom = dm[0];
           } else if(log !== "NA") {
             filterFrom = Math.log(filterFrom) / Math.log(log);
           }
-          if(filterTo == undefined) {
+          if(filterTo === undefined) {
             filterTo = dm[1];
           } else if(log !== "NA") {
             filterTo = Math.log(filterTo) / Math.log(log);
           }
-          var filter = [filterFrom, filterTo];
+          filter = [filterFrom, filterTo];
           d3.select("#univarFilterPlot")
             .select(".brush")
             .call(d3univarYbrush.extent(filter));
@@ -157,9 +162,9 @@ univarFilterLocalLoad = function() {
     } else {
       // highlighted selected bars in barchart
       if(filter) {
-        if(filter["select"]) {
+        if(filter.select) {
           d3.selectAll("#univarFilterPlot svg rect").attr("class", function(d) {
-            if($.inArray(d.label, filter["select"]) >= 0 && !filter["empty"]) {
+            if($.inArray(d.label, filter.select) >= 0 && !filter.empty) {
               return("unifilter-bar selected");
             } else {
               return("unifilter-bar");
@@ -169,7 +174,7 @@ univarFilterLocalLoad = function() {
       }
     }
   }
-}
+};
 
 function cogUniFilterControlsOutputApplyButton() {
   // reset to page one
@@ -254,7 +259,7 @@ function cogUniFilterControlsOutputPostRender() {
       var buttons = $("#univarPlotType");
       if($(this).data("type") == "numeric") {
         // only change them if we need to
-        if(buttons.find("button.histogram-button.active,button.quantile-button.active").length == 0) {
+        if(buttons.find("button.histogram-button.active,button.quantile-button.active").length === 0) {
           buttons.find("button.quantile-button")
             .prop("disabled", false)
             .addClass("active")

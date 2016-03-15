@@ -1,9 +1,3 @@
-if(getRversion() >= "2.15.1") {
-  utils::globalVariables(c("displayList", "displayListDF", "displayListNames"))
-}
-
-
-
 #' S3method print displayObj
 #' @param x TODO
 #' @param ... TODO

@@ -1,7 +1,3 @@
-if(getRversion() >= "2.15.1") {
-  utils::globalVariables(c("type"))
-}
-
 #' Compute RMSE of Loess Fit Cognostic
 #'
 #' Compute RMSE of loess fit as a cognostic to be used as cognostics in a trelliscope display.

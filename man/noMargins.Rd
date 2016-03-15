@@ -18,14 +18,15 @@ Removes whitespace surrounding a trellis plot.  Ideal for \code{\link{makeDispla
 }
 \examples{
 \dontrun{
+library(lattice)
 xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
   par.settings=noMargins()
 )
 
 # with additional par.settings...
-xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
-  par.settings=noMargins(
-    list(plot.symbol=list(col="black"))
+xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace = TRUE),
+  par.settings = noMargins(
+    list(plot.symbol = list(col = "black"))
   )
 )
 }
@@ -35,6 +36,6 @@ xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
 Ryan Hafen
 }
 \seealso{
-\code{\link{xyplot}}, \code{\link{makeDisplay}}
+\code{\link[lattice]{xyplot}}, \code{\link{makeDisplay}}
 }
 

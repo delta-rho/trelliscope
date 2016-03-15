@@ -1,24 +1,30 @@
 Package: trelliscope
 Type: Package
-Title: Trelliscope
-Version: 0.9.3
-Date: 2016-02-07
+Title: Trelliscope - Create and Navigate Large Multi-Panel Displays
+Version: 0.9.4
+Date: 2016-03-14
 Authors@R: c(person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre")),
     person("Jeremiah", "Rounds", role = "ctb"),
     person("Barret", "Schloerke", role = "ctb"),
     person("Landon", "Sego", role = "ctb"))
 Maintainer: Ryan Hafen <rhafen@gmail.com>
-Description: Trelliscope provides a way to create, organize, and view
-    multi-panel displays, a collection of which is called a visualization
-    database (VDB).  This package provides a mechanism for extending the ideas
-    of Trellis Display to easily generate and organize plots, providing a
+Description: Create, organize, and view
+    multi-panel displays against potentially very large data sets.
+    Trelliscope extends the ideas of Trellis Display, providing
+    a mechanism to easily generate and organize plots, and providing a
     dynamic viewer for tiling panels of a display across the screen and paging
-    through them. There is also a mechanism to generate built-in or
+    through them.  There is also a mechanism to generate built-in or
     user-defined "cognostic" metrics for each panel of a display , and the
     viewer has the ability to sort or filter the pages based on these
     cognostics.  This is useful for large multi-panel displays where it is not
     possible to view each panel, allowing only panels with interesting features
-    to be presented.
+    to be presented.  Built upon datadr, Trelliscope displays with millions of
+    panels can be created against terabytes of data, but are also very useful
+    for small datasets.
+
+a collection of which is called a visualization
+    database (VDB)
+
 URL: http://tessera.io/docs-trelliscope
 BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE
@@ -26,11 +32,10 @@ LazyData: yes
 NeedsCompilation: no
 Depends:
     R (>= 3.0.0),
-    base,
-    datadr (>= 0.8.0),
-    lattice (>= 0.20-23),
-    ggplot2
+    datadr (>= 0.8.3),
 Imports:
+    lattice (>= 0.20-23),
+    ggplot2,
     data.table,
     base64enc,
     shiny (>= 0.12.0),

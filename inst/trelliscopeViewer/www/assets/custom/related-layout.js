@@ -28,11 +28,12 @@ jQuery(function($) {
   })
   .drag(function(ev, dd) {
     var props = {};
+    var deltax1, deltax2, deltax;
     if (dd.attr.indexOf("SE") > -1) {
-      var deltax1 = Math.min(dd.deltaX, dd.limit.right - dd.originalX);
-      var deltax2 = Math.min(dd.deltaX * dd.height / dd.width,
+      deltax1 = Math.min(dd.deltaX, dd.limit.right - dd.originalX);
+      deltax2 = Math.min(dd.deltaX * dd.height / dd.width,
         dd.limit.bottom - dd.originalY) * dd.width / dd.height;
-      var deltax = Math.round(Math.min(deltax1, deltax2) / snap) * snap;
+      deltax = Math.round(Math.min(deltax1, deltax2) / snap) * snap;
 
       props.width = Math.max(50, dd.width + deltax);
       props.height = Math.max(50 * dd.height / dd.width,
@@ -40,10 +41,10 @@ jQuery(function($) {
     }
 
     if (dd.attr.indexOf("NE") > -1) {
-      var deltax1 = Math.min(dd.deltaX, dd.limit.right - dd.originalX);
-      var deltax2 = Math.min(dd.deltaX * dd.height / dd.width,
+      deltax1 = Math.min(dd.deltaX, dd.limit.right - dd.originalX);
+      deltax2 = Math.min(dd.deltaX * dd.height / dd.width,
         dd.originalY - dd.limit.top) * dd.width / dd.height;
-      var deltax = Math.round(Math.min(deltax1, deltax2) / snap) * snap;
+      deltax = Math.round(Math.min(deltax1, deltax2) / snap) * snap;
 
       props.width = Math.max(50, dd.width + deltax);
       props.height = Math.max(50 * dd.height / dd.width,
@@ -52,10 +53,10 @@ jQuery(function($) {
     }
 
     if (dd.attr.indexOf("SW") > -1) {
-      var deltax1 = Math.max(dd.deltaX, dd.limit.left - dd.originalX);
-      var deltax2 = - Math.max(dd.deltaX * dd.height / dd.width,
+      deltax1 = Math.max(dd.deltaX, dd.limit.left - dd.originalX);
+      deltax2 = - Math.max(dd.deltaX * dd.height / dd.width,
         dd.limit.bottom - dd.originalY) * dd.width / dd.height;
-      var deltax = Math.round(Math.max(deltax1, deltax2) / snap) * snap;
+      deltax = Math.round(Math.max(deltax1, deltax2) / snap) * snap;
 
       props.width = Math.max(50, dd.width - deltax);
       props.height = Math.max(50 * dd.height / dd.width,
@@ -64,9 +65,9 @@ jQuery(function($) {
     }
 
     if (dd.attr.indexOf("NW") > -1) {
-      var deltax1 = Math.max(dd.deltaX, dd.limit.left - dd.originalX);
-      var deltax2 = Math.max(dd.deltaX * dd.height / dd.width, dd.limit.top - dd.originalY) * dd.width / dd.height;
-      var deltax = Math.round(Math.max(deltax1, deltax2) / snap) * snap;
+      deltax1 = Math.max(dd.deltaX, dd.limit.left - dd.originalX);
+      deltax2 = Math.max(dd.deltaX * dd.height / dd.width, dd.limit.top - dd.originalY) * dd.width / dd.height;
+      deltax = Math.round(Math.max(deltax1, deltax2) / snap) * snap;
 
       props.width = Math.max(50, dd.width - deltax);
       props.height = Math.max(50 * dd.height / dd.width, dd.height - deltax * dd.height / dd.width);

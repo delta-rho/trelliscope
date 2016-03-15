@@ -55,11 +55,11 @@ bivarFilterLocalSave = function() {
         filterData[xVar]= {};
       // **log**
       if(xLog !== "NA") {
-        filterData[xVar]["from"] = Math.pow(xLog, brush[0][0]);
-        filterData[xVar]["to"] = Math.pow(xLog, brush[1][0]);
+        filterData[xVar].from = Math.pow(xLog, brush[0][0]);
+        filterData[xVar].to = Math.pow(xLog, brush[1][0]);
       } else {
-        filterData[xVar]["from"] = brush[0][0];
-        filterData[xVar]["to"] = brush[1][0];
+        filterData[xVar].from = brush[0][0];
+        filterData[xVar].to = brush[1][0];
       }
     }
     if(yVar) {
@@ -67,11 +67,11 @@ bivarFilterLocalSave = function() {
         filterData[yVar]= {};
       // **log**
       if(yLog !== "NA") {
-        filterData[yVar]["from"] = Math.pow(yLog, brush[0][1]);
-        filterData[yVar]["to"] = Math.pow(yLog, brush[1][1]);
+        filterData[yVar].from = Math.pow(yLog, brush[0][1]);
+        filterData[yVar].to = Math.pow(yLog, brush[1][1]);
       } else {
-        filterData[yVar]["from"] = brush[0][1];
-        filterData[yVar]["to"] = brush[1][1];
+        filterData[yVar].from = brush[0][1];
+        filterData[yVar].to = brush[1][1];
       }
     }
   } else {
@@ -84,7 +84,7 @@ bivarFilterLocalSave = function() {
     }
   }
   $("#bivarFilterState").data("filterData", filterData);
-}
+};
 
 bivarFilterLocalLoad = function() {
   // load current filter extent for selected bivariate x and y vars
@@ -101,10 +101,11 @@ bivarFilterLocalLoad = function() {
       filterData = {};
 
     var xFilter;
+    var xf;
     if(xVar) {
       var xFrom = xDomain[0];
       var xTo = xDomain[1];
-      var xf = filterData[xVar];
+      xf = filterData[xVar];
       if(xf) {
         if(xf.from !== undefined) {
           xFrom = xf.from;
@@ -122,10 +123,11 @@ bivarFilterLocalLoad = function() {
       xFilter = [xFrom, xTo];
     }
     var yFilter;
+    var yf;
     if(yVar) {
       var yFrom = yDomain[0];
       var yTo = yDomain[1];
-      var yf = filterData[yVar];
+      yf = filterData[yVar];
       if(yf) {
         if(yf.from !== undefined) {
           yFrom = yf.from;
@@ -142,6 +144,7 @@ bivarFilterLocalLoad = function() {
       }
       yFilter = [yFrom, yTo];
     }
+    var res;
     if(yFilter || xFilter) {
       if(!yFilter)
         yFilter = yDomain;
@@ -151,10 +154,10 @@ bivarFilterLocalLoad = function() {
       if(xf || yf) {
         // console.log("brushing!");
         // set the filter on the screen
-        var res = [[xFilter[0], yFilter[0]], [xFilter[1], yFilter[1]]];
+        res = [[xFilter[0], yFilter[0]], [xFilter[1], yFilter[1]]];
       } else {
         bivarFilterPlotBrush.clear();
-        var res = bivarFilterPlotBrush.extent()
+        res = bivarFilterPlotBrush.extent();
       }
       d3.select("#bivarFilterPlot")
         .select(".brush")
@@ -162,7 +165,7 @@ bivarFilterLocalLoad = function() {
       bivarFilterPlotBrushFn();
     }
   }
-}
+};
 
 function bivarFilterSetFromExposedState() {
   // trigger save in case currently-active filter hasn't been saved

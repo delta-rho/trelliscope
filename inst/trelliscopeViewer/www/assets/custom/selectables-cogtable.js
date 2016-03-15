@@ -19,7 +19,7 @@ $(function() {
   })
   .bind("selectstart", function () {
     return false;
-  })
+  });
 
   $(document)
   .mouseup(function () {

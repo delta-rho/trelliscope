@@ -1,3 +1,5 @@
+library(lattice)
+
 context("Global variables")
 
 vdbPath <- file.path(tempdir(), "vdb")

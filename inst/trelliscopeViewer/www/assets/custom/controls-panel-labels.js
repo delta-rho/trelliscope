@@ -19,7 +19,7 @@ function panelLabelListOutputApplyButton() {
     }
   });
 
-  if(panelLabel.length == 0)
+  if(panelLabel.length === 0)
     panelLabel.push("__none__");
 
   // we need the new labels to be available as active cogs

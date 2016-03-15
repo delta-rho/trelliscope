@@ -8,24 +8,25 @@
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{xyplot}}, \code{\link{makeDisplay}}
+#' @seealso \code{\link[lattice]{xyplot}}, \code{\link{makeDisplay}}
 #'
 #' @examples
 #' \dontrun{
+#' library(lattice)
 #' xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
 #'   par.settings=noMargins()
 #' )
 #'
 #' # with additional par.settings...
-#' xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace=TRUE),
-#'   par.settings=noMargins(
-#'     list(plot.symbol=list(col="black"))
+#' xyplot(c(1:10) ~ c(1:10) | sample(letters[1:2], 10, replace = TRUE),
+#'   par.settings = noMargins(
+#'     list(plot.symbol = list(col = "black"))
 #'   )
 #' )
 #' }
 #'
 #' @export
-noMargins <- function(..., topkey=FALSE, rightkey=FALSE) {
+noMargins <- function(..., topkey = FALSE, rightkey = FALSE) {
 
   nmlist <- list(
     layout.heights = list(
@@ -44,9 +45,9 @@ noMargins <- function(..., topkey=FALSE, rightkey=FALSE) {
       axis.key.padding = 0,
       right.padding = 0.6
     ),
-    axis.components=list(
-      top=list(pad1 = ifelse(topkey, 2, 1), pad2 = ifelse(topkey, 2, 0)), # padding above top axis
-      right=list(pad1 = 0, pad2 = 0)
+    axis.components = list(
+      top = list(pad1 = ifelse(topkey, 2, 1), pad2 = ifelse(topkey, 2, 0)), # padding above top axis
+      right = list(pad1 = 0, pad2 = 0)
     )
   )
   # TODO: allow "..." to override any elements in "nmlist"

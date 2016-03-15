@@ -9,7 +9,7 @@ function bivarFilterPlotBrushFn() {
   activeYvar = $("#bivar-y-filter-select li.active");
   correspXvar = $("#bivar-x-" + activeYvar.data("name"));
 
-  if(curBrush[0].length == undefined) {
+  if(curBrush[0].length === undefined) {
     curBrush = "";
     $("#bivarFilterPlotRange").html("");
     // make sure filter icon is hidden
@@ -55,7 +55,7 @@ function multivarFilterPlotBrushFn() {
 
   var prec = d3.format(".5r");
 
-  if(curBrush[0].length == undefined) {
+  if(curBrush[0].length === undefined) {
     curBrush = "";
     $("#multivarFilterPlotRange").html("");
   } else {
@@ -139,11 +139,12 @@ function d3bivar(data, id) {
 
   var xFrom = null;
   var xTo = null;
+  var filterData, varName;
   activeXvar = $("#bivar-x-filter-select li.active");
   if(activeXvar) {
-    var filterData = $("#univarFilterState").data("filterData");
+    filterData = $("#univarFilterState").data("filterData");
     if(filterData) {
-      var varName = activeXvar.data("name");
+      varName = activeXvar.data("name");
       if(filterData[varName]) {
         xFrom = filterData[varName].from;
         xTo = filterData[varName].to;
@@ -160,9 +161,9 @@ function d3bivar(data, id) {
   var yTo = null;
   activeYvar = $("#bivar-y-filter-select li.active");
   if(activeYvar) {
-    var filterData = $("#univarFilterState").data("filterData");
+    filterData = $("#univarFilterState").data("filterData");
     if(filterData) {
-      var varName = activeYvar.data("name");
+      varName = activeYvar.data("name");
       if(filterData[varName]) {
         yFrom = filterData[varName].from;
         yTo = filterData[varName].to;
@@ -219,9 +220,9 @@ function d3bivar(data, id) {
       .append("svg:polygon")
       .attr("points",function(d) {
         var polystr = "";
-        for (var i=0; i < data.hexx.length; i++) {
+        for (var i = 0; i < data.hexx.length; i++) {
           polystr += window[id + "X"](d.x + data.hexx[i] * d.r) + "," + window[id + "Y"](d.y + data.hexy[i] * d.r) + " ";
-        };
+        }
         return(polystr);
       })
       .attr("fill", "steelblue")

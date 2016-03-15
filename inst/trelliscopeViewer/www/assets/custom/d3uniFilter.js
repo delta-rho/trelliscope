@@ -2,7 +2,7 @@
 function d3univarXbrushFn() {
   var curBrush = d3univarXbrush.empty() ? "" : d3univarXbrush.extent();
   var prec = d3.format(".5r");
-  if(curBrush == "") {
+  if(curBrush === "") {
     $("#univarFilterPlotRange").text("");
     // make sure filter icon is hidden
     $("#univarFilterSelect li.active i").addClass("hidden");
@@ -17,7 +17,7 @@ function d3univarXbrushFn() {
 function d3univarYbrushFn() {
   var curBrush = d3univarYbrush.empty() ? "" : d3univarYbrush.extent();
   var prec = d3.format(".5r");
-  if(curBrush == "") {
+  if(curBrush === "") {
     $("#univarFilterPlotRange").text("");
     // make sure filter icon is hidden
     $("#univarFilterSelect li.active i").addClass("hidden");
@@ -116,14 +116,16 @@ function d3univar(data, id) {
     }
   }
 
-  if(plotType == "hist") {
-    var delta = data[1].xdat - data[0].xdat;
+  var xrange, yrange, rdelta, delta;
 
-    var xrange = d3.extent(data.map(function(d) { return d.xdat; }));
+  if(plotType == "hist") {
+    delta = data[1].xdat - data[0].xdat;
+
+    xrange = d3.extent(data.map(function(d) { return d.xdat; }));
     xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.07;
     xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
 
-    if(filter != undefined) {
+    if(filter !== undefined) {
       if(isNaN(filter.from)) {
         filter.from = xrange[0];
       }
@@ -133,7 +135,7 @@ function d3univar(data, id) {
 
       xrange[0] = Math.min(xrange[0], filter.from);
       xrange[1] = Math.max(xrange[1], filter.to);
-      var rdelta = xrange[1] - xrange[0];
+      rdelta = xrange[1] - xrange[0];
       xrange[0] = xrange[0] - 0.3 * rdelta;
       xrange[1] = xrange[1] + 0.3 * rdelta;
     }
@@ -158,15 +160,15 @@ function d3univar(data, id) {
       .attr("height", d3univarHeight + 7);
 
   } else if(plotType == "quant") {
-    var xrange = d3.extent(data.map(function(d) { return d.x; }));
+    xrange = d3.extent(data.map(function(d) { return d.x; }));
     xrange[0] = xrange[0] - (xrange[1] - xrange[0]) * 0.07;
     xrange[1] = xrange[1] + (xrange[1] - xrange[0]) * 0.07;
 
-    var yrange = d3.extent(data.map(function(d) { return d.y; }));
+    yrange = d3.extent(data.map(function(d) { return d.y; }));
     yrange[0] = yrange[0] - (yrange[1] - yrange[0]) * 0.07;
     yrange[1] = yrange[1] + (yrange[1] - yrange[0]) * 0.07;
 
-    if(filter != undefined) {
+    if(filter !== undefined) {
       if(isNaN(filter.from)) {
         filter.from = yrange[0];
       }
@@ -176,7 +178,7 @@ function d3univar(data, id) {
 
       yrange[0] = Math.min(yrange[0], filter.from);
       yrange[1] = Math.max(yrange[1], filter.to);
-      var rdelta = yrange[1] - yrange[0];
+      rdelta = yrange[1] - yrange[0];
       yrange[0] = yrange[0] - 0.3 * rdelta;
       yrange[1] = yrange[1] + 0.3 * rdelta;
     }
@@ -203,7 +205,7 @@ function d3univar(data, id) {
     // remove last dummy record
     data.pop();
 
-    var delta = data[1].ind - data[0].ind;
+    delta = data[1].ind - data[0].ind;
 
     d3univarX.domain([0, d3.max(data.map(function(d) { return d.Freq; }))]);
     var yMax = d3.max(data.map(function(d) { return d.ind; }));
@@ -213,9 +215,9 @@ function d3univar(data, id) {
     // console.log(d3univarY.domain);
     // console.log(d3univarX.domain);
 
-    function hasClass(el, cls) {
-      return($(el).attr("class").split(/\s/).indexOf(cls) >= 0)
-    }
+    hasClass = function(el, cls) {
+      return($(el).attr("class").split(/\s/).indexOf(cls) >= 0);
+    };
 
     var isMouseDown = false, isSelected;
 

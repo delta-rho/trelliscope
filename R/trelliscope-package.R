@@ -1,4 +1,6 @@
-#' trelliscope
+utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass"))
+
+#' Trelliscope
 #'
 #' Trelliscope provides a way to create, organize, and view
 #' multi-panel displays, a collection of which is called a visualization
