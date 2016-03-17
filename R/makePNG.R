@@ -28,19 +28,20 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
     }
   }
 
-  pointsize <- basePointSize * width / origWidth * pixelratio
+  fac <- max(min(width / origWidth, 1), 0.65) * 1.5
+  pointsize <- basePointSize
 
   pngfun(filename = file,
+    res = res * pixelratio * fac,
     width = width * pixelratio,
     height = height * pixelratio,
-    # res = res * pixelratio,
-    pointsize = pointsize)
+    pointsize = basePointSize * fac)
 
   dv <- dev.cur()
   tryCatch({
     if(inherits(dat, "trellis")) {
       # single panel plot
-      dat$par.settings$fontsize <- list(text = pointsize, points = pointsize * 2 / 3)
+      # dat$par.settings$fontsize <- list(text = pointsize, points = pointsize * 2 / 3)
       print(dat)
     } else if(inherits(dat, "ggplot")) {
       # single panel plot
@@ -55,7 +56,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
       if(!is.null(lims)) {
         if(inherits(tmp, "trellis")) {
           # set pointsize
-          tmp$par.settings$fontsize <- list(text = pointsize, points = pointsize * 2 / 3)
+          # tmp$par.settings$fontsize <- list(text = pointsize, points = pointsize * 2 / 3)
 
           # if there are multiple panels inside of one plot, we can't do this
           if(!(inherits(tmp$x.limits, "list") || inherits(tmp$y.limits, "list"))) {
@@ -74,7 +75,6 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
             }
           }
         } else if(inherits(tmp, "ggplot")) {
-          ggplot2::theme_set(ggplot2::theme_grey(pointsize))
           # tmp <- tmp + opts(pointsize = pointsize)
           # this is ugly now - make more robust, etc.
           ggbuild <- ggplot2::ggplot_build(tmp)
