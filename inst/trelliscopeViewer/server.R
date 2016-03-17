@@ -45,14 +45,13 @@ if(file.exists(dataTar)) {
   unlink(dataTar)
 }
 
-source("server/_fns.R", local = TRUE)
+source(file.path(vdbPrefix, "server/_fns.R"), local = TRUE)
 
 shinyServer(function(input, output, session) {
-  source("server/currentDisplay.R", local = TRUE)
-  source("server/visualFilters.R", local = TRUE)
-  source("server/cogState.R", local = TRUE)
-  source("server/cogTable.R", local = TRUE)
-  source("server/panelTable.R", local = TRUE)
-  source("server/misc.R", local = TRUE)
+  source(file.path(vdbPrefix, "server/currentDisplay.R"), local = TRUE)
+  source(file.path(vdbPrefix, "server/visualFilters.R"), local = TRUE)
+  source(file.path(vdbPrefix, "server/cogState.R"), local = TRUE)
+  source(file.path(vdbPrefix, "server/cogTable.R"), local = TRUE)
+  source(file.path(vdbPrefix, "server/panelTable.R"), local = TRUE)
+  source(file.path(vdbPrefix, "server/misc.R"), local = TRUE)
 })
-
