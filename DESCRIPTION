@@ -1,6 +1,6 @@
 Package: trelliscope
 Type: Package
-Title: Trelliscope - Create and Navigate Large Multi-Panel Displays
+Title: Create and Navigate Large Multi-Panel Visual Displays
 Version: 0.9.4
 Date: 2016-03-14
 Authors@R: c(person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre")),
@@ -8,23 +8,18 @@ Authors@R: c(person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut",
     person("Barret", "Schloerke", role = "ctb"),
     person("Landon", "Sego", role = "ctb"))
 Maintainer: Ryan Hafen <rhafen@gmail.com>
-Description: Create, organize, and view
-    multi-panel displays against potentially very large data sets.
-    Trelliscope extends the ideas of Trellis Display, providing
-    a mechanism to easily generate and organize plots, and providing a
-    dynamic viewer for tiling panels of a display across the screen and paging
-    through them.  There is also a mechanism to generate built-in or
-    user-defined "cognostic" metrics for each panel of a display , and the
-    viewer has the ability to sort or filter the pages based on these
-    cognostics.  This is useful for large multi-panel displays where it is not
-    possible to view each panel, allowing only panels with interesting features
-    to be presented.  Built upon datadr, Trelliscope displays with millions of
-    panels can be created against terabytes of data, but are also very useful
-    for small datasets.
-
-a collection of which is called a visualization
-    database (VDB)
-
+Description: An extension of Trellis Display that enables creation,
+    organization, and interactive viewing of multi-panel displays created
+    against potentially very large data sets.  The dynamic viewer tiles
+    panels of a display across the screen in a web browser and allows the
+    user to interactively page through the panels and sort and filter them
+    based on "cognostic" metrics computed for each panel.  Panels can be
+    created using many of R's plotting capabilities, including base R
+    graphics, lattice, ggplot2, and many htmlwidgets.  Conditioning is
+    handled through the datadr package, which enables Trelliscope displays
+    with potentially millions of panels to be created against terabytes of
+    data on systems like Hadoop.  While designed to scale, Trelliscope
+    displays can also be very useful for small datasets.
 URL: http://tessera.io/docs-trelliscope
 BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE

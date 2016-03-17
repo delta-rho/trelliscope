@@ -1,18 +1,19 @@
 utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass"))
 
-#' Trelliscope
+#' Trelliscope: Create and Navigate Large Multi-Panel Visual Displays
 #'
-#' Trelliscope provides a way to create, organize, and view
-#' multi-panel displays, a collection of which is called a visualization
-#' database (VDB).  This package provides a mechanism for extending the ideas
-#' of Trellis Display to easily generate and organize plots, providing a
-#' dynamic viewer for tiling panels of a display across the screen and paging
-#' through them. There is also a mechanism to generate built-in or
-#' user-defined "cognostic" metrics for each panel of a display , and the
-#' viewer has the ability to sort or filter the pages based on these
-#' cognostics.  This is useful for large multi-panel displays where it is not
-#' possible to view each panel, allowing only panels with interesting features
-#' to be presented.
+#' An extension of Trellis Display that enables creation,
+#' organization, and interactive viewing of multi-panel displays created
+#' against potentially very large data sets.  The dynamic viewer tiles
+#' panels of a display across the screen in a web browser and allows the
+#' user to interactively page through the panels and sort and filter them
+#' based on "cognostic" metrics computed for each panel.  Panels can be
+#' created using many of R's plotting capabilities, including base R
+#' graphics, lattice, ggplot2, and many htmlwidgets.  Conditioning is
+#' handled through the datadr package, which enables Trelliscope displays
+#' with potentially millions of panels to be created against terabytes of
+#' data on systems like Hadoop.  While designed to scale, Trelliscope
+#' displays can also be very useful for small datasets.
 #'
 #' \url{http://tessera.io/docs-trelliscope/}
 #'
