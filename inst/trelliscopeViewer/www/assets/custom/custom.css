@@ -29,7 +29,7 @@ body {
   font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1000px) {
   #resolution-alert {
     font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
     position: absolute;
@@ -43,7 +43,7 @@ body {
   }*/
 }
 
-@media (max-height: 725px) {
+@media (max-height: 700px) {
   #resolution-alert {
     font-family: "LatoBold","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
     position: absolute;
@@ -1022,7 +1022,7 @@ td.select-column.active {
 
 /* cog-table */
 
-#cog-table-hideoverflow { overflow: hidden; height: 510px; width: 100%}
+#cog-table-hideoverflow { overflow: hidden; height: 520px; width: 100%}
 #cog-table-outer { position: relative; left: 50%; float: left; }
 #cog-table-inner { position: relative; left: -50%; float: left}
 
@@ -1417,7 +1417,7 @@ th {
 
 ::-webkit-scrollbar {
   width: 7px;
-  height: 4px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
