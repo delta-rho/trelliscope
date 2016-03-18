@@ -83,7 +83,7 @@ cdoExposedCogState <- reactive({
   cdo <- currentDisplay()$cdo
 
   if(!is.null(cdo)) {
-    cdo$state <- setState(
+    cdo$state <- stateSpec(
       name = cdo$name,
       group = cdo$group)
 

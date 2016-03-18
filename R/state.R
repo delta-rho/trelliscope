@@ -1,16 +1,23 @@
 #' Set State Parameters
 #'
+#' @param name the name of the display
+#' @param group the group of the display
+#' @param labels a vector of names of cognostics to be shown as labels underneath each panel.  If not specified, the default is to show labels for any of the splitting variables that created the partition of the data being plotted.
+#' @param  layout a list with optional elements \code{nrow}, \code{ncol}, and \code{arrange}.  \code{nrow} and \code{ncol} specify the arrangement of the panels into rows and columns (\code{nrow = 1} and \code{ncol = 1} are defaults), and \code{arrange} can be either "row" or "col" and specified whether to sort the panels by row or by column ("row" is default)
+#' @param sort a named list where each name corresponds to a cognostic name and the value is either "asc" or "desc" for sorting in ascending or descending order.  The order in which sorting is applied to each variable is according to the order of the variables specified.
+#' @param filter a named list where each name corresponds to a cognostic name and the value is a specification of either "regex" or "select" for categorical variables, or a range, "from" and "to", for quantitative variables.  For a "regex", a simple regular expression string is specified, and the filter finds all matches for the regular expression against the variable.  For "select" a vector of strings is specified, and all exact matches are returned.  For the range filter, all values of the specified variable within the range "from" and "to" are returned.  If either "from" or "to" are omitted, they are treated as \code{-Inf} and \code{Inf} respectively.
+#' @details Trelliscope allows you to specify either a default state in \code{\link{makeDisplay}} or specify the state of the display when you call \code{\link{view}}.
 #' @export
-setState <- function(name, group = "common", sort = NULL,
-  filter = NULL, labels = NULL, layout = NULL) {
+stateSpec <- function(name = NULL, group = "common", labels = NULL, layout = NULL,
+  sort = NULL, filter = NULL) {
 
   state <- structure(list(), class = c("list", "cogState"))
-  state$name <- name
-  state$group = group
-  state$sort = sort
-  state$filter = filter
-  state$labels = labels
-  state$layout = layout
+  state$name   <- name
+  state$group  <- group
+  state$sort   <- sort
+  state$filter <- filter
+  state$labels <- labels
+  state$layout <- layout
 
   state
 }
@@ -20,25 +27,17 @@ setState <- function(name, group = "common", sort = NULL,
 #' Validate state parameters for a Trelliscope display
 #'
 #' @param x a list of state parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see details)
-#' @param name the name of the display (optional but recommended - if checking state against variable names, etc. of the display is desired)
-#' @param group the group the display belongs to
-#' @param displayObj the display object (can be specified in place of \code{name} and \code{group})
+#' @param displayObj a display object to validate against (if not provided and checkDisplay is TRUE, it will be fetched based on \code{x})
+#' @param checkDisplay should the state be checked against a display (to make sure fields match, etc.) or should it simply be checked for structure?
 #'
 #' @return a modified state parameter list that is valid, an object of class "cogState"
 #'
-#' @details Trelliscope allows you to specify either a default state in \code{\link{makeDisplay}} or specify the state of the display when you call \code{\link{view}}.  Aspects of the display that can be controlled with the state include:
-#' \itemize{
-#'  \item labels a vector of names of cognostics to be shown as labels underneath each panel.  If not specified, the default is to show labels for any of the splitting variables that created the partition of the data being plotted.
-#'  \item layout a list with optional elements \code{nrow}, \code{ncol}, and \code{arrange}.  \code{nrow} and \code{ncol} specify the arrangement of the panels into rows and columns (\code{nrow = 1} and \code{ncol = 1} are defaults), and \code{arrange} can be either "row" or "col" and specified whether to sort the panels by row or by column ("row" is default)
-#'  \item sort a named list where each name corresponds to a cognostic name and the value is either "asc" or "desc" for sorting in ascending or descending order.  The order in which sorting is applied to each variable is according to the order of the variables specified.
-#'  \item filter a named list where each name corresponds to a cognostic name and the value is a specification of either "regex" or "select" for categorical variables, or a range, "from" and "to", for quantitative variables.  For a "regex", a simple regular expression string is specified, and the filter finds all matches for the regular expression against the variable.  For "select" a vector of strings is specified, and all exact matches are returned.  For the range filter, all values of the specified variable within the range "from" and "to" are returned.  If either "from" or "to" are omitted, they are treated as \code{-Inf} and \code{Inf} respectively.
-#' }
-#' @author Ryan Hafen
+#' @note See \code{\link{stateSpec}} for details on how to specify state.
 #'
 #' @seealso \code{\link{view}}, \code{\link{cogDisplayHref}}
 #'
 #' @examples
-#' state <- setState(
+#' state <- stateSpec(
 #'   name = "my_display",
 #'   sort = list(state = "desc", county = "asc"),
 #'   filter = list(
@@ -49,14 +48,14 @@ setState <- function(name, group = "common", sort = NULL,
 #'   layout = list(nrow = 2, ncol = 4),
 #'   labels = c("county", "state")
 #' )
-#' validateState(state)
+#' validateState(state, checkDisplay = FALSE)
 #' @export
 validateState <- function(x, displayObj = NULL,
   checkDisplay = TRUE) {
   nms <- names(x)
 
   if(!inherits(x, "cogState"))
-    stop("Use setState() to get a proper state object.")
+    stop("Use stateSpec() to get a proper state object.")
 
   name <- x$name
   group <- x$group
@@ -64,7 +63,8 @@ validateState <- function(x, displayObj = NULL,
   if(checkDisplay) {
     if(is.null(displayObj))
       displayObj <- getDisplay(name = x$name, group = x$group)
-
+    if(is.null(displayObj))
+      stop("Could not find display '", x$name,"' when validating state.  See listDisplays() for a list of available displays, or call validateState with checkDisplay = FALSE.", call. = FALSE)
     ci <- displayObj$cogInfo
     name <- displayObj$name
     group <- displayObj$group
@@ -209,17 +209,13 @@ validateState <- function(x, displayObj = NULL,
 #' Make a URL hash out of cognostics state information
 #'
 #' @param x a list of cognostics state parameters
-#' @param name the name of the display
-#' @param group the group the display belongs to
 #'
 #' @return a URL hash
-#'
-#' @author Ryan Hafen
 #'
 #' @seealso \code{\link{validateState}}
 #'
 #' @examples
-#' x <- setState(
+#' x <- stateSpec(
 #'   name = "my_display",
 #'   sort = list(state = "desc", county = "asc"),
 #'   filter = list(
@@ -230,11 +226,11 @@ validateState <- function(x, displayObj = NULL,
 #'   layout = list(nrow = 2, ncol = 4),
 #'   labels = c("county", "state")
 #' )
-#' makeStateHash(validateState(x))
+#' makeStateHash(validateState(x, checkDisplay = FALSE))
 #' @export
 makeStateHash <- function(x) {
   if(!inherits(x, "cogState"))
-    stop("Use setState() to get a proper state object.")
+    stop("Use stateSpec() to get a proper state object.")
 
   res <- list()
   res$name <- x$name
