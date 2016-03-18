@@ -342,7 +342,7 @@ getPanels <- function(cdo, width, height, curRows, pixelratio = 2) {
     panelContent <- lapply(seq_along(curDat), function(i) {
       x <- curDat[[i]]
       res <- try({
-        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$height, cdo$lims, pixelratio)
+        getPanelContent(cdo$panelFn, x, width, height, cdo$width, cdo$height, cdo$lims, pixelratio, cdo$name, cdo$group)
       })
       if(inherits(res, "try-error"))
         res <- NULL
@@ -363,7 +363,7 @@ getPanelContent.rplotFn <- function(panelFn, ...)
 getPanelContent.ggplotFn <- function(panelFn, ...)
   getPanelContent.trellisFn(panelFn, ...)
 
-getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
+getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio, name, group) {
   tmpfile <- tempfile()
   on.exit(rm(tmpfile))
 
@@ -383,73 +383,92 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, orig
   list(html = html, class = "raster")
 }
 
-getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio) {
-  p <- datadr::kvApply(x, panelFn)$value
-  scaleUp <- p$scale_up
-  scaleDown <- p$scale_down
-  if(is.null(scaleUp))
-    scaleUp <- FALSE
-  # default if not explicitly specified is to scale down
-  if(is.null(scaleDown))
-    scaleDown <- TRUE
+getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio, name, group) {
 
-  if(scaleUp && width > origWidth) {
-    p$width <- origWidth
-    p$height <- origHeight
-    scale <- width / origWidth
-  } else if(scaleDown && width < origWidth) {
-    p$width <- origWidth
-    p$height <- origHeight
-    scale <- width / origWidth
+  p <- datadr::kvApply(x, panelFn)$value
+
+  if(inherits(p, "rbokeh") || !is.null(p$trscope_direct_embed)) {
+    scaleUp <- p$scale_up
+    scaleDown <- p$scale_down
+    if(is.null(scaleUp))
+      scaleUp <- FALSE
+    # default if not explicitly specified is to scale down
+    if(is.null(scaleDown))
+      scaleDown <- TRUE
+
+    if(scaleUp && width > origWidth) {
+      p$width <- origWidth
+      p$height <- origHeight
+      scale <- width / origWidth
+    } else if(scaleDown && width < origWidth) {
+      p$width <- origWidth
+      p$height <- origHeight
+      scale <- width / origWidth
+    } else {
+      p$width <- width
+      p$height <- height
+      scale <- ""
+    }
+
+    w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
+    d <- attr(w, "html_dependencies")
+    d <- lapply(d, function(el) {
+      class(el) <- "list"
+      # copy script and css and set $src$href
+      # also set a flag so we dont render dependency every time?
+      depDir <- paste("widgetassets/", el$name, "-", el$version, sep = "")
+      assetDir <- file.path("www", depDir)
+
+      if(!file.exists(assetDir))
+        dir.create(assetDir, recursive = TRUE)
+
+      if(!is.null(el$script)) {
+        ff1 <- file.path(assetDir, el$script)
+        ff2 <- file.path(el$src$file, el$script)
+        for(ii in seq_along(ff1)) {
+          if(!file.exists(ff1[ii]))
+            file.copy(ff2[ii], assetDir)
+        }
+        el$src$href <- depDir
+      } else {
+        el$script <- NULL
+      }
+      if(!is.null(el$stylesheet)) {
+        ff1 <- file.path(assetDir, el$stylesheet)
+        ff2 <- file.path(el$src$file, el$stylesheet)
+        for(ii in seq_along(ff1)) {
+          if(!file.exists(ff1[ii]))
+            file.copy(ff2[ii], assetDir)
+        }
+        el$src$href <- depDir
+      } else {
+        el$stylesheet <- NULL
+      }
+      el
+    })
+
+    return(list(
+      html = as.character(w),
+      class = "htmlwidget",
+      deps = d,
+      scale = scale
+    ))
   } else {
+    ff <- file.path("iframes", paste(group, name, sep = "_"), paste0(digest::digest(x[[1]]), ".html"))
+    fb <- file.path(getOption("vdbConn")$path, "www", ff)
+    if(!file.exists(dirname(fb)))
+      dir.create(dirname(fb), recursive = TRUE)
+    p$sizingPolicy$padding <- 0
     p$width <- width
     p$height <- height
-    scale <- ""
+    suppressMessages(saveWidget(p, fb, selfcontained = FALSE))
+    html <- paste0("<iframe width='", width, "' height='", height, "' frameBorder='0' webkitallowfullscreen='' mozallowfullscreen='' allowfullscreen='' scrolling='no' sandbox='allow-forms allow-scripts allow-popups allow-same-origin allow-pointer-lock' src='", ff, "'></iframe>")
+
+    return(list(
+      html = html,
+      class = "iframe"
+    ))
   }
-
-  w <- htmlwidgets:::toHTML(p) #, standalone = TRUE)
-  d <- attr(w, "html_dependencies")
-  d <- lapply(d, function(el) {
-    class(el) <- "list"
-    # copy script and css and set $src$href
-    # also set a flag so we dont render dependency every time?
-    depDir <- paste("widgetassets/", el$name, "-", el$version, sep = "")
-    assetDir <- file.path("www", depDir)
-
-    if(!file.exists(assetDir))
-      dir.create(assetDir, recursive = TRUE)
-
-    if(!is.null(el$script)) {
-      ff1 <- file.path(assetDir, el$script)
-      ff2 <- file.path(el$src$file, el$script)
-      for(ii in seq_along(ff1)) {
-        if(!file.exists(ff1[ii]))
-          file.copy(ff2[ii], assetDir)
-      }
-      el$src$href <- depDir
-    } else {
-      el$script <- NULL
-    }
-    if(!is.null(el$stylesheet)) {
-      ff1 <- file.path(assetDir, el$stylesheet)
-      ff2 <- file.path(el$src$file, el$stylesheet)
-      for(ii in seq_along(ff1)) {
-        if(!file.exists(ff1[ii]))
-          file.copy(ff2[ii], assetDir)
-      }
-      el$src$href <- depDir
-    } else {
-      el$stylesheet <- NULL
-    }
-    el
-  })
-
-  list(
-    html = as.character(w),
-    class = "htmlwidget",
-    deps = d,
-    scale = scale
-  )
 }
 
 
