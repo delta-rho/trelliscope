@@ -1,6 +1,7 @@
-#' S3method print displayObj
-#' @param x TODO
-#' @param ... TODO
+#' Print a display object
+#'
+#' @param x an object of class "displayObj"
+#' @param \ldots further arguments passed to or from other methods
 print.displayObj <- function(x, ...) {
   cat("display object...\n")
 }
@@ -18,7 +19,8 @@ print.displayObj <- function(x, ...) {
 #' @return a display object
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
 #' @export
 getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 
@@ -70,7 +72,8 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{makeDisplay}}
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
 #' @export
 removeDisplay <- function(name = NULL, group = NULL, conn = getOption("vdbConn"), autoYes = FALSE, verbose = TRUE) {
 
@@ -156,7 +159,8 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #'
 #' @author Ryan Hafen
 #'
-#' @seealso \code{\link{makeDisplay}}, \code{\link{removeDisplay}}, \code{\link{view}}
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
 #' @export
 listDisplays <- function(conn = getOption("vdbConn")) {
   validateVdbConn(conn, mustHaveDisplays = TRUE)
@@ -206,6 +210,54 @@ listDisplays <- function(conn = getOption("vdbConn")) {
 
 }
 
+#' Restore a Backed-Up Display Object
+#'
+#' @param name the name of the display
+#' @param group the group the display belongs to
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param autoYes should questions to proceed with display removal be automatically answered with "yes"?
+#'
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
+#' @export
+restoreDisplay <- function(name, group = NULL, conn = getOption("vdbConn"), autoYes = FALSE) {
+  displayInfo <- findDisplay(name = name, group = group, conn = conn)
+
+  fp <- file.path(conn$path, "displays", displayInfo$group)
+  ff <- list.files(fp)
+  bak <- paste0(name, "_bak")
+  cur <- name
+  if(bak %in% ff) {
+    if(autoYes) {
+      ans <- "y"
+    } else {
+      ans <- readline(paste("Are you sure you want to restore ", bak, "? (y = yes) ", sep = ""))
+    }
+    if(!tolower(substr(ans, 1, 1)) == "y")
+      return()
+    message("* Restoring backup display directory...", bak)
+    unlink(file.path(fp, cur), recursive = TRUE)
+    copyVerify <- copy_dir(file.path(fp, bak), file.path(fp, cur))
+    disp <- getDisplay(displayInfo$name, displayInfo$group)
+    updateDisplayList(list(
+      group = disp$group,
+      name = disp$name,
+      desc = disp$desc,
+      n = disp$n,
+      panelFnType = disp$panelFnType,
+      preRender = disp$preRender,
+      dataClass = tail(class(disp$panelDataSource), 1),
+      cogClass = class(disp$cogDatConn)[1],
+      height = disp$height,
+      width = disp$width,
+      updated = disp$updated,
+      keySig = disp$keySig
+    ), conn)
+  } else {
+    message("* No display to restore...")
+  }
+}
+
 #' Update a Display Object
 #'
 #' @param name the name of the display
@@ -213,6 +265,8 @@ listDisplays <- function(conn = getOption("vdbConn")) {
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param \ldots display parameters to update which must be one of "desc", "width", "height", "keySig", "panelFn", "state" - see \code{\link{makeDisplay}} for details on these parameters.
 #'
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
 #' @export
 updateDisplay <- function(name, ..., group = NULL, conn = getOption("vdbConn")) {
 
@@ -300,11 +354,18 @@ updateDisplay <- function(name, ..., group = NULL, conn = getOption("vdbConn")) 
   }
 }
 
-## remove all _bak directories
+#' Remove Backed-Up Trelliscope Displays
+#'
+#' Remove all display directories ending with "_bak"
+#' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @example man-roxygen/ex-displayObj.R
+#' @family display_manipulation
+#' @export
 cleanupDisplays <- function(conn = getOption("vdbConn")) {
   validateVdbConn(conn)
 
-  ff <- list.files(file.path(conn$path, "displays"), recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
+  ff <- list.files(file.path(conn$path, "displays"),
+    recursive = TRUE, include.dirs = TRUE, pattern = "_bak$", full.names = TRUE)
   for(f in ff) {
     unlink(f, recursive = TRUE)
   }
