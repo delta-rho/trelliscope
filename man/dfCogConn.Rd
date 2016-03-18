@@ -15,9 +15,6 @@ Initiate data frame cognostics connection
 \note{
 This should never need to be called explicitly.  It is the default mechanism for storing cognostics in \code{\link{makeDisplay}}.
 }
-\author{
-Ryan Hafen
-}
 \seealso{
 \code{\link{makeDisplay}}
 }

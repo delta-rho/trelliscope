@@ -4,7 +4,7 @@
 \alias{print.displayObj}
 \title{Print a display object}
 \usage{
-print.displayObj(x, ...)
+\method{print}{displayObj}(x, ...)
 }
 \arguments{
 \item{x}{an object of class "displayObj"}

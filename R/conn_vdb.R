@@ -81,6 +81,10 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, updateFiles = TRUE, verb
   return(conn)
 }
 
+#' Print a vdbConn Object
+#'
+#' @param x a "vdbConn" object
+#' @param \ldots further arguments passed to or from other methods
 #' @export
 print.vdbConn <- function(x, ...) {
   if(is.null(x$name)) {

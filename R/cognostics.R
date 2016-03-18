@@ -260,6 +260,10 @@ inferCogType <- function(val) {
   type
 }
 
+#' Print a cognostics object
+#'
+#' @param x a cognostics object
+#' @param \ldots further arguments passed to or from other methods
 #' @export
 print.cog <- function(x, ...) {
   attr(x, "cogAttrs") <- NULL

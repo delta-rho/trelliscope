@@ -8,13 +8,17 @@
 #'
 #' @note This should never need to be called explicitly.  It is the default mechanism for storing cognostics in \code{\link{makeDisplay}}.
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{makeDisplay}}
 #' @export
 dfCogConn <- function() {
   structure(list(), class = c("dfCogConn", "cogConn"))
 }
 
+
+#' Print a dfCogConn object
+#'
+#' @param x a "dfCogConn" object
+#' @param \ldots further arguments passed to or from other methods
 #' @export
 print.dfCogConn <- function(x, ...) {
   cat("dfCogConn object\n")

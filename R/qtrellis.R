@@ -86,6 +86,10 @@ qtrellis_ <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), 
   res
 }
 
+#' Print a qtrellis Object
+#'
+#' @param x a "qtrellis" object
+#' @param \ldots further arguments passed to or from other methods
 #' @export
 print.qtrellis <- function(x, ...) {
   view(name = x$name, group = x$group, state = x$state)
