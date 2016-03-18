@@ -5,6 +5,10 @@
 $(function() {
   var isMouseDown = false, isActive;
 
+  $("#active-cog-selection td.selectable").unbind('mousedown');
+  $("#active-cog-selection td.selectable").unbind('mouseover');
+  $("#active-cog-selection td.selectable").unbind('selectstart');
+
   $("#active-cog-selection td.selectable")
   .mousedown(function () {
     isMouseDown = true;

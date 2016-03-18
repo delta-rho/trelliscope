@@ -2,8 +2,13 @@
 
 // this code allows for multiple selection of li and td elements
 // by holding down the mouse and dragging
+
 $(function() {
   var isMouseDown = false, isActive;
+
+  $("#panel-labels-selection td.selectable").unbind('mousedown');
+  $("#panel-labels-selection td.selectable").unbind('mouseover');
+  $("#panel-labels-selection td.selectable").unbind('selectstart');
 
   $("#panel-labels-selection td.selectable")
   .mousedown(function () {
@@ -26,5 +31,3 @@ $(function() {
     isMouseDown = false;
   });
 });
-
-

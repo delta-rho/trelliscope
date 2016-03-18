@@ -5,6 +5,10 @@
 $(function() {
   var isMouseDown = false, isActive;
 
+  $("#cog-table-vars li").unbind('mousedown');
+  $("#cog-table-vars li").unbind('mouseover');
+  $("#cog-table-vars li").unbind('selectstart');
+
   $("#cog-table-vars li")
   .mousedown(function () {
     isMouseDown = true;

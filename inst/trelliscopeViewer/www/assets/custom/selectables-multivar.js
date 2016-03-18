@@ -5,6 +5,10 @@
 $(function() {
   var isMouseDown = false, isActive;
 
+  $("#multivarFilterSelect li").unbind('mousedown');
+  $("#multivarFilterSelect li").unbind('mouseover');
+  $("#multivarFilterSelect li").unbind('selectstart');
+
   $("#multivarFilterSelect li")
   .mousedown(function () {
     isMouseDown = true;
