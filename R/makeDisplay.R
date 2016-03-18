@@ -179,12 +179,12 @@ makeDisplay <- function(
   )
 
   parList <- list(
-    dataConn   = dataConn,
+    dataConn  = dataConn,
     group     = group,
     name      = name,
-    preRender  = preRender,
-    cogConn    = cogConn,
-    panelFn    = panelFn,
+    preRender = preRender,
+    cogConn   = cogConn,
+    panelFn   = panelFn,
     cogFn     = cogFn,
     lims      = lims,
     conn      = conn,
@@ -284,7 +284,7 @@ makeDisplay <- function(
   class(displayObj) <- "displayObj"
 
   if(!is.null(state))
-    displayObj$state <- validateState(state, name, group, displayObj)
+    displayObj$state <- validateState(state, displayObj)
 
   save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
 

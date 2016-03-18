@@ -83,10 +83,14 @@ cdoExposedCogState <- reactive({
   cdo <- currentDisplay()$cdo
 
   if(!is.null(cdo)) {
-    cdo$state$filter <- filterState()
-    cdo$state$sort <- sortState()
-    cdo$state$labels <- panelLabelState()
-    cdo$state$layout <- panelLayoutState()
+    cdo$state <- setState(
+      name = cdo$name,
+      group = cdo$group)
+
+    cdo$state$filter = filterState()
+    cdo$state$sort = sortState()
+    cdo$state$labels = panelLabelState()
+    cdo$state$layout = panelLayoutState()
     cdo$state$activeCog <- activeCogState()
     cdo$state$relatedDisplays <- relatedDisplayState()
 
@@ -178,10 +182,7 @@ output$appHashOutput <- renderText({
   cdo <- cdoExposedCogState()
 
   if(!is.null(cdo))
-    makeStateHash(cdo$state, cdo$name, cdo$group)
+    makeStateHash(cdo$state)
 })
-
-
-
 
 

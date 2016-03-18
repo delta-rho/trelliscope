@@ -1,3 +1,20 @@
+#' Set State Parameters
+#'
+#' @export
+setState <- function(name, group = "common", sort = NULL,
+  filter = NULL, labels = NULL, layout = NULL) {
+
+  state <- structure(list(), class = c("list", "cogState"))
+  state$name <- name
+  state$group = group
+  state$sort = sort
+  state$filter = filter
+  state$labels = labels
+  state$layout = layout
+
+  state
+}
+
 #' Validate State Parameters
 #'
 #' Validate state parameters for a Trelliscope display
@@ -21,7 +38,8 @@
 #' @seealso \code{\link{view}}, \code{\link{cogDisplayHref}}
 #'
 #' @examples
-#' state <- list(
+#' state <- setState(
+#'   name = "my_display",
 #'   sort = list(state = "desc", county = "asc"),
 #'   filter = list(
 #'     county = list(regex = "Ben"),
@@ -33,29 +51,32 @@
 #' )
 #' validateState(state)
 #' @export
-validateState <- function(x, name = NULL, group = NULL, displayObj = NULL) {
+validateState <- function(x, displayObj = NULL,
+  checkDisplay = TRUE) {
   nms <- names(x)
 
-  checkDisplay <- FALSE
-  if(is.null(displayObj)) {
-    if(!is.null(name))
-      displayObj <- getDisplay(name = name, group = group)
-  }
+  if(!inherits(x, "cogState"))
+    stop("Use setState() to get a proper state object.")
 
-  if(!is.null(displayObj)) {
-    checkDisplay <- TRUE
+  name <- x$name
+  group <- x$group
+
+  if(checkDisplay) {
+    if(is.null(displayObj))
+      displayObj <- getDisplay(name = x$name, group = x$group)
+
     ci <- displayObj$cogInfo
     name <- displayObj$name
     group <- displayObj$group
   }
 
-  implStates <- c("sort", "filter", "layout", "labels")
+  implStates <- c("name", "group", "sort", "filter", "layout", "labels")
 
   pnms <- nms[nms %in% implStates]
 
   extra <- setdiff(nms, pnms)
   if(length(extra) > 0) {
-    warning("Specified viewer parameters ", paste(extra, collapse = ","), " have been ignored.")
+    warning("Specified viewer parameters ", paste(extra, collapse = ", "), " have been ignored.")
   }
 
   if("sort" %in% pnms) {
@@ -198,7 +219,8 @@ validateState <- function(x, name = NULL, group = NULL, displayObj = NULL) {
 #' @seealso \code{\link{validateState}}
 #'
 #' @examples
-#' x <- list(
+#' x <- setState(
+#'   name = "my_display",
 #'   sort = list(state = "desc", county = "asc"),
 #'   filter = list(
 #'     county = list(regex = "Bent"),
@@ -210,11 +232,13 @@ validateState <- function(x, name = NULL, group = NULL, displayObj = NULL) {
 #' )
 #' makeStateHash(validateState(x))
 #' @export
-makeStateHash <- function(x, name = NULL, group = NULL) {
+makeStateHash <- function(x) {
+  if(!inherits(x, "cogState"))
+    stop("Use setState() to get a proper state object.")
 
   res <- list()
-  res$name <- name
-  res$group <- group
+  res$name <- x$name
+  res$group <- x$group
   res$layout <- toHash(x$layout)
   res$sort <- toHash(x$sort)
   res$filter <- toHash(x$filter)

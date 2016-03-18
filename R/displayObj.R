@@ -251,9 +251,8 @@ updateDisplay <- function(name, ..., group = NULL, conn = getOption("vdbConn")) 
         disp[[cur]] <- args[[cur]]
     }
 
-    if("state" %in% nms) {
-      disp$state <- validateState(args$state, name, group, disp)
-    }
+    if("state" %in% nms)
+      disp$state <- validateState(args$state, disp)
 
     if("panelFn" %in% nms) {
       if(is.null(args$detectGlobals)) {

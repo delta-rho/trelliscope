@@ -41,12 +41,17 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
   # make sure that the viewer has the prefix
   options(vdbShinyPrefix = vdbPrefix)
 
+  if(!is.null(state)) {
+    name <- state$name
+    group <- state$group
+  }
+
   if(!is.null(name)) {
     disp <- findDisplay(name = name, group = group)
     if(is.null(state)) {
       state <- disp
     } else {
-      state <- c(disp, validateState(state))
+      state <- validateState(state)
     }
   } else {
     disp <- NULL
