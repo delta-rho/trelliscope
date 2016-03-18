@@ -92,11 +92,13 @@ $(window).bind('resizeEnd', function() {
   }
 });
 
-// bind left and right keys for paging through panels
+// bind keys for navigating controls / paging through panels
+// var keymap = {};
 $(document).keydown(function(e) {
-  // only want right and left to work when no panels are open
+  // some keys should only work when no panels are open
   var slidePanel = $(".slide-panel.slide-left");
   var modals = $(".modal:visible");
+  // keymap["k" + e.keyCode] = true;
 
   if($(document.activeElement).attr("id") != "curPanelPageInput" &&
     slidePanel.length === 0 && modals.length === 0) {
@@ -121,7 +123,7 @@ $(document).keydown(function(e) {
         return false;
       case 82: // r
         $("#add-related-display-nav-link").click();
-        return false;
+        return true; // allow refresh with cmd-r
       case 65: // a
         $("#active-cog-nav-link").click();
         return false;
@@ -147,16 +149,25 @@ $(document).keydown(function(e) {
         $("#aboutModal").modal("show");
         return false;
     }
-  } else if(slidePanel.length == 1) {
-    if(e.keyCode == 27) // escape
+  } else if(slidePanel.length === 1) {
+    var returnVal = true;
+    if(e.keyCode === 27) { // escape
       slidePanel.find("button.btn-panel-close").click();
-    if(e.keyCode == 13) { //enter
-      // // don't want enter to do anything inside editor
-      // if(slidePanel.attr("id") != "panel-function")
-      slidePanel.find("button.btn-panel-apply").click();
+      returnVal = false;
     }
+    if(e.keyCode === 13) { //enter
+      slidePanel.find("button.btn-panel-apply").click();
+      returnVal = false;
+    }
+    return returnVal;
   }
 });
+
+// $(document).keyup(function(e) {
+//   if (e.keyCode + "" in keymap) {
+//     delete keymap["k" + e.keyCode];
+//   }
+// });
 
 function pageForward() {
   var curPage = parseInt($("#curPanelPageInput").val());
