@@ -5,9 +5,9 @@
 #'
 #' Connecting to a VDB is required prior to calling \code{\link{makeDisplay}} or \code{\link{view}}.
 #'
-#' @param path The path on the local file system where the directory for the VDB is located
+#' @param path the path on the local file system where the directory for the VDB is located
 #'
-#' @param name A character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
+#' @param name a character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
 #' the previous name is used.  If the VDB exists and a string is provided for \code{name}, the name is overwritten.
 #' The primary purpose of the \code{name} argument is to facilitate deploying the trelliscope display as a Shiny app.
 #' See the \code{appName} argument of \code{\link{deployToShinyApps}}
@@ -93,6 +93,16 @@ print.vdbConn <- function(x, ...) {
 
   cat(paste("vdb connection object: ", nm, "; path=", x$path, "\n", sep = ""))
 }
+
+#' Get Current VDB Path
+#'
+#' @examples
+#' vdbConn(tempfile(), autoYes = TRUE)
+#' curVdbPath()
+#' @export
+curVdbPath <- function()
+  getOption("vdbConn")$path
+
 
 ## internal
 vdbInit <- function(path, autoYes, verbose) {
