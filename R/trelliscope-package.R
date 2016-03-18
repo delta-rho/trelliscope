@@ -26,7 +26,6 @@ utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayLis
 #' @import datadr ggplot2 lattice
 #'
 #' @author Ryan Hafen
-#' Maintainer: Ryan Hafen <rhafen@@gmail.com>
 #'
 #' @keywords package
 #'

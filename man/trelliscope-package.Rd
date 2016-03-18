@@ -25,5 +25,8 @@ displays can also be very useful for small datasets.
 \examples{
 help(package = trelliscope)
 }
+\author{
+Ryan Hafen
+}
 \keyword{package}
 

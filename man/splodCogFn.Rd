@@ -16,7 +16,7 @@ a data.frame of scagnostics for the given subset
 Default cognostics function for splod
 }
 \references{
-Wilkinson's scagnostics paper.
+Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 }
 \seealso{
 \code{\link{splodPanelFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}

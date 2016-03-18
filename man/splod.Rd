@@ -21,7 +21,7 @@ an object of class 'localDiv' that can be passed to \code{\link{splod}}
 Create a scatterplot display (splod)
 }
 \references{
-Wilkinson's scagnostics paper.
+Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 }
 \seealso{
 \code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}

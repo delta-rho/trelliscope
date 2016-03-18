@@ -20,7 +20,7 @@ an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{s
 Create pairwise scatterplot data plottable by splod
 }
 \references{
-Wilkinson's scagnostics paper.
+Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 }
 \seealso{
 \code{\link{splod}}, \code{\link{splodPanelFn}}

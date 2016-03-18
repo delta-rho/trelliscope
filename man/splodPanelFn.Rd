@@ -16,7 +16,7 @@ a trellis plot object of a scatterplot for the given subset
 Default plot function for splod
 }
 \references{
-Wilkinson's scagnostics paper.
+Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 }
 \seealso{
 \code{\link{splodCogFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
