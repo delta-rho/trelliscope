@@ -1,29 +1,11 @@
 language: r
+cache: packages
 
 env:
   global:
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
 
-r_binary_packages:
-  - lattice
-  - base64enc
-  - knitr
-  - markdown
-  - shiny
-  - digest
-  - codetools
-  - hexbin
-  - ggplot2
-  - jsonlite
-  - fastICA
-  - scagnostics
-  - magrittr
-  - dplyr
-  - testthat
-  - roxygen2
-
 r_github_packages:
-  - tesseradata/datadr
   - rstudio/shinyapps
 
 branches:
