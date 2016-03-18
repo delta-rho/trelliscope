@@ -143,7 +143,7 @@ relatedDisplayListOutputData <- function(x, displayList) {
 
     res <- lapply(displayList[relDisp], function(x) {
       x$updated <- as.character(x$updated)
-      img <- paste("<img src =\"", encodePNG(file.path(options()$vdbConn$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
+      img <- paste("<img src =\"", encodePNG(file.path(getOption("vdbConn")$path, "displays", x$group, x$name, "thumb.png")), "\" style=\"max-height: 60px; max-width: 80px\">", sep = "")
       x$thumb <- img
       x$aspect <- x$height / x$width
       x
