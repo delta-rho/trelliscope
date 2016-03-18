@@ -17,7 +17,6 @@ print.displayObj <- function(x, ...) {
 #' @details If a display is uniquely determined by its name, then group is not required.
 #'
 #' @return a display object
-#' @author Ryan Hafen
 #'
 #' @example man-roxygen/ex-displayObj.R
 #' @family display_manipulation
@@ -69,8 +68,6 @@ getDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #' @param verbose logical - print messages about what is being done
 #'
 #' @details If a display is uniquely determined by its name, then group is not required.
-#'
-#' @author Ryan Hafen
 #'
 #' @example man-roxygen/ex-displayObj.R
 #' @family display_manipulation
@@ -156,8 +153,6 @@ findDisplay <- function(name, group = NULL, conn = getOption("vdbConn")) {
 #' List displays in a VDB.
 #'
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
-#'
-#' @author Ryan Hafen
 #'
 #' @example man-roxygen/ex-displayObj.R
 #' @family display_manipulation

@@ -27,9 +27,6 @@ makePNG(dat, panelFn = NULL, file, width, height, origWidth = width,
 \description{
 Make a png for a subset of an object of class "ddo" or "ddf".  The user should never need to call this directly, but the viewer needs it, so it is exported with this documentation.
 }
-\author{
-Ryan Hafen
-}
 \seealso{
 \code{\link{makeDisplay}}
 }

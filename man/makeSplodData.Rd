@@ -19,9 +19,6 @@ an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{s
 \description{
 Create pairwise scatterplot data plottable by splod
 }
-\author{
-Ryan Hafen
-}
 \references{
 Wilkinson's scagnostics paper.
 }

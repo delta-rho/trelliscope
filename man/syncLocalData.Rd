@@ -14,9 +14,6 @@ syncLocalData(vdbConn = getOption("vdbConn"), rsync = NULL)
 \description{
 Sync localDisk data that is used for VDB displays located throughout the system to a 'data' directory inside the VDB - useful for collecting data before syncing with a web server, and used inside of \code{\link{webSync}}.
 }
-\author{
-Ryan Hafen
-}
 \seealso{
 \code{\link{webSync}}, \code{\link{webConn}}
 }

@@ -17,8 +17,6 @@
 #' @param updateFiles upon connection, should the Trelliscope viewer app files be updated in the VDB directory?
 #' @param verbose should messages be printed about what is being done?
 #'
-#' @author Ryan Hafen
-#'
 #' @return An object of class \code{vdbConn} that contains the path and name of the VDB. This object is also assigned
 #' to the \code{vdbConn} option, and can be retrieved via \code{getOption("vdbConn")}
 #'

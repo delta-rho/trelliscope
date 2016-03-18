@@ -15,9 +15,6 @@ a data.frame of scagnostics for the given subset
 \description{
 Default cognostics function for splod
 }
-\author{
-Ryan Hafen
-}
 \references{
 Wilkinson's scagnostics paper.
 }

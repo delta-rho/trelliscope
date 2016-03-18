@@ -6,8 +6,6 @@
 #' @param topkey should extra space be added for a top key?
 #' @param rightkey should extra space be added for a right key?
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link[lattice]{xyplot}}, \code{\link{makeDisplay}}
 #'
 #' @examples

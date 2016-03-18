@@ -2,16 +2,16 @@
 % Please edit documentation in R/displayObj.R
 \name{print.displayObj}
 \alias{print.displayObj}
-\title{S3method print displayObj}
+\title{Print a display object}
 \usage{
-\method{print}{displayObj}(x, ...)
+print.displayObj(x, ...)
 }
 \arguments{
-\item{x}{TODO}
+\item{x}{an object of class "displayObj"}
 
-\item{...}{TODO}
+\item{\ldots}{further arguments passed to or from other methods}
 }
 \description{
-S3method print displayObj
+Print a display object
 }
 

@@ -10,8 +10,6 @@
 #'
 #' @details This requires rsync to be installed on your machine.  If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{webConn}}, \code{\link{syncLocalData}}
 #'
 #' @export
@@ -97,8 +95,6 @@ webSync <- function(
 #' @param vdbConn VDB connection settings
 #' @param rsync location of rsync binary
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{webSync}}, \code{\link{webConn}}
 #'
 #' @export
@@ -176,8 +172,6 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
 #' @param quiet passed to \code{shinyapps::configureApp}
 #'
 #' @details If you do not have a shinyapps.io account and have not set your account info, first visit here prior to calling this function: \url{http://shiny.rstudio.com/articles/shinyapps.html}.
-#'
-#' @author Ryan Hafen
 #'
 #' \code{\link{syncLocalData}}
 #'

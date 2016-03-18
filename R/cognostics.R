@@ -1,20 +1,35 @@
 #' Compute RMSE of Loess Fit Cognostic
 #'
-#' Compute RMSE of loess fit as a cognostic to be used as cognostics in a trelliscope display.
+#' Compute RMSE of loess fit as a cognostic to be used in a trelliscope display.
 #'
 #' @param \ldots arguments to be passed to \code{link{loess}}, such as the formula, data, smoothing parameters, etc.
 #' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
-#' @examples
-#' cogLoessRMSE(dist ~ speed, span = 0.5, data = cars)
+#' @example man-roxygen/ex-cog.R
 #' @export
 cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
   suppressWarnings(tmp <- try(loess(...), silent = TRUE))
   if(inherits(tmp, "try-error"))
     return(NA)
   cog(tmp$s, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
+}
+
+#' Compute Slope of Linear Fit Cognostic
+#'
+#' Compute the slope of a linear fit as a cognostic to be used in a trelliscope display.
+#'
+#' @param \ldots arguments to be passed to \code{link{loess}}, such as the formula, data, smoothing parameters, etc.
+#' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
+#'
+#' @seealso \code{\link{cog}}
+#' @example man-roxygen/ex-cog.R
+#' @export
+cogSlope <- function(..., desc = "Slope of fitted line", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
+  suppressWarnings(tmp <- try(as.numeric(coef(lm(...))[2]), silent = TRUE))
+  if(inherits(tmp, "try-error"))
+    return(NA)
+  cog(tmp, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
 }
 
 #' Compute Range Cognostic
@@ -24,10 +39,8 @@ cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit", group =
 #' @param x numeric vector from which to compute the range
 #' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
-#' @examples
-#' cogRange(rnorm(100))
+#' @example man-roxygen/ex-cog.R
 #' @export
 cogRange <- function(x, desc = "range (max - min)", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
   res <- suppressWarnings(diff(range(x, na.rm = TRUE)))
@@ -42,10 +55,8 @@ cogRange <- function(x, desc = "range (max - min)", group = "common", defLabel =
 #'
 #' @param x numeric vector from which to compute the mean
 #' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
-#' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
-#' @examples
-#' cogMean(rnorm(100))
+#' @example man-roxygen/ex-cog.R
 #' @export
 cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
   res <- suppressWarnings(mean(x, na.rm = TRUE))
@@ -63,10 +74,8 @@ cogMean <- function(x, desc = "mean", group = "common", defLabel = FALSE, defAct
 #' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
 #' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
-#' @examples
-#' cogHref("www.google.com")
+#' @example man-roxygen/ex-cogHref.R
 #' @export
 cogHref <- function(x, label = "link", desc = "link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE, sortable = TRUE, log = FALSE) {
   if(is.null(target)) {
@@ -82,25 +91,24 @@ cogHref <- function(x, label = "link", desc = "link", group = "common", target =
 #'
 #' Create href that points to another trelliscope display with optional state
 #'
-#' @param displayName the name of the display
-#' @param displayGroup the group the display belongs to
-#' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
+#' @param state the state of the display to link to, using \code{\link{stateSpec}} - at a minimum the name and group of the display must be specivied - additionally, default parameter settings (such as layout, sorting, filtering, etc.) can be set to be in effect when the display is launched (see \code{\link{stateSpec}} for details)
 #' @param label label of the href
 #' @param target value to be used for the \code{target} attribute of the \code{a} html tag - default is "_blank" which will open the link in a new window
 #' @param desc,group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
 #'
 #' @return a hash string
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{validateState}}, \code{\link{cogHref}}
+#' @example man-roxygen/ex-cogDisplayHref.R
 #' @export
-cogDisplayHref <- function(displayName, displayGroup = "common", state = NULL, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE, sortable = TRUE, log = FALSE) {
+cogDisplayHref <- function(state, label = "link", desc = "display link", group = "common", target = "_blank", defLabel = FALSE, defActive = FALSE, filterable = FALSE, sortable = TRUE, log = FALSE) {
 
-  state <- validateState(state, displayName, displayGroup)
-  x <- makeStateHash(state, displayName, displayGroup)
+  state <- validateState(state, checkDisplay = FALSE)
+  x <- makeStateHash(state)
 
-  cog(paste("<a href=\"#", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
+  res <- cog(paste("<a href=\"#", x, "\" target=\"", target, "\">", label, "</a>", sep = ""), type = "href", desc = desc, group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)
+  attr(res, "cogDisplay") <- list(name = state$name, group = state$group)
+  res
 }
 
 
@@ -112,7 +120,6 @@ cogDisplayHref <- function(displayName, displayGroup = "common", state = NULL, l
 #' @param y vector of the y-axis data for a scatterplot
 #' @param group,defLabel,defActive,filterable,sortable,log arguments passed to \code{\link{cog}}
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{cog}}
 #' @examples
 #' cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
@@ -175,22 +182,22 @@ cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defAct
 #'
 #' @details Different types of cognostics can be specified through the \code{type} argument that will affect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}
-#'
+#' @example man-roxygen/ex-cog.R
 #' @export
-cog <- function(val = NULL, desc = "", group = "common", type = NULL, defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = NULL) {
+cog <- function(val = NULL, desc = "", group = "common",
+  type = NULL, defLabel = FALSE, defActive = TRUE,
+  filterable = TRUE, sortable = TRUE, log = NULL) {
 
   cogTypes <- list(
-    key    = as.character,
-    integer  = as.integer  ,
-    numeric  = as.numeric  ,
+    key     = as.character,
+    integer = as.integer  ,
+    numeric = as.numeric  ,
     factor  = as.character,
-    date    = as.Date    ,
+    date    = as.Date     ,
     time    = as.POSIXct  ,
-    geo    = as.cogGeo  ,
-    rel    = as.cogRel  ,
+    geo     = as.cogGeo   ,
+    rel     = as.cogRel   ,
     hier    = as.cogHier  ,
     href    = as.cogHref
   )
@@ -262,23 +269,39 @@ print.cog <- function(x, ...) {
 
 #' Apply Cognostics Function to a Key-Value Pair
 #'
-#' Apply cognostics function to a key-value pair
+#' Apply cognostics function to a key-value pair, obtaining additional default cognostics like the conditioning variable values in the case of conditioning variable division, the panel key, and between-subset variables.
 #'
 #' @param cogFn cognostics function
 #' @param kvSubset key-value pair
-#' @param conn TODO
+#' @param conn the connection object or ddo/ddf object from which the key/value pair came (see details)
+#' @param \ldots additional parameters for special cases (handled internally)
 #'
-#' @author Ryan Hafen
+#' @examples
+#' # create a division with a between-subset variable
+#' d <- divide(iris, by = "Species",
+#'   bsvFn = function(x) list(msl = mean(x$Sepal.Length)))
+#' # create a cognostics function that gets max sepal length
+#' cogFn <- function(x)
+#'   list(maxsl = max(x$Sepal.Length))
+#' # apply the cognostics function to the first key-value pair
+#' applyCogFn(cogFn, d[[1]])
+#' @note This function is used inside of \code{\link{makeDisplay}} and is exposed for users who are curious about what the complete output of a cognostics function will look like.
+#' @details The \code{conn} connection object is required in the case of a local disk connection so that the panel key default cognostic can be computed based on the file hash function, if used.
 #' @seealso \code{\link{cog}}, \code{\link{makeDisplay}}
 #' @export
-applyCogFn <- function(cogFn, kvSubset, conn) {
+applyCogFn <- function(cogFn, kvSubset, conn = NULL, ...) {
+  cdhc <- list(...)$cdhc
+
   res <- list()
+  if(inherits(conn, "ddo"))
+    conn <- getAttribute("conn", conn)
   if(inherits(conn, "localDiskConn")) {
     panelKey <- conn$fileHashFn(list(kvSubset[[1]]), conn)
   } else {
     panelKey <- digest(kvSubset[[1]])
   }
-  res$panelKey <- cog(panelKey, desc = "panel key", type = "key", group = "panelKey", defActive = TRUE, filterable = FALSE)
+  res$panelKey <- cog(panelKey, desc = "panel key", type = "key",
+    group = "panelKey", defActive = TRUE, filterable = FALSE)
   splitVars <- datadr::getSplitVars(kvSubset)
   if(!is.null(splitVars)) {
     nms <- names(splitVars)
@@ -291,11 +314,13 @@ applyCogFn <- function(cogFn, kvSubset, conn) {
     nms <- names(bsvs)
     # TODO: get bsvInfo so we can get bsv description
     for(i in seq_along(splitVars)) {
-      res[[nms[i]]] <- cog(bsvs[[i]], desc = "bsv")
+      res[[nms[i]]] <- cog(bsvs[[i]], desc = "bsv", group = "bsv")
     }
   }
-  if(!is.null(cogFn))
+  if(!is.null(cogFn)) {
+    attr(kvSubset, "cdhc") <- cdhc
     res <- c(res, datadr::kvApply(kvSubset, cogFn)$value)
+  }
 
   res
 }

@@ -28,9 +28,6 @@ Deploy VDB to shinyapps.io
 }
 \details{
 If you do not have a shinyapps.io account and have not set your account info, first visit here prior to calling this function: \url{http://shiny.rstudio.com/articles/shinyapps.html}.
-}
-\author{
-Ryan Hafen
 
 \code{\link{syncLocalData}}
 }

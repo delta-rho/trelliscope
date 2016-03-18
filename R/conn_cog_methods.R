@@ -41,16 +41,11 @@ cogFinal <- function(cogConn, ...)
 
 #' Methods for Cognostics Connections
 #'
-#' @param x object
+#' @param x cognostics connection object
 #' @param ... other objects passed onto generic methods
-#' @param rowIdx TODO
-#' @param colIdx TODO
-# @param cogDF TODO
-# @param flt TODO
-# @param ordering TODO
-# @param colIndex TODO
-# @param verbose TODO
-#' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  They should never need to be used by an analyst.
+#' @param rowIdx index of rows to be retrieved from the cognostics connection
+#' @param colIdx index of columns to be retrieved from the cognostics connection
+#' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  Their purpose is to provide a general interface for a cognostics store.  Currently just data frames are used for cognostics, but in previous versions systems like MongoDB were used.  These methods should never need to be used by an analyst.
 #' @export
 #' @rdname cogConn-methods
 cogNcol <- function(x, ...)

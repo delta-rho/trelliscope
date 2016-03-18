@@ -19,9 +19,6 @@ webConn(user = NULL, ip = NULL, appDir = "/srv/shiny-server",
 \description{
 Initialize a connection to a web server
 }
-\author{
-Ryan Hafen
-}
 \seealso{
 \code{\link{webSync}}
 }

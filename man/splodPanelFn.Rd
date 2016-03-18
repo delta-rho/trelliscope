@@ -15,9 +15,6 @@ a trellis plot object of a scatterplot for the given subset
 \description{
 Default plot function for splod
 }
-\author{
-Ryan Hafen
-}
 \references{
 Wilkinson's scagnostics paper.
 }

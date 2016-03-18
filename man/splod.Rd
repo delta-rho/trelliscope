@@ -20,9 +20,6 @@ an object of class 'localDiv' that can be passed to \code{\link{splod}}
 \description{
 Create a scatterplot display (splod)
 }
-\author{
-Ryan Hafen
-}
 \references{
 Wilkinson's scagnostics paper.
 }

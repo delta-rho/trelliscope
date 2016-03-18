@@ -7,8 +7,6 @@
 #' @param appDir the directory where Shiny apps go on the web server - defaults to the default location of /srv/shiny-server
 #' @param name the name of the directory in \code{appDir} under which to store the application - if not supplied, it defaults to the name provided in the vdb connection
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{webSync}}
 #' @export
 webConn <- function(

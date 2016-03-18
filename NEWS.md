@@ -1,6 +1,22 @@
 Version 0.9
 ---------------------------------------------------------------------
 
+- major updates to documentation, including many more examples (0.9.4)
+- add `curVdbPath()` convenience function (0.9.4)
+- add `cleanupDisplays()`, `restoreDisplay()` display handling functions (0.9.4)
+- add `cogSlope()` cognostics function (0.9.4)
+- use vdbConn from options to get thumbnail in viewer (0.9.4)
+- add support for iframe embedding for generic htmlwidget panel functions (0.9.4)
+- fix handling of state to include display and not be checked in `cogDisplayHref()` - significantly improves display creation time when using `cogDisplayHref()` (0.9.4)
+- fix bug with viewer keycodes not being always honored always (0.9.4)
+- fix bug in panel labels not being selectable when loaded twice (0.9.4)
+- update png resolution logic to have better defaults for ggplot and lattice (0.9.4)
+- fix bug in viewer when dealing with an NULL plot object sent from R (0.9.4)
+- remove airplane data (0.9.4)
+- update screen size constraints and widen scrollbars (0.9.4)
+- use full path in server.R for loading other files - may help when embedding the viewer n rmarkdown documents / presentations (0.9.4)
+- update js to conform with jslint (0.9.4)
+- add blank thumbnail (0.9.4)
 - fix `dir.exists()` issue (0.9.3)
 - fix potential bug in panel rendering with htmlwidgets (0.9.3)
 - fix issue with copying htmlwidget stylesheet assets (0.9.3)

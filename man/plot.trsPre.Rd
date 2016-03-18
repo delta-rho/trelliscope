@@ -35,9 +35,20 @@ irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
 plot(irisPre)
 }
 
+d <- datadr::divide(iris, "Species")
+
+irisPreFn <- function(x) {
+  list(
+    xlim = range(x$Sepal.Length),
+    ylim = range(x$Sepal.Width)
+  )
 }
-\author{
-Ryan Hafen
+
+irisPre <- prepanel(d, prepanelFn = irisPreFn)
+
+plot(irisPre)
+
+irisLims <- setLims(irisPre, x = "same", y = "sliced")
 }
 \seealso{
 \code{\link{prepanel}}, \code{\link{makeDisplay}}

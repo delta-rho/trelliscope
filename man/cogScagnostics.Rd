@@ -20,9 +20,6 @@ Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be u
 \examples{
 cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
 }
-\author{
-Ryan Hafen
-}
 \seealso{
 \code{\link{cog}}
 }

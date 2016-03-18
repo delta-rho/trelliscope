@@ -4,20 +4,35 @@
 \alias{applyCogFn}
 \title{Apply Cognostics Function to a Key-Value Pair}
 \usage{
-applyCogFn(cogFn, kvSubset, conn)
+applyCogFn(cogFn, kvSubset, conn = NULL, ...)
 }
 \arguments{
 \item{cogFn}{cognostics function}
 
 \item{kvSubset}{key-value pair}
 
-\item{conn}{TODO}
+\item{conn}{the connection object or ddo/ddf object from which the key/value pair came (see details)}
+
+\item{\ldots}{additional parameters for special cases (handled internally)}
 }
 \description{
-Apply cognostics function to a key-value pair
+Apply cognostics function to a key-value pair, obtaining additional default cognostics like the conditioning variable values in the case of conditioning variable division, the panel key, and between-subset variables.
 }
-\author{
-Ryan Hafen
+\details{
+The \code{conn} connection object is required in the case of a local disk connection so that the panel key default cognostic can be computed based on the file hash function, if used.
+}
+\note{
+This function is used inside of \code{\link{makeDisplay}} and is exposed for users who are curious about what the complete output of a cognostics function will look like.
+}
+\examples{
+# create a division with a between-subset variable
+d <- divide(iris, by = "Species",
+  bsvFn = function(x) list(msl = mean(x$Sepal.Length)))
+# create a cognostics function that gets max sepal length
+cogFn <- function(x)
+  list(maxsl = max(x$Sepal.Length))
+# apply the cognostics function to the first key-value pair
+applyCogFn(cogFn, d[[1]])
 }
 \seealso{
 \code{\link{cog}}, \code{\link{makeDisplay}}

@@ -7,9 +7,7 @@
 #' @return a trellis plot object of a scatterplot for the given subset
 #'
 #' @references
-#' Wilkinson's scagnostics paper.
-#'
-#' @author Ryan Hafen
+#' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splodCogFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
 #'
@@ -30,9 +28,7 @@ splodPanelFn <- function(df) {
 #' @return a data.frame of scagnostics for the given subset
 #'
 #' @references
-#' Wilkinson's scagnostics paper.
-#'
-#' @author Ryan Hafen
+#' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splodPanelFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
 #'
@@ -52,9 +48,7 @@ splodCogFn <- function(df) {
 #' @return an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}
 #'
 #' @references
-#' Wilkinson's scagnostics paper.
-#'
-#' @author Ryan Hafen
+#' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splod}}, \code{\link{splodPanelFn}}
 #'
@@ -99,9 +93,7 @@ makeSplodData <- function(data, id.vars = NULL, ...) {
 #' @return an object of class 'localDiv' that can be passed to \code{\link{splod}}
 #'
 #' @references
-#' Wilkinson's scagnostics paper.
-#'
-#' @author Ryan Hafen
+#' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}
 #'

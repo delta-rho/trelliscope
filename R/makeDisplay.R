@@ -30,12 +30,9 @@
 #'
 #' \code{keySig} does not generally need to be specified.  It is useful to specify when creating multiple displays that you would like to be treated as related displays, so that you can view them side by side.  Two displays are determined to be related when their key signatures, typically computed as a md5 hash of the complete collection of keys, match.  Sometimes two displays will have data where the keys match for a significant portion of subsets, but not all.  Manually specifying the same \code{keySig} for each can ensure that they will be treated as related displays.
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{prepanel}}, \code{\link{setLims}}, \code{\link{divide}}
 #'
-#' @examples
-#' # see docs
+#' @example man-roxygen/ex-cogDisplayHref.R
 #'
 #' @export
 #' @importFrom digest digest
@@ -283,8 +280,11 @@ makeDisplay <- function(
   )
   class(displayObj) <- "displayObj"
 
-  if(!is.null(state))
+  if(!is.null(state)) {
+    state$name <- name
+    state$group <- group
     displayObj$state <- validateState(state, displayObj)
+  }
 
   save(displayObj, file = file.path(tempPrefix, "displayObj.Rdata"))
 

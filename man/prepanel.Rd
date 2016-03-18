@@ -36,20 +36,20 @@ Axis limits are very important.  What makes viewing groups of plots of subsets o
 This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{setLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
 }
 \examples{
-\dontrun{
-irisSplit <- datadr::divide(iris, "Species")
+d <- datadr::divide(iris, "Species")
+
 irisPreFn <- function(x) {
   list(
     xlim = range(x$Sepal.Length),
     ylim = range(x$Sepal.Width)
   )
 }
-irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
-plot(irisPre)#' }
 
-}
-\author{
-Ryan Hafen
+irisPre <- prepanel(d, prepanelFn = irisPreFn)
+
+plot(irisPre)
+
+irisLims <- setLims(irisPre, x = "same", y = "sliced")
 }
 \seealso{
 \code{\link{x}}

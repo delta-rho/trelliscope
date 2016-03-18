@@ -20,23 +20,10 @@
 #'
 #' This function is also useful for identifying subsets with very large outlying values, and in conjunction with \code{\link{setLims}}, allows you to account for that prior to the expensive process of creating all of the plots.
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{x}}
 #' \code{\link{plot.trsPre}}, \code{\link{setLims}}, \code{\link{makeDisplay}}
 #'
-#' @examples
-#' \dontrun{
-#' irisSplit <- datadr::divide(iris, "Species")
-#' irisPreFn <- function(x) {
-#'   list(
-#'     xlim = range(x$Sepal.Length),
-#'     ylim = range(x$Sepal.Width)
-#'   )
-#' }
-#' irisPre <- prepanel(irisSplit, prepanelFn = irisPreFn)
-#' plot(irisPre)#' }
-#'
+#' @example man-roxygen/ex-prepanel.R
 #' @export
 #' @importFrom data.table rbindlist
 prepanel <- function(
@@ -218,8 +205,6 @@ prepanel <- function(
 #'
 #' @details This function plots the sorted axis ranges for the x and y axis for the case of "same" (all axis limits share the same range) and "sliced" (all axis limits share the) and can be useful in helping determine how to ultimately set the limits.
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #'
 #' @examples
@@ -236,6 +221,7 @@ prepanel <- function(
 #' }
 #'
 #' @method plot trsPre
+#' @example man-roxygen/ex-prepanel.R
 #' @export
 plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, strip.left = TRUE, between = list(y = 0.25), xlab = "Rank", ylab = "Panel Limits", ...
 ) {
@@ -317,8 +303,6 @@ plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, str
 #' About "x" and "y" parameters: This is the same as in lattice.  From lattice documentation:
 #' A character string that determines how axis limits are calculated for each panel. Possible values are "same" (default), "free" and "sliced". For relation="same", the same limits, usually large enough to encompass all the data, are used for all the panels. For relation="free", limits for each panel is determined by just the points in that panel. Behavior for relation="sliced" is similar, except that the length (max - min) of the scales are constrained to remain the same across panels.
 #'
-#' @author Ryan Hafen
-#'
 #' @seealso \code{\link{prepanel}}, \code{\link{makeDisplay}}
 #'
 #' @examples
@@ -334,6 +318,7 @@ plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, str
 #' irisLims <- setLims(irisPre, x = "same", y = "sliced")
 #' }
 #'
+#' @example man-roxygen/ex-prepanel.R
 #' @export
 setLims <- function(lims, x = "same", y = "same", xQuant = c(0,1), yQuant = c(0,1), xRangeQuant = 1, yRangeQuant = 1, prop = 0.07) {
 

@@ -4,14 +4,10 @@
 \alias{makeStateHash}
 \title{Make a URL hash out of state information}
 \usage{
-makeStateHash(x, name = NULL, group = NULL)
+makeStateHash(x)
 }
 \arguments{
 \item{x}{a list of cognostics state parameters}
-
-\item{name}{the name of the display}
-
-\item{group}{the group the display belongs to}
 }
 \value{
 a URL hash
@@ -20,7 +16,8 @@ a URL hash
 Make a URL hash out of cognostics state information
 }
 \examples{
-x <- list(
+x <- stateSpec(
+  name = "my_display",
   sort = list(state = "desc", county = "asc"),
   filter = list(
     county = list(regex = "Bent"),
@@ -30,10 +27,7 @@ x <- list(
   layout = list(nrow = 2, ncol = 4),
   labels = c("county", "state")
 )
-makeStateHash(validateState(x))
-}
-\author{
-Ryan Hafen
+makeStateHash(validateState(x, checkDisplay = FALSE))
 }
 \seealso{
 \code{\link{validateState}}

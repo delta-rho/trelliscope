@@ -21,7 +21,4 @@ view(name = NULL, group = NULL, state = NULL, openBrowser = TRUE,
 \description{
 View a display or run Shiny display viewer
 }
-\author{
-Ryan Hafen
-}
 

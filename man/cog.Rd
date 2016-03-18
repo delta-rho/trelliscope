@@ -36,8 +36,39 @@ Create a cognostics object.  To be used inside of the function passed to the \co
 \details{
 Different types of cognostics can be specified through the \code{type} argument that will affect how the user is able to interact with those cognostics in the viewer.  This can usually be ignored because it will be inferred from the implicit data type of \code{val}.  But there are special types of cognostics, such as geographic coordinates and relations (not implemented) that can be specified as well.  Current possibilities for \code{type} are "key", "integer", "numeric", "factor", "date", "time", "geo", "rel", "hier", "href".
 }
-\author{
-Ryan Hafen
+\examples{
+d <- stack(data.frame(EuStockMarkets))
+d$time <- rep(as.numeric(time(EuStockMarkets)), 4)
+d$year <- floor(d$time)
+
+byIndexYear <- divide(d, by = c("ind", "year"))
+
+cogFn <- function(x)
+  list(lormse = cogLoessRMSE(values ~ time, data = x, span = 0.3, degree = 2),
+       slope  = cogSlope(values ~ time, data = x),
+       range  = cogRange(x$values),
+       mean   = cogMean(x$values),
+       max    = cog(max(x$values, na.rm = TRUE), desc = "max value"))
+
+applyCogFn(cogFn, byIndexYear[[1]])
+
+library(lattice)
+panelFn <- function(x)
+  xyplot(values ~ time, data = x,
+    panel = function(x, y, ...) {
+      panel.xyplot(x, y, ...)
+      panel.loess(x, y, span = 0.3,
+        degree = 2, evaluation = 200, col = "black")
+    })
+
+vdbConn(tempfile(), autoYes = TRUE)
+makeDisplay(byIndexYear, name = "ts_index_year",
+  cogFn = cogFn, panelFn = panelFn)
+
+\dontrun{
+# sort and fiter the index/year panels by slope and loess RMSE
+view(name = "ts_index_year")
+}
 }
 \seealso{
 \code{\link{makeDisplay}}, \code{\link{cogRange}}, \code{\link{cogMean}}, \code{\link{cogScagnostics}}, \code{\link{cogLoessRMSE}}

@@ -11,7 +11,6 @@
 #' @param lims axis limits
 #' @param pixelratio TODO
 #'
-#' @author Ryan Hafen
 #' @seealso \code{\link{makeDisplay}}
 #' @export
 #' @import lattice
