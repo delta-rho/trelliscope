@@ -155,14 +155,31 @@ body {
 -------------------------------------------------- */
 
 #logo {
-  height: 150px;
+  height: 40px;
+  width: 170px;
+  margin-top: 20px;
+  margin-left: 10px;
 }
 
-#logo img {
-  width: 100px;
-  margin-left: 43px;
-  margin-top: 10px;
+#logo-img-div {
+  display: inline-block;
+  float: left;
 }
+
+#logo-img {
+  width: 48px;
+}
+
+#logo-text {
+  display: inline-block;
+  color:  white;
+  line-height: 48px;
+  font-size: 20px;
+  float: left;
+  padding-left: 10px;
+  font-family: "LatoReg","proxima-nova","Helvetica Neue",Arial,sans-serif !important;
+}
+
 
 #wrapper {
   padding-left: 205px;
