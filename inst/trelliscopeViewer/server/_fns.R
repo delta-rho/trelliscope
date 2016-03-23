@@ -462,6 +462,7 @@ getPanelContent.htmlwidgetFn <- function(panelFn, x, width, height, origWidth, o
     p$width <- width
     p$height <- height
     suppressMessages(saveWidget(p, fb, selfcontained = FALSE))
+    # <iframe src="data:text/html;base64, ..."></iframe>
     html <- paste0("<iframe width='", width, "' height='", height, "' frameBorder='0' webkitallowfullscreen='' mozallowfullscreen='' allowfullscreen='' scrolling='no' sandbox='allow-forms allow-scripts allow-popups allow-same-origin allow-pointer-lock' src='", ff, "'></iframe>")
 
     return(list(
