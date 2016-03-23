@@ -293,7 +293,7 @@ plot.trsPre <- function(x, layout = c(2, 2), as.table = TRUE, strip = FALSE, str
 #' @param yQuant same as xQuant but for y-axis
 #' @param xRangeQuant a single upper quantile at which to cut off the x-axis range, used when x="sliced", used in the case of a few splits having abnormally high range, which are wished to be excluded
 #' @param yRangeQuant same as xRangeQuant but for y-axis
-#' @param prop TODO
+#' @param prop the proportion of the axis range to pad beyond the actual axis range
 #'
 #' @return object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}
 #'

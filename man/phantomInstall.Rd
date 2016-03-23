@@ -9,4 +9,7 @@ phantomInstall()
 \description{
 Get instructions on how to install phantomjs
 }
+\examples{
+phantomInstall()
+}
 

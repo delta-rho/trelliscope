@@ -4,20 +4,49 @@
 \alias{makeSplodData}
 \title{Create Data Plottable by splod}
 \usage{
-makeSplodData(data, id.vars = NULL, ...)
+makeSplodData(data, id.vars = NULL)
 }
 \arguments{
 \item{data}{a data.frame}
 
 \item{id.vars}{variables to ignore when computing all pairs of variables}
-
-\item{...}{TODO}
 }
 \value{
 an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}
 }
 \description{
 Create pairwise scatterplot data plottable by splod
+}
+\examples{
+\dontrun{
+library(lattice)
+
+vdbConn(tempfile(), autoYes = TRUE)
+
+# make "splod" directly from a data frame
+splod(batting, name = "batting",
+  id.vars = c("playerID", "yearID", "stint", "teamID", "lgID"))
+
+# first transform the data into a "splodDat" object
+batSplodDat <- makeSplodData(batting,
+  id.vars = c("playerID", "yearID", "stint", "teamID", "lgID"))
+# now make "splod"
+splod(batSplodDat, name = "batting2", data = batSplodDat)
+
+# custom panel function (color by league)
+mySplodFn <- function(d) {
+  xyplot(jitter(y) ~ jitter(x), groups = lgID, data = d,
+    xlab = getSplitVar(d, "xVar"),
+    ylab = getSplitVar(d, "yVar"),
+    auto.key = TRUE
+  )
+}
+
+splod(batSplodDat, name = "batting3",
+  data = batSplodDat, panelFn = mySplodFn)
+
+view()
+}
 }
 \references{
 Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.

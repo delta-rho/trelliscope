@@ -216,8 +216,14 @@ makeThumb <- function(inFile, outFile, height, width) {
 
 #' base64 Encoding of a .png File
 #'
-#' @param plotLoc TODO
+#' @param plotLoc location of a png file on disk to encode as a base64 string
 #'
+#' @examples
+#' f <- tempfile(fileext = ".png")
+#' png(f)
+#' plot(1:10)
+#' dev.off()
+#' encodePNG(f)
 #' @export
 #' @importFrom base64enc base64encode
 encodePNG <- function(plotLoc) {

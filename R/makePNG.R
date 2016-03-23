@@ -6,12 +6,14 @@
 #' @param panelFn panel function
 #' @param file file name for png
 #' @param width,height,res width, height, and resolution
-#' @param origWidth TODO
-#' @param basePointSize TODO
+#' @param origWidth the original specified width of the plot
+#' @param basePointSize the base point size to use (for png \code{pointsize} argument)
 #' @param lims axis limits
-#' @param pixelratio TODO
+#' @param pixelratio pixel ratio of screen to which plot will be rendered (e.g. 2 for a retina display)
 #'
 #' @seealso \code{\link{makeDisplay}}
+#' @examples
+#' # see examples for makeDisplay()
 #' @export
 #' @import lattice
 makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width, res = 72, basePointSize = 12, lims = NULL, pixelratio = 2) {

@@ -16,4 +16,7 @@ widgetThumbnail(p, thumbPath, timeout = 1500)
 \description{
 Make a thumbnail for an htmlwidget panel
 }
+\note{
+This is used internally \code{\link{makeDisplay}} to create thumbnails of htmlwidget panel functions.
+}
 

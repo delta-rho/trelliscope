@@ -3,6 +3,7 @@
 #' @param p htmlwidget object
 #' @param thumbPath where to save thumbnail file
 #' @param timeout how many milliseconds to wait until plot is rendered
+#' @note This is used internally \code{\link{makeDisplay}} to create thumbnails of htmlwidget panel functions.
 #' @export
 #' @importFrom htmlwidgets saveWidget
 widgetThumbnail <- function(p, thumbPath, timeout = 1500) {
@@ -49,6 +50,8 @@ page.open('file://", ff, "', function() {
 }
 
 #' Get instructions on how to install phantomjs
+#' @examples
+#' phantomInstall()
 #' @export
 phantomInstall <- function() {
   message("Please visit this page to install phantomjs on your system: http://phantomjs.org/download.html")

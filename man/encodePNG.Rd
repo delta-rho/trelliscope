@@ -7,9 +7,16 @@
 encodePNG(plotLoc)
 }
 \arguments{
-\item{plotLoc}{TODO}
+\item{plotLoc}{location of a png file on disk to encode as a base64 string}
 }
 \description{
 base64 Encoding of a .png File
+}
+\examples{
+f <- tempfile(fileext = ".png")
+png(f)
+plot(1:10)
+dev.off()
+encodePNG(f)
 }
 

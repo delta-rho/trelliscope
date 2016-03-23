@@ -10,12 +10,13 @@
 #' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splodCogFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
+#' @example man-roxygen/ex-splod.R
 #'
 #' @export
 splodPanelFn <- function(df) {
   xyplot(y ~ x, data = df,
-    xlab = attr(df, "split")$xVar,
-    ylab = attr(df, "split")$yVar
+    xlab = getSplitVar(df, "xVar"),
+    ylab = getSplitVar(df, "yVar")
   )
 }
 
@@ -31,6 +32,7 @@ splodPanelFn <- function(df) {
 #' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splodPanelFn}}, \code{\link{splod}}, \code{\link{makeSplodData}}
+#' @example man-roxygen/ex-splod.R
 #'
 #' @export
 splodCogFn <- function(df) {
@@ -43,7 +45,6 @@ splodCogFn <- function(df) {
 #'
 #' @param data a data.frame
 #' @param id.vars variables to ignore when computing all pairs of variables
-#' @param ... TODO
 #'
 #' @return an object of class 'localDiv' and 'splodDat' that can be passed to \code{\link{splod}}
 #'
@@ -51,9 +52,10 @@ splodCogFn <- function(df) {
 #' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{splod}}, \code{\link{splodPanelFn}}
+#' @example man-roxygen/ex-splod.R
 #'
 #' @export
-makeSplodData <- function(data, id.vars = NULL, ...) {
+makeSplodData <- function(data, id.vars = NULL) {
   nCol <- ncol(data)
   dataNames <- names(data)
 
@@ -78,7 +80,7 @@ makeSplodData <- function(data, id.vars = NULL, ...) {
     res
   }))
 
-  class(res) <- c(class(res), "splodDat")
+  class(res) <- c("splodDat", class(res))
   res
 }
 
@@ -96,6 +98,7 @@ makeSplodData <- function(data, id.vars = NULL, ...) {
 #' Wilkinson, L., Anushka A., and Grossman, R. L. "Graph-Theoretic Scagnostics." INFOVIS. Vol. 5. 2005.
 #'
 #' @seealso \code{\link{makeDisplay}}, \code{\link{makeSplodData}}, \code{\link{splodPanelFn}}
+#' @example man-roxygen/ex-splod.R
 #'
 #' @export
 splod <- function(

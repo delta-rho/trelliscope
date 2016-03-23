@@ -30,4 +30,10 @@ Methods for Cognostics Connections
 \note{
 These methods are used mainly by the trelliscope viewer and therefore must be exported.  Their purpose is to provide a general interface for a cognostics store.  Currently just data frames are used for cognostics, but in previous versions systems like MongoDB were used.  These methods should never need to be used by an analyst.
 }
+\examples{
+# see examples for makeDisplay()
+}
+\seealso{
+\code{\link{makeDisplay}}
+}
 

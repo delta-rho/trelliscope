@@ -7,7 +7,7 @@
 \alias{cogPre}
 \title{Methods Used in MapReduce for makeDisplay}
 \usage{
-cogPre(cogConn, conn, group, name, ...)
+cogPre(cogConn, ...)
 
 cogEmit(cogConn, ...)
 
@@ -16,7 +16,9 @@ cogCollect(cogConn, ...)
 cogFinal(cogConn, ...)
 }
 \arguments{
-\item{cogConn, conn, group, name, \ldots}{TODO}
+\item{cogConn}{a cognostics connection object}
+
+\item{\ldots}{additional parameters}
 }
 \description{
 Methods Used in MapReduce for makeDisplay

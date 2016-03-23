@@ -16,16 +16,19 @@ makePNG(dat, panelFn = NULL, file, width, height, origWidth = width,
 
 \item{width, height, res}{width, height, and resolution}
 
-\item{origWidth}{TODO}
+\item{origWidth}{the original specified width of the plot}
 
-\item{basePointSize}{TODO}
+\item{basePointSize}{the base point size to use (for png \code{pointsize} argument)}
 
 \item{lims}{axis limits}
 
-\item{pixelratio}{TODO}
+\item{pixelratio}{pixel ratio of screen to which plot will be rendered (e.g. 2 for a retina display)}
 }
 \description{
 Make a png for a subset of an object of class "ddo" or "ddf".  The user should never need to call this directly, but the viewer needs it, so it is exported with this documentation.
+}
+\examples{
+# see examples for makeDisplay()
 }
 \seealso{
 \code{\link{makeDisplay}}

@@ -5,12 +5,13 @@
 # executed prior to mr job
 #' Methods Used in MapReduce for makeDisplay
 #'
-#' @param cogConn,conn,group,name,\ldots TODO
+#' @param cogConn a cognostics connection object
+#' @param \ldots additional parameters
 #' @export
 #' @examples
 #' # used internally when calling makeDisplay
 #' @rdname mr-methods
-cogPre <- function(cogConn, conn, group, name, ...)
+cogPre <- function(cogConn, ...)
   UseMethod("cogPre")
 
 # in the map, how to emit records
@@ -48,6 +49,9 @@ cogFinal <- function(cogConn, ...)
 #' @param rowIdx index of rows to be retrieved from the cognostics connection
 #' @param colIdx index of columns to be retrieved from the cognostics connection
 #' @note These methods are used mainly by the trelliscope viewer and therefore must be exported.  Their purpose is to provide a general interface for a cognostics store.  Currently just data frames are used for cognostics, but in previous versions systems like MongoDB were used.  These methods should never need to be used by an analyst.
+#' @seealso \code{\link{makeDisplay}}
+#' @examples
+#' # see examples for makeDisplay()
 #' @export
 #' @rdname cogConn-methods
 cogNcol <- function(x, ...)

@@ -10,7 +10,7 @@ deployVDB(vdbConn = getOption("vdbConn"), appName = NULL, account = NULL,
 \arguments{
 \item{vdbConn}{A vdbConn object containing the VDB connection settings}
 
-\item{appName}{name of application (app will be available at https://[account].shinyapps.io/[appName]/) - if not supplied, will use the name of VDB connection}
+\item{appName}{name of application (app will be available at https://[account].shinyapps.io/[appName]/ or at https://beta.rstudioconnect.com/[account]/[appName] if using RStudio connect) - if not supplied, will use the name of VDB connection}
 
 \item{account}{passed to \code{rsconnect::configureApp}}
 

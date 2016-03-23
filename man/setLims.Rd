@@ -22,7 +22,7 @@ setLims(lims, x = "same", y = "same", xQuant = c(0, 1), yQuant = c(0,
 
 \item{yRangeQuant}{same as xRangeQuant but for y-axis}
 
-\item{prop}{TODO}
+\item{prop}{the proportion of the axis range to pad beyond the actual axis range}
 }
 \value{
 object of class "trsLims", which can be used in a call to \code{\link{makeDisplay}}

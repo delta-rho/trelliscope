@@ -189,7 +189,7 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
 #' Deploy VDB to shinyapps.io or RStudio Connect
 #'
 #' @param vdbConn A vdbConn object containing the VDB connection settings
-#' @param appName name of application (app will be available at https://[account].shinyapps.io/[appName]/) - if not supplied, will use the name of VDB connection
+#' @param appName name of application (app will be available at https://[account].shinyapps.io/[appName]/ or at https://beta.rstudioconnect.com/[account]/[appName] if using RStudio connect) - if not supplied, will use the name of VDB connection
 #' @param account passed to \code{rsconnect::configureApp}
 #' @param redeploy passed to \code{rsconnect::configureApp}
 #' @param size passed to \code{rsconnect::configureApp}
