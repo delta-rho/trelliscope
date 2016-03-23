@@ -2,7 +2,7 @@
 % Please edit documentation in R/webSync.R
 \name{webSync}
 \alias{webSync}
-\title{Sync VDB Files to a Web Server}
+\title{Sync VDB files to a web server}
 \usage{
 webSync(vdbConn = getOption("vdbConn"), webConn = getOption("vdbWebConn"),
   fixPermissions = FALSE, verbose = FALSE, rsync = NULL)
@@ -23,6 +23,35 @@ Sync VDB files to a web server
 }
 \details{
 This requires rsync to be installed on your machine.  If you are syncing via ssh, this only works if public key authentication is enabled between your local machine and the remote server.
+}
+\examples{
+library(ggplot2)
+
+vdbConn(tempfile(), autoYes = TRUE)
+
+# make a simple display
+d <- divide(iris, by = "Species")
+makeDisplay(d, name = "sl_vs_sw",
+  panelFn = function(x)
+    qplot(Sepal.Width, Sepal.Length, data = x))
+
+\dontrun{
+# to sync to a server 'myshinyserver.org' with login 'user'
+# need: passwordless ssh for user@myshinyserver.org)
+# need: rsync installed on local machine
+# (these should both be easy to do with local linux / OS X)
+
+# set up a connection to a shiny server
+webConn(user = "hafen", ip = "myshinyserver.org", name = "myapp")
+
+# webSync() uses rsync to sync your local vdb
+# to the one on your shiny server pointed to with webConn()
+webSync()
+
+# if shiny server is running on the remote on port 3838
+# then the VDB will now be viewable at
+browseURL("http://myshinyserver.org:3838/myapp")
+}
 }
 \seealso{
 \code{\link{webConn}}, \code{\link{syncLocalData}}

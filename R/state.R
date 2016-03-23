@@ -7,6 +7,7 @@
 #' @param sort a named list where each name corresponds to a cognostic name and the value is either "asc" or "desc" for sorting in ascending or descending order.  The order in which sorting is applied to each variable is according to the order of the variables specified.
 #' @param filter a named list where each name corresponds to a cognostic name and the value is a specification of either "regex" or "select" for categorical variables, or a range, "from" and "to", for quantitative variables.  For a "regex", a simple regular expression string is specified, and the filter finds all matches for the regular expression against the variable.  For "select" a vector of strings is specified, and all exact matches are returned.  For the range filter, all values of the specified variable within the range "from" and "to" are returned.  If either "from" or "to" are omitted, they are treated as \code{-Inf} and \code{Inf} respectively.
 #' @details Trelliscope allows you to specify either a default state in \code{\link{makeDisplay}} or specify the state of the display when you call \code{\link{view}}.
+#' @example man-roxygen/ex-state.R
 #' @export
 stateSpec <- function(name = NULL, group = "common", labels = NULL, layout = NULL,
   sort = NULL, filter = NULL) {
@@ -36,19 +37,7 @@ stateSpec <- function(name = NULL, group = "common", labels = NULL, layout = NUL
 #'
 #' @seealso \code{\link{view}}, \code{\link{cogDisplayHref}}
 #'
-#' @examples
-#' state <- stateSpec(
-#'   name = "my_display",
-#'   sort = list(state = "desc", county = "asc"),
-#'   filter = list(
-#'     county = list(regex = "Ben"),
-#'     state = list(select = c("OR", "WA")),
-#'     meanList = list(from = 50, to = 150)
-#'   ),
-#'   layout = list(nrow = 2, ncol = 4),
-#'   labels = c("county", "state")
-#' )
-#' validateState(state, checkDisplay = FALSE)
+#' @example man-roxygen/ex-state.R
 #' @export
 validateState <- function(x, displayObj = NULL,
   checkDisplay = TRUE) {
@@ -214,19 +203,7 @@ validateState <- function(x, displayObj = NULL,
 #'
 #' @seealso \code{\link{validateState}}
 #'
-#' @examples
-#' x <- stateSpec(
-#'   name = "my_display",
-#'   sort = list(state = "desc", county = "asc"),
-#'   filter = list(
-#'     county = list(regex = "Bent"),
-#'     state = list(select = "WA"),
-#'     meanList = list(from = 0, to = 1)
-#'   ),
-#'   layout = list(nrow = 2, ncol = 4),
-#'   labels = c("county", "state")
-#' )
-#' makeStateHash(validateState(x, checkDisplay = FALSE))
+#' @example man-roxygen/ex-state.R
 #' @export
 makeStateHash <- function(x) {
   if(!inherits(x, "cogState"))
@@ -250,7 +227,10 @@ makeStateHash <- function(x) {
 }
 
 #' Methods for dealing with state and hashes
+#'
+#' @note Used in \code{\link{makeStateHash}}.
 #' @param x state or hash object
+#' @example man-roxygen/ex-state.R
 #' @export
 #' @rdname hash-methods
 toHash <- function(x) {

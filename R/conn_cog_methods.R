@@ -7,6 +7,8 @@
 #'
 #' @param cogConn,conn,group,name,\ldots TODO
 #' @export
+#' @examples
+#' # used internally when calling makeDisplay
 #' @rdname mr-methods
 cogPre <- function(cogConn, conn, group, name, ...)
   UseMethod("cogPre")

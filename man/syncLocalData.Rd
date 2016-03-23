@@ -2,7 +2,7 @@
 % Please edit documentation in R/webSync.R
 \name{syncLocalData}
 \alias{syncLocalData}
-\title{Sync localDisk Objects to VDB}
+\title{Sync localDisk objects to VDB}
 \usage{
 syncLocalData(vdbConn = getOption("vdbConn"), rsync = NULL)
 }
@@ -12,7 +12,36 @@ syncLocalData(vdbConn = getOption("vdbConn"), rsync = NULL)
 \item{rsync}{location of rsync binary}
 }
 \description{
-Sync localDisk data that is used for VDB displays located throughout the system to a 'data' directory inside the VDB - useful for collecting data before syncing with a web server, and used inside of \code{\link{webSync}}.
+Sync localDisk data that is used for VDB displays located throughout the system to a 'data' directory inside the VDB - useful for collecting data before syncing with a web server, and used inside of \code{\link{webSync}} and \code{\link{deployVDB}}.
+}
+\examples{
+library(ggplot2)
+
+vdbConn(tempfile(), autoYes = TRUE)
+
+# divide iris data and store it as a local disk connection
+d <- divide(iris, by = "Species",
+  output = localDiskConn(tempfile(), autoYes = TRUE))
+
+# make a simple display using this data
+makeDisplay(d, name = "sl_vs_sw",
+  panelFn = function(x)
+    qplot(Sepal.Width, Sepal.Length, data = x))
+
+# look at files in our VDB directory
+list.files(getVdbPath())
+# since the data for our display resides in a different path
+# if we try to share this file with someone on another machine
+# the data will not be found
+
+# sync any local data objects used in any display to be
+# centralized with the VDB directory, making it portable
+\dontrun{
+syncLocalData() # requires rsync
+}
+
+# now there is a "data" directory that holds all local disk data
+list.files(getVdbPath())
 }
 \seealso{
 \code{\link{webSync}}, \code{\link{webConn}}

@@ -39,12 +39,12 @@ Imports:
     jsonlite,
     fastICA,
     hexbin,
-    png
+    png,
+    rsconnect
 Suggests:
     Cairo,
     dplyr,
     testthat (>= 0.11.0),
     roxygen2 (>= 5.0.1),
-    scagnostics,
-    shinyapps
+    scagnostics
 RoxygenNote: 5.0.1

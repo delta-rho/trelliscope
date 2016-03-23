@@ -10,7 +10,7 @@
 #' @param name a character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
 #' the previous name is used.  If the VDB exists and a string is provided for \code{name}, the name is overwritten.
 #' The primary purpose of the \code{name} argument is to facilitate deploying the trelliscope display as a Shiny app.
-#' See the \code{appName} argument of \code{\link{deployToShinyApps}}
+#' See the \code{appName} argument of \code{\link{deployVDB}}
 #'
 #' @param autoYes should questions to proceed with directory creation operations be automatically answered with "yes"?
 #'
@@ -20,6 +20,9 @@
 #' @return An object of class \code{vdbConn} that contains the path and name of the VDB. This object is also assigned
 #' to the \code{vdbConn} option, and can be retrieved via \code{getOption("vdbConn")}
 #'
+#' @examples
+#' conn <- vdbConn(tempfile(), name = "myvdb", autoYes = TRUE)
+#' conn
 #' @export
 vdbConn <- function(path, name = NULL, autoYes = FALSE, updateFiles = TRUE, verbose = TRUE) {
 
@@ -85,6 +88,9 @@ vdbConn <- function(path, name = NULL, autoYes = FALSE, updateFiles = TRUE, verb
 #'
 #' @param x a "vdbConn" object
 #' @param \ldots further arguments passed to or from other methods
+#' @examples
+#' conn <- vdbConn(tempfile(), name = "myvdb", autoYes = TRUE)
+#' conn
 #' @export
 print.vdbConn <- function(x, ...) {
   if(is.null(x$name)) {
@@ -100,9 +106,9 @@ print.vdbConn <- function(x, ...) {
 #'
 #' @examples
 #' vdbConn(tempfile(), autoYes = TRUE)
-#' curVdbPath()
+#' getVdbPath()
 #' @export
-curVdbPath <- function()
+getVdbPath <- function()
   getOption("vdbConn")$path
 
 

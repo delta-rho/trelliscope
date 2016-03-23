@@ -14,4 +14,8 @@
 \description{
 Print a vdbConn Object
 }
+\examples{
+conn <- vdbConn(tempfile(), name = "myvdb", autoYes = TRUE)
+conn
+}
 

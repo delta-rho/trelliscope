@@ -64,7 +64,7 @@ lobj$desc
 makeDisplay(d, name = "ggplot2", panelFn = function(x) qplot(1, 1))
 
 # notice that there is a backup display:
-list.files(file.path(curVdbPath(), "displays", "common"))
+list.files(file.path(getVdbPath(), "displays", "common"))
 
 # oops - let's restore the previous one
 restoreDisplay(name = "ggplot2", autoYes = TRUE)

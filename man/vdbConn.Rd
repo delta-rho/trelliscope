@@ -13,7 +13,7 @@ vdbConn(path, name = NULL, autoYes = FALSE, updateFiles = TRUE,
 \item{name}{a character string giving the name of the VDB. If the VDB already exists and \code{name = NULL},
 the previous name is used.  If the VDB exists and a string is provided for \code{name}, the name is overwritten.
 The primary purpose of the \code{name} argument is to facilitate deploying the trelliscope display as a Shiny app.
-See the \code{appName} argument of \code{\link{deployToShinyApps}}}
+See the \code{appName} argument of \code{\link{deployVDB}}}
 
 \item{autoYes}{should questions to proceed with directory creation operations be automatically answered with "yes"?}
 
@@ -30,5 +30,9 @@ Connect to a new or existing visualization database
 }
 \details{
 Connecting to a VDB is required prior to calling \code{\link{makeDisplay}} or \code{\link{view}}.
+}
+\examples{
+conn <- vdbConn(tempfile(), name = "myvdb", autoYes = TRUE)
+conn
 }
 

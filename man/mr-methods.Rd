@@ -27,4 +27,7 @@ Methods Used in MapReduce for makeDisplay
 
 Methods Used in MapReduce for makeDisplay
 }
+\examples{
+# used internally when calling makeDisplay
+}
 

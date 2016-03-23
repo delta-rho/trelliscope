@@ -34,7 +34,10 @@ state <- stateSpec(
   layout = list(nrow = 2, ncol = 4),
   labels = c("county", "state")
 )
-validateState(state, checkDisplay = FALSE)
+
+state <- validateState(state, checkDisplay = FALSE)
+
+makeStateHash(state)
 }
 \seealso{
 \code{\link{view}}, \code{\link{cogDisplayHref}}
