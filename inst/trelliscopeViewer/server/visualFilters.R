@@ -17,13 +17,13 @@ output$bivarFilterPlot <- renderDataLite({
   }
 })
 
-output$multivarFilterPlot <- renderDataLite({
-  selectVals <- input$multivarFilterSelect
-  cdo <- exposedCogDF()
+# output$multivarFilterPlot <- renderDataLite({
+#   selectVals <- input$multivarFilterSelect
+#   cdo <- exposedCogDF()
 
-  if(!is.null(selectVals) && !is.null(cdo)) {
-    getMultivarPlotDat(cdo, unlist(selectVals$varNames), distType = selectVals$distType, plotType = selectVals$plotType)
-  }
-})
+#   if(!is.null(selectVals) && !is.null(cdo)) {
+#     getMultivarPlotDat(cdo, unlist(selectVals$varNames), distType = selectVals$distType, plotType = selectVals$plotType)
+#   }
+# })
 
 

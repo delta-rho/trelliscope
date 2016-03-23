@@ -279,31 +279,31 @@ getBivarPlotDat <- function(cd, xVar, yVar, distType = "marginal", plotType = "s
   }
 }
 
-getCogICA <- function(x, ...)
-  UseMethod("getCogICA", x)
+# getCogICA <- function(x, ...)
+#   UseMethod("getCogICA", x)
 
-getCogICA.data.frame <- function(cogDF, vars) {
-  require(fastICA)
-  # set.seed(4331)
-  idx <- which(complete.cases(cogDF[,vars]))
-  res <- fastICA(cogDF[idx, vars], n.comp=2)
-  data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
-}
+# getCogICA.data.frame <- function(cogDF, vars) {
+#   require(fastICA)
+#   # set.seed(4331)
+#   idx <- which(complete.cases(cogDF[,vars]))
+#   res <- fastICA(cogDF[idx, vars], n.comp=2)
+#   data.frame(IC1 = res$S[,1], IC2 = res$S[,2])
+# }
 
-getMultivarPlotDat <- function(cd, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
-  xVar <- "IC1"
-  yVar <- "IC2"
-  if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
-    icaDat <- getCogICA(cd$cdo$cogDatConn, vars)
-  } else {
-    icaDat <- getCogICA(cd$curCogDF, vars)
-  }
-  if(plotType == "scatter") {
-    getCogScatterPlotData(icaDat, xVar, yVar)
-  } else {
-    getCogHexbinPlotData(icaDat, xVar, yVar, shape, xbin)
-  }
-}
+# getMultivarPlotDat <- function(cd, vars, distType = "marginal", plotType = "scatter", shape = 370 / 515, xbin = 50) {
+#   xVar <- "IC1"
+#   yVar <- "IC2"
+#   if(distType == "marginal" || cogNrow(cd$cdo$cogDatConn) == nrow(cd$curCogDF)) {
+#     icaDat <- getCogICA(cd$cdo$cogDatConn, vars)
+#   } else {
+#     icaDat <- getCogICA(cd$curCogDF, vars)
+#   }
+#   if(plotType == "scatter") {
+#     getCogScatterPlotData(icaDat, xVar, yVar)
+#   } else {
+#     getCogHexbinPlotData(icaDat, xVar, yVar, shape, xbin)
+#   }
+# }
 
 
 ############################################################################

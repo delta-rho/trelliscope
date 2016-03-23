@@ -37,7 +37,6 @@ Imports:
     htmlwidgets (>= 0.5.0),
     digest,
     jsonlite,
-    fastICA,
     hexbin,
     png,
     rsconnect
@@ -46,5 +45,6 @@ Suggests:
     dplyr,
     testthat (>= 0.11.0),
     roxygen2 (>= 5.0.1),
-    scagnostics
+    scagnostics,
+    housingData
 RoxygenNote: 5.0.1

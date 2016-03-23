@@ -9,7 +9,6 @@ library(codetools)
 library(hexbin)
 library(ggplot2)
 library(jsonlite)
-library(fastICA)
 library(png)
 
 ff <- list.files("R", full.names = TRUE)

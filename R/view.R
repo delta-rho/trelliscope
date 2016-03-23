@@ -11,7 +11,7 @@
 #' @export
 #' @example man-roxygen/ex-view.R
 #' @importFrom shiny runApp
-#' @import hexbin fastICA
+#' @import hexbin
 #' @importFrom jsonlite toJSON
 view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = getOption("trelliscopePort")) {
 
