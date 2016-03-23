@@ -65,6 +65,4 @@ test_that("makeDisplay works with RHIPE", {
   expect_true(file.exists(file.path(vdbPath, "displays", "common", "variety_vs_yield_rh", "displayObj.Rdata")))
 })
 
-
 }
-

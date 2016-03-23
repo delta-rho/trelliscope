@@ -32,6 +32,7 @@
 #' @keywords datasets
 #' @name batting
 #' @usage data(batting)
+#' @example man-roxygen/ex-splod.R
 #' @format A data frame with 1435 rows and 22 variables
 NULL
 

@@ -30,4 +30,7 @@ If you do not have a shinyapps.io account and have not set your account info, fi
 
 \code{\link{syncLocalData}}
 }
+\examples{
+man-roxygen/ex-deployVDB.R
+}
 

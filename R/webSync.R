@@ -201,6 +201,7 @@ findRsync <- function(rsync = NULL, verbose = "FALSE") {
 #' \code{\link{syncLocalData}}
 #'
 #' @export
+#' @examples man-roxygen/ex-deployVDB.R
 #' @importFrom rsconnect configureApp deployApp
 deployVDB <- function(
   vdbConn = getOption("vdbConn"),

@@ -9,6 +9,7 @@
 #' @param port what port to use for the viewer - if not specified, will look for "trelliscopePort" set in R's global options, followed by a search for a system-level environment variable "TRELLISCOPE_PORT".  If none of these are defined, a random port assigned provided by shiny will be used.
 #'
 #' @export
+#' @example man-roxygen/ex-view.R
 #' @importFrom shiny runApp
 #' @import hexbin fastICA
 #' @importFrom jsonlite toJSON
