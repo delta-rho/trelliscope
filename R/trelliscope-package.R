@@ -29,6 +29,11 @@ utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayLis
 #'
 #' @keywords package
 #'
+#' @importFrom grDevices dev.cur dev.off png
+#' @importFrom graphics hist par rasterImage
+#' @importFrom stats coef lm loess median quantile setNames xtabs
+#' @importFrom utils capture.output combn object.size tail
+#'
 #' @examples
 #' help(package = trelliscope)
 NULL

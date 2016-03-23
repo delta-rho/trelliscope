@@ -110,7 +110,7 @@ makeDisplay <- function(
   } else {
     if(inherits(data, "kvMemory")) {
       # if an in-memory data set is too large we want to put it on disk
-      if(object.size(data) > 50 * 1024^2)
+      if(utils::object.size(data) > 50 * 1024^2)
         data <- datadr::convert(data, datadr::localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
     }
 
@@ -163,7 +163,7 @@ makeDisplay <- function(
         res <- cogCollect(cogConn, res, reduce.values, conn, group, name)
       } else if(reduce.key == "TRS___panelkey") {
         res <- sort(c(res, do.call(c, reduce.values)))
-        res <- c(head(res, 100), tail(res, 100))
+        res <- c(head(res, 100), utils::tail(res, 100))
       } else {
         collect(reduce.key, reduce.values)
       }
@@ -312,7 +312,7 @@ makeDisplay <- function(
       n = datadr::getAttribute(data, "nDiv"),
       panelFnType = panelFnType,
       preRender = preRender,
-      dataClass = tail(class(data), 1),
+      dataClass = utils::tail(class(data), 1),
       cogClass = class(cogConn)[1],
       height = height,
       width = width,

@@ -39,7 +39,7 @@ prepanel <- function(
     id <- dx != 0 & dy != 0 & !is.na(dx) & !is.na(dy)
     if (any(id)) {
       r  <- abs(dx[id]/dy[id])
-      median(r)
+      stats::median(r)
     }
     else 1
   }
@@ -124,7 +124,7 @@ prepanel <- function(
         key = digest(k),
         min = xr[1],
         max = xr[2],
-        # med = median(x, na.rm = TRUE),
+        # med = stats::median(x, na.rm = TRUE),
         bnk = bnk,
         stringsAsFactors = FALSE
       ))
@@ -133,7 +133,7 @@ prepanel <- function(
         key = digest(k),
         min = yr[1],
         max = yr[2],
-        # med = median(y, na.rm = TRUE),
+        # med = stats::median(y, na.rm = TRUE),
         bnk = bnk,
         stringsAsFactors = FALSE
       ))
@@ -173,7 +173,7 @@ prepanel <- function(
   nms <- names(parList)
   parList <- parList[which(!duplicated(nms))]
 
-  # suppressMessages(capture.output(
+  # suppressMessages(utils::capture.output(
   jobRes <- datadr::mrExec(
     data,
     map = map,
@@ -341,11 +341,13 @@ setLims <- function(lims, x = "same", y = "same", xQuant = c(0,1), yQuant = c(0,
     # TODO: if character and not "free" then set limits
     # to all levels of the variable, if known
     if(type == "sliced" && datClass != "character") {
-      tmp <- as.numeric(quantile(dat$max - dat$min, rangeQuant, na.rm = TRUE))
+      tmp <- as.numeric(stats::quantile(dat$max - dat$min, rangeQuant, na.rm = TRUE))
       tmp <- tmp + 2 * prop * tmp
       res <- list(type = "sliced", lim = NULL, range = tmp)
     } else if(type == "same" && datClass != "character") {
-      tmp <- as.numeric(c(quantile(dat$min, quant[1], na.rm = TRUE), quantile(dat$max, quant[2], na.rm = TRUE)))
+      tmp <- as.numeric(c(
+        stats::quantile(dat$min, quant[1], na.rm = TRUE),
+        stats::quantile(dat$max, quant[2], na.rm = TRUE)))
       tmp <- tmp + c(-1, 1) * diff(tmp) * prop
       res <- list(type = "same", lim = tmp, range = NULL)
     } else {

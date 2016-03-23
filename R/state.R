@@ -285,7 +285,7 @@ fromHash.filterHash <- function(x) {
     }
     val
   })
-  res <- setNames(values, keys)
+  res <- stats::setNames(values, keys)
   class(res) <- c(class(res), "filterState")
   res
 }
@@ -305,7 +305,7 @@ fromHash.sortHash <- function(x) {
   values <- lapply(seq_along(res), function(i) {
     list(dir = res[[i]][2], order = i)
   })
-  res <- setNames(as.list(values), keys)
+  res <- stats::setNames(as.list(values), keys)
   class(res) <- c(class(res), "sortState")
   res
 }
@@ -350,7 +350,7 @@ fromHash.layoutHash <- function(x) {
   res <- strsplit(res, ":")
   keys <- sapply(res, "[", 1)
   values <- sapply(res, "[", 2)
-  res <- setNames(as.list(values), keys)
+  res <- stats::setNames(as.list(values), keys)
 
   if(is.null(res$nrow)) {
     res$nrow <- 1

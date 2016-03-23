@@ -2,7 +2,7 @@ Package: trelliscope
 Type: Package
 Title: Create and Navigate Large Multi-Panel Visual Displays
 Version: 0.9.4
-Date: 2016-03-14
+Date: 2016-03-23
 Authors@R: c(person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("aut", "cre")),
     person("Jeremiah", "Rounds", role = "ctb"),
     person("Barret", "Schloerke", role = "ctb"),
@@ -27,7 +27,7 @@ LazyData: yes
 NeedsCompilation: no
 Depends:
     R (>= 3.0.0),
-    datadr (>= 0.8.3),
+    datadr (>= 0.8.5),
 Imports:
     lattice (>= 0.20-23),
     ggplot2,

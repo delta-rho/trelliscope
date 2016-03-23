@@ -26,7 +26,7 @@ cogLoessRMSE <- function(..., desc = "RMSE of residuals from loess fit", group =
 #' @example man-roxygen/ex-cog.R
 #' @export
 cogSlope <- function(..., desc = "Slope of fitted line", group = "common", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
-  suppressWarnings(tmp <- try(as.numeric(coef(lm(...))[2]), silent = TRUE))
+  suppressWarnings(tmp <- try(as.numeric(stats::coef(stats::lm(...))[2]), silent = TRUE))
   if(inherits(tmp, "try-error"))
     return(NA)
   cog(tmp, desc = desc, type = "numeric", group = group, defLabel = defLabel, defActive = defActive, filterable = filterable, sortable = sortable, log = log)

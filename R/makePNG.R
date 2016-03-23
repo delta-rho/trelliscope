@@ -38,7 +38,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
     height = height * pixelratio,
     pointsize = basePointSize * fac)
 
-  dv <- dev.cur()
+  dv <- grDevices::dev.cur()
   tryCatch({
     if(inherits(dat, "trellis")) {
       # single panel plot
@@ -110,7 +110,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
         eval(tmp)
       }
     }
-  }, finally = dev.off(dv))
+  }, finally = grDevices::dev.off(dv))
 
   # if panel function didn't plot anything then make a blank panel
   if(!file.exists(file)) {
@@ -122,7 +122,7 @@ makePNG <- function(dat, panelFn = NULL, file, width, height, origWidth = width,
 
     print(xyplot(NA ~ NA, xlab = "", ylab = "", scales = list(draw = FALSE), panel = function(x, y, ...) panel.text(0.5, 0.5, "no panel")))
 
-    dev.off()
+    grDevices::dev.off()
   }
 }
 

@@ -6,14 +6,15 @@ Trelliscope is an R package to be used in conjunction with [datadr](https://gith
 
 ## Installation
 
-```s
+```r
+# from CRAN:
+install.packages("trelliscope")
+
+# from packages.tessera.io:
 options(repos = c(tessera = "http://packages.tessera.io", getOption("repos")))
 install.packages("trelliscope")
-```
 
-Alternatively, you can install directly from github:
-
-```s
+# from github:
 devtools::install_github("tesseradata/datadr")
 devtools::install_github("tesseradata/trelliscope")
 ```
@@ -24,7 +25,7 @@ To get started, see the package documentation and function reference located [he
 
 ## License
 
-This software is currently under the BSD license.  Please read the [license](https://github.com/hafen/trelliscope/blob/master/LICENSE.md) document.
+This software is currently under the BSD license.
 
 ## Acknowledgement
 

@@ -48,7 +48,7 @@ webSync <- function(
 
   message("* Syncing local vdb directory to web server...")
 
-  lns <- capture.output(system(paste(rsync, " -a -v ", sshFlag,
+  lns <- utils::capture.output(system(paste(rsync, " -a -v ", sshFlag,
     path.expand(vdbConn$path), "/* ",
     user, ip, webConn$serverDir, "/", webConn$name,
     sep = ""
@@ -61,7 +61,7 @@ webSync <- function(
 
   message("* Syncing latest shiny viewer to web app directory...")
 
-  lns <- capture.output(system(paste(rsync, " -a -v ", sshFlag,
+  lns <- utils::capture.output(system(paste(rsync, " -a -v ", sshFlag,
     file.path(pkgPath, "trelliscopeViewer/*"), " ",
     user, ip, webConn$serverDir, "/", webConn$name,
     sep = ""
@@ -79,7 +79,7 @@ webSync <- function(
       sshQuote <- "'"
     }
     message("* Attempting to fix permissions...")
-    lns <- capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$serverDir, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
+    lns <- utils::capture.output(system(paste(sshString, sshQuote, "sudo chown -R shiny ", webConn$serverDir, sshQuote, sep = ""), intern = TRUE, ignore.stderr = FALSE, ignore.stdout = FALSE))
     if(verbose)
       cat(paste(c("*** Output ***", lns), collapse = "\n"))
   }

@@ -93,7 +93,7 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
     if(length(dat) == 0) {
       res[["hist"]] <- data.frame(xdat = c(0, 1), ydat = c(0, 0))
     } else {
-      hst <- hist(dat, plot = FALSE)
+      hst <- graphics::hist(dat, plot = FALSE)
       res[["hist"]] <- data.frame(xdat = hst$breaks, ydat = c(hst$counts, 0))
     }
   }
@@ -108,7 +108,7 @@ getCogQuantPlotData.data.frame <- function(cogDF, name, type = "hist", filter = 
         qnt <- data.frame(f = seq(0, 1, length = n), q = sort(dat))
       } else {
         sq <- seq(0, 1, length = 200)
-        qnt <- data.frame(f = sq, q = quantile(dat, sq))
+        qnt <- data.frame(f = sq, q = stats::quantile(dat, sq))
       }
       res[["quant"]] <- qnt
     }
@@ -129,7 +129,7 @@ getCogCatPlotData.data.frame <- function(cogDF, name, filter = NULL) {
   n <- length(unique(dat))
   freq <- NULL
   if(n <= 1000) {
-    freq <- data.frame(xtabs(~ dat))
+    freq <- data.frame(stats::xtabs(~ dat))
     names(freq)[1] <- "label"
     freq <- freq[order(freq$Freq, freq$label),]
   }

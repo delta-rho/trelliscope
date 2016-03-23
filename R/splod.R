@@ -66,7 +66,7 @@ makeSplodData <- function(data, id.vars = NULL) {
   splodVars <- setdiff(1:nCol, nonSplodVars)
   nSplodVars <- length(splodVars)
 
-  combs <- combn(nSplodVars, 2)
+  combs <- utils::combn(nSplodVars, 2)
 
   res <- datadr::ddf(lapply(1:ncol(combs), function(j) {
     yInd <- splodVars[combs[1,j]]

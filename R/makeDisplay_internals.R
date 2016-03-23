@@ -180,12 +180,12 @@ updateDisplayList <- function(argList, conn) {
 makeThumb <- function(inFile, outFile, height, width) {
   img <- png::readPNG(inFile)
 
-  png(filename = outFile, height = height, width = width)
-    par(mar = c(0,0,0,0), xaxs = "i", yaxs = "i", ann = FALSE)
+  grDevices::png(filename = outFile, height = height, width = width)
+    graphics::par(mar = c(0,0,0,0), xaxs = "i", yaxs = "i", ann = FALSE)
     plot(1:2, type = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "")
-    lim <- par()
-    rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
-  dev.off()
+    lim <- graphics::par()
+    graphics::rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+  grDevices::dev.off()
 
   if(!file.exists(outFile))
     file.copy(system.file("thumb_small.png", package = "trelliscope"), outFile)
