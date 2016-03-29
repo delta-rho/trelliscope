@@ -15,11 +15,11 @@ Description: An extension of Trellis Display that enables creation,
     user to interactively page through the panels and sort and filter them
     based on "cognostic" metrics computed for each panel.  Panels can be
     created using many of R's plotting capabilities, including base R
-    graphics, lattice, ggplot2, and many htmlwidgets.  Conditioning is
-    handled through the datadr package, which enables Trelliscope displays
+    graphics, 'lattice', 'ggplot2', and many 'htmlwidgets'.  Conditioning is
+    handled through the 'datadr' package, which enables 'Trelliscope' displays
     with potentially millions of panels to be created against terabytes of
-    data on systems like Hadoop.  While designed to scale, Trelliscope
-    displays can also be very useful for small datasets.
+    data on systems like 'Hadoop'.  While designed to scale, 'Trelliscope'
+    displays can also be very useful for small data sets.
 URL: http://tessera.io/docs-trelliscope
 BugReports: https://github.com/tesseradata/trelliscope/issues
 License: BSD_3_clause + file LICENSE
