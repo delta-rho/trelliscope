@@ -1,6 +1,7 @@
 # Trelliscope: Detailed Visualization of Large Complex Data in R
 
 [![Build Status](https://travis-ci.org/tesseradata/trelliscope.svg?branch=master)](https://travis-ci.org/tesseradata/trelliscope)
+[![CRAN](http://www.r-pkg.org/badges/version/trelliscope)](https://cran.r-project.org/web/packages/trelliscope/index.html)
 
 Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/tesseradata/datadr) and [RHIPE](https://github.com/tesseradata/RHIPE) to provide a framework for detailed visualization of large complex data.
 
