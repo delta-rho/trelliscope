@@ -1,10 +1,12 @@
 Version 0.9
 ---------------------------------------------------------------------
 
-- add favicon.ico
-- update Trelliscope logo and styling in viewer
-- change `webSync()` argument `appDir` to `serverDir`
-- change dependency on shinyapps package to rsconnect
+- fix state spec in `qtrellis()` (0.9.5)
+- don't run scagnostics example since it uses a suggested package (0.9.5)
+- add favicon.ico (0.9.4)
+- update Trelliscope logo and styling in viewer (0.9.4)
+- change `webSync()` argument `appDir` to `serverDir` (0.9.4)
+- change dependency on shinyapps package to rsconnect (0.9.4)
 - major updates to documentation, including many more examples (0.9.4)
 - add `curVdbPath()` convenience function (0.9.4)
 - add `cleanupDisplays()`, `restoreDisplay()` display handling functions (0.9.4)
