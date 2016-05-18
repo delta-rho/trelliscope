@@ -79,6 +79,8 @@ qtrellis_ <- function(x, panel = NULL, cog = NULL, by = NULL, layout = c(1, 1), 
       args$state <- list(layout = list(nrow = layout[1], ncol = layout[2]))
     }
   }
+  if(!is.null(args$state))
+    args$state <- do.call(stateSpec, args$state)
 
   res <- do.call(makeDisplay, args)
   res$vdbConn <- vdbConn # keep this so we can view it if the vdb connection changes

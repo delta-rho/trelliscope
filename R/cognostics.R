@@ -122,7 +122,9 @@ cogDisplayHref <- function(state, label = "link", desc = "display link", group =
 #'
 #' @seealso \code{\link{cog}}
 #' @examples
+#' \dontrun{
 #' cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
+#' }
 #' @export
 cogScagnostics <- function(x, y, group = "scagnostics", defLabel = FALSE, defActive = TRUE, filterable = TRUE, sortable = TRUE, log = FALSE) {
 
