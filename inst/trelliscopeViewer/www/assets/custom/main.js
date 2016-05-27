@@ -414,19 +414,20 @@ function panelTableContentOutputPostRender(data) {
   }
 
   // if it is not a raster image expect an htmlwidget
-  var pc = data[0][0].panel_content[0];
+  for (var i = 0; i < data[0][0].panel_content.length; i++) {
+    var pc = data[0][0].panel_content[i];
 
-  if(pc.class && pc.class[0] === "htmlwidget") {
-    // console.log(pc)
-    Shiny.renderDependencies(pc.deps);
+    if(pc.class && pc.class[0] === "htmlwidget") {
+      Shiny.renderDependencies(pc.deps);
 
-    try {
-      HTMLWidgets.staticRender();
-    } catch(err) {
-      console.log(err.message);
+      try {
+        HTMLWidgets.staticRender();
+      } catch(err) {
+        console.log(err.message);
+      }
+      if(pc.scale[0] !== "")
+        $(".html-widget-static-bound").zoomscale(pc.scale[0]);
     }
-    if(pc.scale[0] !== "")
-      $(".html-widget-static-bound").zoomscale(pc.scale[0]);
   }
 
   // make width of cog name column uniform across
