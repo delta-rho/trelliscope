@@ -325,19 +325,9 @@ fromHash.labelsHash <- function(x) {
 #' @export
 toHash.layoutState <- function(x) {
   x$w <- x$h <- NULL # don't store height / width state
-  # if defaults, don't include in string
-  if(!is.null(x$nrow))
-    if(x$nrow == 1)
-      x$nrow <- NULL
-  if(!is.null(x$ncol))
-    if(x$ncol == 1)
-      x$ncol <- NULL
-  if(!is.null(x$arrange))
-    if(x$arrange == "row")
-      x$arrange <- NULL
 
   x <- unlist(x)
-  if(length(x) > 0) {
+  if (length(x) > 0) {
     paste(names(x), x, collapse = ",", sep = ":")
   } else {
     NULL
