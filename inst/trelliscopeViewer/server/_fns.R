@@ -52,6 +52,20 @@ cogDataString <- function(data) {
   }), ncol = nc)
 }
 
+cogTitleString <- function(data) {
+  nc <- ncol(data)
+  matrix(sapply(seq_len(nc), function(i) {
+    if(inherits(data[[i]], c("integer", "numeric"))) {
+      val <- ""
+    } else {
+      val <- as.character(data[[i]])
+      if(nchar(val) < 30 || grepl("<|>", val))
+        val <- ""
+    }
+    val
+  }), ncol = nc)
+}
+
 cogTableBodyData <- function(data, nr = 10) {
   nc <- ncol(data)
   if(nc == 0) {
@@ -378,6 +392,14 @@ getPanelContent.trellisFn <- function(panelFn, x, width, height, origWidth, orig
     pixelratio = pixelratio
   )
   html <- paste("<img src=\"", encodePNG(tmpfile),
+    "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
+
+  list(html = html, class = "raster")
+}
+
+getPanelContent.base64pngFn <- function(panelFn, x, width, height, origWidth, origHeight, lims, pixelratio, name, group) {
+
+  html <- paste("<img src=\"", kvApply(x, panelFn)$value,
     "\" width=\"", width, "px\" height=\"", height, "px\">", sep = "")
 
   list(html = html, class = "raster")

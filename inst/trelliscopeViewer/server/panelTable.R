@@ -79,10 +79,12 @@ output$panelTableContentOutput <- renderDataLite({
             } else {
               curPanelContent <- panelContent[[i]]
               tmp <- cogDataString(curRows[i, labelVars, drop = FALSE])
+              tmp2 <- cogTitleString(curRows[i, labelVars, drop = FALSE])
               if(is.null(labelVars)) {
                 cogData <- NULL
               } else {
-                cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+                cogData <- data.frame(cog_name = labelVars,
+                  cog_value = tmp[1,], cog_title = tmp2[1,])
               }
             }
 
@@ -102,10 +104,13 @@ output$panelTableContentOutput <- renderDataLite({
 
       # div with each related display rendered with relative position
       tmp <- cogDataString(curRows[1, labelVars, drop = FALSE])
+      tmp2 <- cogTitleString(curRows[1, labelVars, drop = FALSE])
+
       if(is.null(labelVars)) {
         cogData <- NULL
       } else {
-        cogData <- data.frame(cog_name = labelVars, cog_value = tmp[1,])
+        cogData <- data.frame(cog_name = labelVars,
+          cog_value = tmp[1,], cog_title = tmp2[1,])
       }
 
       pageHeight <- cd$cdo$state$relatedDisplays[[1]]$pageHeight
@@ -148,5 +153,3 @@ output$panelTableContentOutput <- renderDataLite({
     }
   }
 })
-
-
