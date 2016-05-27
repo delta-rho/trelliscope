@@ -110,8 +110,10 @@ makeDisplay <- function(
   } else {
     if(inherits(data, "kvMemory")) {
       # if an in-memory data set is too large we want to put it on disk
-      if(utils::object.size(data) > 50 * 1024^2)
+      if(utils::object.size(data) > 50 * 1024^2) {
+        message("* Converting large in-memory ddf to local disk ddf for persistence")
         data <- datadr::convert(data, datadr::localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
+      }
     }
 
     panelDataSource <- data
@@ -292,6 +294,11 @@ makeDisplay <- function(
   message("* Plotting thumbnail...")
   if(inherits(panelEx, "htmlwidget")) {
     widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
+  } else if(inherits(panelEx, "base64png")) {
+    thumbf <- file(file.path(tempPrefix, "thumb.png"), "wb")
+    panelEx <- gsub("data:image/png;base64,", "", panelEx)
+    writeBin(object = base64enc::base64decode(as.character(panelEx)), con = thumbf)
+    close(thumbf)
   } else {
     suppressMessages(makePNG(datadr::kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
   }
