@@ -7,13 +7,14 @@
 #' @param openBrowser should the browser be automatically launched?
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param port what port to use for the viewer - if not specified, will look for "trelliscopePort" set in R's global options, followed by a search for a system-level environment variable "TRELLISCOPE_PORT".  If none of these are defined, a random port assigned provided by shiny will be used.
+#' @param copyFiles should updated viewer files be copied over to VDB directory?
 #'
 #' @export
 #' @example man-roxygen/ex-view.R
 #' @importFrom shiny runApp
 #' @import hexbin
 #' @importFrom jsonlite toJSON
-view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = getOption("trelliscopePort")) {
+view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, conn = getOption("vdbConn"), port = getOption("trelliscopePort"), copyFiles = TRUE) {
 
   if(is.null(port) && nzchar(Sys.getenv("TRELLISCOPE_PORT")))
     port <- as.integer(Sys.getenv("TRELLISCOPE_PORT"))
@@ -22,7 +23,8 @@ view <- function(name = NULL, group = NULL, state = NULL, openBrowser = TRUE, co
   vdbPrefix <- conn$path
 	packagePath <- system.file(package = "trelliscope")
 
-  copyViewerFiles(conn)
+  if(copyFiles)
+    copyViewerFiles(conn)
 
   message("Attempting to launch shiny vdb viewer...")
   message("Press Ctrl+C or Esc to stop viewer")
