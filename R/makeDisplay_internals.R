@@ -179,6 +179,8 @@ updateDisplayList <- function(argList, conn) {
 }
 
 # creates low-resolution thumbnail
+#' @importFrom png readPNG
+#' @importFrom jpeg readJPEG
 makeThumb <- function(inFile, outFile, height, width) {
   img <- try(png::readPNG(inFile), silent = TRUE)
   if(inherits(img, "try-error"))

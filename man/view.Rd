@@ -5,7 +5,8 @@
 \title{View a Display or Run Shiny Display Viewer}
 \usage{
 view(name = NULL, group = NULL, state = NULL, openBrowser = TRUE,
-  conn = getOption("vdbConn"), port = getOption("trelliscopePort"))
+  conn = getOption("vdbConn"), port = getOption("trelliscopePort"),
+  copyFiles = TRUE)
 }
 \arguments{
 \item{name, group}{optional parameters to load the viewer with a pre-specified display - if not specified, the viewer will launch with a list to choose from}
@@ -17,6 +18,8 @@ view(name = NULL, group = NULL, state = NULL, openBrowser = TRUE,
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 
 \item{port}{what port to use for the viewer - if not specified, will look for "trelliscopePort" set in R's global options, followed by a search for a system-level environment variable "TRELLISCOPE_PORT".  If none of these are defined, a random port assigned provided by shiny will be used.}
+
+\item{copyFiles}{should updated viewer files be copied over to VDB directory?}
 }
 \description{
 View a display or run Shiny display viewer

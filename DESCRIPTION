@@ -39,6 +39,7 @@ Imports:
     jsonlite,
     hexbin,
     png,
+    jpeg,
     rsconnect
 Suggests:
     Cairo,
