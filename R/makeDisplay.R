@@ -15,6 +15,7 @@
 #' @param cogFn a function that returns a named list, where each element of the list is a cognostic feature (with length 1). This list must be coerceable to a 1-row data frame. The function should take one argument, which will be the current split of the data being passed to it.  Useful to test with \code{cogFn(divExample(dat))}
 #' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
 #' @param preRender should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.  See Details.
+#' @param thumbIndex the index value to use for creating the thumbnail
 #' @param cogConn a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
@@ -50,6 +51,7 @@ makeDisplay <- function(
   cogFn = NULL,
   state = NULL,
   preRender = FALSE,
+  thumbIndex = 1,
   cogConn = dfCogConn(),
   output = NULL,
   conn = getOption("vdbConn"),
@@ -124,7 +126,7 @@ makeDisplay <- function(
   	environment(panelFn) <- list2env(params)
   	environment(cogFn) <- list2env(params)
   }
-  panelEx <-  datadr::kvApply(datadr::kvExample(data), panelFn)$value
+  panelEx <-  datadr::kvApply(data[[thumbIndex]], panelFn)$value
   cogEx <- validateCogFn(data, cogFn, verbose)
 
   if(is.null(desc) || is.na(desc))

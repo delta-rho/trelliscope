@@ -7,9 +7,10 @@
 makeDisplay(data, name, group = "common", desc = "", mdDesc = NULL,
   height = 500, width = 500, panelFn = NULL, lims = list(x = "free", y =
   "free", prepanelFn = NULL), cogFn = NULL, state = NULL,
-  preRender = FALSE, cogConn = dfCogConn(), output = NULL,
-  conn = getOption("vdbConn"), verbose = TRUE, keySig = NULL,
-  params = NULL, packages = NULL, control = NULL, detectGlobals = TRUE)
+  preRender = FALSE, thumbIndex = 1, cogConn = dfCogConn(),
+  output = NULL, conn = getOption("vdbConn"), verbose = TRUE,
+  keySig = NULL, params = NULL, packages = NULL, control = NULL,
+  detectGlobals = TRUE)
 }
 \arguments{
 \item{data}{data of class "ddo" or "ddf" (see \code{\link{ddo}}, \code{\link{ddf}})}
@@ -36,6 +37,8 @@ converted to underscores).  Defaults to "common"}
 \item{state}{if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)}
 
 \item{preRender}{should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.  See Details.}
+
+\item{thumbIndex}{the index value to use for creating the thumbnail}
 
 \item{cogConn}{a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.}
 
