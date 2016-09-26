@@ -9,6 +9,9 @@
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
 #' @param autoYes should questions to proceed with directory creation operations be automatically answered with "yes"?
 #' @export
+#' @importFrom DistributionUtils skewness
+#' @importFrom htmltools as.tags htmlDependencies
+#' @importFrom utils str
 vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
   jsonp = TRUE, conn = getOption("vdbConn"), autoYes = FALSE) {
 
@@ -122,7 +125,7 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
     }
 
     message("writing displayObj...")
-    a$example <- paste(capture.output(str(a[[1]]))[-1], collapse = "\n")
+    a$example <- paste(capture.output(utils::str(a[[1]]))[-1], collapse = "\n")
     a$panelDataSource <- NULL
     a$panelFn <- fn2text(a$panelFn)
     a$cogFn <- fn2text(a$cogFn)
@@ -152,6 +155,11 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
     cat(jsonlite::toJSON(displayListDF, pretty = TRUE),
       file = file.path(basePath, "displayList.json"))
   }
+
+  # download latest js
+  # curl::curl_download
+
+  # make config
 
   invisible(TRUE)
 }
@@ -299,6 +307,7 @@ updateCogInfo <- function(a) {
   tmp
 }
 
+#' @importFrom grDevices nclass.Sturges
 getCogDistnsConvert <- function(cogDat) {
   cogDistns <- lapply(cogDat, function(x) {
     type <- attr(x, "cogAttrs")$type
@@ -341,7 +350,7 @@ getCogDistnsConvert <- function(cogDat) {
         x <- x[x > 0]
         x2 <- log10(x)
         rng <- range(x2, na.rm = TRUE)
-        brks <- 10 ^ seq(rng[1], rng[2], length = nclass.Sturges(x))
+        brks <- 10 ^ seq(rng[1], rng[2], length = grDevices::nclass.Sturges(x))
         lhst <- hist(x, breaks = brks, plot = FALSE)
         res$dist$log <- list(
           breaks = hst$breaks,

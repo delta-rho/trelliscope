@@ -1,4 +1,4 @@
-utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass"))
+utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass", "obj", "x", "a", "name"))
 
 #' Trelliscope: Create and Navigate Large Multi-Panel Visual Displays
 #'
