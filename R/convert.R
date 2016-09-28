@@ -1,5 +1,3 @@
-# __panel__._55d2e8f0e782ee366f3190b5e5bc24a8(
-
 #' Convert a VDB to be usable with the new Trelliscope viewer
 #'
 #' @param overwrite should existing converted files be overwritten? (not implemented)
@@ -16,10 +14,11 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
   jsonp = TRUE, conn = getOption("vdbConn"), autoYes = FALSE) {
 
   if (is.null(basePath)) {
-    basePath <- file.path(conn$path, "trscope", "displays")
+    basePath <- file.path(conn$path, "trscope")
   }
+  basePath2 <- file.path(basePath, "displays")
 
-  if (!dir.exists(basePath)) {
+  if (!dir.exists(basePath2)) {
     ans <- "y"
     if (!autoYes)
       ans <- readline(paste("The path ", basePath,
@@ -36,11 +35,11 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
     nm <- displayListDF$name[ii]
     gp <- displayListDF$group[ii]
 
-    if (!dir.exists(file.path(basePath, gp, nm)))
-      dir.create(file.path(basePath, gp, nm), recursive = TRUE)
+    if (!dir.exists(file.path(basePath2, gp, nm)))
+      dir.create(file.path(basePath2, gp, nm), recursive = TRUE)
 
-    cogDatPath <- file.path(basePath, gp, nm, "cogData.json")
-    displayObjPath <- file.path(basePath, gp, nm, "displayObj.json")
+    cogDatPath <- file.path(basePath2, gp, nm, "cogData.json")
+    displayObjPath <- file.path(basePath2, gp, nm, "displayObj.json")
     if (jsonp) {
       cogDatPath <- paste0(cogDatPath, "p")
       displayObjPath <- paste0(displayObjPath, "p")
@@ -110,14 +109,14 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
 
     a$panelInterface <- list(
       type = ifelse(a$panelFnType == "htmlwidgetFn", "htmlwidget", "image"),
-      deps = writeWidgetDeps(a, conn)
+      deps = writeWidgetDeps(a, basePath)
     )
 
     if (convertPanels) {
       message("converting panels to json...")
-      panelPath <- file.path(basePath, gp, nm, "json")
+      panelPath <- file.path(basePath2, gp, nm, "json")
       if (jsonp)
-        panelPath <- file.path(basePath, gp, nm, "jsonp")
+        panelPath <- file.path(basePath2, gp, nm, "jsonp")
       if (!dir.exists(panelPath))
         dir.create(panelPath, recursive = TRUE)
 
@@ -143,23 +142,64 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
 
     message("copying thumbnail...")
     file.copy(file.path(conn$path, "displays", gp, nm, "thumb.png"),
-      file.path(basePath, gp, nm), overwrite = overwrite)
+      file.path(basePath2, gp, nm), overwrite = overwrite)
   }
 
   load(file.path(conn$path, "displays", "_displayList.Rdata"))
   if (jsonp) {
     cat(paste0("__loadDisplayList__(",
       jsonlite::toJSON(displayListDF, pretty = TRUE), ")"),
-      file = file.path(basePath, "displayList.jsonp"))
+      file = file.path(basePath2, "displayList.jsonp"))
   } else {
     cat(jsonlite::toJSON(displayListDF, pretty = TRUE),
-      file = file.path(basePath, "displayList.json"))
+      file = file.path(basePath2, "displayList.json"))
   }
 
   # download latest js
-  # curl::curl_download
+  dir.create(file.path(basePath, "static/fonts/IcoMoon/fonts"), recursive = TRUE)
+  dir.create(file.path(basePath, "static/fonts/OpenSans"), recursive = TRUE)
+
+  toCopy <- c(
+    "bundle.js",
+    "bundle.js.map",
+    "index.html",
+    "favicon.ico",
+    "static/fonts/IcoMoon/style.css",
+    "static/fonts/IcoMoon/fonts/icomoon.eot",
+    "static/fonts/IcoMoon/fonts/icomoon.svg",
+    "static/fonts/IcoMoon/fonts/icomoon.ttf",
+    "static/fonts/IcoMoon/fonts/icomoon.woff",
+    "static/fonts/OpenSans/opensans-light-webfont.woff",
+    "static/fonts/OpenSans/opensans-light-webfont.woff2",
+    "static/fonts/OpenSans/opensans-regular-webfont.woff",
+    "static/fonts/OpenSans/opensans-regular-webfont.woff2",
+    "static/fonts/OpenSans/stylesheet.css"
+  )
+
+  urlBase <- "https://raw.githubusercontent.com/hafen/trelliscopejs-demo/gh-pages/"
+  for (ff in toCopy) {
+    curl::curl_download(
+      paste0(urlBase, ff),
+      file.path(basePath, ff))
+  }
 
   # make config
+  cfg <- as.character(jsonlite::toJSON(
+    list(
+      display_base = "displays",
+      data_type = ifelse(jsonp, "jsonp", "json"),
+      cog_server = list(
+        type = ifelse(jsonp, "jsonp", "json"),
+        info = list(base = "displays")
+      )
+    ),
+    pretty = TRUE,
+    auto_unbox = TRUE
+  ))
+  if (jsonp)
+    cfg <- paste0("__loadTrscopeConfig__(", cfg, ")")
+  cat(cfg, file = file.path(basePath,
+    paste0("config", ifelse(jsonp, ".jsonp", ".json"))))
 
   invisible(TRUE)
 }
@@ -214,7 +254,7 @@ panel2json <- function(a, conn, panelPath, jsonp) {
   }
 }
 
-writeWidgetDeps <- function(a, conn) {
+writeWidgetDeps <- function(a, dir) {
   if (a$panelFnType == "htmlwidgetFn") {
     panelEx <- datadr::kvApply(datadr::kvExample(a$panelDataSource),
       a$panelFn)$value
@@ -222,7 +262,6 @@ writeWidgetDeps <- function(a, conn) {
     pt <- htmltools::as.tags(panelEx)
     deps <- htmltools::htmlDependencies(pt)
 
-    dir <- conn$path
     libdir <- "lib"
     dir.create(dir, showWarnings = FALSE)
     oldwd <- getwd()
