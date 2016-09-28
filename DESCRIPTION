@@ -42,6 +42,7 @@ Imports:
     jpeg,
     DistributionUtils,
     htmltools,
+    curl,
     rsconnect
 Suggests:
     Cairo,

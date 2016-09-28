@@ -10,6 +10,7 @@
 #' @importFrom DistributionUtils skewness
 #' @importFrom htmltools as.tags htmlDependencies
 #' @importFrom utils str
+#' @importFrom curl curl_download
 vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
   jsonp = TRUE, conn = getOption("vdbConn"), autoYes = FALSE) {
 
