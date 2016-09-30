@@ -18,7 +18,7 @@ for(f in ff) {
    source(f)
 }
 
-Sys.setenv(TRELLISCOPE_DEV_APP_PREFIX = "~/Documents/Code/Tessera/hafen/trelliscope/inst/trelliscopeViewer/")
+Sys.setenv(TRELLISCOPE_DEV_APP_PREFIX = "~/Documents/Code/DeltaRho/hafen/trelliscope/inst/trelliscopeViewer/")
 Sys.setenv(TRELLISCOPE_LOGGING = "true")
 
 vdbConn("~/Documents/Code/housingData/housingjunk/vdb")

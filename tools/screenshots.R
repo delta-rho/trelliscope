@@ -28,7 +28,7 @@ priceCog <- function(x) {
    )
 }
 
-conn <- vdbConn("vdb", name = "tesseraTutorial", autoYes = TRUE)
+conn <- vdbConn("vdb", name = "deltarhoTutorial", autoYes = TRUE)
 makeDisplay(byCounty,
    name = "list_sold_vs_time_quickstart",
    desc = "List and sold price over time",

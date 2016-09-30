@@ -1,8 +1,8 @@
 # Trelliscope: Detailed Visualization of Large Complex Data in R
 
-[![Build Status](https://travis-ci.org/tesseradata/trelliscope.svg?branch=master)](https://travis-ci.org/tesseradata/trelliscope)
+[![Build Status](https://travis-ci.org/delta-rho/trelliscope.svg?branch=master)](https://travis-ci.org/delta-rho/trelliscope)
 
-Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/tesseradata/datadr) and [RHIPE](https://github.com/tesseradata/RHIPE) to provide a framework for detailed visualization of large complex data.
+Trelliscope is an R package to be used in conjunction with [datadr](https://github.com/delta-rho/datadr) and [RHIPE](https://github.com/delta-rho/RHIPE) to provide a framework for detailed visualization of large complex data.
 
 ## Installation
 
@@ -10,18 +10,14 @@ Trelliscope is an R package to be used in conjunction with [datadr](https://gith
 # from CRAN:
 install.packages("trelliscope")
 
-# from packages.tessera.io:
-options(repos = c(tessera = "http://packages.tessera.io", getOption("repos")))
-install.packages("trelliscope")
-
 # from github:
-devtools::install_github("tesseradata/datadr")
-devtools::install_github("tesseradata/trelliscope")
+devtools::install_github("delta-rho/datadr")
+devtools::install_github("delta-rho/trelliscope")
 ```
 
 ## Tutorial
 
-To get started, see the package documentation and function reference located [here](http://tesseradata.github.io/docs-trelliscope/).
+To get started, see the package documentation and function reference located [here](http://delta-rho.github.io/docs-trelliscope/).
 
 ## License
 

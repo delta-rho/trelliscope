@@ -20,8 +20,8 @@ Description: An extension of Trellis Display that enables creation,
     with potentially millions of panels to be created against terabytes of
     data on systems like 'Hadoop'.  While designed to scale, 'Trelliscope'
     displays can also be very useful for small data sets.
-URL: http://tessera.io/docs-trelliscope
-BugReports: https://github.com/tesseradata/trelliscope/issues
+URL: http://deltarho.org/docs-trelliscope
+BugReports: https://github.com/delta-rho/trelliscope/issues
 License: BSD_3_clause + file LICENSE
 LazyData: yes
 NeedsCompilation: no
