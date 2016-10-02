@@ -19,7 +19,7 @@ devtools::install_github("delta-rho/trelliscope")
 
 ## Tutorial
 
-To get started, see the package documentation and function reference located [here](http://delta-rho.github.io/docs-trelliscope/).
+To get started, see the package documentation and function reference located [here](http://deltarho.org/docs-trelliscope/).
 
 ## License
 
