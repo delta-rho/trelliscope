@@ -1,6 +1,10 @@
 Version 0.9
 ---------------------------------------------------------------------
 
+- Update all references to point to DeltaRho (0.9.7)
+- vdbConvert method to convert vdb to be compatible with TrelliscopeJS (0.9.7)
+- Add thumbIndex to makeDisplay (0.9.7)
+- Fix png and jpeg imports (0.9.7)
 - reveal long cog values in tabel and label views and put max width on table cog labels (0.9.6)
 - preserve nrow and ncol in state layout hash (0.9.6)
 - add option to view() to not copy viewer files (0.9.6)
