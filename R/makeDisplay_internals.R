@@ -67,6 +67,8 @@ getPanelFnType <- function(panelEx) {
     panelFnType <- "ggplotFn"
   } else if(inherits(panelEx, "htmlwidget")) {
     panelFnType <- "htmlwidgetFn"
+  } else if(inherits(panelEx, "base64png")) {
+    panelFnType <- "base64pngFn"
   }
   if(is.null(panelFnType))
     stop("Unsupported panel function.  If panel function uses base R commands, be sure to include 'return(NULL)' at the end of the function definition.", call. = FALSE)
@@ -177,8 +179,15 @@ updateDisplayList <- function(argList, conn) {
 }
 
 # creates low-resolution thumbnail
+#' @importFrom png readPNG
+#' @importFrom jpeg readJPEG
 makeThumb <- function(inFile, outFile, height, width) {
-  img <- png::readPNG(inFile)
+  img <- try(png::readPNG(inFile), silent = TRUE)
+  if(inherits(img, "try-error"))
+    img <- try(jpeg::readJPEG(inFile), silent = TRUE)
+  if(inherits(img, "try-error")) {
+    file.copy(inFile, outFile)
+  }
 
   grDevices::png(filename = outFile, height = height, width = width)
     graphics::par(mar = c(0,0,0,0), xaxs = "i", yaxs = "i", ann = FALSE)

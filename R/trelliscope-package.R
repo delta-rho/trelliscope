@@ -1,4 +1,4 @@
-utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass"))
+utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayListDF", "displayListNames", "dataClass", "obj", "x", "a", "name"))
 
 #' Trelliscope: Create and Navigate Large Multi-Panel Visual Displays
 #'
@@ -15,7 +15,7 @@ utils::globalVariables(c("type", "collect", "logMsg", "displayList", "displayLis
 #' data on systems like Hadoop.  While designed to scale, Trelliscope
 #' displays can also be very useful for small datasets.
 #'
-#' \url{http://tessera.io/docs-trelliscope/}
+#' \url{http://deltarho.org/docs-trelliscope/}
 #'
 #' @name trelliscope-package
 #'

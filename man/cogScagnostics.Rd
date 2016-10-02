@@ -18,7 +18,9 @@ cogScagnostics(x, y, group = "scagnostics", defLabel = FALSE,
 Compute list of scagnostics (see \code{\link[scagnostics]{scagnostics}}) to be used as cognostics in a trelliscope display.
 }
 \examples{
+\dontrun{
 cogScagnostics(iris$Sepal.Length, iris$Sepal.Width)
+}
 }
 \seealso{
 \code{\link{cog}}

@@ -1,18 +1,18 @@
-How to contribute to Tessera / trelliscope
+How to contribute to DeltaRho / trelliscope
 ==========================================
 
-Thank you for sharing your code with the Tessera project. We appreciate your contribution!
+Thank you for sharing your code with the DeltaRho project. We appreciate your contribution!
 
 ## Join the developer mailing list
 
-If you're not already on the Tessera developers list, take a minute to join.  This is as easy as sending an email to tessera-dev+subscribe@googlegroups.com.
+If you're not already on the DeltaRho developers list, take a minute to join.  This is as easy as sending an email to tessera-dev+subscribe@googlegroups.com.
 It would be great if you'd introduce yourself to the group but it's not required. You can just let your code do the talking for you if you like.
 
 ## Check the issue tracker
 
-Before you write too much code, check the [open issues in the trelliscope issue tracker](https://github.com/tesseradata/trelliscope/issues?state=open)
+Before you write too much code, check the [open issues in the trelliscope issue tracker](https://github.com/delta-rho/trelliscope/issues?state=open)
 to see if someone else has already filed an issue related to your work or is already working on it. If not, go ahead and
-[open a new issue](https://github.com/tesseradata/trelliscope/issues/new).
+[open a new issue](https://github.com/delta-rho/trelliscope/issues/new).
 
 ## Announce your work on the mailing list
 
@@ -44,5 +44,5 @@ into self-contained and incremental pull requests, if need be, and reference dep
 request builds on request #92. Please review #92 first."
 * The first line of commit messages should be a short (<80 character) summary, followed by an empty line and then,
 optionally, any details that you want to share about the commit.
-* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org/tesseradata/trelliscope)
+* Include unit tests with your pull request. We love tests and [use Travis CI](https://travis-ci.org/delta-rho/trelliscope)
 to check every pull request and commit.  We use the [testthat](http://adv-r.had.co.nz/Testing.html) R package for running unit tests.  See code in the `tests/testthat` for examples.

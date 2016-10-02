@@ -15,6 +15,7 @@
 #' @param cogFn a function that returns a named list, where each element of the list is a cognostic feature (with length 1). This list must be coerceable to a 1-row data frame. The function should take one argument, which will be the current split of the data being passed to it.  Useful to test with \code{cogFn(divExample(dat))}
 #' @param state if specified, this tells the viewer the default parameter settings (such as layout, sorting, filtering, etc.) to use when the display is viewed (see \code{\link{validateState}} for details)
 #' @param preRender should the panels be pre-rendered and stored (\code{TRUE}), or rendered on-the-fly (\code{FALSE}, default)?  Default is recommended unless rendering is very expensive.  See Details.
+#' @param thumbIndex the index value to use for creating the thumbnail
 #' @param cogConn a connection to store the cognostics data.  By default, this is \code{\link{dfCogConn}()}.
 #' @param output how to store the panels and metadata for the display (unnecessary to specify in most cases -- see details)
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
@@ -24,9 +25,9 @@
 #' @param packages a vector of R package names that contain functions used in \code{panelFn} or \code{cogFn} (most should be taken care of automatically such that this is rarely necessary to specify)
 #' @param control parameters specifying how the backend should handle things (most-likely parameters to \code{rhwatch} in RHIPE) - see \code{\link[datadr]{rhipeControl}} and \code{\link[datadr]{localDiskControl}}
 #' @param detectGlobals  if TRUE params are automatically detected (packages are always auto-detected)
-#' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at tessera.io: \url{http://tessera.io/docs-trelliscope}
+#' @details Many of the parameters are optional or have defaults.  For several examples, see the documentation at deltarho.org: \url{http://deltarho.org/docs-trelliscope}
 #'
-#' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the Tessera backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
+#' Panels by default are not pre-rendered. Instead, this function creates a display object and computes and stores the cognostics.  Panels are then rendered on the fly by the DeltaRho backend and pushed to the Trelliscope viewer as html with the panel images embedded in the html.  If a user would like to pre-render the images for every subset (using \code{preRender = TRUE}), then by default the image files for the panels will be stored to a local disk connection (see \code{\link{localDiskConn}}) inside the VDB directory, organized in subdirectories by group and name of the display.  Optionally, the user can specify the \code{output} parameter to be any valid "kvConnection" object, as long as it is one that persists on disk (e.g. \code{\link{hdfsConn}}).
 #'
 #' \code{keySig} does not generally need to be specified.  It is useful to specify when creating multiple displays that you would like to be treated as related displays, so that you can view them side by side.  Two displays are determined to be related when their key signatures, typically computed as a md5 hash of the complete collection of keys, match.  Sometimes two displays will have data where the keys match for a significant portion of subsets, but not all.  Manually specifying the same \code{keySig} for each can ensure that they will be treated as related displays.
 #'
@@ -50,6 +51,7 @@ makeDisplay <- function(
   cogFn = NULL,
   state = NULL,
   preRender = FALSE,
+  thumbIndex = 1,
   cogConn = dfCogConn(),
   output = NULL,
   conn = getOption("vdbConn"),
@@ -110,8 +112,10 @@ makeDisplay <- function(
   } else {
     if(inherits(data, "kvMemory")) {
       # if an in-memory data set is too large we want to put it on disk
-      if(utils::object.size(data) > 50 * 1024^2)
+      if(utils::object.size(data) > 50 * 1024^2) {
+        message("* Converting large in-memory ddf to local disk ddf for persistence")
         data <- datadr::convert(data, datadr::localDiskConn(file.path(tempPrefix, "panels"), autoYes = TRUE))
+      }
     }
 
     panelDataSource <- data
@@ -122,7 +126,7 @@ makeDisplay <- function(
   	environment(panelFn) <- list2env(params)
   	environment(cogFn) <- list2env(params)
   }
-  panelEx <-  datadr::kvApply(datadr::kvExample(data), panelFn)$value
+  panelEx <-  datadr::kvApply(data[[thumbIndex]], panelFn)$value
   cogEx <- validateCogFn(data, cogFn, verbose)
 
   if(is.null(desc) || is.na(desc))
@@ -292,6 +296,11 @@ makeDisplay <- function(
   message("* Plotting thumbnail...")
   if(inherits(panelEx, "htmlwidget")) {
     widgetThumbnail(panelEx, file.path(tempPrefix, "thumb.png"))
+  } else if(inherits(panelEx, "base64png")) {
+    thumbf <- file(file.path(tempPrefix, "thumb.png"), "wb")
+    panelEx <- gsub("data:image/png;base64,", "", panelEx)
+    writeBin(object = base64enc::base64decode(as.character(panelEx)), con = thumbf)
+    close(thumbf)
   } else {
     suppressMessages(makePNG(datadr::kvExample(data), panelFn = panelFn, file = file.path(tempPrefix, "thumb.png"), width = width, height = height, lims = lims))
   }

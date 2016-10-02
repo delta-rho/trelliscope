@@ -1074,6 +1074,9 @@ button#btn-cog-table-reset.btn.btn-danger {
 .cog-table td {
   text-align: right;
   min-width: 100px;
+  max-width: 250px;
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 

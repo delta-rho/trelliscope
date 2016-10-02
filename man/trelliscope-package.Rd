@@ -20,7 +20,7 @@ data on systems like Hadoop.  While designed to scale, Trelliscope
 displays can also be very useful for small datasets.
 }
 \details{
-\url{http://tessera.io/docs-trelliscope/}
+\url{http://deltarho.org/docs-trelliscope/}
 }
 \examples{
 help(package = trelliscope)
