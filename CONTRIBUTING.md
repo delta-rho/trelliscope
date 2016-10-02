@@ -3,22 +3,18 @@ How to contribute to DeltaRho / trelliscope
 
 Thank you for sharing your code with the DeltaRho project. We appreciate your contribution!
 
-## Join the developer mailing list
-
-If you're not already on the DeltaRho developers list, take a minute to join.  This is as easy as sending an email to tessera-dev+subscribe@googlegroups.com.
-It would be great if you'd introduce yourself to the group but it's not required. You can just let your code do the talking for you if you like.
-
 ## Check the issue tracker
 
 Before you write too much code, check the [open issues in the trelliscope issue tracker](https://github.com/delta-rho/trelliscope/issues?state=open)
 to see if someone else has already filed an issue related to your work or is already working on it. If not, go ahead and
 [open a new issue](https://github.com/delta-rho/trelliscope/issues/new).
 
-## Announce your work on the mailing list
+## Announce your ideas in our gitter dev chat room
 
-Shoot us a quick email on the mailing list letting us know what you're working on. There
-will likely be people on the list who can give you tips about where to find relevant
-source or alert you to other planned changes that might effect your work.
+Shoot us a quick note on [gitter chat](https://gitter.im/delta-rho/dev) letting
+us know what you're working on. There will likely be people on there who can give
+you tips about where to find relevant source or alert you to other planned
+changes that might effect your work.
 
 If the work you're proposing makes substantive changes to trelliscope, you may be asked to attach a design document
 to your issue in the issue tracker. This document should provide a high-level explanation of your design, clearly define the goal
