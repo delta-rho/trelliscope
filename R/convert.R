@@ -1,3 +1,5 @@
+# "<a[^>]*>(.*?)</a>"
+
 #' Convert a VDB to be usable with the new Trelliscope viewer
 #'
 #' @param overwrite should existing converted files be overwritten? (not implemented)
@@ -22,11 +24,11 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
   if (!dir.exists(basePath2)) {
     ans <- "y"
     if (!autoYes)
-      ans <- readline(paste("The path ", basePath,
+      ans <- readline(paste("The path ", basePath2,
         " does not exist.  Should it be created? (y = yes) ", sep = ""))
     if (!tolower(substr(ans, 1, 1)) == "y")
       return()
-    if (!dir.create(basePath, recursive = TRUE))
+    if (!dir.create(basePath2, recursive = TRUE))
       stop("Could not create directory.\n")
   }
 
@@ -84,6 +86,15 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
     if (length(naCogs) > 0) {
       a$cogDatConn[naCogs] <- NULL
       a$cogInfo <- subset(a$cogInfo, ! (name %in% names(naCogs)))
+    }
+
+    # fix href cogs
+    ind <- which(a$cogInfo$type == "href")
+    if (length(ind) > 0) {
+      for (cognm in a$cogInfo$name[ind])
+      href <- gsub("<a href=\\\"([^ >]*)\\\".*", "\\1", a$cogDatConn[[cognm]])
+      txt <- gsub("<a href=[^>]*>(.*)</a>", "\\1", a$cogDatConn[[cognm]])
+      a$cogDatConn[[cognm]] <- href
     }
 
     message("updating cog distributions, info, and state...")
