@@ -2,10 +2,11 @@
 % Please edit documentation in R/convert.R
 \name{vdbConvert}
 \alias{vdbConvert}
-\title{Convert a VDB to be usable with the new Trelliscope viewer}
+\title{Convert a VDB to be usable with the new Trelliscope viewer (experimental)}
 \usage{
 vdbConvert(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
-  jsonp = TRUE, conn = getOption("vdbConn"), autoYes = FALSE)
+  jsonp = TRUE, conn = getOption("vdbConn"), open = TRUE,
+  autoYes = FALSE)
 }
 \arguments{
 \item{overwrite}{should existing converted files be overwritten? (not implemented)}
@@ -18,9 +19,14 @@ vdbConvert(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
 
 \item{conn}{VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists}
 
+\item{open}{should the new viewer be opened after conversion?}
+
 \item{autoYes}{should questions to proceed with directory creation operations be automatically answered with "yes"?}
 }
 \description{
-Convert a VDB to be usable with the new Trelliscope viewer
+Convert a VDB to be usable with the new Trelliscope viewer (experimental)
+}
+\details{
+This is an experimental function that allows experimentation with the next generation Trelliscope viewer (\url{https://github.com/hafen/trelliscopejs}).
 }
 

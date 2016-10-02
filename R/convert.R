@@ -1,20 +1,21 @@
-# "<a[^>]*>(.*?)</a>"
-
-#' Convert a VDB to be usable with the new Trelliscope viewer
+#' Convert a VDB to be usable with the new Trelliscope viewer (experimental)
 #'
 #' @param overwrite should existing converted files be overwritten? (not implemented)
 #' @param basePath the base directory to place the converted vdb in (doesn't need to exist)
 #' @param convertPanels should panels be converted to json for the new viewer? (good to set to FALSE if this has already been done but other aspects of the VDB have changed and need to be re-converted)
 #' @param jsonp should jsonp files be created instead of json?
 #' @param conn VDB connection info, typically stored in options("vdbConn") at the beginning of a session, and not necessary to specify here if a valid "vdbConn" object exists
+#' @param open should the new viewer be opened after conversion?
 #' @param autoYes should questions to proceed with directory creation operations be automatically answered with "yes"?
+#' @details This is an experimental function that allows experimentation with the next generation Trelliscope viewer (\url{https://github.com/hafen/trelliscopejs}).
 #' @export
 #' @importFrom DistributionUtils skewness
 #' @importFrom htmltools as.tags htmlDependencies
 #' @importFrom utils str
 #' @importFrom curl curl_download
+#' @importFrom utils browseURL
 vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
-  jsonp = TRUE, conn = getOption("vdbConn"), autoYes = FALSE) {
+  jsonp = TRUE, conn = getOption("vdbConn"), open = TRUE, autoYes = FALSE) {
 
   if (is.null(basePath)) {
     basePath <- file.path(conn$path, "trscope")
@@ -213,6 +214,8 @@ vdbConvert <- function(overwrite = FALSE, basePath = NULL, convertPanels = TRUE,
   cat(cfg, file = file.path(basePath,
     paste0("config", ifelse(jsonp, ".jsonp", ".json"))))
 
+  if (open)
+    utils::browseURL(file.path(normalizePath(basePath), "index.html"))
   invisible(TRUE)
 }
 
