@@ -1,6 +1,7 @@
 Version 0.9
 ---------------------------------------------------------------------
 
+- Fix bug that appeared with newer version of Shiny (0.9.8)
 - Update all references to point to DeltaRho (0.9.7)
 - vdbConvert method to convert vdb to be compatible with TrelliscopeJS (0.9.7)
 - Add thumbIndex to makeDisplay (0.9.7)
